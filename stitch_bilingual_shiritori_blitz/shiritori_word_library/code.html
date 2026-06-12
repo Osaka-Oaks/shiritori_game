@@ -1,0 +1,291 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Shiritori - Word Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#e0d5f6",
+                    "on-surface-variant": "#544246",
+                    "surface-variant": "#e9ddff",
+                    "primary": "#98415e",
+                    "secondary-container": "#92f5dc",
+                    "surface-container-low": "#f8f1ff",
+                    "on-secondary-fixed-variant": "#005143",
+                    "inverse-surface": "#332c46",
+                    "tertiary": "#735c00",
+                    "outline": "#867276",
+                    "on-secondary-container": "#007260",
+                    "secondary-fixed": "#92f5dc",
+                    "surface-tint": "#98415e",
+                    "inverse-primary": "#ffb1c6",
+                    "on-primary-fixed": "#3f001b",
+                    "tertiary-fixed": "#ffe088",
+                    "on-surface": "#1e1830",
+                    "on-secondary-fixed": "#00201a",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#7b2947",
+                    "surface-bright": "#fdf7ff",
+                    "on-tertiary-container": "#564400",
+                    "surface-container": "#f3eaff",
+                    "tertiary-container": "#d4b142",
+                    "primary-fixed-dim": "#ffb1c6",
+                    "surface-container-high": "#eee4ff",
+                    "surface": "#fdf7ff",
+                    "inverse-on-surface": "#f6eeff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#e9ddff",
+                    "tertiary-fixed-dim": "#e7c353",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#76d8c0",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#ffd9e1",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#241a00",
+                    "on-error": "#ffffff",
+                    "background": "#fdf7ff",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "secondary": "#006b5a",
+                    "on-primary-container": "#7a2846",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#ff94b4",
+                    "outline-variant": "#d9c0c5",
+                    "on-background": "#1e1830"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "gutter": "16px",
+                    "container-margin": "24px",
+                    "bubble-padding": "16px"
+            },
+            "fontFamily": {
+                    "body-md": ["Quicksand"],
+                    "body-lg": ["Quicksand"],
+                    "label-caps": ["Quicksand"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "display-game": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                    "body-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-game": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .kawaii-shadow-base { box-shadow: 0px 4px 0px 0px rgba(152,65,94,0.1); }
+        .kawaii-shadow-active { box-shadow: 0px 2px 0px 0px rgba(152,65,94,0.2); transform: translateY(2px); }
+        .kawaii-input:focus { outline: none; border-color: #98415e; box-shadow: 0 0 0 4px rgba(255, 148, 180, 0.3); }
+        .dashed-connector { background-image: linear-gradient(to bottom, #d9c0c5 50%, transparent 50%); background-size: 2px 8px; background-repeat: repeat-y; background-position: center; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full sticky top-0 z-50 px-4 bg-surface shadow-sm shadow-[0px_4px_0px_0px_rgba(152,65,94,0.1)] py-unit hidden md:flex">
+<div class="flex items-center gap-3"><a href="{{DATA:SCREEN:SCREEN_13}}" class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border-2 border-primary">
+<img alt="kawaii animal mascot avatar" class="w-full h-full object-cover" data-alt="A cute, kawaii-style illustration of an animal mascot, like a stylized cartoon cat or dog, rendered in soft pastel colors suitable for a profile avatar in a light-hearted language learning game. The mood is friendly and approachable." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdrhngdQNWKLWnvJK4GHkX8pyr_v4pQVeE8rbbuu0RqOC3U6NOjc83gAqaXlU7a5OXZy4Vdl_-eeEc7F7QsVB4ovBpXHqpXJZWNDlQtIWhHCyE1PeyrCe5U5OkH20rK9jS0LHEqGMk0F_-dZF8x3HXYENSlJ_q6Wyl9fH85-jCgp6FuLNWruJn7p17v2KlBdYHCjeMgt4qK9LY1v3XyVZpnKdKGqZiJw_bSZpczm_9O6B7RLYvnQghf3uNCzSOVeTlQO2ds1RWBKWv">
+</div>
+<h1 class="font-display-game text-headline-lg text-primary tracking-tight">Shiritori</h1>
+</a></div>
+<nav class="flex gap-6">
+<a class="flex items-center gap-2 text-on-surface-variant hover:bg-surface-variant/50 px-4 py-2 rounded-full transition-colors" href="{{DATA:SCREEN:SCREEN_13}}">
+<span class="material-symbols-outlined">videogame_asset</span>
+<span class="font-label-caps text-label-caps">Play</span>
+</a>
+<a class="flex items-center gap-2 text-on-surface-variant hover:bg-surface-variant/50 px-4 py-2 rounded-full transition-colors" href="{{DATA:SCREEN:SCREEN_5}}">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-caps text-label-caps">History</span>
+</a>
+<a class="flex items-center gap-2 text-primary bg-primary-container/30 px-4 py-2 rounded-full transition-colors font-bold" href="{{DATA:SCREEN:SCREEN_3}}">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-caps text-label-caps">Library</span>
+</a>
+<a class="flex items-center gap-2 text-on-surface-variant hover:bg-surface-variant/50 px-4 py-2 rounded-full transition-colors" href="{{DATA:SCREEN:SCREEN_22}}">
+<span class="material-symbols-outlined">gavel</span>
+<span class="font-label-caps text-label-caps">Rules</span>
+</a>
+</nav>
+<button class="text-primary hover:bg-surface-variant/50 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined text-3xl">account_circle</span>
+</button>
+</header>
+<!-- Mobile Header -->
+<header class="flex justify-between items-center w-full sticky top-0 z-50 px-4 bg-surface shadow-[0px_4px_0px_0px_rgba(152,65,94,0.1)] py-unit md:hidden">
+<div class="flex items-center gap-3"><a href="{{DATA:SCREEN:SCREEN_13}}" class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border-2 border-primary">
+<img alt="kawaii animal mascot avatar" class="w-full h-full object-cover" data-alt="A cute, kawaii-style illustration of an animal mascot, like a stylized cartoon cat or dog, rendered in soft pastel colors suitable for a profile avatar in a light-hearted language learning game. The mood is friendly and approachable." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7EMiwwfur7Vj0bIplWMLp5RXpbtB1al4Z3_bmktGaW4ZQf6h9VBB6U_J6o8tUVXnYdxO-aSg9m5oiWVyVYgmXSZBOzLPDeDiNd-1g9qPH0ZahIjUQF7ig18Eb_tZnpmdMQvxU4hZRzAdpchjiz3job6ngY3RxR9MhfuX-NQ67f_VvqAmluGjoqPHi83E6Z_9e_JuUIxymrWB5caDLqTp6MpAfPj08eldAcmM-gHQPfDEaiVPHp5zFYzo5vmgXC2WrTf2i2TwujDmt">
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">Shiritori</h1>
+</a></div>
+<button class="text-primary hover:bg-surface-variant/50 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined text-3xl">account_circle</span>
+</button>
+</header>
+<main class="max-w-3xl mx-auto px-container-margin pt-8 pb-12 space-y-12">
+<!-- Header & Search Section -->
+<section class="space-y-6">
+<div class="text-center space-y-2">
+<h2 class="font-headline-lg text-headline-lg md:text-display-game font-display-game text-on-surface">Word Library</h2>
+<p class="text-on-surface-variant font-body-lg text-body-lg">Search, learn, and evaluate Shiritori words!</p>
+</div>
+<div class="bg-surface-container rounded-xl p-2 flex gap-2 kawaii-shadow-base">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-lowest text-on-surface font-body-lg text-body-lg py-4 pl-12 pr-4 rounded-lg border-2 border-transparent kawaii-input transition-all" placeholder="Type a word..." type="text" value="Ringo">
+</div>
+<div class="flex items-center bg-surface-container-highest rounded-lg p-1">
+<button class="px-4 py-2 rounded-lg font-label-caps text-label-caps bg-primary-container text-on-primary-container shadow-sm transition-all">ENG</button>
+<button class="px-4 py-2 rounded-lg font-label-caps text-label-caps text-on-surface-variant hover:bg-surface-variant/50 transition-all">JPN</button>
+</div>
+</div>
+</section>
+<!-- Search Result Card -->
+<section>
+<div class="bg-surface-container-lowest rounded-xl p-6 md:p-8 kawaii-shadow-base border-2 border-surface-container-highest relative overflow-hidden group">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-primary-container rounded-full opacity-20 group-hover:scale-110 transition-transform duration-500"></div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile md:text-headline-lg md:font-headline-lg text-on-surface flex items-center gap-3">
+                            Ringo
+                            <span class="px-3 py-1 bg-tertiary-container text-on-tertiary-container font-label-caps text-label-caps rounded-full inline-block align-middle shadow-sm">Noun</span>
+</h3>
+<p class="text-on-surface-variant font-body-lg text-body-lg mt-1">Apple</p>
+</div>
+<button class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary-container hover:text-on-primary-container transition-colors kawaii-shadow-base active:translate-y-1">
+<span class="material-symbols-outlined">volume_up</span>
+</button>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-8">
+<div class="bg-surface-container-low p-4 rounded-lg text-center border border-outline-variant/30">
+<div class="font-label-caps text-label-caps text-outline mb-1">Kanji</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">林檎</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg text-center border border-outline-variant/30">
+<div class="font-label-caps text-label-caps text-outline mb-1">Hiragana</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">りんご</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg text-center border border-outline-variant/30">
+<div class="font-label-caps text-label-caps text-outline mb-1">Katakana</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">リンゴ</div>
+</div>
+</div>
+<div class="bg-error-container/30 border border-error-container rounded-lg p-4 flex gap-3 items-start">
+<span class="material-symbols-outlined text-error mt-0.5">info</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-bold">Shiritori Rule Check</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Valid word! Starts with <strong class="text-primary">Ri (り)</strong> and ends with <strong class="text-primary">Go (ご)</strong>. Does not end in 'N' (ん).</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Word Evaluator Tool -->
+<section class="bg-secondary-container rounded-xl p-6 md:p-8 kawaii-shadow-base border-b-4 border-[#76d8c0]">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">psychology_alt</span>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-secondary-container">Word Evaluator</h3>
+</div>
+<p class="text-on-secondary-container/80 mb-6 font-body-md text-body-md">Not sure if a word works? Type it here to test the 'N' rule!</p>
+<div class="flex gap-3">
+<input class="flex-1 bg-surface-container-lowest text-on-surface font-body-md text-body-md py-3 px-4 rounded-lg border-2 border-transparent focus:outline-none focus:border-secondary focus:ring-4 focus:ring-secondary/20 transition-all" placeholder="e.g., Mikan" type="text">
+<button class="bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-caps text-label-caps hover:bg-on-secondary-container transition-colors kawaii-shadow-base active:translate-y-1">Evaluate</button>
+</div>
+<!-- Evaluator Empty State / Result Placeholder -->
+<div class="mt-6 flex flex-col items-center justify-center p-4 border-2 border-dashed border-secondary/30 rounded-lg text-secondary/60">
+<span class="material-symbols-outlined text-4xl mb-2">pending</span>
+<p class="font-body-md text-body-md">Awaiting word input...</p>
+</div>
+</section>
+<!-- Recent Lookups -->
+<section>
+<div class="flex justify-between items-end mb-4">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Recent Lookups</h3>
+<button class="text-primary font-label-caps text-label-caps hover:underline">Clear</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-lg p-4 kawaii-shadow-base border border-surface-variant hover:bg-surface-variant/30 cursor-pointer transition-colors group">
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface group-hover:text-primary transition-colors">Neko</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Cat</div>
+<div class="mt-3 flex justify-between items-center">
+<span class="text-xs font-bold text-outline">ねこ</span>
+<span class="material-symbols-outlined text-sm text-outline group-hover:text-primary">arrow_forward</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-lg p-4 kawaii-shadow-base border border-surface-variant hover:bg-surface-variant/30 cursor-pointer transition-colors group">
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface group-hover:text-primary transition-colors">Inu</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Dog</div>
+<div class="mt-3 flex justify-between items-center">
+<span class="text-xs font-bold text-outline">いぬ</span>
+<span class="material-symbols-outlined text-sm text-outline group-hover:text-primary">arrow_forward</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-lg p-4 kawaii-shadow-base border border-surface-variant hover:bg-surface-variant/30 cursor-pointer transition-colors group">
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-error group-hover:text-error transition-colors flex justify-between">
+                        Mikan
+                        <span class="material-symbols-outlined text-sm">cancel</span>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Mandarin</div>
+<div class="mt-3 flex justify-between items-center">
+<span class="text-xs font-bold text-outline">みかん</span>
+<span class="material-symbols-outlined text-sm text-outline group-hover:text-error">arrow_forward</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest rounded-lg p-4 kawaii-shadow-base border border-surface-variant hover:bg-surface-variant/30 cursor-pointer transition-colors group">
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface group-hover:text-primary transition-colors">Sakura</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Cherry Blossom</div>
+<div class="mt-3 flex justify-between items-center">
+<span class="text-xs font-bold text-outline">さくら</span>
+<span class="material-symbols-outlined text-sm text-outline group-hover:text-primary">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface shadow-[0px_-4px_12px_rgba(152,65,94,0.08)] rounded-t-lg md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 active:scale-95 transition-all duration-200" href="{{DATA:SCREEN:SCREEN_13}}">
+<span class="material-symbols-outlined">videogame_asset</span>
+<span class="font-label-caps text-label-caps mt-1">Play</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 active:scale-95 transition-all duration-200" href="{{DATA:SCREEN:SCREEN_5}}">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-caps text-label-caps mt-1">History</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-spacing-gutter py-1 transition-all active:scale-95 w-20" href="{{DATA:SCREEN:SCREEN_3}}">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-caps text-label-caps mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 active:scale-95 transition-all duration-200" href="{{DATA:SCREEN:SCREEN_22}}">
+<span class="material-symbols-outlined">gavel</span>
+<span class="font-label-caps text-label-caps mt-1">Rules</span>
+</a>
+</nav>
+
+
+</body></html>

@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+dist/
+**/dist/
+dist-ssr/
+*.local
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+*serviceAccount*.json
+*service-account*.json
+
+# Firebase
+.firebase/
+**/.firebase/
+firebase-debug.log
+**/firebase-debug.log
+database-debug.log
+
+# OS / editor
+.DS_Store
+**/.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

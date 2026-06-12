@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "Playfair Display", "Times New Roman", Georgia, serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-gold-cream: #C5A059;
+  --color-gold-hover: #D7B574;
+  --color-dark-bg: #050505;
+  --color-dark-surface: #0E0E0E;
+  --color-dark-surface-lg: #161616;
+}
+
+body {
+  background-color: #050505;
+  color: #D1D1D1;
+  font-family: var(--font-sans);
+}
+
+/* Glasscard utilities for the 'Sophisticated Dark' luxury look */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card-interactive {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-interactive:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(197, 160, 89, 0.35); /* Elegant gold aura border on hover */
+  transform: translateY(-2px);
+}
+
+.gold-text {
+  color: #C5A059;
+}
+
+.gold-border {
+  border-color: rgba(197, 160, 89, 0.3);
+}
+
+.serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #121212 0%, #050505 100%);
+}
+
+.luxury-glow {
+  box-shadow: 0 0 30px rgba(197, 160, 89, 0.06);
+}
+
+.text-gold {
+  color: #C5A059;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(197, 160, 89, 0.4);
+}

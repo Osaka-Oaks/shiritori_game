@@ -1,0 +1,233 @@
+/* app/globals.css
+   Palette drawn from aizome (Japanese indigo dyeing):
+   --ai      deep indigo cloth      #16263d
+   --ai-2    lighter dye bath       #1f3552
+   --kinari  undyed cotton          #f2ead8
+   --shu     vermillion seal ink    #e0492f
+   --asagi   pale indigo wash       #9db8d2
+*/
+
+:root {
+  --ai: #16263d;
+  --ai-2: #1f3552;
+  --kinari: #f2ead8;
+  --shu: #e0492f;
+  --asagi: #9db8d2;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--ai);
+  color: var(--kinari);
+  min-height: 100dvh;
+}
+
+main {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+/* ---------- home ---------- */
+
+.title {
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin: 32px 0 28px;
+  letter-spacing: 0.08em;
+}
+.title-sub {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--asagi);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.field {
+  display: block;
+  margin-bottom: 14px;
+}
+.field span {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--asagi);
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+.field input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 1.1rem;
+  font-family: inherit;
+  color: var(--kinari);
+  background: var(--ai-2);
+  border: 1px solid rgba(157, 184, 210, 0.35);
+  border-radius: 10px;
+  outline: none;
+}
+.field input:focus {
+  border-color: var(--shu);
+}
+.code-input {
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+}
+
+.btn {
+  width: 100%;
+  padding: 13px;
+  font-size: 1.05rem;
+  font-family: inherit;
+  font-weight: 700;
+  color: var(--kinari);
+  background: var(--ai-2);
+  border: 1px solid rgba(157, 184, 210, 0.35);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.btn.primary {
+  background: var(--shu);
+  border-color: var(--shu);
+  color: #fff;
+}
+.btn:disabled { opacity: 0.5; }
+.btn:focus-visible {
+  outline: 2px solid var(--kinari);
+  outline-offset: 2px;
+}
+
+.divider {
+  text-align: center;
+  color: var(--asagi);
+  font-size: 0.85rem;
+  margin: 20px 0;
+  letter-spacing: 0.2em;
+}
+
+.error {
+  color: var(--shu);
+  background: rgba(224, 73, 47, 0.12);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 14px;
+  font-size: 0.95rem;
+}
+.muted { color: var(--asagi); }
+
+/* ---------- room ---------- */
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.85rem;
+  color: var(--asagi);
+  border-bottom: 1px solid rgba(157, 184, 210, 0.25);
+  padding-bottom: 10px;
+  margin-bottom: 18px;
+  letter-spacing: 0.05em;
+}
+
+.waiting { text-align: center; padding: 40px 0; }
+.big-code {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  margin: 12px 0;
+  color: var(--shu);
+}
+
+/* the word chain */
+.chain {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+}
+.chain li {
+  position: relative;
+  padding: 8px 0 8px 18px;
+  font-size: 1.4rem;
+}
+/* the literal chain: a thread running down the left edge */
+.chain li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(157, 184, 210, 0.3);
+}
+.chain li:first-child::before { top: 50%; }
+.chain li:last-child::before { bottom: 50%; }
+.chain li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--asagi);
+}
+.chain li.mine::after { background: var(--shu); }
+
+.chain-player {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--asagi);
+  letter-spacing: 0.1em;
+}
+.chain-kana {
+  font-style: normal;
+  color: var(--shu);
+  font-weight: 700;
+}
+.empty { font-size: 1rem; padding-left: 18px; }
+.empty::before, .empty::after { display: none; }
+
+/* play area pinned visually at the bottom of the flow */
+.play-area {
+  border-top: 1px solid rgba(157, 184, 210, 0.25);
+  padding-top: 16px;
+}
+.next-kana {
+  font-size: 1rem;
+  color: var(--asagi);
+  margin: 0 0 10px;
+}
+.next-kana strong {
+  font-size: 1.6rem;
+  color: var(--shu);
+}
+.input-row {
+  display: flex;
+  gap: 10px;
+}
+.input-row input {
+  flex: 1;
+  padding: 12px 14px;
+  font-size: 1.3rem;
+  font-family: inherit;
+  color: var(--kinari);
+  background: var(--ai-2);
+  border: 1px solid rgba(157, 184, 210, 0.35);
+  border-radius: 10px;
+  outline: none;
+  min-width: 0;
+}
+.input-row input:focus { border-color: var(--shu); }
+.input-row .btn { width: auto; padding: 12px 20px; }
+
+.waiting-turn { font-size: 1rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

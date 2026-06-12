@@ -1,0 +1,239 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Shiritori - Success!</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&amp;family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#eee4ff",
+                      "secondary-fixed": "#92f5dc",
+                      "on-surface-variant": "#544246",
+                      "on-secondary-fixed-variant": "#005143",
+                      "on-background": "#1e1830",
+                      "on-tertiary-container": "#564400",
+                      "primary-container": "#ff94b4",
+                      "surface-container-highest": "#e9ddff",
+                      "surface": "#fdf7ff",
+                      "secondary-fixed-dim": "#76d8c0",
+                      "on-secondary-fixed": "#00201a",
+                      "on-primary-container": "#7a2846",
+                      "primary-fixed-dim": "#ffb1c6",
+                      "on-tertiary-fixed-variant": "#574500",
+                      "surface-variant": "#e9ddff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "surface-tint": "#98415e",
+                      "surface-container-low": "#f8f1ff",
+                      "surface-bright": "#fdf7ff",
+                      "on-primary-fixed-variant": "#7b2947",
+                      "tertiary-fixed": "#ffe088",
+                      "inverse-primary": "#ffb1c6",
+                      "tertiary-container": "#d4b142",
+                      "outline-variant": "#d9c0c5",
+                      "outline": "#867276",
+                      "on-tertiary-fixed": "#241a00",
+                      "tertiary": "#735c00",
+                      "on-surface": "#1e1830",
+                      "surface-dim": "#e0d5f6",
+                      "surface-container": "#f3eaff",
+                      "secondary-container": "#92f5dc",
+                      "tertiary-fixed-dim": "#e7c353",
+                      "error": "#ba1a1a",
+                      "inverse-surface": "#332c46",
+                      "on-secondary-container": "#007260",
+                      "on-primary-fixed": "#3f001b",
+                      "on-error-container": "#93000a",
+                      "primary": "#98415e",
+                      "error-container": "#ffdad6",
+                      "inverse-on-surface": "#f6eeff",
+                      "on-error": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed": "#ffd9e1",
+                      "on-primary": "#ffffff",
+                      "secondary": "#006b5a",
+                      "background": "#fdf7ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-margin": "24px",
+                      "bubble-padding": "16px",
+                      "unit": "8px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-caps": [
+                              "Quicksand"
+                      ],
+                      "headline-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-game": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Quicksand"
+                      ],
+                      "body-md": [
+                              "Quicksand"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-game": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "body-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .confetti-bg {
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 148, 180, 0.1) 0%, transparent 60%),
+                              radial-gradient(circle at 20% 30%, rgba(146, 245, 220, 0.1) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 70%, rgba(255, 224, 136, 0.1) 0%, transparent 50%);
+            background-size: 150% 150%;
+            animation: floating-bg 15s ease-in-out infinite alternate;
+        }
+        @keyframes floating-bg {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        .squish-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 0px 0px rgba(0,0,0,0.1);
+        }
+      </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md confetti-bg overflow-hidden relative">
+<!-- TopAppBar -->
+<header class="w-full top-0 bg-surface dark:bg-background flat no shadows z-40 relative md:hidden">
+<div class="flex justify-between items-center px-container-margin py-unit w-full max-w-full">
+<button class="text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-transform active:scale-95 duration-200 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<h1 class="font-display-game text-headline-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tighter">SHIRITORI</h1>
+<button class="text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-transform active:scale-95 duration-200 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</div>
+</header>
+<!-- Desktop Nav (Hidden on Mobile) -->
+<header class="hidden md:flex w-full top-0 bg-surface dark:bg-background flat no shadows z-40 relative px-container-margin py-unit justify-between items-center max-w-7xl mx-auto">
+<h1 class="font-display-game text-headline-lg text-primary dark:text-primary-fixed-dim tracking-tighter">SHIRITORI</h1>
+<nav class="flex gap-6 items-center">
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-transform active:scale-95 duration-200 rounded-lg px-4 py-2" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
+<span class="font-label-caps text-label-caps">Play</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-transform active:scale-95 duration-200 rounded-lg px-4 py-2" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">history</span>
+<span class="font-label-caps text-label-caps">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-transform active:scale-95 duration-200 rounded-lg px-4 py-2" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-container-margin py-12 relative z-10 w-full max-w-3xl mx-auto mb-24 md:mb-0">
+<!-- Success Card -->
+<div class="bg-surface-container-lowest rounded-xl p-8 flex flex-col items-center text-center shadow-[0_8px_30px_rgba(152,65,94,0.15)] border-b-4 border-surface-dim relative w-full max-w-md mx-auto">
+<!-- Sparkles Decor -->
+<span class="material-symbols-outlined absolute top-4 left-4 text-tertiary-fixed text-4xl opacity-70 animate-pulse" style="font-variation-settings: 'FILL' 1;">temp_preferences_custom</span>
+<span class="material-symbols-outlined absolute bottom-12 right-6 text-secondary-fixed text-3xl opacity-60 animate-bounce" style="font-variation-settings: 'FILL' 1;">temp_preferences_custom</span>
+<!-- Mascot Image -->
+<div class="w-48 h-48 mb-6 relative">
+<div class="absolute inset-0 bg-primary-fixed rounded-full animate-ping opacity-20"></div>
+<img alt="" class="w-full h-full object-contain relative z-10 drop-shadow-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDuKva3Ae4Mdx_1okP6_ZLRerZXxvd-AjbqdUFthtF4ohqCI7t2K-UrHVh-2aTWROAho5wPA9sSDg8QFu1abQ6N8LSPmv9d5XQEx87YDQb7DqQlNrJPDkKXSpjdCaHdl0wM1WzEF_9NvJlhPF4BiLm_9_wTH9n3uDXSqVWnE-Us64hmzyRw9AWBSPZNF1Sg5Mw1dblfwImLyCWdToV20RGJbgEJc0Rnfx0a4UCk9cSKzllL4wqzKMEUr6Ea8V3NOzRfFgXMCutEuUv">
+</div>
+<!-- Headline -->
+<h2 class="font-display-game text-display-game text-primary mb-2">SUGOI!</h2>
+<!-- Subtext -->
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-4">Amazing word!</p>
+<!-- Points Chip -->
+<div class="bg-secondary-fixed text-on-secondary-fixed-variant font-label-caps text-label-caps px-4 py-2 rounded-full mb-8 shadow-sm border-b-2 border-secondary-fixed-dim inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                +50 Points
+            </div>
+<!-- Action Button -->
+<button class="squish-btn w-full bg-primary text-on-primary font-headline-lg-mobile text-headline-lg-mobile py-4 rounded-full shadow-[0_4px_15px_rgba(152,65,94,0.3)] border-b-4 border-surface-tint hover:bg-surface-tint transition-all flex items-center justify-center gap-2" onclick="window.location.href='{{DATA:SCREEN:SCREEN_14}}'">
+                Keep Playing
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">arrow_forward</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container dark:bg-surface-container-high shadow-[0_-4px_10px_rgba(152,65,94,0.1)] rounded-t-lg md:hidden">
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-fixed text-on-primary-container dark:text-on-primary-fixed-variant rounded-full px-5 py-1 hover:opacity-80 active:translate-y-0.5 transition-all duration-150" href="{{DATA:SCREEN:SCREEN_13}}">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
+<span class="font-label-caps text-label-caps">Play</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:opacity-80 active:translate-y-0.5 transition-all duration-150 px-5 py-1" href="{{DATA:SCREEN:SCREEN_5}}">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">history</span>
+<span class="font-label-caps text-label-caps">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:opacity-80 active:translate-y-0.5 transition-all duration-150 px-5 py-1" href="{{DATA:SCREEN:SCREEN_9}}">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+
+
+</body></html>

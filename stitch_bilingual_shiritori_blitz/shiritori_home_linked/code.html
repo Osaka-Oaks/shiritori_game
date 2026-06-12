@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shiritori! - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100..900&amp;family=Quicksand:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        .kana-float {
+            position: absolute;
+            color: rgba(152, 65, 94, 0.05);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pressable-button {
+            transition: all 0.1s ease;
+        }
+        .pressable-button:active {
+            transform: translateY(2px);
+            box-shadow: none !important;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#006b5a",
+                      "error-container": "#ffdad6",
+                      "secondary-container": "#92f5dc",
+                      "on-error": "#ffffff",
+                      "tertiary": "#735c00",
+                      "surface-dim": "#e0d5f6",
+                      "outline-variant": "#d9c0c5",
+                      "on-primary-container": "#7a2846",
+                      "surface-container": "#f3eaff",
+                      "error": "#ba1a1a",
+                      "primary": "#98415e",
+                      "secondary-fixed-dim": "#76d8c0",
+                      "outline": "#867276",
+                      "tertiary-container": "#d4b142",
+                      "on-tertiary-fixed": "#241a00",
+                      "on-surface-variant": "#544246",
+                      "on-tertiary-container": "#564400",
+                      "primary-fixed": "#ffd9e1",
+                      "surface": "#fdf7ff",
+                      "surface-variant": "#e9ddff",
+                      "background": "#fdf7ff",
+                      "inverse-primary": "#ffb1c6",
+                      "primary-fixed-dim": "#ffb1c6",
+                      "on-secondary": "#ffffff",
+                      "tertiary-fixed-dim": "#e7c353",
+                      "inverse-surface": "#332c46",
+                      "surface-container-low": "#f8f1ff",
+                      "inverse-on-surface": "#f6eeff",
+                      "on-tertiary": "#ffffff",
+                      "on-surface": "#1e1830",
+                      "on-background": "#1e1830",
+                      "surface-container-highest": "#e9ddff",
+                      "on-primary-fixed": "#3f001b",
+                      "on-secondary-fixed-variant": "#005143",
+                      "on-secondary-container": "#007260",
+                      "surface-tint": "#98415e",
+                      "secondary-fixed": "#92f5dc",
+                      "surface-container-high": "#eee4ff",
+                      "tertiary-fixed": "#ffe088",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed": "#00201a",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#fdf7ff",
+                      "on-tertiary-fixed-variant": "#574500",
+                      "primary-container": "#ff94b4",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#7b2947"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "unit": "8px",
+                      "container-margin": "24px",
+                      "bubble-padding": "16px"
+              },
+              "fontFamily": {
+                      "body-md": ["Quicksand"],
+                      "display-game": ["Plus Jakarta Sans"],
+                      "body-lg": ["Quicksand"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "label-caps": ["Quicksand"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                      "display-game": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "body-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen relative overflow-x-hidden flex flex-col">
+<!-- Floating Background Elements -->
+<div class="absolute inset-0 z-0 opacity-50" id="floating-bg">
+<!-- Scripts will inject kana here -->
+<span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 26.8048%; top: 55.5114%; animation: 27.2242s ease-in-out -2.66908s infinite normal none running float;">の</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 89.8011%; top: 85.0451%; animation: 19.2385s ease-in-out -2.05556s infinite normal none running float;">は</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 42.4303%; top: 97.4997%; animation: 27.3976s ease-in-out -3.11726s infinite normal none running float;">み</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 30.078%; top: 73.1973%; animation: 12.1696s ease-in-out -5.4114s infinite normal none running float;">う</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 21.5657%; top: 17.681%; animation: 25.385s ease-in-out -0.385032s infinite normal none running float;">ふ</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 31.6531%; top: 39.1192%; animation: 17.5798s ease-in-out -0.417209s infinite normal none running float;">わ</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 26.4574%; top: 94.4398%; animation: 10.8477s ease-in-out -8.43831s infinite normal none running float;">ね</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 29.685%; top: 81.8907%; animation: 27.957s ease-in-out -1.04742s infinite normal none running float;">た</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 89.8855%; top: 55.4095%; animation: 29.4682s ease-in-out -1.16114s infinite normal none running float;">め</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 10.0346%; top: 45.6486%; animation: 27.5957s ease-in-out -9.25558s infinite normal none running float;">い</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 20.3415%; top: 83.5763%; animation: 12.1467s ease-in-out -1.36771s infinite normal none running float;">ひ</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 12.608%; top: 95.1126%; animation: 24.9218s ease-in-out -2.91403s infinite normal none running float;">ぬ</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 36.59%; top: 22.5977%; animation: 11.4688s ease-in-out -3.82591s infinite normal none running float;">つ</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 38.1004%; top: 84.3321%; animation: 26.5628s ease-in-out -9.86928s infinite normal none running float;">わ</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 31.8988%; top: 24.7909%; animation: 12.7881s ease-in-out -7.49046s infinite normal none running float;">る</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 68.3157%; top: 0.377382%; animation: 21.663s ease-in-out -7.67284s infinite normal none running float;">め</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 6.75098%; top: 63.7775%; animation: 15.7035s ease-in-out -1.4077s infinite normal none running float;">ん</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 50.7978%; top: 40.7529%; animation: 10.7394s ease-in-out -5.57153s infinite normal none running float;">は</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 17.1019%; top: 44.0962%; animation: 15.4008s ease-in-out -6.25963s infinite normal none running float;">い</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 10.3611%; top: 9.2438%; animation: 24.7782s ease-in-out -9.8817s infinite normal none running float;">さ</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 39.7442%; top: 46.8937%; animation: 22.8274s ease-in-out -3.43014s infinite normal none running float;">け</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 24.2418%; top: 17.0043%; animation: 12.6374s ease-in-out -7.69556s infinite normal none running float;">の</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 93.6478%; top: 67.0151%; animation: 13.9709s ease-in-out -8.11827s infinite normal none running float;">と</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 2.84344%; top: 42.3767%; animation: 26.0299s ease-in-out -7.99219s infinite normal none running float;">た</span><span class="kana-float font-display-game text-2xl md:text-4xl" style="left: 87.5946%; top: 46.5881%; animation: 25.1872s ease-in-out -3.14404s infinite normal none running float;">す</span></div>
+<!-- Top App Bar -->
+<header class="bg-surface shadow-[0_4px_0_0_rgba(152,65,94,0.1)] fixed top-0 w-full z-40 px-container-margin py-unit flex justify-between items-center h-16">
+<div class="flex items-center gap-3">
+<a class="w-10 h-10 rounded-full bg-primary-fixed overflow-hidden flex items-center justify-center ring-2 ring-primary/20 cursor-pointer" href="{{DATA:SCREEN:SCREEN_9}}"><img alt="User Avatar" class="w-full h-full object-cover" data-alt="A super cute and simple vector illustration of a round white cat face with tiny pink ears and friendly blinking eyes. The style is minimalist Japanese kawaii aesthetic with soft, thick outlines and a warm, playful expression, set against a soft pastel pink circular background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgWaY8wM3TnXqtlr-4znTLsr8MyMGa6m1iY0yieFB4CkBDmRT1P6bIVf07k8FFmD7SxhnI9pXocuPEJoDu-vM-P6N1bNX8k2KAc07ORdBl6L-LJshT92qjXtcLldZ8m7g0Vlzabe-TcF2Z-N_QGZKADSCPKNPXhGKUNCUNAN_iua0fqdo8U9kCGlXX_sFNF-VrTrV654FdmYc_SX_UQdRlIlWvc9rx25YK_VclgiHCEacxt0qMe83o-ilSKz1YMv55y7_r0SQnTri9"/></a>
+<span class="font-label-caps text-label-caps text-on-surface-variant">PLAYER ONE</span>
+</div>
+<h1 class="font-display-game text-headline-lg-mobile text-primary tracking-tight">Shiritori!</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-primary-container/20 transition-colors text-primary active:translate-y-0.5">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow flex flex-col items-center justify-center pt-24 pb-32 px-container-margin z-10">
+<!-- Hero Mascot Section -->
+<div class="relative mb-8 animate-float">
+<div class="absolute -inset-4 bg-primary-container/30 blur-3xl rounded-full"></div>
+<div class="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
+<img alt="Mascot" class="w-full h-full object-contain" data-alt="A charming and joyful Japanese mascot character of a round white cat with large sparkling eyes and a tiny pink nose. The character is waving a paw in a welcoming gesture, designed in a soft-shaded modern kawaii 3D style with vibrant yet gentle lighting. The mood is highly energetic, friendly, and inviting for a language learning game." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIJc9i78oxQtXLO6jntI_gb7v5BsmQoj1Ob5iJJQ4QKgi9iDe75MVwk7ltKFhLauudOLcp5cnroV-fzaoRiole6HOYnVlaq7zXvw64tNk6SfIKR0YkRDFxp61SwTxK-HXhhpFjswctK230zFEEUXSzcFnzSauKbRJsGcHHoZqfh88VWfgAXT5CBtxsf8nYUrjdJKVRwPckM4NVzpGHc3lKUlWi-X1XrHCDl9VWVM8GBiaHgHCnvRa8NNuyDfPFn1VTn_UACWBg53oO"/>
+</div>
+</div>
+<!-- Call to Action Cluster -->
+<div class="w-full max-w-sm flex flex-col gap-4">
+<a class="pressable-button w-full bg-primary text-on-primary font-display-game py-5 rounded-lg shadow-[0_4px_0_0_#7a2846] flex items-center justify-center gap-3 hover:opacity-95" href="{{DATA:SCREEN:SCREEN_14}}"><span class="material-symbols-outlined" data-icon="videogame_asset" style="font-variation-settings: 'FILL' 1;">videogame_asset</span>Play with a Friend</a>
+<a class="pressable-button w-full bg-secondary text-on-secondary font-display-game py-4 rounded-lg shadow-[0_4px_0_0_#005143] flex items-center justify-center gap-3 hover:opacity-95" href="{{DATA:SCREEN:SCREEN_22}}"><span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>How to Play</a>
+</div>
+<!-- Recent Games Bento-ish Card -->
+<section class="mt-12 w-full max-w-md">
+<div class="flex items-center justify-between mb-4 px-2">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">RECENT GAMES</h3>
+<span class="text-xs text-primary font-bold cursor-pointer">View All</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-4 shadow-[0_4px_12px_0_rgba(152,65,94,0.05)] border border-primary/5">
+<div class="space-y-3">
+<!-- Game Item 1 -->
+<a class="flex items-center justify-between p-3 bg-white rounded-xl hover:bg-primary-container/10 transition-colors cursor-pointer group" href="{{DATA:SCREEN:SCREEN_14}}"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center"><span class="material-symbols-outlined text-secondary" data-icon="person">person</span></div><div><p class="font-body-md text-on-surface font-bold">Haru-chan</p><p class="text-[12px] text-on-surface-variant">Last turn: りんご</p></div></div><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span></div></a>
+<!-- Game Item 2 -->
+<a class="flex items-center justify-between p-3 bg-white rounded-xl hover:bg-primary-container/10 transition-colors cursor-pointer group opacity-80" href="{{DATA:SCREEN:SCREEN_17}}"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-tertiary-container/30 flex items-center justify-center"><span class="material-symbols-outlined text-tertiary" data-icon="smart_toy">smart_toy</span></div><div><p class="font-body-md text-on-surface font-bold">Bot Neko</p><p class="text-[12px] text-on-surface-variant">Finished • You won!</p></div></div><span class="material-symbols-outlined text-on-surface-variant" data-icon="replay">replay</span></a>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container shadow-[0_-4px_12px_0_rgba(152,65,94,0.05)] border-t-2 border-primary/10">
+<!-- Play (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-6 py-2 shadow-[0_2px_0_0_#7a2846] scale-95 translate-y-0.5 transition-all" href="{{DATA:SCREEN:SCREEN_13}}">
+<span class="material-symbols-outlined" data-icon="videogame_asset" style="font-variation-settings: 'FILL' 1;">videogame_asset</span>
+<span class="font-label-caps text-label-caps mt-1">Play</span>
+</a>
+<!-- History -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:scale-105 transition-transform" href="{{DATA:SCREEN:SCREEN_5}}">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-caps text-label-caps mt-1">History</span>
+</a>
+<!-- Rules -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:scale-105 transition-transform" href="{{DATA:SCREEN:SCREEN_3}}">
+<span class="material-symbols-outlined" data-icon="library_books">library_books</span>
+<span class="font-label-caps text-label-caps mt-1">Library</span>
+</a><a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:scale-105 transition-transform" href="{{DATA:SCREEN:SCREEN_22}}">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-caps text-label-caps mt-1">Rules</span>
+</a>
+</nav>
+<script>
+        // Floating Kana Animation logic
+        const kana = ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と', 'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ', 'ま', 'み', 'む', 'め', 'も', 'や', 'ゆ', 'よ', 'ら', 'り', 'る', 'れ', 'ろ', 'わ', 'を', 'ん'];
+        const bg = document.getElementById('floating-bg');
+        const count = 25;
+
+        for (let i = 0; i < count; i++) {
+            const span = document.createElement('span');
+            span.className = 'kana-float font-display-game text-2xl md:text-4xl';
+            span.innerText = kana[Math.floor(Math.random() * kana.length)];
+            
+            const left = Math.random() * 100;
+            const top = Math.random() * 100;
+            const delay = Math.random() * 10;
+            const duration = 10 + Math.random() * 20;
+            
+            span.style.left = `${left}%`;
+            span.style.top = `${top}%`;
+            span.style.animation = `float ${duration}s ease-in-out infinite`;
+            span.style.animationDelay = `-${delay}s`;
+            
+            bg.appendChild(span);
+        }
+
+        // Dark mode simulation toggle (optional helper for debugging)
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+    </script>
+</body></html>

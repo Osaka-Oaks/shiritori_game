@@ -1,0 +1,18 @@
+{
+  "name": "Shiritori · しりとり",
+  "short_name": "Shiritori",
+  "description": "Bilingual two-player Japanese word-chain game.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff7ee",
+  "theme_color": "#f27d26",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

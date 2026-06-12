@@ -1,0 +1,15 @@
+rules_version = '2';
+// v1 rules: anyone with the app can read/write rooms, nothing else.
+// Fine for a private game between two people — the room code is the secret.
+// Tighten later (e.g. Anonymous Auth + player checks) if you ever share it wider.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /rooms/{roomId} {
+      allow read, write: if true;
+      match /words/{wordId} {
+        allow read, create: if true;
+        allow update, delete: if false; // history is append-only
+      }
+    }
+  }
+}

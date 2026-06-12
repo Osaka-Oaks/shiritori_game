@@ -1,0 +1,297 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>How to Play - Shiritori!</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#76d8c0",
+                    "tertiary-container": "#d4b142",
+                    "on-background": "#1e1830",
+                    "surface-variant": "#e9ddff",
+                    "surface-container-low": "#f8f1ff",
+                    "on-primary-fixed": "#3f001b",
+                    "on-primary-container": "#7a2846",
+                    "surface-container": "#f3eaff",
+                    "inverse-primary": "#ffb1c6",
+                    "outline-variant": "#d9c0c5",
+                    "inverse-on-surface": "#f6eeff",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#ffe088",
+                    "surface-bright": "#fdf7ff",
+                    "on-surface": "#1e1830",
+                    "on-secondary-container": "#007260",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed": "#92f5dc",
+                    "background": "#fdf7ff",
+                    "tertiary": "#735c00",
+                    "surface-container-high": "#eee4ff",
+                    "surface": "#fdf7ff",
+                    "primary-fixed": "#ffd9e1",
+                    "outline": "#867276",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "on-secondary-fixed-variant": "#005143",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#e7c353",
+                    "secondary": "#006b5a",
+                    "surface-container-highest": "#e9ddff",
+                    "on-tertiary-container": "#564400",
+                    "on-surface-variant": "#544246",
+                    "surface-dim": "#e0d5f6",
+                    "primary-container": "#ff94b4",
+                    "primary-fixed-dim": "#ffb1c6",
+                    "primary": "#98415e",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#332c46",
+                    "surface-tint": "#98415e",
+                    "on-primary-fixed-variant": "#7b2947",
+                    "secondary-container": "#92f5dc",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#00201a",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#241a00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "gutter": "16px",
+                    "container-margin": "24px",
+                    "bubble-padding": "16px"
+            },
+            "fontFamily": {
+                    "body-md": ["Quicksand"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-lg": ["Quicksand"],
+                    "display-game": ["Plus Jakarta Sans"],
+                    "label-caps": ["Quicksand"],
+                    "headline-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "display-game": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bubbly-shadow {
+            box-shadow: 0 4px 0 0 rgba(152, 65, 94, 0.1);
+        }
+        .press-effect:active {
+            transform: translateY(2px);
+        }
+        .chain-dot::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            width: 4px;
+            height: 20px;
+            background-image: radial-gradient(circle, #98415e 1.5px, transparent 1.5px);
+            background-size: 100% 6px;
+            transform: translateX(-50%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface shadow-[0_4px_0_0_rgba(152,65,94,0.1)] flex justify-between items-center px-container-margin py-unit">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container bg-surface-container-high">
+<img alt="Cute Neko Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjH9YejTLH_Kbsdu6hx9EfDlxZzkdx5TZ6nSyqp1ndLF8L5TH9K4J4kIlQzgp4wIyfXYR91hz6ihKBav4VSOtwxydxC4-p0pr7znd4XaYBooOdPAQgZDPV_mYxjzIBz9C2eGTGS_W5gbCOngy4pMq3HaLsEqjQTJ6d_jqAOzdNP3BRiWqg0PxaSx6cARYn0IF4DCeX5Uwc9eTXSYNJkOodiWPa56YFLH278tEUgQB8aypmtwxPmOJMhQcxEerJVLUEwJsq6O6DAafG">
+</div>
+<span class="font-display-game text-headline-lg-mobile text-primary">Shiritori!</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-primary">help</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 px-container-margin max-w-2xl mx-auto space-y-6">
+<!-- Hero Header -->
+<div class="text-center py-6 space-y-2">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">How to Play / 遊び方</h1>
+<p class="font-body-md text-on-surface-variant">Master the art of the word chain!</p>
+</div>
+<!-- Section 1: What is Shiritori? -->
+<section class="bg-surface-container-lowest rounded-lg p-6 shadow-[0_4px_12px_0_rgba(152,65,94,0.05)] border-2 border-primary-fixed-dim">
+<div class="flex items-center gap-3 mb-4">
+<div class="bg-primary-container p-2 rounded-lg">
+<span class="material-symbols-outlined text-on-primary-container">question_mark</span>
+</div>
+<h2 class="font-headline-lg-mobile text-primary">しりとりとは? <span class="text-on-surface-variant font-body-md block text-sm">What is Shiritori?</span></h2>
+</div>
+<p class="font-body-md text-on-surface mb-4 leading-relaxed">
+                Shiritori (しりとり) is a traditional Japanese word game. The word literally means "taking the end." You take the last sound of your opponent's word and use it to start your own!
+            </p>
+<div class="relative w-full h-40 rounded-lg overflow-hidden bg-secondary-container/30">
+<img class="w-full h-full object-cover opacity-80" data-alt="A whimsical Japanese street scene at dusk with soft pastel pink cherry blossom trees and floating word bubbles in Katakana script. The atmosphere is warm and welcoming with soft glowing lanterns. The digital art style is clean and kawaii with rounded edges and soft gradients in a light mode palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJwgPec6oOGAfeCrKKGCYllgQtMZyLyokc-U9przoTfttWlpgGUdlKdCQa8fLHX9CGg4tZNWwVCqLf67gc66SW425Lkd5bB2tH_qgo1GnX7w2SYvsOtYQ8r3e_OELxeC3utr7MXG5M7pwZ5MGTuLoahU3Jn5SB73oE4LDD9Cy1ms75Wb6wmrhuMN-Lz-XHsEp4tAzolpeUM44GcYkiF_PyMENG4gZoS1SEGcirH6SasHpQJYpIxhqh5jbB4xHuk9oRfusTaWv_OU4G" style="transition: transform 3s ease-in-out; transform: scale(1);">
+</div>
+</section>
+<!-- Section 2: Basic Rules -->
+<section class="space-y-4">
+<div class="flex items-center gap-3">
+<div class="bg-secondary-fixed p-2 rounded-lg">
+<span class="material-symbols-outlined text-on-secondary-fixed">assignment</span>
+</div>
+<h2 class="font-headline-lg-mobile text-secondary">Basic Rules <span class="text-on-surface-variant font-body-md block text-sm">基本ルール</span></h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Steps -->
+<div class="bg-surface-container rounded-lg p-4 space-y-4 border-b-4 border-secondary/20">
+<div class="flex items-start gap-3">
+<span class="w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center font-bold shrink-0">1</span>
+<p class="font-body-md">Players take turns saying a word.<br><span class="text-xs text-on-surface-variant">交代で単語を言います。</span></p>
+</div>
+<div class="flex items-start gap-3">
+<span class="w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center font-bold shrink-0">2</span>
+<p class="font-body-md">Must use Nouns only.<br><span class="text-xs text-on-surface-variant">名詞のみ使えます。</span></p>
+</div>
+<div class="flex items-start gap-3">
+<span class="w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center font-bold shrink-0">3</span>
+<p class="font-body-md">Start your word with the last kana of the previous word.<br><span class="text-xs text-on-surface-variant">前の単語の最後の音から始めます。</span></p>
+</div>
+<div class="flex items-start gap-3">
+<span class="w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center font-bold shrink-0">4</span>
+<p class="font-body-md">No repeating words!<br><span class="text-xs text-on-surface-variant">一度出た単語は使えません。</span></p>
+</div>
+</div>
+<!-- Example Chain -->
+<div class="bg-surface-container-high rounded-lg p-4 flex flex-col items-center justify-center space-y-6 relative border-b-4 border-primary/10">
+<span class="absolute top-2 left-2 font-label-caps text-on-surface-variant">Example Chain</span>
+<div class="flex flex-col items-center gap-4 py-2 w-full">
+<div class="bg-surface-container-lowest px-6 py-2 rounded-full bubbly-shadow relative chain-dot">
+<span class="font-body-lg text-primary">Ringo (りんご)</span>
+</div>
+<div class="bg-surface-container-lowest px-6 py-2 rounded-full bubbly-shadow relative chain-dot">
+<span class="font-body-lg text-primary">Gorira (ごりら)</span>
+</div>
+<div class="bg-surface-container-lowest px-6 py-2 rounded-full bubbly-shadow">
+<span class="font-body-lg text-primary">Rappa (らっぱ)</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: How You Lose -->
+<section class="bg-error-container/20 rounded-lg p-6 border-2 border-error/10">
+<div class="flex items-center gap-3 mb-4">
+<div class="bg-error p-2 rounded-lg">
+<span class="material-symbols-outlined text-on-error">warning</span>
+</div>
+<h2 class="font-headline-lg-mobile text-error">Game Over Conditions <span class="text-on-surface-variant font-body-md block text-sm">負けの条件</span></h2>
+</div>
+<ul class="space-y-4">
+<li class="flex items-center gap-4 bg-surface-container-lowest p-3 rounded-lg border-l-4 border-error">
+<span class="font-display-game text-error text-2xl">「ん」</span>
+<div class="font-body-md">
+<p class="">Ending with 'n' (ん)</p>
+<p class="text-xs text-on-surface-variant">No Japanese words start with 'n'.</p>
+</div>
+</li>
+<li class="flex items-center gap-4 bg-surface-container-lowest p-3 rounded-lg border-l-4 border-error">
+<span class="material-symbols-outlined text-error">history</span>
+<div class="font-body-md">
+<p class="">Repeating a word</p>
+<p class="text-xs text-on-surface-variant">Once used, it's out!</p>
+</div>
+</li>
+<li class="flex items-center gap-4 bg-surface-container-lowest p-3 rounded-lg border-l-4 border-error">
+<span class="material-symbols-outlined text-error">timer_off</span>
+<div class="font-body-md">
+<p class="">Running out of time</p>
+<p class="text-xs text-on-surface-variant">Think fast!</p>
+</div>
+</li>
+</ul>
+</section>
+<!-- Section 4: Special Cases -->
+<section class="bg-tertiary-fixed/30 rounded-lg p-6 border-2 border-tertiary/10">
+<div class="flex items-center gap-3 mb-4">
+<div class="bg-tertiary-container p-2 rounded-lg">
+<span class="material-symbols-outlined text-on-tertiary-container">stars</span>
+</div>
+<h2 class="font-headline-lg-mobile text-tertiary">Pro Tips &amp; Edge Cases <span class="text-on-surface-variant font-body-md block text-sm">特殊なルール</span></h2>
+</div>
+<div class="space-y-4">
+<div class="bg-white/60 rounded-lg p-4">
+<h3 class="font-body-lg text-tertiary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+                        Small Kana (ぁ, ぃ, ぅ...)
+                    </h3>
+<p class="font-body-md text-sm pl-6">You can use either the whole syllable or just the small kana. Example: <span class="font-bold">Kaisha (かいしゃ)</span> ends in <span class="font-bold">Ya</span>.</p>
+</div>
+<div class="bg-white/60 rounded-lg p-4">
+<h3 class="font-body-lg text-tertiary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+                        Long Vowels (ー)
+                    </h3>
+<p class="font-body-md text-sm pl-6">In Katakana, use the vowel sound before the dash. Example: <span class="font-bold">Takushii (タクシー)</span> ends in <span class="font-bold">i</span>.</p>
+</div>
+</div>
+</section>
+<!-- CTA -->
+<div class="py-8">
+<button class="w-full bg-primary text-on-primary font-body-lg py-4 rounded-xl shadow-[0_4px_0_0_#7a2846] press-effect flex items-center justify-center gap-2">
+                Ready to Play!
+                <span class="material-symbols-outlined">play_circle</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container shadow-[0_-4px_12px_0_rgba(152,65,94,0.05)] border-t-2 border-primary/10"><a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:scale-105 transition-transform" href="#"><span class="material-symbols-outlined">videogame_asset</span><span class="font-label-caps uppercase mt-1">Play</span></a><a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:scale-105 transition-transform" href="#"><span class="material-symbols-outlined">history</span><span class="font-label-caps uppercase mt-1">History</span></a><a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:scale-105 transition-transform" href="#"><span class="material-symbols-outlined">library_books</span><span class="font-label-caps uppercase mt-1">Library</span></a><a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-6 py-2 shadow-[0_2px_0_0_#7a2846] scale-95 translate-y-0.5 duration-100" href="#"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span><span class="font-label-caps uppercase mt-1 font-bold">Rules</span></a></nav>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('.press-effect').forEach(button => {
+            button.addEventListener('touchstart', () => {
+                button.classList.add('scale-95');
+            });
+            button.addEventListener('touchend', () => {
+                button.classList.remove('scale-95');
+            });
+        });
+
+        // Atmospheric floating effect for the main illustrations
+        const heroImg = document.querySelector('img[data-alt]');
+        if (heroImg) {
+            heroImg.style.transition = 'transform 3s ease-in-out';
+            let toggle = true;
+            setInterval(() => {
+                heroImg.style.transform = toggle ? 'scale(1.05)' : 'scale(1)';
+                toggle = !toggle;
+            }, 3000);
+        }
+    </script>
+
+
+</body></html>

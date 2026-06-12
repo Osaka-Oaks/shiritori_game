@@ -1,0 +1,341 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Pick Your Avatar - Shiritori!</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#e9ddff",
+                    "secondary": "#006b5a",
+                    "secondary-fixed": "#92f5dc",
+                    "secondary-fixed-dim": "#76d8c0",
+                    "on-secondary-fixed-variant": "#005143",
+                    "surface-dim": "#e0d5f6",
+                    "on-tertiary-container": "#564400",
+                    "surface-container": "#f3eaff",
+                    "inverse-surface": "#332c46",
+                    "on-primary-fixed-variant": "#7b2947",
+                    "tertiary-container": "#d4b142",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#ffd9e1",
+                    "outline": "#867276",
+                    "background": "#fdf7ff",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#1e1830",
+                    "outline-variant": "#d9c0c5",
+                    "inverse-primary": "#ffb1c6",
+                    "surface-container-low": "#f8f1ff",
+                    "primary-container": "#ff94b4",
+                    "on-primary-fixed": "#3f001b",
+                    "surface-container-high": "#eee4ff",
+                    "primary": "#98415e",
+                    "on-tertiary-fixed": "#241a00",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "surface": "#fdf7ff",
+                    "on-secondary-container": "#007260",
+                    "on-secondary": "#ffffff",
+                    "on-surface": "#1e1830",
+                    "tertiary-fixed-dim": "#e7c353",
+                    "surface-bright": "#fdf7ff",
+                    "primary-fixed-dim": "#ffb1c6",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#e9ddff",
+                    "on-surface-variant": "#544246",
+                    "inverse-on-surface": "#f6eeff",
+                    "tertiary-fixed": "#ffe088",
+                    "surface-tint": "#98415e",
+                    "on-primary-container": "#7a2846",
+                    "tertiary": "#735c00",
+                    "secondary-container": "#92f5dc",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed": "#00201a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "bubble-padding": "16px",
+                    "gutter": "16px",
+                    "container-margin": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-md": [
+                            "Quicksand"
+                    ],
+                    "body-lg": [
+                            "Quicksand"
+                    ],
+                    "display-game": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "label-caps": [
+                            "Quicksand"
+                    ],
+                    "headline-lg": [
+                            "Plus Jakarta Sans"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-lg": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "display-game": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "800"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Pulse animation for active avatar preview */
+        @keyframes subtle-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 148, 180, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 148, 180, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 148, 180, 0); }
+        }
+        .pulse-ring {
+            animation: subtle-pulse 2s infinite;
+        }
+
+        /* Tonal Soft Shadows */
+        .shadow-soft {
+            box-shadow: 0 4px 12px rgba(152, 65, 94, 0.08);
+        }
+        
+        /* 3D Button Effect */
+        .btn-3d {
+            box-shadow: 0 4px 0 0 #7a2846; /* on-primary-container */
+            transition: all 0.1s ease;
+        }
+        .btn-3d:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 0 #7a2846;
+        }
+
+        /* Hidden scrollbar for main area */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased h-screen flex flex-col overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 fixed z-40 bg-surface dark:bg-surface-dim shadow-[0_4px_0_0_rgba(152,65,94,0.1)] transition-colors">
+<div class="flex justify-between items-center w-full px-container-margin py-unit h-16">
+<!-- Leading Avatar -->
+<div class="w-10 h-10 rounded-full bg-primary-container overflow-hidden flex-shrink-0 border-2 border-primary/20">
+<img alt="Cute Neko Avatar" class="w-full h-full object-cover" data-alt="A highly detailed, cute illustration of a happy white cat with rosy cheeks in a flat vector art style. The background is a soft pastel pink. The lighting is bright and even, matching a modern light-mode app interface. The mood is extremely friendly, welcoming, and kawaii, perfect for a casual gaming profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3TYeuI21vYcyIbjRQcgAPmGER9cXAYEWpfV9LdZtzL5cv9cgg4xHJfwjByCL9bbLyHpiRm7S13iDALSg7y06087fM-GjdjQCmspPIRbaoMPy7yRSbqgfm-2YrMdkg_Ur58-flwnqf6wzpeYyRXNoqXcKWX4Uc_LiVXEpJ5feD2rqp9p2a5ERzJpBtH8PfZtTE1iKJKXJKH-E5Ke1-YEe3CTrXvoUCLpTZ7jOZwP0pRMRCFcw0l6uOpWYWIeP1rXp2-0nuIajvKyqM">
+</div>
+<!-- Headline -->
+<h1 class="font-display-game text-headline-lg-mobile text-primary dark:text-primary-fixed truncate px-4">Shiritori!</h1>
+<!-- Trailing Icon -->
+<button aria-label="Help" class="text-primary dark:text-primary-fixed hover:bg-primary-container/20 transition-colors p-2 rounded-full flex-shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">help</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto no-scrollbar pt-[80px] pb-[160px] px-container-margin flex flex-col items-center">
+<!-- Preview Section -->
+<section class="flex flex-col items-center mt-6 mb-8 w-full max-w-md">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-6 text-center">Pick your Avatar</h2>
+<!-- Active Avatar Display -->
+<div class="relative mb-8">
+<div class="w-32 h-32 rounded-full bg-surface-container-high border-4 border-primary p-1 pulse-ring shadow-soft z-10 relative">
+<img alt="Selected Avatar Preview" class="w-full h-full object-cover rounded-full" data-alt="A highly detailed, cute illustration of a happy white cat with rosy cheeks in a flat vector art style. The background is a soft pastel pink. The lighting is bright and even, matching a modern light-mode app interface. The mood is extremely friendly, welcoming, and kawaii, perfect for a casual gaming profile picture." id="main-avatar-preview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANOuGrOsv-96XQvI8bosq_UYcnNGdxDKm5cOF2YbrvU1TWSXsQvqqqDS4bVFmwbRDeWP4shfrZmDoXtHB3gt-9IJJITzse1D_ewjhj3qT-paPy294Mz5tih9ZdTEGRa-1chVf5KhcVghmhCvUGqQppn9DFqiQvq1gT1wE0GO0Ac5b15y8tju5B5TTWmXgZeg2ysTvNs_UqjgtaKDCqvK68L8-TWauBjqCXJacIiX80f33WvQ2maDkrMR3v9xaMaCfTi-YQA5YXO6Jj">
+</div>
+<!-- Sparkle decorations -->
+<div class="absolute -top-2 -right-2 text-tertiary-container text-2xl animate-bounce" style="animation-duration: 2s;">✨</div>
+<div class="absolute -bottom-1 -left-2 text-primary-container text-xl animate-bounce" style="animation-duration: 2.5s; animation-delay: 0.5s;">✨</div>
+</div>
+<!-- Name Input Area -->
+<div class="w-full max-w-xs relative">
+<label class="sr-only" for="player-name">Your Name</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-2 border-primary/40 rounded-full py-4 px-6 text-center font-body-lg text-body-lg text-on-surface placeholder-outline focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary-container/30 transition-all shadow-[0_2px_0_0_#98415e]" id="player-name" placeholder="Type your name..." type="text" value="NekoChan">
+<!-- Edit Icon -->
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none">edit</span>
+</div>
+</div>
+</section>
+<!-- Grid Section -->
+<section class="w-full max-w-md mb-8">
+<div class="grid grid-cols-3 gap-4" id="avatar-grid">
+<!-- Avatar Option 1 (Selected) -->
+<button class="avatar-option group relative aspect-square rounded-[2rem] bg-surface-container border-4 border-primary shadow-soft overflow-hidden transition-transform active:scale-95" data-src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&amp;fit=crop&amp;w=400&amp;q=80">
+<img alt="Cat Avatar" class="w-full h-full object-cover" data-alt="A highly detailed, cute illustration of a happy white cat with rosy cheeks in a flat vector art style. The background is a soft pastel pink. The lighting is bright and even, matching a modern light-mode app interface. The mood is extremely friendly, welcoming, and kawaii, perfect for a casual gaming profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVZDzYmZD1OOaa-jx1PeGFLhc77f5RJHcUmJRq7wG6ZukbMAmwIx-fBcdkaDJRkAjPdzb9tl7_keOMil-1N18qe1YJKMe9rTF50gLjWLoGVhOBJG6C9Kmx77Y7vVW1QPYK4kfbER1TaqI2eyG4GlWDDk_AqaaExl7nm9XC5z2MLzOl5cwdpGiKgro7raMyaEIgd53fQ14aAMC2c6GTemgD2hruhZ0st2mrEn2wG2PWGkMuuCy-4USP9euHLT14BpfyJ1YqS6dCPV-_">
+<div class="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors"></div>
+<!-- Selected Check -->
+<div class="absolute top-2 right-2 bg-primary text-on-primary rounded-full w-6 h-6 flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-sm font-bold" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<!-- Avatar Option 2 -->
+<button class="avatar-option group relative aspect-square rounded-[2rem] bg-surface-container border-4 border-transparent hover:border-primary/50 shadow-soft overflow-hidden transition-all active:scale-95" data-src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&amp;fit=crop&amp;w=400&amp;q=80">
+<img alt="Dog Avatar" class="w-full h-full object-cover" data-alt="A highly detailed, cute illustration of a smiling Shiba Inu dog in a flat vector art style. The background is a soft pastel mint green. The lighting is bright and even, matching a modern light-mode app interface. The mood is playful, energetic, and kawaii, suitable for a casual mobile game avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDv2_dSmuLzNIvq77bleM6yYK1w2nskbF-805BwE30p1TCTfPqHucQDAhM51009utAwsM6gOV0Pf4wEKJ7SxEX9Zv2R7bHUD9Y48kWy2ryoViyezxrLRkfiMgWMXsgiswNZmqFEyeSZFvAUfS-BjXK2NuUE1tD4HE6ks_DU_weW0RR9jrg9ESv15u3kPcSXDOMX7jQdFtaqgPe82uxThMpWFrN0mLCMa8PEBZTMiDunmvltqaE4mghXOTvBoEhYqMx7RPt3lUshKVvY">
+<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+</button>
+<!-- Avatar Option 3 -->
+<button class="avatar-option group relative aspect-square rounded-[2rem] bg-surface-container border-4 border-transparent hover:border-primary/50 shadow-soft overflow-hidden transition-all active:scale-95" data-src="https://images.unsplash.com/photo-1585110396000-c9fd4e4e5030?auto=format&amp;fit=crop&amp;w=400&amp;q=80">
+<img alt="Bunny Avatar" class="w-full h-full object-cover" data-alt="A highly detailed, cute illustration of a fluffy white bunny rabbit with large floppy ears in a flat vector art style. The background is a soft pastel lavender. The lighting is bright and even, matching a modern light-mode app interface. The mood is gentle, adorable, and kawaii, fitting for a language learning game." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5Lg5SU1xKaPIp0mM--d-Cep1T93IrZoLObvX2XNsHO8P-sgdUN8q_D1v5DWfBUXEkKW59oJtJcM0q8o4_1jT5XFM9M3Mu3amwXXKFMPfo_S6MscBlMqBrO4sDHxvHNL1KlKIXI91sYZkaYd-X8aH6yzGf6ABkJUT1E2QAQnPRZLZ0C9c67gWNbWx6hmp-2oMyST2EHB4FLVV-XvbRz-RXEZegVx39CKMnsJnPtoetEXNsOdQjg-KTjAmi2s2j1M3NOXlLjHtcDQo7">
+<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+</button>
+<!-- Avatar Option 4 -->
+<button class="avatar-option group relative aspect-square rounded-[2rem] bg-surface-container border-4 border-transparent hover:border-primary/50 shadow-soft overflow-hidden transition-all active:scale-95" data-src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?auto=format&amp;fit=crop&amp;w=400&amp;q=80">
+<img alt="Panda Avatar" class="w-full h-full object-cover" data-alt="A highly detailed, cute illustration of a chubby giant panda eating bamboo in a flat vector art style. The background is a soft pastel yellow. The lighting is bright and even, matching a modern light-mode app interface. The mood is relaxed, soft, and kawaii, creating a welcoming atmosphere for players." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFRYI5dsRRAnSJV4BppuP-eap7bMIE9mKy65rz08TBAULgei4Nofz3ln4LLTJfnHXvxtI-k4mEBCtsri257VesEzQ_eAxT9XBju7KMfc8NepRD17o5rkW1rgB16wNNM83jLvs7I1Xt238IFjgIhxUJFFqePYlA3i9H0cDZwrLONCXS_lJlAFQyEWosSLb5-jZUzarDzM2vKfIA6q8FTDBOM41TYWjdxEtc1nFCSjBYamaJZItiEsKZreGwqaOW1KWuVddOmpiTur0p">
+<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+</button>
+<!-- Avatar Option 5 -->
+<button class="avatar-option group relative aspect-square rounded-[2rem] bg-surface-container border-4 border-transparent hover:border-primary/50 shadow-soft overflow-hidden transition-all active:scale-95" data-src="https://images.unsplash.com/photo-1605553531637-211516dd5a8d?auto=format&amp;fit=crop&amp;w=400&amp;q=80">
+<img alt="Fox Avatar" class="w-full h-full object-cover" data-alt="A highly detailed, cute illustration of a clever red fox with a bushy tail in a flat vector art style. The background is a soft pastel peach color. The lighting is bright and even, matching a modern light-mode app interface. The mood is cunning yet friendly and undeniably kawaii, perfect for a profile selection screen." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiUGinuf2_gEvw9lg5ziXpJoQjS-EeUXJC9gLJzBVu-t_8T8IzvBA59uUGDh2nOF1RVA69aXXq4cV93HG3vK63mPS5tLLq8UOiG1SRTrOG8BLiJsmY-uR4C6rSRFy3o5bNmAyaRF40RFn70d0YeGD62DLDNWyXfODBbQMQvJVcs4VF39YgKjYfQhTxjMt2QcD5GkKlzMc82brS_TiSv3euPOO9TQX8hPd7Gj5KMPY9ai1Cd98Kmn92TA--FlZqnuwS3kAVtI023Bs4">
+<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+</button>
+<!-- Add New Placeholder -->
+<button class="group relative aspect-square rounded-[2rem] bg-surface-container-low border-4 border-dashed border-outline-variant hover:border-primary shadow-inner flex flex-col items-center justify-center transition-all active:scale-95">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary text-4xl mb-1 transition-colors">add</span>
+<span class="font-label-caps text-label-caps text-outline-variant group-hover:text-primary transition-colors">Upload</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Fixed Action Button Area -->
+<div class="fixed bottom-[90px] left-0 w-full px-container-margin z-40 flex justify-center pointer-events-none">
+<button class="pointer-events-auto w-full max-w-md bg-primary text-on-primary font-headline-lg-mobile text-headline-lg-mobile rounded-full py-4 px-8 btn-3d flex items-center justify-center gap-2">
+<span class="">Confirm</span>
+<span class="material-symbols-outlined font-bold">arrow_forward</span>
+</button>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container dark:bg-surface-container-highest rounded-t-xl border-t-2 border-primary/10 shadow-[0_-4px_12px_0_rgba(152,65,94,0.05)]">
+<!-- Play (Inactive) -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:scale-105 transition-transform w-20">
+<span class="material-symbols-outlined mb-1 text-[28px]">videogame_asset</span>
+<span class="font-label-caps text-label-caps">Play</span>
+</button>
+<!-- History (Inactive) -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:scale-105 transition-transform w-20">
+<span class="material-symbols-outlined mb-1 text-[28px]">history</span>
+<span class="font-label-caps text-label-caps">History</span>
+</button><button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:scale-105 transition-transform w-20">
+<span class="material-symbols-outlined mb-1 text-[28px]">library_books</span>
+<span class="font-label-caps text-label-caps">Library</span>
+</button>
+<!-- Rules (Inactive) -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:scale-105 transition-transform w-20">
+<span class="material-symbols-outlined mb-1 text-[28px]">menu_book</span>
+<span class="font-label-caps text-label-caps">Rules</span>
+</button>
+</nav>
+<script>
+        // Simple avatar selection logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const options = document.querySelectorAll('.avatar-option');
+            const previewImage = document.getElementById('main-avatar-preview');
+
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected state from all
+                    options.forEach(opt => {
+                        opt.classList.remove('border-primary');
+                        opt.classList.add('border-transparent');
+                        
+                        // Remove checkmark if exists
+                        const checkmark = opt.querySelector('.bg-primary');
+                        if(checkmark) checkmark.remove();
+                    });
+
+                    // Add selected state to clicked
+                    this.classList.remove('border-transparent');
+                    this.classList.add('border-primary');
+                    
+                    // Add checkmark
+                    const checkHTML = `
+                        <div class="absolute top-2 right-2 bg-primary text-on-primary rounded-full w-6 h-6 flex items-center justify-center shadow-sm checkmark-anim">
+                            <span class="material-symbols-outlined text-sm font-bold" style="font-variation-settings: 'wght' 700;">check</span>
+                        </div>
+                    `;
+                    this.insertAdjacentHTML('beforeend', checkHTML);
+
+                    // Update preview
+                    const newSrc = this.getAttribute('data-src');
+                    
+                    // Small pop animation for preview
+                    previewImage.parentElement.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        previewImage.src = newSrc;
+                        previewImage.parentElement.style.transform = 'scale(1.05)';
+                        setTimeout(() => {
+                            previewImage.parentElement.style.transform = 'scale(1)';
+                        }, 150);
+                    }, 100);
+                });
+            });
+        });
+    </script>
+
+
+</body></html>

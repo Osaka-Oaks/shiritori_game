@@ -1,0 +1,6 @@
+{
+  "name": "Kawaii Shiritori",
+  "description": "A striking brutalist Japanese word chain game with bold typography, AI opponents, dictionary, and leaderboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

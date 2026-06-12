@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Users collection rules
+    match /users/{userId} {
+      allow read: if isSignedIn() && userId == request.auth.uid;
+      allow create: if isSignedIn() 
+                    && userId == request.auth.uid 
+                    && isValidUser(incoming());
+      allow update: if isSignedIn() 
+                    && userId == request.auth.uid 
+                    && isValidUser(incoming())
+                    && incoming().createdAt == existing().createdAt
+                    && incoming().email == existing().email
+                    && incoming().uid == existing().uid
+                    && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'highScore', 'gamesPlayed']);
+      allow delete: if false;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email', 'displayName', 'highScore', 'gamesPlayed', 'createdAt'])
+             && data.keys().size() == 6
+             && data.uid == request.auth.uid
+             && data.email is string && data.email.size() <= 128
+             && data.displayName is string && data.displayName.size() <= 100
+             && data.highScore is int
+             && data.gamesPlayed is int
+             && data.createdAt == request.time;
+    }
+
+    // Contact submissions rules - Write-only for security
+    match /contactSubmissions/{submissionId} {
+      allow create: if isValidId(submissionId) && isValidContactSubmission(incoming());
+      allow read, update, delete: if false;
+    }
+
+    function isValidContactSubmission(data) {
+      return data.keys().hasAll(['name', 'email', 'message', 'createdAt'])
+             && data.keys().size() == 4
+             && data.name is string && data.name.size() > 0 && data.name.size() <= 128
+             && data.email is string && data.email.size() > 0 && data.email.size() <= 128
+             && data.message is string && data.message.size() > 0 && data.message.size() <= 3000
+             && data.createdAt == request.time;
+    }
+  }
+}

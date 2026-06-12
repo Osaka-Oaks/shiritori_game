@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Jarrel ❤️ Mei - Shiritori Love &amp; Gems</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#92f5dc",
+                      "outline": "#867276",
+                      "surface-container-low": "#f8f1ff",
+                      "on-surface": "#1e1830",
+                      "on-secondary": "#ffffff",
+                      "tertiary-fixed": "#ffe088",
+                      "on-primary-fixed-variant": "#7b2947",
+                      "surface-variant": "#e9ddff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-container": "#564400",
+                      "inverse-surface": "#332c46",
+                      "primary-container": "#ff94b4",
+                      "primary": "#98415e",
+                      "on-error": "#ffffff",
+                      "surface-dim": "#e0d5f6",
+                      "surface-container-highest": "#e9ddff",
+                      "secondary-container": "#92f5dc",
+                      "on-secondary-fixed-variant": "#005143",
+                      "surface-tint": "#98415e",
+                      "inverse-primary": "#ffb1c6",
+                      "on-primary-fixed": "#3f001b",
+                      "tertiary-fixed-dim": "#e7c353",
+                      "inverse-on-surface": "#f6eeff",
+                      "on-secondary-container": "#007260",
+                      "secondary": "#006b5a",
+                      "on-tertiary-fixed-variant": "#574500",
+                      "surface-bright": "#fdf7ff",
+                      "primary-fixed": "#ffd9e1",
+                      "on-primary": "#ffffff",
+                      "tertiary-container": "#d4b142",
+                      "on-secondary-fixed": "#00201a",
+                      "background": "#fdf7ff",
+                      "outline-variant": "#d9c0c5",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#1e1830",
+                      "surface-container": "#f3eaff",
+                      "error-container": "#ffdad6",
+                      "surface": "#fdf7ff",
+                      "on-tertiary-fixed": "#241a00",
+                      "secondary-fixed-dim": "#76d8c0",
+                      "on-primary-container": "#7a2846",
+                      "tertiary": "#735c00",
+                      "surface-container-high": "#eee4ff",
+                      "primary-fixed-dim": "#ffb1c6",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "on-surface-variant": "#544246"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "8px",
+                      "bubble-padding": "16px",
+                      "gutter": "16px",
+                      "container-margin": "24px"
+              },
+              "fontFamily": {
+                      "display-game": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Quicksand"
+                      ],
+                      "body-lg": [
+                              "Quicksand"
+                      ],
+                      "headline-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-caps": [
+                              "Quicksand"
+                      ]
+              },
+              "fontSize": {
+                      "display-game": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+          },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .bubble-shadow {
+            box-shadow: 0 4px 12px rgba(152, 65, 94, 0.1), 0 2px 0 rgba(152, 65, 94, 0.15);
+        }
+        
+        .button-shadow {
+            box-shadow: 0 4px 12px rgba(152, 65, 94, 0.2), 0 3px 0 #7a2846;
+            transition: all 0.1s ease;
+        }
+        
+        .button-shadow:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 6px rgba(152, 65, 94, 0.2), 0 1px 0 #7a2846;
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 148, 180, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 148, 180, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 148, 180, 0); }
+        }
+
+        .floating-heart {
+            animation: float-up 3s ease-in-out infinite;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-50px) scale(1.5) rotate(20deg); opacity: 0; }
+        }
+        
+        /* Sparkle animation for gems */
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(15deg); }
+        }
+        .gem-sparkle:hover {
+            animation: sparkle 0.5s ease-in-out;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex justify-center pb-24 md:pb-0 overflow-x-hidden">
+<!-- Mobile Top App Bar -->
+<header class="md:hidden w-full top-0 sticky bg-surface dark:bg-surface-dim shadow-[0_2px_0_0_rgba(152,65,94,0.1)] shadow-sm z-40">
+<div class="flex items-center justify-between px-gutter h-16 w-full">
+<div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-container overflow-hidden ring-2 ring-primary">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="A cute, simple illustrated cat face in pastel colors, perfect for a modern kawaii game avatar. The style is minimalist with soft edges and a friendly expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX3PWxqCD-AFTkOzW89wpAr8Xa-CDD1QJDQkWxGmPTcwfzoRfKJwSmyYcQV-zBBuJjn32EOuUqZK1tEHESoFBCeXKVp9JcELpXhqOZmlhUL1SxSOcPbDDZbA0eCEZybcPt36QnZRWfi15wL0NwRwWH6_O215aXehyCn1zPXGwnX7XlU2pKmD6jQIyewvXJDLZxbOOFIUfaXL3LffPrAPlKnyX2N4gjrfZpVLGDPaPMfNLBiJ5ikEO__Q4A4S0LgvBbJHNmS7kvH6Yl"/>
+</div>
+<h1 class="font-display-game text-headline-lg-mobile text-primary dark:text-primary-container tracking-tight">しりとり</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-primary dark:text-primary-fixed-dim hover:bg-primary-container/20 transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Desktop Top App Bar -->
+<header class="hidden md:flex fixed top-0 w-full bg-surface dark:bg-surface-dim shadow-[0_2px_0_0_rgba(152,65,94,0.1)] shadow-sm z-40">
+<div class="max-w-4xl mx-auto w-full flex items-center justify-between px-container-margin h-20">
+<h1 class="font-display-game text-headline-lg text-primary dark:text-primary-container tracking-tight">しりとり</h1>
+<nav class="flex space-x-6 items-center">
+<a class="flex items-center space-x-2 text-primary font-body-md bg-primary-container/20 px-4 py-2 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="sports_esports" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
+<span>Play</span>
+</a>
+<a class="flex items-center space-x-2 text-on-surface-variant hover:text-primary transition-colors font-body-md px-4 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span>History</span>
+</a>
+<a class="flex items-center space-x-2 text-on-surface-variant hover:text-primary transition-colors font-body-md px-4 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span>Library</span>
+</a>
+</nav>
+<div class="flex items-center space-x-4">
+<div class="flex items-center justify-center w-12 h-12 rounded-full bg-primary-container overflow-hidden ring-2 ring-primary">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="A cute, simple illustrated cat face in pastel colors, perfect for a modern kawaii game avatar. The style is minimalist with soft edges and a friendly expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASDuR6zoKTAZLY2T64fBfCYdypR3ntva9Qr88i5GgBumvwHJP_bnJj56Mm34XbxHDobM2y0Z_MD3cyJa7dLWDWLu75DaLJi7PEDY8mF0vVvZNGirBpSwvGtWJYWh0Ailbn0OPufKGOwmWxvIxlWseLr_4bIQGnFjNjYKBeaBbUnX0CENckC57ztSJPeVs08A--jAsuZEEAA59guwzY3dxY2N8WABaP7VbqEVXrZOPOHrKYhzTCvovdUqHY6p-MzUa8YARrJjjVzksb"/>
+</div>
+</div>
+</div>
+</header>
+<main class="w-full max-w-lg md:max-w-4xl mx-auto px-gutter md:px-container-margin pt-6 md:pt-28 flex flex-col items-center">
+<!-- Love Header Section -->
+<section class="w-full text-center mb-8 relative">
+<div class="absolute -top-4 -left-4 text-primary-container floating-heart hidden md:block">
+<span class="material-symbols-outlined text-4xl" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<div class="absolute -top-2 right-4 text-secondary-container floating-heart hidden md:block" style="animation-delay: 1s;">
+<span class="material-symbols-outlined text-3xl" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<h2 class="font-display-game text-headline-lg-mobile md:text-headline-lg text-primary flex items-center justify-center gap-3">
+                Jarrel 
+                <span class="material-symbols-outlined text-primary-container text-4xl pulse-glow rounded-full" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                Mei
+            </h2>
+<p class="font-body-md text-on-surface-variant mt-2 tracking-wide text-sm md:text-base">
+                愛してる • Happy Together
+            </p>
+</section>
+<!-- Love Gems Collection -->
+<section class="w-full bg-surface-container-low rounded-xl p-4 mb-8 bubble-shadow flex items-center justify-between border border-surface-variant/50 relative overflow-hidden">
+<!-- Decorative background pattern -->
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, #ff94b4 1px, transparent 0); background-size: 16px 16px;"></div>
+<div class="relative z-10 flex flex-col">
+<span class="font-label-caps text-on-surface-variant uppercase tracking-widest text-[10px]">Love Gems Collected</span>
+<span class="font-display-game text-headline-lg-mobile text-primary flex items-baseline gap-1 mt-1">
+                    42 <span class="text-sm text-primary-container material-symbols-outlined" data-icon="diamond" style="font-variation-settings: 'FILL' 1;">diamond</span>
+</span>
+</div>
+<div class="relative z-10 flex gap-2">
+<!-- Gem Icons -->
+<div class="w-10 h-10 rounded-full bg-primary-container/30 flex items-center justify-center border border-primary-container gem-sparkle cursor-pointer">
+<span class="material-symbols-outlined text-primary" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-secondary-container/30 flex items-center justify-center border border-secondary-container gem-sparkle cursor-pointer">
+<span class="material-symbols-outlined text-secondary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-tertiary-container/30 flex items-center justify-center border border-tertiary-container gem-sparkle cursor-pointer">
+<span class="material-symbols-outlined text-tertiary" data-icon="diamond" style="font-variation-settings: 'FILL' 1;">diamond</span>
+</div>
+</div>
+</section>
+<!-- Game Area / Bento Grid Layout -->
+<div class="w-full grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Left Sidebar (Desktop) / Info Cards -->
+<aside class="hidden md:flex flex-col gap-4 col-span-1">
+<div class="bg-surface-container-low rounded-xl p-4 bubble-shadow border border-surface-variant/50">
+<h3 class="font-label-caps text-on-surface-variant mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+                        Spiller-san's Turn
+                    </h3>
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-primary-container overflow-hidden pulse-glow">
+<img alt="Jarrel Avatar" class="w-full h-full object-cover" data-alt="A cute illustrated dog face in a minimal pastel style, suitable for a kawaii user profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDXOTK5x3kXO7aJ12GbblpnCXvfFO77oPtiZN2foDedhhLikOkD6CLS8FDnl2ETNHRZ6wk9Or-OzeEPUg1HaM4zh8iFgJRkCEaqLPoF8rUdxURgtU8ghKFEWSpt6juUrs1M6FQbNIZ5V3J3XfOWTF52IBvTsAosv_1mw8a6d4olxx-Hmm40is8lGlkBmHdH9YJiWmm3TnLot56gBbfYwbHa69v871nP6j_3LhKmd7qqOM5NkVxFV3iDOv0gBlJSKUpDONZ9vGTqaBr"/>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-on-surface">Jarrel</span>
+<span class="text-xs text-on-surface-variant">Thinking...</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-highest rounded-xl p-4 bubble-shadow">
+<h3 class="font-label-caps text-on-surface-variant mb-2">Recent Words</h3>
+<div class="flex flex-wrap gap-2 mt-2">
+<span class="px-3 py-1 bg-surface-container-low rounded-full text-sm font-body-md text-on-surface border border-surface-variant">ねこ (neko)</span>
+<span class="px-3 py-1 bg-surface-container-low rounded-full text-sm font-body-md text-on-surface border border-surface-variant">こい (koi)</span>
+<span class="px-3 py-1 bg-primary-container/20 rounded-full text-sm font-body-md text-primary border border-primary-container">いのち (inochi)</span>
+</div>
+</div>
+</aside>
+<!-- Main Play Area -->
+<div class="col-span-1 md:col-span-2 flex flex-col gap-6 w-full">
+<!-- Game Feed -->
+<div class="flex flex-col gap-4 w-full px-2 relative">
+<!-- Dotted line connecting bubbles -->
+<div class="absolute left-1/2 top-4 bottom-4 w-0.5 border-l-2 border-dashed border-surface-variant -z-10"></div>
+<!-- Opponent Bubble (Mei) -->
+<div class="self-start flex flex-col items-start max-w-[85%]">
+<span class="font-label-caps text-on-surface-variant ml-4 mb-1 text-[10px]">Mei</span>
+<div class="bg-surface-container-lowest text-on-surface rounded-2xl rounded-tl-sm p-bubble-padding bubble-shadow border border-surface-variant/30 flex items-center gap-3 relative">
+<span class="font-body-lg text-lg">ねこ</span>
+<span class="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">cat</span>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center ml-2 border-2 border-surface-container-lowest shrink-0">
+<span class="font-display-game text-on-secondary-container text-sm">こ</span>
+</div>
+</div>
+</div>
+<!-- User Bubble (Jarrel) -->
+<div class="self-end flex flex-col items-end max-w-[85%]">
+<span class="font-label-caps text-primary ml-4 mb-1 text-[10px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                            Jarrel
+                        </span>
+<div class="bg-primary-fixed text-on-primary-fixed rounded-2xl rounded-tr-sm p-bubble-padding bubble-shadow border border-primary-container/50 flex items-center gap-3 relative">
+<span class="font-body-lg text-lg">こい</span>
+<span class="text-xs text-on-primary-fixed-variant bg-primary-container/50 px-2 py-1 rounded-md">love/carp</span>
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center ml-2 border-2 border-primary-fixed shrink-0">
+<span class="font-display-game text-on-tertiary-container text-sm">い</span>
+</div>
+</div>
+</div>
+<!-- Opponent Bubble (Mei) -->
+<div class="self-start flex flex-col items-start max-w-[85%]">
+<span class="font-label-caps text-on-surface-variant ml-4 mb-1 text-[10px]">Mei</span>
+<div class="bg-surface-container-lowest text-on-surface rounded-2xl rounded-tl-sm p-bubble-padding bubble-shadow border border-surface-variant/30 flex items-center gap-3 relative">
+<span class="font-body-lg text-lg">いのち</span>
+<span class="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">life</span>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center ml-2 border-2 border-surface-container-lowest shrink-0">
+<span class="font-display-game text-on-secondary-container text-sm">ち</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="w-full mt-4 bg-surface-container-lowest p-4 rounded-xl bubble-shadow border border-surface-variant relative">
+<!-- Subtle hint label -->
+<div class="absolute -top-3 left-6 bg-primary-container text-on-primary-container font-label-caps px-3 py-0.5 rounded-full text-[10px] border border-surface-container-lowest">
+                        Starts with 'ち' (chi)
+                    </div>
+<div class="flex items-center gap-3 mt-1">
+<div class="relative flex-grow">
+<input class="w-full bg-surface-container-low border-2 border-primary/30 text-on-surface font-body-md rounded-full px-5 py-3 focus:outline-none focus:border-primary focus:ring-0 placeholder:text-on-surface-variant/50 transition-colors" placeholder="Type a romantic word..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="keyboard">keyboard</span>
+</button>
+</div>
+<button class="w-12 h-12 bg-primary text-on-primary rounded-full flex items-center justify-center button-shadow shrink-0">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation Bar -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-lg bg-surface-container dark:bg-surface-container-high shadow-[0_-4px_12px_0_rgba(152,65,94,0.08)] shadow-lg flex justify-around items-center px-4 pt-2 pb-safe-area-inset-bottom h-20">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 translate-y-[-2px] shadow-[0_2px_0_0_#7a2846] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="sports_esports" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
+<span class="font-label-caps text-label-caps mt-1">Play</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest transition-all rounded-xl active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-caps text-label-caps mt-1">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest transition-all rounded-xl active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-caps text-label-caps mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest transition-all rounded-xl active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+<span class="font-label-caps text-label-caps mt-1">Rules</span>
+</a>
+</nav>
+<!-- Spacer for bottom nav on mobile -->
+<div class="h-24 md:hidden w-full"></div>
+</body></html>

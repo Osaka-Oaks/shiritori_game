@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile and Customizations",
+      "description": "User specific credentials, score and layout customizations",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Unique authentication ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display nickname"
+        },
+        "avatarUrl": {
+          "type": "string",
+          "description": "Profile picture URL"
+        },
+        "accentColor": {
+          "type": "string",
+          "description": "Theme accent color hex code (e.g. #f27d26)"
+        },
+        "gridStyle": {
+          "type": "string",
+          "description": "Background grid pattern density enum (dense, sparse, none)"
+        },
+        "font": {
+          "type": "string",
+          "description": "Selected typography font family name (Space Grotesk, Playfair Display, JetBrains Mono)"
+        },
+        "headingStyle": {
+          "type": "string",
+          "description": "Whether headings are uppercase or normal"
+        },
+        "layoutDensity": {
+          "type": "string",
+          "description": "Compact or Spacious layout sizing"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "uid",
+        "name",
+        "accentColor"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Stores user customizations, nickname, and chosen avatar"
+    }
+  }
+}

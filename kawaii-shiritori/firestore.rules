@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Reusable global helper gates
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // 3. Validation Blueprint for User Profiles & Customizations
+    function isValidUser(data) {
+      return data.uid is string && data.uid.size() <= 128 &&
+             data.name is string && data.name.size() <= 100 &&
+             data.avatarUrl is string && data.avatarUrl.size() <= 1000 &&
+             data.accentColor is string && data.accentColor.size() <= 50 &&
+             (!('gridStyle' in data) || (data.gridStyle is string && data.gridStyle.size() <= 50)) &&
+             (!('font' in data) || (data.font is string && data.font.size() <= 100)) &&
+             (!('headingStyle' in data) || (data.headingStyle is string && data.headingStyle.size() <= 50)) &&
+             (!('layoutDensity' in data) || (data.layoutDensity is string && data.layoutDensity.size() <= 50));
+    }
+
+    // 4. Users Collection Rules (PII Isolation and ID poisoning guard)
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && incoming().uid == userId;
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && incoming().uid == existing().uid;
+      allow delete: if isOwner(userId) && isValidId(userId);
+    }
+  }
+}

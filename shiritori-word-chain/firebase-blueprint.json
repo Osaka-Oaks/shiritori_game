@@ -1,0 +1,72 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile holding score stats",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Unique user ID"
+        },
+        "email": {
+          "type": "string",
+          "description": "User login email"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name"
+        },
+        "highScore": {
+          "type": "number",
+          "description": "High score in Shiritori matches"
+        },
+        "gamesPlayed": {
+          "type": "number",
+          "description": "Total number of games completed"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["uid", "email"]
+    },
+    "ContactSubmission": {
+      "title": "Contact Submission",
+      "description": "Contact message from visitors",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Sender name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Sender email address"
+        },
+        "message": {
+          "type": "string",
+          "description": "Inquiry message content"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Submission timestamp"
+        }
+      },
+      "required": ["name", "email", "message"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/contactSubmissions/{submissionId}": {
+      "schema": "ContactSubmission",
+      "description": "Contact form submissions"
+    }
+  }
+}

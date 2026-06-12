@@ -1,0 +1,6 @@
+{
+  "name": "Shiritori Word Chain",
+  "description": "A beautiful, interactive Japanese Shiritori word chain game featuring dynamic translation, real-time validations, anime chat overlays, and smart AI bot opponents.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

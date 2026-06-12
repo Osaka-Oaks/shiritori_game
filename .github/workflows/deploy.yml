@@ -1,0 +1,51 @@
+name: CI/CD — shiritori-online
+
+# Build-check on every push & PR. Auto-deploy to Firebase Hosting + Database
+# rules when changes land on main.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Avoid overlapping deploys if you push twice quickly.
+concurrency:
+  group: shiritori-online-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: shiritori-online
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: shiritori-online/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type-check & build
+        run: npm run build
+
+      # Only deploys on a push to main (skipped for pull requests).
+      # Requires the repo secret FIREBASE_TOKEN (see README "CI/CD").
+      - name: Deploy to Firebase
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: >
+          npx firebase-tools@latest deploy
+          --only hosting,database
+          --project shiritori-game-ccaae
+          --non-interactive
+          --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
