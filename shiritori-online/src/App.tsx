@@ -3,9 +3,13 @@ import { ensureSignedIn } from "./firebase";
 import Home from "./components/Home";
 import GameRoom from "./components/GameRoom";
 import Rules from "./components/Rules";
+import Welcome from "./components/Welcome";
+import LoveNote from "./components/LoveNote";
 import { useSettings } from "./settings";
 
 type View = { name: "home" } | { name: "room"; code: string };
+
+const LOVE_KEY = "shiritori_lovenote_seen";
 
 export default function App() {
   const { t } = useSettings();
@@ -13,6 +17,8 @@ export default function App() {
   const [authError, setAuthError] = useState<string | null>(null);
   const [view, setView] = useState<View>({ name: "home" });
   const [showRules, setShowRules] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [showLove, setShowLove] = useState(false);
   const [playerName, setPlayerName] = useState(
     () => localStorage.getItem("shiritori_name") || ""
   );
@@ -46,6 +52,26 @@ export default function App() {
     setView({ name: "home" });
   }
 
+  function closeLove() {
+    localStorage.setItem(LOVE_KEY, "1");
+    setShowLove(false);
+  }
+
+  const welcome = showWelcome ? (
+    <Welcome
+      name={playerName.trim()}
+      onDone={() => {
+        setShowWelcome(false);
+        // First-ever visit: surprise Mei with the note.
+        if (!localStorage.getItem(LOVE_KEY)) setShowLove(true);
+      }}
+    />
+  ) : null;
+
+  const loveNote = showLove ? (
+    <LoveNote fromName={playerName} onClose={closeLove} />
+  ) : null;
+
   if (authError) {
     return (
       <div className="app">
@@ -69,6 +95,8 @@ export default function App() {
           <div className="spinner" />
           <p>{t("connecting")}</p>
         </div>
+        {welcome}
+        {loveNote}
       </div>
     );
   }
@@ -83,6 +111,7 @@ export default function App() {
           deepLinkCode={deepLinkCode}
           onEnterRoom={enterRoom}
           onShowRules={() => setShowRules(true)}
+          onShowLove={() => setShowLove(true)}
         />
       ) : (
         <GameRoom
@@ -93,6 +122,8 @@ export default function App() {
         />
       )}
       {showRules && <Rules onClose={() => setShowRules(false)} />}
+      {welcome}
+      {loveNote}
     </>
   );
 }

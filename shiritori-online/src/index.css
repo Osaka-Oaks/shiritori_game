@@ -87,6 +87,10 @@ input {
   color: var(--accent);
   letter-spacing: 1px;
 }
+.brand h1 span {
+  display: inline-block;
+  animation: drop-bounce 0.6s cubic-bezier(0.2, 0.6, 0.3, 1.4) backwards;
+}
 .brand p {
   margin: 2px 0 0;
   color: var(--muted);
@@ -101,6 +105,13 @@ input {
   box-shadow: var(--shadow);
   padding: 20px;
   margin-top: 14px;
+  animation: rise 0.45s ease backwards;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
 }
 
 /* ---------- Buttons ---------- */
@@ -117,6 +128,10 @@ input {
   background: var(--accent);
   color: #fff;
   transition: transform 0.08s ease, opacity 0.2s ease;
+}
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
 }
 .btn:active {
   transform: scale(0.97);
@@ -244,7 +259,16 @@ input {
 }
 .player-pill.active {
   border-color: var(--accent);
-  transform: translateY(-2px);
+  animation: pill-bob 1.8s ease-in-out infinite;
+}
+@keyframes pill-bob {
+  0%,
+  100% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 .player-pill.them.active {
   border-color: var(--them);
@@ -272,6 +296,15 @@ input {
 }
 .timer.danger > div {
   background: var(--bad);
+  animation: bar-pulse 0.5s ease-in-out infinite alternate;
+}
+@keyframes bar-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.55;
+  }
 }
 
 .next-kana {
@@ -289,6 +322,16 @@ input {
   font-size: 64px;
   color: var(--accent);
   line-height: 1.1;
+  animation: kana-pop 0.45s cubic-bezier(0.2, 0.7, 0.3, 1.4) backwards;
+}
+@keyframes kana-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.3) rotate(-8deg);
+  }
+  70% {
+    transform: scale(1.12);
+  }
 }
 .next-kana .any {
   font-size: 28px;
@@ -311,6 +354,13 @@ input {
   border-radius: 18px;
   box-shadow: var(--shadow);
   position: relative;
+  animation: bubble-pop 0.35s cubic-bezier(0.2, 0.7, 0.3, 1.3) backwards;
+}
+@keyframes bubble-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateY(12px);
+  }
 }
 .bubble .kana {
   font-size: 22px;
@@ -432,9 +482,27 @@ input {
   max-width: 380px;
   text-align: center;
   box-shadow: var(--shadow);
+  animation: modal-pop 0.45s cubic-bezier(0.2, 0.8, 0.3, 1.3);
+}
+@keyframes modal-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.75) translateY(24px);
+  }
 }
 .modal .emoji {
   font-size: 64px;
+  display: inline-block;
+  animation: emoji-bounce 0.8s cubic-bezier(0.2, 0.6, 0.3, 1.4) 0.15s backwards;
+}
+@keyframes emoji-bounce {
+  from {
+    opacity: 0;
+    transform: translateY(-36px) scale(0.5);
+  }
+  60% {
+    transform: translateY(6px) scale(1.1);
+  }
 }
 .modal h2 {
   margin: 8px 0 4px;
@@ -636,4 +704,244 @@ input {
   width: 40px;
   padding: 0;
   justify-content: center;
+}
+
+/* ---------- Welcome splash ---------- */
+.welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: opacity 0.45s ease;
+}
+.welcome.leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+.welcome-inner {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  padding: 0 24px;
+}
+.welcome-title {
+  font-family: "Mochiy Pop One", sans-serif;
+  font-size: 60px;
+  color: var(--accent);
+  margin: 0 0 10px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.welcome-title span {
+  display: inline-block;
+  animation: drop-bounce 0.7s cubic-bezier(0.2, 0.6, 0.3, 1.4) backwards;
+}
+@keyframes drop-bounce {
+  from {
+    opacity: 0;
+    transform: translateY(-48px) scale(0.5);
+  }
+  60% {
+    transform: translateY(8px) scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.welcome-greeting {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  animation: fade 0.6s ease 0.55s backwards;
+}
+.welcome-msg {
+  font-size: 15px;
+  color: var(--muted);
+  margin: 0;
+  animation: fade 0.6s ease 0.8s backwards;
+}
+.welcome-tap {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 32px;
+  animation: blink-soft 1.8s ease 1.4s infinite backwards;
+}
+@keyframes blink-soft {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.floaties {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.floaty {
+  position: absolute;
+  bottom: -10vh;
+  font-family: "Mochiy Pop One", sans-serif;
+  color: var(--accent);
+  opacity: 0.1;
+  animation: floaty linear infinite;
+}
+@keyframes floaty {
+  from {
+    transform: translateY(0) rotate(-10deg);
+  }
+  to {
+    transform: translateY(-120vh) rotate(10deg);
+  }
+}
+
+/* ---------- Falling sakura petals ---------- */
+.petals {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.petal {
+  position: absolute;
+  top: -8vh;
+  opacity: 0.55;
+  animation-name: petal-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+@keyframes petal-fall {
+  0% {
+    transform: translateY(-8vh) translateX(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(46vh) translateX(28px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(110vh) translateX(-18px) rotate(360deg);
+  }
+}
+/* keep app content above the petals */
+.app {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Love note 💌 ---------- */
+.love-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  background: radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 145, 160, 0.28),
+      transparent 60%
+    ),
+    rgba(58, 45, 34, 0.5);
+  backdrop-filter: blur(6px);
+}
+.love-hearts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.love-heart {
+  position: absolute;
+  bottom: -10vh;
+  animation: love-rise linear infinite;
+  opacity: 0.85;
+}
+@keyframes love-rise {
+  from {
+    transform: translateY(0) rotate(-8deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(-120vh) rotate(10deg);
+    opacity: 0;
+  }
+}
+.love-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  background: var(--card);
+  border-radius: 26px;
+  padding: 30px 24px 24px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(200, 60, 90, 0.3);
+  border: 2px solid var(--accent-soft);
+  animation: modal-pop 0.5s cubic-bezier(0.2, 0.8, 0.3, 1.3);
+}
+.love-seal {
+  font-size: 52px;
+  display: inline-block;
+  animation: emoji-bounce 0.9s cubic-bezier(0.2, 0.6, 0.3, 1.4) 0.1s backwards;
+}
+.love-title {
+  font-family: "Mochiy Pop One", sans-serif;
+  color: var(--accent);
+  font-size: 26px;
+  margin: 6px 0 14px;
+}
+.love-title .love-jp {
+  display: block;
+  font-size: 17px;
+  color: var(--accent-ink);
+  margin-top: 2px;
+}
+.love-body p {
+  line-height: 1.85;
+  font-size: 15px;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+.love-jp-block {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+.love-sign {
+  font-weight: 700;
+  color: var(--accent);
+}
+.love-sign span {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 13px;
+}
+.love-btn {
+  margin-top: 8px;
+}
+
+/* ---------- Accessibility ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

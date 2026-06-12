@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createRoom, joinRoom } from "../lib/roomService";
 import { DEFAULT_RULES, type RuleSettings } from "../lib/shiritori";
 import { useSettings, SettingsControls } from "../settings";
+import Petals from "./Petals";
 
 interface Props {
   uid: string;
@@ -10,6 +11,7 @@ interface Props {
   deepLinkCode: string;
   onEnterRoom: (code: string) => void;
   onShowRules: () => void;
+  onShowLove: () => void;
 }
 
 const TIME_OPTIONS = [15, 30, 60];
@@ -21,6 +23,7 @@ export default function Home({
   deepLinkCode,
   onEnterRoom,
   onShowRules,
+  onShowLove,
 }: Props) {
   const { t } = useSettings();
   const [joinCode, setJoinCode] = useState(deepLinkCode);
@@ -65,10 +68,17 @@ export default function Home({
 
   return (
     <div className="app fade-in">
+      <Petals />
       <SettingsControls />
 
       <div className="brand">
-        <h1>しりとり</h1>
+        <h1 aria-label="しりとり">
+          {"しりとり".split("").map((ch, i) => (
+            <span key={i} style={{ animationDelay: `${i * 0.07}s` }}>
+              {ch}
+            </span>
+          ))}
+        </h1>
         <p>{t("subtitle")}</p>
       </div>
 
@@ -164,6 +174,9 @@ export default function Home({
 
       <button className="btn ghost" style={{ marginTop: 10 }} onClick={onShowRules}>
         {t("howToPlay")}
+      </button>
+      <button className="btn ghost" style={{ marginTop: 2 }} onClick={onShowLove}>
+        💌 {t("loveButton")}
       </button>
     </div>
   );

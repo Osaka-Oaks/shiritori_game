@@ -211,7 +211,9 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
       <div className="next-kana">
         <div className="lbl">{t("nextStartsWith")}</div>
         {state.currentKana ? (
-          <div className="kana">{state.currentKana}</div>
+          <div className="kana" key={state.currentKana}>
+            {state.currentKana}
+          </div>
         ) : (
           <div className="any">{t("anyFirst")}</div>
         )}

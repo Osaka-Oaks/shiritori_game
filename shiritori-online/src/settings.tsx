@@ -29,6 +29,12 @@ type Str = { en: string; ja: string };
 const STRINGS = {
   subtitle: { en: "Shiritori · word chain", ja: "しりとり・ことばつなぎ" },
 
+  // Welcome splash
+  welcome: { en: "Welcome!", ja: "ようこそ！" },
+  welcomeBack: { en: "Welcome back, {name}!", ja: "おかえり、{name}！" },
+  welcomeMsg: { en: "Let's play the word-chain game!", ja: "ことばつなぎであそぼう！" },
+  tapToStart: { en: "Tap to start", ja: "タップしてスタート" },
+
   // Home / lobby
   yourName: { en: "Your name", ja: "なまえ" },
   namePlaceholder: { en: "e.g. Mei", ja: "れい：めい" },
@@ -50,6 +56,10 @@ const STRINGS = {
   joining: { en: "Joining…", ja: "さんかちゅう…" },
   howToPlay: { en: "How to play", ja: "あそびかた" },
   enterCode: { en: "Enter the 4-character room code.", ja: "4文字のコードを入れてね。" },
+
+  // Love note 💌
+  loveButton: { en: "A note for Mei", ja: "メイへのメッセージ" },
+  loveClose: { en: "I love you too 💛", ja: "わたしもだいすき 💛" },
 
   // Connecting / errors
   connecting: { en: "Connecting…", ja: "せつぞくちゅう…" },
