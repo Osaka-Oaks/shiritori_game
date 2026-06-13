@@ -8,6 +8,8 @@ import {
 } from "../lib/roomService";
 import { romajiToHiragana, speak } from "../lib/romaji";
 import { findHint } from "../lib/words";
+import { validateMove } from "../lib/shiritori";
+import { lookupWord } from "../lib/dictionary";
 import { useSettings, SettingsControls } from "../settings";
 import type { GameState } from "../types";
 
@@ -24,6 +26,7 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
   const [closed, setClosed] = useState(false);
   const [raw, setRaw] = useState("");
   const [moveError, setMoveError] = useState("");
+  const [checking, setChecking] = useState(false);
   const [now, setNow] = useState(Date.now());
   const [copied, setCopied] = useState(false);
   const chainRef = useRef<HTMLDivElement>(null);
@@ -131,8 +134,30 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
   }
 
   async function submit() {
-    if (!state || !converted.trim()) return;
-    const res = await playWord(state, uid, converted);
+    if (!state || !converted.trim() || checking) return;
+
+    // Fast pre-check for obvious errors (wrong kana, duplicate, etc.) before hitting the API.
+    const preCheck = validateMove(
+      converted,
+      state.currentKana,
+      state.words.map((w) => w.word),
+      state.settings
+    );
+    if (!preCheck.ok) {
+      setMoveError(preCheck.reason);
+      return;
+    }
+
+    setChecking(true);
+    const { valid, meaning } = await lookupWord(converted);
+    setChecking(false);
+
+    if (!valid) {
+      setMoveError(t("notRealWord"));
+      return;
+    }
+
+    const res = await playWord(state, uid, converted, meaning);
     if (res.ok) {
       setRaw("");
     } else {
@@ -235,6 +260,7 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
                 🔊
               </button>
               <div className="kana">{w.word}</div>
+              {w.meaning && <div className="meaning">{w.meaning}</div>}
               <div className="romaji">
                 → {t("nextLabel")}: 「{w.kana}」
               </div>
@@ -250,7 +276,10 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
               <div className="preview">
                 {converted || <span className="ph">{t("typePrompt")}</span>}
               </div>
-              {moveError && <div className="error">{moveError}</div>}
+              {checking
+                ? <div className="error" style={{ color: "var(--muted)" }}>{t("checking")}</div>
+                : moveError && <div className="error">{moveError}</div>
+              }
               <div className="dock-row">
                 <input
                   className="field"
@@ -262,6 +291,7 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
                   autoCapitalize="off"
                   spellCheck={false}
                   enterKeyHint="send"
+                  disabled={checking}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
@@ -269,8 +299,8 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
                     }
                   }}
                 />
-                <button className="send" onClick={submit} disabled={!converted.trim()} aria-label="Send">
-                  ➤
+                <button className="send" onClick={submit} disabled={!converted.trim() || checking} aria-label="Send">
+                  {checking ? "…" : "➤"}
                 </button>
               </div>
               <button className="btn ghost hint-btn" onClick={useHint}>

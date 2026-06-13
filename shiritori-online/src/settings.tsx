@@ -96,6 +96,8 @@ const STRINGS = {
   inputPlaceholder: { en: "e.g. sakura → さくら", ja: "れい：sakura → さくら" },
   hint: { en: "Hint", ja: "ヒント" },
   noHint: { en: "No hint available — you're on your own! 💪", ja: "ヒントなし — がんばって！💪" },
+  checking: { en: "Checking word…", ja: "ことばをかくにんちゅう…" },
+  notRealWord: { en: "Not a real Japanese word — try another!", ja: "日本語のことばではありません — 別のことばを試してね！" },
   waitingOpp: { en: "Waiting for {name} to play…", ja: "{name}さんの番をまっています…" },
   opponentFallback: { en: "your opponent", ja: "あいて" },
 

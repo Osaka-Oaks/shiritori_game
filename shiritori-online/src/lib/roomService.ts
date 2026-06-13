@@ -167,7 +167,8 @@ export type PlayResult = { ok: true } | { ok: false; reason: string };
 export async function playWord(
   state: GameState,
   uid: string,
-  rawWord: string
+  rawWord: string,
+  meaning?: string
 ): Promise<PlayResult> {
   const seat = seatOf(state, uid);
   if (seat === -1) return { ok: false, reason: "You're not in this game." };
@@ -191,6 +192,7 @@ export async function playWord(
     seat,
     by: uid,
     ts: now,
+    ...(meaning ? { meaning } : {}),
   };
 
   await runTransaction(gameRef(state.code), (raw) => {

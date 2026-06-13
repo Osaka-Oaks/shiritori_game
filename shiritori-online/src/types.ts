@@ -9,6 +9,7 @@ export interface PlayedWord {
   seat: number; // 0 or 1 — who played it
   by: string; // uid
   ts: number; // client timestamp (ms)
+  meaning?: string; // English meaning from dictionary lookup
 }
 
 export interface GameState {
