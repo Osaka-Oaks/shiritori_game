@@ -162,22 +162,6 @@ export default function GameRoomView({
       if (!response.ok) throw new Error("Bot turn API error");
       const botPlay = await response.json();
 
-      // Check if bot tried to play a duplicate word
-      const botLower = botPlay.word.toLowerCase();
-      const botDuplicate = currentHistory.some(w => 
-        w.word.toLowerCase() === botLower || 
-        w.hiragana === botPlay.hiragana || 
-        w.kanji === botPlay.kanji ||
-        w.romaji.toLowerCase() === (botPlay.romaji || "").toLowerCase()
-      );
-
-      if (botDuplicate) {
-        // Bot made an error - player wins
-        setBotChat(`Oh no! I accidentally repeated "${botPlay.word}". That's against the rules - you win!`);
-        setTimeout(() => triggerGameOver("player"), 2000);
-        return;
-      }
-
       // Check if bot played a fatal word ending in ん (fatal self loss)
       const isFatal = botPlay.endSound === "ん" || botPlay.word.toLowerCase().endsWith("n");
 
@@ -398,7 +382,7 @@ export default function GameRoomView({
     setSuccessState(null);
     setOopsState(null);
     setGameOverState(null);
-    setBotChat(`New game! I played "Ringo" (りんご) = 🍎 Apple. Match the sound "go" (ご)! がんばって!`);
+    setBotChat(`New game battle launched! Connect current word "Ringo". Play sound syllable "go" (ご)!`);
   };
 
   return (

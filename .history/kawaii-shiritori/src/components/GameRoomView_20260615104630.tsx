@@ -398,7 +398,7 @@ export default function GameRoomView({
     setSuccessState(null);
     setOopsState(null);
     setGameOverState(null);
-    setBotChat(`New game! I played "Ringo" (りんご) = 🍎 Apple. Match the sound "go" (ご)! がんばって!`);
+    setBotChat(`New game battle launched! Connect current word "Ringo". Play sound syllable "go" (ご)!`);
   };
 
   return (
