@@ -94,43 +94,6 @@ export default function App() {
     localStorage.setItem("shiritori_matches_v2", JSON.stringify(matches));
   }, [matches]);
 
-  // Initialize Firebase services on app mount
-  React.useEffect(() => {
-    console.log("🔥 Initializing Firebase services...");
-    
-    // Fetch Remote Config
-    fetchRemoteConfig().then(activated => {
-      if (activated) {
-        console.log("✅ Remote Config fetched and activated");
-      }
-    });
-    
-    // Request notification permission (optional)
-    // Uncomment to enable push notifications
-    // requestNotificationPermission().then(token => {
-    //   if (token) {
-    //     console.log("✅ Notifications enabled. FCM Token:", token);
-    //     // Save token to database for later use
-    //   }
-    // });
-    
-    // Listen for foreground messages
-    listenForMessages((payload) => {
-      console.log("📬 Notification received:", payload);
-      // Show in-app notification or update UI
-    });
-    
-    // Set user properties for analytics
-    setAnalyticsUserProperties({
-      user_name: profile.name,
-      total_matches: matches.length,
-      app_version: "1.0.0"
-    });
-    
-    // Track page load performance
-    GamePerformance.trackPageLoad("home");
-  }, []); // Run once on mount
-
   // --- SCORE REDUCTION RECAP SYSTEM FOR LEADERBOARD ---
   const leaderboardWithCurrent = React.useMemo(() => {
     // Collect all unique matches score points of player
