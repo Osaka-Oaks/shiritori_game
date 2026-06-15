@@ -46,6 +46,7 @@ export default function GameRoomView({
   const [hasShieldGuard, setHasShieldGuard] = React.useState(true);
   const [shieldActive, setShieldActive] = React.useState(false);
   const [hintCount, setHintCount] = React.useState(3);
+  const [voiceError, setVoiceError] = React.useState<string>("");
 
   // Timer settings
   const INITIAL_TIME_S = selectedBot.difficulty === "easy" ? 40 : selectedBot.difficulty === "medium" ? 25 : 15;
@@ -128,6 +129,11 @@ export default function GameRoomView({
 
     return () => clearInterval(timer);
   }, [timeLeft, currentTurn, hasShieldGuard, successState, oopsState, gameOverState]);
+
+  // Translate text in client preview romaji -> hiragana
+  const inputHiraganaPreview = React.useMemo(() => {
+    return convertRomajiToHiragana(playerInput);
+  }, [playerInput]);
 
   // Get requested sound syllable
   const requiredLetter = React.useMemo(() => {
@@ -567,20 +573,54 @@ export default function GameRoomView({
             <Zap className={`w-5 h-5 fill-current ${showPowerupMenu ? 'animate-bounce' : ''}`} />
           </button>
 
-          {/* Enhanced Japanese Input Field with Voice, Text, and Predictions */}
-          <div className="flex-grow">
-            <JapaneseInputField
-              value={playerInput}
-              onChange={setPlayerInput}
-              onSubmit={submitWord}
+          {/* Core Word Input field */}
+          <div className="relative flex-grow">
+            <input
+              type="text"
+              id="game-word-input"
               disabled={currentTurn === "opponent" || evaluatingWord}
-              placeholder={currentTurn === "opponent" ? "Waiting for Bot..." : `Type or speak in Japanese...`}
-              requiredSound={requiredLetter}
-              showVoiceButton={true}
-              showPredictions={true}
+              className="w-full bg-surface border-2 border-primary rounded-none py-3 px-6 pr-24 text-on-surface font-body font-bold placeholder:text-white/30 focus:outline-none focus:border-white focus:ring-2 focus:ring-primary/20 transition-all shadow-[4px_4px_0px_0px_#f27d26] disabled:opacity-50"
+              placeholder={currentTurn === "opponent" ? "Waiting for Bot..." : `Type or speak...`}
+              value={playerInput}
+              onChange={(e) => setPlayerInput(e.target.value.replace(/[^a-zA-Zあ-んア-ン]/g, ""))}
             />
+            
+            {/* Voice Input Button */}
+            <div className="absolute right-14 top-1/2 -translate-y-1/2">
+              <VoiceInputButton
+                onResult={(text) => setPlayerInput(text)}
+                onError={(err) => setVoiceError(err)}
+                language="ja-JP"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={!playerInput.trim() || currentTurn === "opponent" || evaluatingWord}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-on-primary rounded-none p-2 hover:bg-opacity-90 disabled:opacity-50 transition-colors cursor-pointer border border-white"
+            >
+              {evaluatingWord ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
+            </button>
           </div>
         </form>
+
+        {/* Converted real-time preview helper tooltip */}
+        {playerInput && (
+          <div className="text-center font-display-game font-bold text-xs bg-primary/10 text-primary py-1 px-4 rounded-full mx-auto max-w-xs animate-fade-in select-none">
+            Preview Conversion: <span className="underline font-extrabold">{inputHiraganaPreview}</span>
+          </div>
+        )}
+
+        {/* Voice Error Message */}
+        {voiceError && (
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-xs text-error bg-error-container/20 py-1 px-4 rounded-full mx-auto max-w-xs"
+          >
+            🎤 {voiceError}
+          </motion.div>
+        )}
 
         {/* --- POWERUPS OVERLAY DROPDOWN DRAWER --- */}
         <AnimatePresence>

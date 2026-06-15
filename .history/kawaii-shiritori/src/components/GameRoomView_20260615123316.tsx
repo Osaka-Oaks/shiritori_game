@@ -129,6 +129,11 @@ export default function GameRoomView({
     return () => clearInterval(timer);
   }, [timeLeft, currentTurn, hasShieldGuard, successState, oopsState, gameOverState]);
 
+  // Translate text in client preview romaji -> hiragana
+  const inputHiraganaPreview = React.useMemo(() => {
+    return convertRomajiToHiragana(playerInput);
+  }, [playerInput]);
+
   // Get requested sound syllable
   const requiredLetter = React.useMemo(() => {
     const lastWord = playedWords[playedWords.length - 1];

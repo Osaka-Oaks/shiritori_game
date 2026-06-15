@@ -46,6 +46,7 @@ export default function GameRoomView({
   const [hasShieldGuard, setHasShieldGuard] = React.useState(true);
   const [shieldActive, setShieldActive] = React.useState(false);
   const [hintCount, setHintCount] = React.useState(3);
+  const [voiceError, setVoiceError] = React.useState<string>("");
 
   // Timer settings
   const INITIAL_TIME_S = selectedBot.difficulty === "easy" ? 40 : selectedBot.difficulty === "medium" ? 25 : 15;
@@ -128,6 +129,11 @@ export default function GameRoomView({
 
     return () => clearInterval(timer);
   }, [timeLeft, currentTurn, hasShieldGuard, successState, oopsState, gameOverState]);
+
+  // Translate text in client preview romaji -> hiragana
+  const inputHiraganaPreview = React.useMemo(() => {
+    return convertRomajiToHiragana(playerInput);
+  }, [playerInput]);
 
   // Get requested sound syllable
   const requiredLetter = React.useMemo(() => {
