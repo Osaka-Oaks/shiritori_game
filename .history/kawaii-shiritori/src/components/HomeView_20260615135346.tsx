@@ -1,7 +1,7 @@
 import React from "react";
 import { PlayerProfile, MatchHistory } from "../types";
 import { motion } from "motion/react";
-import { Play, BookOpen, RefreshCw, ChevronRight, User, Cpu, Target, Users, Smartphone, Zap } from "lucide-react";
+import { Play, BookOpen, RefreshCw, ChevronRight, User, Cpu, Target, Users, Smartphone } from "lucide-react";
 
 interface HomeViewProps {
   profile: PlayerProfile;
@@ -114,18 +114,6 @@ export default function HomeView({
             <Play className="fill-current w-4 h-4" />
             Play bot match
           </motion.button>
-
-          {onQuickTest && (
-            <motion.button
-              onClick={onQuickTest}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-              className="squish-btn w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-display-game font-bold py-3 px-6 rounded-none flex items-center justify-center gap-3 transition-all cursor-pointer text-xs uppercase tracking-widest border border-yellow-400/60 shadow-lg"
-            >
-              <Zap className="fill-current w-4 h-4" />
-              Quick Test (Free Bot)
-            </motion.button>
-          )}
 
           <motion.button
             onClick={onOpenMultiplayer}

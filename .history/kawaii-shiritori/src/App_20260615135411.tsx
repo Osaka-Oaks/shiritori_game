@@ -201,7 +201,6 @@ export default function App() {
             onOpenPractice={() => setActiveView("PRACTICE")}
             onOpenMultiplayer={() => setActiveView("MULTIPLAYER")}
             onOpenLocalMultiplayer={() => setActiveView("LOCAL_MULTIPLAYER")}
-            onQuickTest={handleQuickTest}
           />
         );
       case "AVATAR_PICKER":
