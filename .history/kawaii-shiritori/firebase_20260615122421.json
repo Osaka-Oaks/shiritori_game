@@ -48,20 +48,5 @@
   },
   "database": {
     "rules": "database.rules.json"
-  },
-  "emulators": {
-    "hosting": {
-      "port": 5000
-    },
-    "firestore": {
-      "port": 8081
-    },
-    "database": {
-      "port": 9000
-    },
-    "ui": {
-      "enabled": true,
-      "port": 4000
-    }
   }
 }
