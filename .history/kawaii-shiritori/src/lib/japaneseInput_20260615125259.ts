@@ -87,36 +87,23 @@ const wordCache = new Map<string, any>();
  * Initialize dictionary cache
  */
 export function initializeDictionaryCache() {
-  try {
-    if (!dictionary || !Array.isArray(dictionary)) {
-      console.warn("⚠️ Dictionary not loaded, skipping cache initialization");
-      return;
-    }
-
-    dictionary.forEach((entry) => {
-      if (!entry || !entry.hiragana) return;
-
-      // Cache by hiragana
-      dictionaryCache.set(entry.hiragana, true);
-      wordCache.set(entry.hiragana, entry);
-      
-      // Cache by romaji if available
-      if (entry.romaji) {
-        dictionaryCache.set(entry.romaji.toLowerCase(), true);
-        wordCache.set(entry.romaji.toLowerCase(), entry);
-      }
-      
-      // Cache by word name
-      if (entry.word) {
-        dictionaryCache.set(entry.word.toLowerCase(), true);
-        wordCache.set(entry.word.toLowerCase(), entry);
-      }
-    });
+  dictionary.forEach((entry) => {
+    // Cache by hiragana
+    dictionaryCache.set(entry.hiragana, true);
+    wordCache.set(entry.hiragana, entry);
     
-    console.log(`✅ Dictionary cache initialized: ${dictionaryCache.size} entries`);
-  } catch (error) {
-    console.error("❌ Failed to initialize dictionary cache:", error);
-  }
+    // Cache by romaji if available
+    if (entry.romaji) {
+      dictionaryCache.set(entry.romaji.toLowerCase(), true);
+      wordCache.set(entry.romaji.toLowerCase(), entry);
+    }
+    
+    // Cache by word name
+    dictionaryCache.set(entry.word.toLowerCase(), true);
+    wordCache.set(entry.word.toLowerCase(), entry);
+  });
+  
+  console.log(`✅ Dictionary cache initialized: ${dictionaryCache.size} entries`);
 }
 
 /**
@@ -429,11 +416,7 @@ export function validateShiritoriWord(
 
 // Initialize cache on module load
 if (typeof window !== "undefined") {
-  try {
-    initializeDictionaryCache();
-  } catch (error) {
-    console.error("❌ Failed to initialize on module load:", error);
-  }
+  initializeDictionaryCache();
 }
 
 export default {

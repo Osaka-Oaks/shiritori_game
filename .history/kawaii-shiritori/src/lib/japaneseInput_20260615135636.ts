@@ -429,11 +429,7 @@ export function validateShiritoriWord(
 
 // Initialize cache on module load
 if (typeof window !== "undefined") {
-  try {
-    initializeDictionaryCache();
-  } catch (error) {
-    console.error("❌ Failed to initialize on module load:", error);
-  }
+  initializeDictionaryCache();
 }
 
 export default {

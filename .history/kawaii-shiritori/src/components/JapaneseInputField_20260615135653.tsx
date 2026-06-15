@@ -114,27 +114,21 @@ export default function JapaneseInputField({
 
   // Auto-convert romaji to hiragana as user types
   const handleInputChange = (newValue: string) => {
-    try {
-      // If input is empty, just update
-      if (!newValue) {
-        onChange("");
-        return;
-      }
-
-      // If user is typing in Japanese directly (kana), keep it
-      if (isKana(newValue[newValue.length - 1])) {
-        onChange(newValue);
-        return;
-      }
-
-      // Auto-convert romaji to hiragana
-      const converted = convertRomajiToHiragana(newValue, true);
-      onChange(converted);
-    } catch (error) {
-      console.error("Failed to convert input:", error);
-      // Fallback: just use the raw input
-      onChange(newValue);
+    // If input is empty, just update
+    if (!newValue) {
+      onChange("");
+      return;
     }
+
+    // If user is typing in Japanese directly (kana), keep it
+    if (isKana(newValue[newValue.length - 1])) {
+      onChange(newValue);
+      return;
+    }
+
+    // Auto-convert romaji to hiragana
+    const converted = convertRomajiToHiragana(newValue, true);
+    onChange(converted);
   };
 
   // Generate predictions based on input
