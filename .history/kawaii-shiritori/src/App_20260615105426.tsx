@@ -165,7 +165,7 @@ export default function App() {
           />
         );
       case "RULES":
-        return <EnhancedRulesView />;
+        return <RulesView />;
       case "HISTORY":
         return (
           <HistoryView
