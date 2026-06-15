@@ -372,10 +372,24 @@ input {
   margin-top: 2px;
 }
 .bubble .meaning {
-  font-size: 11px;
-  font-style: italic;
-  opacity: 0.65;
-  margin-top: 3px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+.last-word-hint {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+.live-meaning {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--good);
+  margin-top: -2px;
+  margin-bottom: 6px;
+  animation: fade 0.25s ease;
 }
 .bubble.me {
   align-self: flex-end;

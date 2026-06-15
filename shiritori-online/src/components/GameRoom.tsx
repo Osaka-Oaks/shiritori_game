@@ -27,6 +27,7 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
   const [raw, setRaw] = useState("");
   const [moveError, setMoveError] = useState("");
   const [checking, setChecking] = useState(false);
+  const [liveMeaning, setLiveMeaning] = useState<string | undefined>();
   const [now, setNow] = useState(Date.now());
   const [copied, setCopied] = useState(false);
   const chainRef = useRef<HTMLDivElement>(null);
@@ -59,6 +60,18 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
   useEffect(() => {
     if (moveError) setMoveError("");
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [raw]);
+
+  // Live meaning lookup while typing — debounced 400 ms, cache-backed.
+  useEffect(() => {
+    const kana = romajiToHiragana(raw);
+    setLiveMeaning(undefined);
+    if (kana.length < 2) return;
+    const timer = setTimeout(async () => {
+      const { valid, meaning } = await lookupWord(kana);
+      if (valid) setLiveMeaning(meaning);
+    }, 400);
+    return () => clearTimeout(timer);
   }, [raw]);
 
   const mySeat = state ? seatOf(state, uid) : -1;
@@ -160,6 +173,7 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
     const res = await playWord(state, uid, converted, meaning);
     if (res.ok) {
       setRaw("");
+      setLiveMeaning(undefined);
     } else {
       setMoveError(res.reason);
     }
@@ -236,9 +250,19 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
       <div className="next-kana">
         <div className="lbl">{t("nextStartsWith")}</div>
         {state.currentKana ? (
-          <div className="kana" key={state.currentKana}>
-            {state.currentKana}
-          </div>
+          <>
+            {(() => {
+              const last = state.words[state.words.length - 1];
+              return last ? (
+                <div className="last-word-hint">
+                  {last.word}{last.meaning ? ` — ${last.meaning}` : ""}
+                </div>
+              ) : null;
+            })()}
+            <div className="kana" key={state.currentKana}>
+              {state.currentKana}
+            </div>
+          </>
         ) : (
           <div className="any">{t("anyFirst")}</div>
         )}
@@ -276,6 +300,9 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
               <div className="preview">
                 {converted || <span className="ph">{t("typePrompt")}</span>}
               </div>
+              {liveMeaning && converted && !checking && (
+                <div className="live-meaning">{liveMeaning}</div>
+              )}
               {checking
                 ? <div className="error" style={{ color: "var(--muted)" }}>{t("checking")}</div>
                 : moveError && <div className="error">{moveError}</div>
