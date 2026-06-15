@@ -1,0 +1,12 @@
+{
+  "name": "shiritori-game-workspace",
+  "private": true,
+  "description": "Root command runner for the Shiritori Online app.",
+  "scripts": {
+    "install:app": "npm --prefix shiritori-online install",
+    "dev": "npm --prefix shiritori-online run dev",
+    "build": "npm --prefix shiritori-online run build",
+    "preview": "npm --prefix shiritori-online run preview",
+    "deploy": "npm --prefix shiritori-online run deploy"
+  }
+}

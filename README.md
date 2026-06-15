@@ -21,18 +21,43 @@ installable as a PWA.
 | `stitch_bilingual_shiritori_blitz/` | Design mockups (static HTML screens) |
 | `How to Play Shiritori.*` | The bilingual rules guide |
 
-The working game lives in **[`shiritori-online/`](shiritori-online/)** — see its
-[README](shiritori-online/README.md) for full details.
+The working game lives in **[`shiritori-online/`](shiritori-online/)**. Treat
+the other app folders as references unless you are intentionally porting a
+specific feature into `shiritori-online`.
 
 ---
 
 ## Run it locally
 
 ```bash
-cd shiritori-online
-npm install
+npm run install:app
 npm run dev          # open the printed Network URL on your phone to test
 ```
+
+The root `package.json` delegates to `shiritori-online`, so these commands all
+operate on the one production app:
+
+```bash
+npm run build
+npm run preview
+npm run deploy
+```
+
+You can still run the same commands from inside `shiritori-online/` if you
+prefer. See [`shiritori-online/README.md`](shiritori-online/README.md) for the
+full app details.
+
+---
+
+## How to use the reference folders
+
+- Use `stitch_bilingual_shiritori_blitz/` for visual ideas, screen mockups, and
+  static HTML references.
+- Use `kawaii-shiritori/` and `shiritori-word-chain/` as older prototypes to
+  borrow from, not as production apps.
+- Use `shiritori-v1/` only as the early Next.js/Firebase reference.
+- Keep new production work in `shiritori-online/` unless you are deliberately
+  porting a feature from a prototype.
 
 ---
 
