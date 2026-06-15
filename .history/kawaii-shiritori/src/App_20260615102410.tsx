@@ -144,7 +144,6 @@ export default function App() {
             onOpenRules={() => setActiveView("RULES")}
             onSelectMatch={handleSelectRecentMatch}
             onOpenPractice={() => setActiveView("PRACTICE")}
-            onOpenMultiplayer={() => setActiveView("MULTIPLAYER")}
           />
         );
       case "AVATAR_PICKER":

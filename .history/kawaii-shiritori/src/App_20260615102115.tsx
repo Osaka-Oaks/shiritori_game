@@ -7,11 +7,8 @@ import HistoryView from "./components/HistoryView";
 import LibraryView from "./components/LibraryView";
 import LeaderboardView from "./components/LeaderboardView";
 import RulesView from "./components/RulesView";
-import PracticeModeView from "./components/PracticeModeView";
-import MultiplayerView from "./components/MultiplayerView";
-import UnityGameView from "./components/UnityGameView";
 import { motion, AnimatePresence } from "motion/react";
-import { Gamepad2, History, BookOpen, Trophy, HelpCircle, Heart, Sparkles, X, Swords, Target, Users } from "lucide-react";
+import { Gamepad2, History, BookOpen, Trophy, HelpCircle, Heart, Sparkles, X, Swords } from "lucide-react";
 
 const BOT_OPPONENTS: OpponentBot[] = [
   {
@@ -143,8 +140,6 @@ export default function App() {
             onStartGame={handleStartGameSetup}
             onOpenRules={() => setActiveView("RULES")}
             onSelectMatch={handleSelectRecentMatch}
-            onOpenPractice={() => setActiveView("PRACTICE")}
-            onOpenMultiplayer={() => setActiveView("MULTIPLAYER")}
           />
         );
       case "AVATAR_PICKER":
@@ -178,10 +173,6 @@ export default function App() {
         return <LibraryView />;
       case "LEADERBOARD":
         return <LeaderboardView users={leaderboardWithCurrent} />;
-      case "PRACTICE":
-        return <PracticeModeView />;
-      case "MULTIPLAYER":
-        return <MultiplayerView profile={profile} onBack={() => setActiveView("HOME")} />;
       default:
         return <div className="text-center py-20 font-body">Tab parsing anomaly error inside view registry.</div>;
     }

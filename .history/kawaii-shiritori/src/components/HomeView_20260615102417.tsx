@@ -1,7 +1,7 @@
 import React from "react";
 import { PlayerProfile, MatchHistory } from "../types";
 import { motion } from "motion/react";
-import { Play, BookOpen, RefreshCw, ChevronRight, User, Cpu, Target, Users } from "lucide-react";
+import { Play, BookOpen, RefreshCw, ChevronRight, User, Cpu, Target } from "lucide-react";
 
 interface HomeViewProps {
   profile: PlayerProfile;
@@ -22,7 +22,6 @@ export default function HomeView({
   onOpenRules,
   onSelectMatch,
   onOpenPractice,
-  onOpenMultiplayer,
 }: HomeViewProps) {
   // Generate random static positions for background kana floating
   const floatingKana = React.useMemo(() => {
@@ -109,16 +108,6 @@ export default function HomeView({
           >
             <Play className="fill-current w-4 h-4" />
             Play bot match
-          </motion.button>
-
-          <motion.button
-            onClick={onOpenMultiplayer}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className="squish-btn w-full bg-tertiary-container text-white font-display-game font-bold py-3 px-6 rounded-none flex items-center justify-center gap-3 transition-all cursor-pointer text-xs uppercase tracking-widest border border-tertiary-container/60"
-          >
-            <Users className="w-4 h-4" />
-            Multiplayer
           </motion.button>
 
           <motion.button
