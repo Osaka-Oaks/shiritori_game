@@ -3,7 +3,6 @@ import { PlayerProfile, OpponentBot, PlayedWord, MatchHistory, WordHint } from "
 import { convertRomajiToHiragana, speakWord } from "../utils";
 import { motion, AnimatePresence } from "motion/react";
 import { Home, Lightbulb, Shield, ShieldCheck, ArrowRight, Zap, RefreshCw, X, AlertOctagon, Volume2, Trophy, Loader2 } from "lucide-react";
-import VoiceInputButton from "./VoiceInputButton";
 
 interface GameRoomProps {
   playerProfile: PlayerProfile;
@@ -46,7 +45,6 @@ export default function GameRoomView({
   const [hasShieldGuard, setHasShieldGuard] = React.useState(true);
   const [shieldActive, setShieldActive] = React.useState(false);
   const [hintCount, setHintCount] = React.useState(3);
-  const [voiceError, setVoiceError] = React.useState<string>("");
 
   // Timer settings
   const INITIAL_TIME_S = selectedBot.difficulty === "easy" ? 40 : selectedBot.difficulty === "medium" ? 25 : 15;
@@ -59,47 +57,7 @@ export default function GameRoomView({
   const [gameOverState, setGameOverState] = React.useState<{ show: boolean; winnerName: string; winnerAvatar: string } | null>(null);
 
   // Bot Speech Bubble Dialog text
-  const [botChat, setBotChat] = React.useState(`Hello, ${playerProfile.name}! I played "Ringo" (りんご) = 🍎 Apple. Match the final sound "go" (ご)!`);
-
-  // Auto-save game state to localStorage
-  React.useEffect(() => {
-    if (playedWords.length > 1 && !gameOverState?.show) {
-      const gameState = {
-        playedWords,
-        playerScore,
-        opponentScore,
-        currentTurn,
-        timeLeft,
-        botName: selectedBot.name,
-        timestamp: Date.now()
-      };
-      localStorage.setItem('shiritori_game_state', JSON.stringify(gameState));
-    }
-  }, [playedWords, playerScore, opponentScore, currentTurn, gameOverState]);
-
-  // Load saved game state on mount
-  React.useEffect(() => {
-    const saved = localStorage.getItem('shiritori_game_state');
-    if (saved) {
-      try {
-        const state = JSON.parse(saved);
-        // Only restore if less than 1 hour old and same opponent
-        if (state.botName === selectedBot.name && Date.now() - state.timestamp < 3600000) {
-          // Optionally restore game state here
-          // For now, just clear it on new game
-        }
-      } catch (e) {
-        console.error('Failed to load saved game:', e);
-      }
-    }
-  }, []);
-
-  // Clear saved game on game over
-  React.useEffect(() => {
-    if (gameOverState?.show) {
-      localStorage.removeItem('shiritori_game_state');
-    }
-  }, [gameOverState]);
+  const [botChat, setBotChat] = React.useState(`Hello, ${playerProfile.name}! I played standard word "Ringo" (りんご). Match the final sound "go" (ご)!`);
 
   // --- SCIENTIFIC TIMING CHRONO ---
   React.useEffect(() => {
@@ -164,22 +122,6 @@ export default function GameRoomView({
       if (!response.ok) throw new Error("Bot turn API error");
       const botPlay = await response.json();
 
-      // Check if bot tried to play a duplicate word
-      const botLower = botPlay.word.toLowerCase();
-      const botDuplicate = currentHistory.some(w => 
-        w.word.toLowerCase() === botLower || 
-        w.hiragana === botPlay.hiragana || 
-        w.kanji === botPlay.kanji ||
-        w.romaji.toLowerCase() === (botPlay.romaji || "").toLowerCase()
-      );
-
-      if (botDuplicate) {
-        // Bot made an error - player wins
-        setBotChat(`Oh no! I accidentally repeated "${botPlay.word}". That's against the rules - you win!`);
-        setTimeout(() => triggerGameOver("player"), 2000);
-        return;
-      }
-
       // Check if bot played a fatal word ending in ん (fatal self loss)
       const isFatal = botPlay.endSound === "ん" || botPlay.word.toLowerCase().endsWith("n");
 
@@ -196,7 +138,7 @@ export default function GameRoomView({
           speaker: "opponent"
         }]);
 
-        setBotChat(`I played "${botPlay.word}" (${botPlay.hiragana}) = 🇬🇧 ${botPlay.translation}! Your turn to match "${botPlay.endSound}". がんばって!`);
+        setBotChat(botPlay.reason || `Played word "${botPlay.word}". Match spelling "${botPlay.endSound}"!`);
         speakWord(botPlay.hiragana || botPlay.word);
 
         if (isFatal) {
@@ -400,7 +342,7 @@ export default function GameRoomView({
     setSuccessState(null);
     setOopsState(null);
     setGameOverState(null);
-    setBotChat(`New game! I played "Ringo" (りんご) = 🍎 Apple. Match the sound "go" (ご)! がんばって!`);
+    setBotChat(`New game battle launched! Connect current word "Ringo". Play sound syllable "go" (ご)!`);
   };
 
   return (
@@ -520,10 +462,7 @@ export default function GameRoomView({
                     </div>
 
                     <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">
-                      Hiragana: <strong className="font-bold text-primary">{wordObj.hiragana}</strong>
-                    </p>
-                    <p className="text-xs font-bold text-secondary mt-1 flex items-center gap-1">
-                      🇬🇧 {wordObj.translation}
+                      Hiragana: <strong className="font-bold text-primary">{wordObj.hiragana}</strong> • {wordObj.translation}
                     </p>
                   </div>
 
@@ -579,21 +518,12 @@ export default function GameRoomView({
               type="text"
               id="game-word-input"
               disabled={currentTurn === "opponent" || evaluatingWord}
-              className="w-full bg-surface border-2 border-primary rounded-none py-3 px-6 pr-24 text-on-surface font-body font-bold placeholder:text-white/30 focus:outline-none focus:border-white focus:ring-2 focus:ring-primary/20 transition-all shadow-[4px_4px_0px_0px_#f27d26] disabled:opacity-50"
-              placeholder={currentTurn === "opponent" ? "Waiting for Bot..." : `Type or speak...`}
+              className="w-full bg-surface border-2 border-primary rounded-none py-3 px-6 pr-12 text-on-surface font-body font-bold placeholder:text-white/30 focus:outline-none focus:border-white focus:ring-2 focus:ring-primary/20 transition-all shadow-[4px_4px_0px_0px_#f27d26] disabled:opacity-50"
+              placeholder={currentTurn === "opponent" ? "Waiting for Bot..." : `Enter word...`}
               value={playerInput}
               onChange={(e) => setPlayerInput(e.target.value.replace(/[^a-zA-Zあ-んア-ン]/g, ""))}
             />
             
-            {/* Voice Input Button */}
-            <div className="absolute right-14 top-1/2 -translate-y-1/2">
-              <VoiceInputButton
-                onResult={(text) => setPlayerInput(text)}
-                onError={(err) => setVoiceError(err)}
-                language="ja-JP"
-              />
-            </div>
-
             <button
               type="submit"
               disabled={!playerInput.trim() || currentTurn === "opponent" || evaluatingWord}
@@ -609,17 +539,6 @@ export default function GameRoomView({
           <div className="text-center font-display-game font-bold text-xs bg-primary/10 text-primary py-1 px-4 rounded-full mx-auto max-w-xs animate-fade-in select-none">
             Preview Conversion: <span className="underline font-extrabold">{inputHiraganaPreview}</span>
           </div>
-        )}
-
-        {/* Voice Error Message */}
-        {voiceError && (
-          <motion.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center text-xs text-error bg-error-container/20 py-1 px-4 rounded-full mx-auto max-w-xs"
-          >
-            🎤 {voiceError}
-          </motion.div>
         )}
 
         {/* --- POWERUPS OVERLAY DROPDOWN DRAWER --- */}

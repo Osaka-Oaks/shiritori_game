@@ -3,7 +3,6 @@ import { PlayerProfile, OpponentBot, PlayedWord, MatchHistory, WordHint } from "
 import { convertRomajiToHiragana, speakWord } from "../utils";
 import { motion, AnimatePresence } from "motion/react";
 import { Home, Lightbulb, Shield, ShieldCheck, ArrowRight, Zap, RefreshCw, X, AlertOctagon, Volume2, Trophy, Loader2 } from "lucide-react";
-import VoiceInputButton from "./VoiceInputButton";
 
 interface GameRoomProps {
   playerProfile: PlayerProfile;
@@ -46,7 +45,6 @@ export default function GameRoomView({
   const [hasShieldGuard, setHasShieldGuard] = React.useState(true);
   const [shieldActive, setShieldActive] = React.useState(false);
   const [hintCount, setHintCount] = React.useState(3);
-  const [voiceError, setVoiceError] = React.useState<string>("");
 
   // Timer settings
   const INITIAL_TIME_S = selectedBot.difficulty === "easy" ? 40 : selectedBot.difficulty === "medium" ? 25 : 15;
@@ -579,21 +577,12 @@ export default function GameRoomView({
               type="text"
               id="game-word-input"
               disabled={currentTurn === "opponent" || evaluatingWord}
-              className="w-full bg-surface border-2 border-primary rounded-none py-3 px-6 pr-24 text-on-surface font-body font-bold placeholder:text-white/30 focus:outline-none focus:border-white focus:ring-2 focus:ring-primary/20 transition-all shadow-[4px_4px_0px_0px_#f27d26] disabled:opacity-50"
-              placeholder={currentTurn === "opponent" ? "Waiting for Bot..." : `Type or speak...`}
+              className="w-full bg-surface border-2 border-primary rounded-none py-3 px-6 pr-12 text-on-surface font-body font-bold placeholder:text-white/30 focus:outline-none focus:border-white focus:ring-2 focus:ring-primary/20 transition-all shadow-[4px_4px_0px_0px_#f27d26] disabled:opacity-50"
+              placeholder={currentTurn === "opponent" ? "Waiting for Bot..." : `Enter word...`}
               value={playerInput}
               onChange={(e) => setPlayerInput(e.target.value.replace(/[^a-zA-Zあ-んア-ン]/g, ""))}
             />
             
-            {/* Voice Input Button */}
-            <div className="absolute right-14 top-1/2 -translate-y-1/2">
-              <VoiceInputButton
-                onResult={(text) => setPlayerInput(text)}
-                onError={(err) => setVoiceError(err)}
-                language="ja-JP"
-              />
-            </div>
-
             <button
               type="submit"
               disabled={!playerInput.trim() || currentTurn === "opponent" || evaluatingWord}
@@ -609,17 +598,6 @@ export default function GameRoomView({
           <div className="text-center font-display-game font-bold text-xs bg-primary/10 text-primary py-1 px-4 rounded-full mx-auto max-w-xs animate-fade-in select-none">
             Preview Conversion: <span className="underline font-extrabold">{inputHiraganaPreview}</span>
           </div>
-        )}
-
-        {/* Voice Error Message */}
-        {voiceError && (
-          <motion.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center text-xs text-error bg-error-container/20 py-1 px-4 rounded-full mx-auto max-w-xs"
-          >
-            🎤 {voiceError}
-          </motion.div>
         )}
 
         {/* --- POWERUPS OVERLAY DROPDOWN DRAWER --- */}

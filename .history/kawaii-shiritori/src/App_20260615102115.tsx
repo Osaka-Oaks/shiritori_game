@@ -6,20 +6,9 @@ import GameRoomView from "./components/GameRoomView";
 import HistoryView from "./components/HistoryView";
 import LibraryView from "./components/LibraryView";
 import LeaderboardView from "./components/LeaderboardView";
-import EnhancedRulesView from "./components/EnhancedRulesView";
-import PracticeModeView from "./components/PracticeModeView";
-import MultiplayerView from "./components/MultiplayerView";
-import LocalMultiplayerView from "./components/LocalMultiplayerView";
-import UnityGameView from "./components/UnityGameView";
+import RulesView from "./components/RulesView";
 import { motion, AnimatePresence } from "motion/react";
-import { Gamepad2, History, BookOpen, Trophy, HelpCircle, Heart, Sparkles, X, Swords, Target, Users } from "lucide-react";
-import { 
-  fetchRemoteConfig, 
-  requestNotificationPermission, 
-  listenForMessages,
-  GamePerformance,
-  setAnalyticsUserProperties 
-} from "./lib/firebase";
+import { Gamepad2, History, BookOpen, Trophy, HelpCircle, Heart, Sparkles, X, Swords } from "lucide-react";
 
 const BOT_OPPONENTS: OpponentBot[] = [
   {
@@ -94,43 +83,6 @@ export default function App() {
     localStorage.setItem("shiritori_matches_v2", JSON.stringify(matches));
   }, [matches]);
 
-  // Initialize Firebase services on app mount
-  React.useEffect(() => {
-    console.log("🔥 Initializing Firebase services...");
-    
-    // Fetch Remote Config
-    fetchRemoteConfig().then(activated => {
-      if (activated) {
-        console.log("✅ Remote Config fetched and activated");
-      }
-    });
-    
-    // Request notification permission (optional)
-    // Uncomment to enable push notifications
-    // requestNotificationPermission().then(token => {
-    //   if (token) {
-    //     console.log("✅ Notifications enabled. FCM Token:", token);
-    //     // Save token to database for later use
-    //   }
-    // });
-    
-    // Listen for foreground messages
-    listenForMessages((payload) => {
-      console.log("📬 Notification received:", payload);
-      // Show in-app notification or update UI
-    });
-    
-    // Set user properties for analytics
-    setAnalyticsUserProperties({
-      user_name: profile.name,
-      total_matches: matches.length,
-      app_version: "1.0.0"
-    });
-    
-    // Track page load performance
-    GamePerformance.trackPageLoad("home");
-  }, []); // Run once on mount
-
   // --- SCORE REDUCTION RECAP SYSTEM FOR LEADERBOARD ---
   const leaderboardWithCurrent = React.useMemo(() => {
     // Collect all unique matches score points of player
@@ -188,9 +140,6 @@ export default function App() {
             onStartGame={handleStartGameSetup}
             onOpenRules={() => setActiveView("RULES")}
             onSelectMatch={handleSelectRecentMatch}
-            onOpenPractice={() => setActiveView("PRACTICE")}
-            onOpenMultiplayer={() => setActiveView("MULTIPLAYER")}
-            onOpenLocalMultiplayer={() => setActiveView("LOCAL_MULTIPLAYER")}
           />
         );
       case "AVATAR_PICKER":
@@ -211,7 +160,7 @@ export default function App() {
           />
         );
       case "RULES":
-        return <EnhancedRulesView />;
+        return <RulesView />;
       case "HISTORY":
         return (
           <HistoryView
@@ -224,12 +173,6 @@ export default function App() {
         return <LibraryView />;
       case "LEADERBOARD":
         return <LeaderboardView users={leaderboardWithCurrent} />;
-      case "PRACTICE":
-        return <PracticeModeView />;
-      case "MULTIPLAYER":
-        return <MultiplayerView profile={profile} onBack={() => setActiveView("HOME")} />;
-      case "LOCAL_MULTIPLAYER":
-        return <LocalMultiplayerView profile={profile} onBack={() => setActiveView("HOME")} />;
       default:
         return <div className="text-center py-20 font-body">Tab parsing anomaly error inside view registry.</div>;
     }

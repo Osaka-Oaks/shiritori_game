@@ -8,8 +8,7 @@ export type AppView =
   | "RULES"
   | "AUTH"
   | "PRACTICE"
-  | "MULTIPLAYER"
-  | "LOCAL_MULTIPLAYER";
+  | "MULTIPLAYER";
 
 export interface AppCustomizations {
   accentColor: string;

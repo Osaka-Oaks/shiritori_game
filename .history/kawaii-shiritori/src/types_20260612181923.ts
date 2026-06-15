@@ -6,10 +6,7 @@ export type AppView =
   | "LIBRARY" 
   | "LEADERBOARD" 
   | "RULES"
-  | "AUTH"
-  | "PRACTICE"
-  | "MULTIPLAYER"
-  | "LOCAL_MULTIPLAYER";
+  | "AUTH";
 
 export interface AppCustomizations {
   accentColor: string;

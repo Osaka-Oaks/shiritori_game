@@ -6,20 +6,9 @@ import GameRoomView from "./components/GameRoomView";
 import HistoryView from "./components/HistoryView";
 import LibraryView from "./components/LibraryView";
 import LeaderboardView from "./components/LeaderboardView";
-import EnhancedRulesView from "./components/EnhancedRulesView";
-import PracticeModeView from "./components/PracticeModeView";
-import MultiplayerView from "./components/MultiplayerView";
-import LocalMultiplayerView from "./components/LocalMultiplayerView";
-import UnityGameView from "./components/UnityGameView";
+import RulesView from "./components/RulesView";
 import { motion, AnimatePresence } from "motion/react";
-import { Gamepad2, History, BookOpen, Trophy, HelpCircle, Heart, Sparkles, X, Swords, Target, Users } from "lucide-react";
-import { 
-  fetchRemoteConfig, 
-  requestNotificationPermission, 
-  listenForMessages,
-  GamePerformance,
-  setAnalyticsUserProperties 
-} from "./lib/firebase";
+import { Gamepad2, History, BookOpen, Trophy, HelpCircle, Heart, Sparkles, X, Swords } from "lucide-react";
 
 const BOT_OPPONENTS: OpponentBot[] = [
   {
@@ -47,9 +36,9 @@ const BOT_OPPONENTS: OpponentBot[] = [
 
 const INITIAL_LEADERBOARD: LeaderboardUser[] = [
   { rank: 1, name: "Neko Master", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBtgTJqbRrHR2A3kE3800L-klEN5Xn6-0v2Aa9D0SlnqU1DCP3BhnHXWghoFfL6hSsN1FgrjDtMuQUoSw9-xYVpSZMToJQx2tFlV6D2ngX5OuZT5cj3zk200QkuLB_UewEHTwuWRCVz9_q5-zmcpDpKWe-YrQnTqDPnYjkUfgahX40ChVBXYlskeWfuxd_VL3-UKJsmzBw8Fz96Ca8kuo7wD9D74opPtuFFAyxVH5PEFL_KwOepANbXGRwen5j8dl3p4nXwzKHJ-ApH", score: 2500 },
-  { rank: 2, name: "Sakura San", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuANOuGrOsv-96XQvI8bosq_UYcnNGdxDKm5cOF2YbrvU1TWSXsQvqqqDS4bVFmwbRDeWP4shfrZmDoXtHB3gt-9IJJITzse1D_ewjhj3qT-paPy294Mz5tih9ZdTEGRa-1chVf5KhcVghmhCvUGqQppn9DFqiQvq1gT1wE0GO0Ac5b15y8tju5B5TTWmXgZeg2ysTvNs_UqjgtaKDCqvK68L8-TWauBjqCXJacIiX80f33WvQ2maDkrMR3v9xaMaCfTi-YQA5YXO6Jj", score: 1800 },
+  { rank: 2, name: "Mei (Adventure)", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDD-0xFlMJoGr1RST4hByi07rC_6PAviMKob8wj8uioHoe4f4E92-JmQDXgh68sUWTe8HXRvsYMq1-sh6YQPQGAuQzqkDlxLTbZWrhSDAz0D9ncR-nTE-bZUeMT21DVWBlah5mWPl_GzvP1e0jLJ0Rp-_pFdEg_PS26_k8JpoKK_MkyyZ2__lzdPwrIi9kRjaEbOGZFDZpKHo6aUnHvq06fxLS4-w5gF2QgiIS8hhHvHqOOSqvBiHM2JbrcdbYSZbHHFdgMm5AR2_8k", score: 1800 },
   { rank: 3, name: "Inu Sensei", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDv2_dSmuLzNIvq77bleM6yYK1w2nskbF-805BwE30p1TCTfPqHucQDAhM51009utAwsM6gOV0Pf4wEKJ7SxEX9Zv2R7bHUD9Y48kWy2ryoViyezxrLRkfiMgWMXsgiswNZmqFEyeSZFvAUfS-BjXK2NuUE1tD4HE6ks_DU_weW0RR9jrg9ESv15u3kPcSXDOMX7jQdFtaqgPe82uxThMpWFrN0mLCMa8PEBZTMiDunmvltqaE4mghXOTvBoEhYqMx7RPt3lUshKVvY", score: 1200 },
-  { rank: 4, name: "Haru Chan", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDD-0xFlMJoGr1RST4hByi07rC_6PAviMKob8wj8uioHoe4f4E92-JmQDXgh68sUWTe8HXRvsYMq1-sh6YQPQGAuQzqkDlxLTbZWrhSDAz0D9ncR-nTE-bZUeMT21DVWBlah5mWPl_GzvP1e0jLJ0Rp-_pFdEg_PS26_k8JpoKK_MkyyZ2__lzdPwrIi9kRjaEbOGZFDZpKHo6aUnHvq06fxLS4-w5gF2QgiIS8hhHvHqOOSqvBiHM2JbrcdbYSZbHHFdgMm5AR2_8k", score: 850 },
+  { rank: 4, name: "Haru Chan", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuANOuGrOsv-96XQvI8bosq_UYcnNGdxDKm5cOF2YbrvU1TWSXsQvqqqDS4bVFmwbRDeWP4shfrZmDoXtHB3gt-9IJJITzse1D_ewjhj3qT-paPy294Mz5tih9ZdTEGRa-1chVf5KhcVghmhCvUGqQppn9DFqiQvq1gT1wE0GO0Ac5b15y8tju5B5TTWmXgZeg2ysTvNs_UqjgtaKDCqvK68L8-TWauBjqCXJacIiX80f33WvQ2maDkrMR3v9xaMaCfTi-YQA5YXO6Jj", score: 850 },
   { rank: 5, name: "Usagi Chan", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuC5Lg5SU1xKaPIp0mM--d-Cep1T93IrZoLObvX2XNsHO8P-sgdUN8q_D1v5DWfBUXEkKW59oJtJcM0q8o4_1jT5XFM9M3Mu3amwXXKFMPfo_S6MscBlMqBrO4sDHxvHNL1KlKIXI91sYZkaYd-X8aH6yzGf6ABkJUT1E2QAQnPRZLZ0C9c67gWNbWx6hmp-2oMyST2EHB4FLVV-XvbRz-RXEZegVx39CKMnsJnPtoetEXNsOdQjg-KTjAmi2s2j1M3NOXlLjHtcDQo7", score: 480 }
 ];
 
@@ -93,43 +82,6 @@ export default function App() {
   React.useEffect(() => {
     localStorage.setItem("shiritori_matches_v2", JSON.stringify(matches));
   }, [matches]);
-
-  // Initialize Firebase services on app mount
-  React.useEffect(() => {
-    console.log("🔥 Initializing Firebase services...");
-    
-    // Fetch Remote Config
-    fetchRemoteConfig().then(activated => {
-      if (activated) {
-        console.log("✅ Remote Config fetched and activated");
-      }
-    });
-    
-    // Request notification permission (optional)
-    // Uncomment to enable push notifications
-    // requestNotificationPermission().then(token => {
-    //   if (token) {
-    //     console.log("✅ Notifications enabled. FCM Token:", token);
-    //     // Save token to database for later use
-    //   }
-    // });
-    
-    // Listen for foreground messages
-    listenForMessages((payload) => {
-      console.log("📬 Notification received:", payload);
-      // Show in-app notification or update UI
-    });
-    
-    // Set user properties for analytics
-    setAnalyticsUserProperties({
-      user_name: profile.name,
-      total_matches: matches.length,
-      app_version: "1.0.0"
-    });
-    
-    // Track page load performance
-    GamePerformance.trackPageLoad("home");
-  }, []); // Run once on mount
 
   // --- SCORE REDUCTION RECAP SYSTEM FOR LEADERBOARD ---
   const leaderboardWithCurrent = React.useMemo(() => {
@@ -188,9 +140,6 @@ export default function App() {
             onStartGame={handleStartGameSetup}
             onOpenRules={() => setActiveView("RULES")}
             onSelectMatch={handleSelectRecentMatch}
-            onOpenPractice={() => setActiveView("PRACTICE")}
-            onOpenMultiplayer={() => setActiveView("MULTIPLAYER")}
-            onOpenLocalMultiplayer={() => setActiveView("LOCAL_MULTIPLAYER")}
           />
         );
       case "AVATAR_PICKER":
@@ -211,7 +160,7 @@ export default function App() {
           />
         );
       case "RULES":
-        return <EnhancedRulesView />;
+        return <RulesView />;
       case "HISTORY":
         return (
           <HistoryView
@@ -224,12 +173,6 @@ export default function App() {
         return <LibraryView />;
       case "LEADERBOARD":
         return <LeaderboardView users={leaderboardWithCurrent} />;
-      case "PRACTICE":
-        return <PracticeModeView />;
-      case "MULTIPLAYER":
-        return <MultiplayerView profile={profile} onBack={() => setActiveView("HOME")} />;
-      case "LOCAL_MULTIPLAYER":
-        return <LocalMultiplayerView profile={profile} onBack={() => setActiveView("HOME")} />;
       default:
         return <div className="text-center py-20 font-body">Tab parsing anomaly error inside view registry.</div>;
     }

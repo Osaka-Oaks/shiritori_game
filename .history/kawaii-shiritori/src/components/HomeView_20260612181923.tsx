@@ -1,7 +1,7 @@
 import React from "react";
 import { PlayerProfile, MatchHistory } from "../types";
 import { motion } from "motion/react";
-import { Play, BookOpen, RefreshCw, ChevronRight, User, Cpu, Target, Users, Smartphone } from "lucide-react";
+import { Play, BookOpen, RefreshCw, ChevronRight, User, Cpu } from "lucide-react";
 
 interface HomeViewProps {
   profile: PlayerProfile;
@@ -9,9 +9,6 @@ interface HomeViewProps {
   onStartGame: () => void;
   onOpenRules: () => void;
   onSelectMatch: (m: MatchHistory) => void;
-  onOpenPractice?: () => void;
-  onOpenMultiplayer?: () => void;
-  onOpenLocalMultiplayer?: () => void;
 }
 
 const KANA_LIST = ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と', 'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ'];
@@ -22,9 +19,6 @@ export default function HomeView({
   onStartGame,
   onOpenRules,
   onSelectMatch,
-  onOpenPractice,
-  onOpenMultiplayer,
-  onOpenLocalMultiplayer,
 }: HomeViewProps) {
   // Generate random static positions for background kana floating
   const floatingKana = React.useMemo(() => {
@@ -111,36 +105,6 @@ export default function HomeView({
           >
             <Play className="fill-current w-4 h-4" />
             Play bot match
-          </motion.button>
-
-          <motion.button
-            onClick={onOpenMultiplayer}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className="squish-btn w-full bg-tertiary-container text-white font-display-game font-bold py-3 px-6 rounded-none flex items-center justify-center gap-3 transition-all cursor-pointer text-xs uppercase tracking-widest border border-tertiary-container/60"
-          >
-            <Users className="w-4 h-4" />
-            Online Multiplayer
-          </motion.button>
-
-          <motion.button
-            onClick={onOpenLocalMultiplayer}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className="squish-btn w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-display-game font-bold py-3 px-6 rounded-none flex items-center justify-center gap-3 transition-all cursor-pointer text-xs uppercase tracking-widest border border-blue-400/60 shadow-md"
-          >
-            <Smartphone className="w-4 h-4" />
-            Local Play (Phone)
-          </motion.button>
-
-          <motion.button
-            onClick={onOpenPractice}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className="squish-btn w-full bg-secondary text-on-secondary font-display-game font-bold py-3 px-6 rounded-none flex items-center justify-center gap-3 transition-all cursor-pointer text-xs uppercase tracking-widest border border-secondary/40"
-          >
-            <Target className="w-4 h-4" />
-            Practice Mode
           </motion.button>
 
           <motion.button
