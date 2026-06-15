@@ -199,8 +199,7 @@ export default function JapaneseInputField({
   };
 
   const selectPrediction = (prediction: Prediction) => {
-    // Use hiragana directly since we're auto-converting
-    onChange(prediction.hiragana);
+    onChange(prediction.romaji);
     setShowPredictionDropdown(false);
     inputRef.current?.focus();
   };
@@ -223,7 +222,10 @@ export default function JapaneseInputField({
     }
   };
 
-  // No need for preview since we auto-convert in real-time
+  // Convert current input to hiragana for preview
+  const hiraganaPreview = React.useMemo(() => {
+    return convertRomajiToHiragana(value);
+  }, [value]);
 
   // Clear predictions when clicking outside
   React.useEffect(() => {
@@ -245,7 +247,7 @@ export default function JapaneseInputField({
           ref={inputRef}
           type="text"
           value={value}
-          onChange={(e) => handleInputChange(e.target.value)}
+          onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={disabled}
           placeholder={placeholder}
@@ -306,6 +308,13 @@ export default function JapaneseInputField({
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
+
+      {/* Hiragana Preview */}
+      {value && hiraganaPreview !== value && (
+        <div className="mt-2 text-center font-display-game font-bold text-xs bg-primary/10 text-primary py-1 px-4 rounded-full mx-auto max-w-xs animate-fade-in select-none">
+          Preview: <span className="underline font-extrabold">{hiraganaPreview}</span>
+        </div>
+      )}
 
       {/* Voice Transcript Bubble */}
       <AnimatePresence>

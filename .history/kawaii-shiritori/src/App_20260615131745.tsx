@@ -239,30 +239,6 @@ export default function App() {
     }
   };
 
-  // Show game selection screen first
-  if (!selectedGame) {
-    return (
-      <GameSelectionView 
-        onSelectGame={(game) => {
-          setSelectedGame(game);
-          if (game === "shiritori") {
-            setActiveView("HOME");
-          }
-        }} 
-      />
-    );
-  }
-
-  // Show Othello placeholder if selected
-  if (selectedGame === "othello") {
-    return (
-      <OthelloPlaceholder 
-        onBack={() => setSelectedGame(null)} 
-      />
-    );
-  }
-
-  // Show Shiritori game
   return (
     <div className="min-h-screen bg-surface confetti-bg flex flex-col font-sans text-on-surface antialiased overflow-x-hidden">
       

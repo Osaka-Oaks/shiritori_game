@@ -56,9 +56,6 @@ const INITIAL_LEADERBOARD: LeaderboardUser[] = [
 ];
 
 export default function App() {
-  // --- GAME SELECTION STATE ---
-  const [selectedGame, setSelectedGame] = React.useState<"shiritori" | "othello" | null>(null);
-
   // --- CORE DECONSTRUCT COGNOMEN STATE ---
   const [activeView, setActiveView] = React.useState<AppView>("HOME");
   
@@ -239,30 +236,6 @@ export default function App() {
     }
   };
 
-  // Show game selection screen first
-  if (!selectedGame) {
-    return (
-      <GameSelectionView 
-        onSelectGame={(game) => {
-          setSelectedGame(game);
-          if (game === "shiritori") {
-            setActiveView("HOME");
-          }
-        }} 
-      />
-    );
-  }
-
-  // Show Othello placeholder if selected
-  if (selectedGame === "othello") {
-    return (
-      <OthelloPlaceholder 
-        onBack={() => setSelectedGame(null)} 
-      />
-    );
-  }
-
-  // Show Shiritori game
   return (
     <div className="min-h-screen bg-surface confetti-bg flex flex-col font-sans text-on-surface antialiased overflow-x-hidden">
       

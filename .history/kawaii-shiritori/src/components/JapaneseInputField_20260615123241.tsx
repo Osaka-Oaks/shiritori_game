@@ -1,13 +1,8 @@
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Mic, MicOff, Loader2, ArrowRight, X, Lightbulb } from "lucide-react";
-import {
-  convertRomajiToHiragana,
-  searchDictionary,
-  isKana,
-  isRomaji,
-  validateShiritoriWord
-} from "../lib/japaneseInput";
+import { convertRomajiToHiragana } from "../utils";
+import dictionary from "../data/dictionary.json";
 
 interface JapaneseInputFieldProps {
   value: string;
@@ -112,42 +107,42 @@ export default function JapaneseInputField({
     };
   }, [showVoiceButton, onChange]);
 
-  // Auto-convert romaji to hiragana as user types
-  const handleInputChange = (newValue: string) => {
-    // If input is empty, just update
-    if (!newValue) {
-      onChange("");
-      return;
-    }
-
-    // If user is typing in Japanese directly (kana), keep it
-    if (isKana(newValue[newValue.length - 1])) {
-      onChange(newValue);
-      return;
-    }
-
-    // Auto-convert romaji to hiragana
-    const converted = convertRomajiToHiragana(newValue, true);
-    onChange(converted);
-  };
-
   // Generate predictions based on input
   React.useEffect(() => {
-    if (!showPredictions || !value || value.length < 1) {
+    if (!showPredictions || !value || value.length < 2) {
       setPredictions([]);
       setShowPredictionDropdown(false);
       return;
     }
 
-    // Use enhanced search with caching
-    const results = searchDictionary(value, requiredSound, 8);
+    const hiraganaInput = convertRomajiToHiragana(value);
+    const searchTerm = value.toLowerCase();
     
-    const matches: Prediction[] = results.map(entry => ({
-      word: entry.word,
-      hiragana: entry.hiragana,
-      translation: entry.translation,
-      romaji: entry.romaji || entry.word
-    }));
+    const matches: Prediction[] = [];
+    
+    // Search dictionary for matches
+    for (const entry of dictionary) {
+      // Skip if doesn't start with required sound
+      if (requiredSound && !entry.hiragana.startsWith(requiredSound)) {
+        continue;
+      }
+      
+      // Match by romaji, hiragana, or word
+      const matchesRomaji = entry.romaji?.toLowerCase().startsWith(searchTerm);
+      const matchesHiragana = entry.hiragana.startsWith(hiraganaInput);
+      const matchesWord = entry.word.toLowerCase().startsWith(searchTerm);
+      
+      if (matchesRomaji || matchesHiragana || matchesWord) {
+        matches.push({
+          word: entry.word,
+          hiragana: entry.hiragana,
+          translation: entry.translation,
+          romaji: entry.romaji || entry.word
+        });
+        
+        if (matches.length >= 8) break;
+      }
+    }
     
     setPredictions(matches);
     setShowPredictionDropdown(matches.length > 0);
@@ -199,8 +194,7 @@ export default function JapaneseInputField({
   };
 
   const selectPrediction = (prediction: Prediction) => {
-    // Use hiragana directly since we're auto-converting
-    onChange(prediction.hiragana);
+    onChange(prediction.romaji);
     setShowPredictionDropdown(false);
     inputRef.current?.focus();
   };
@@ -223,7 +217,10 @@ export default function JapaneseInputField({
     }
   };
 
-  // No need for preview since we auto-convert in real-time
+  // Convert current input to hiragana for preview
+  const hiraganaPreview = React.useMemo(() => {
+    return convertRomajiToHiragana(value);
+  }, [value]);
 
   // Clear predictions when clicking outside
   React.useEffect(() => {
@@ -245,7 +242,7 @@ export default function JapaneseInputField({
           ref={inputRef}
           type="text"
           value={value}
-          onChange={(e) => handleInputChange(e.target.value)}
+          onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={disabled}
           placeholder={placeholder}
@@ -306,6 +303,13 @@ export default function JapaneseInputField({
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
+
+      {/* Hiragana Preview */}
+      {value && hiraganaPreview !== value && (
+        <div className="mt-2 text-center font-display-game font-bold text-xs bg-primary/10 text-primary py-1 px-4 rounded-full mx-auto max-w-xs animate-fade-in select-none">
+          Preview: <span className="underline font-extrabold">{hiraganaPreview}</span>
+        </div>
+      )}
 
       {/* Voice Transcript Bubble */}
       <AnimatePresence>

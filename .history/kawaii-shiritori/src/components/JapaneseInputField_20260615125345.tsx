@@ -307,6 +307,13 @@ export default function JapaneseInputField({
         </button>
       </div>
 
+      {/* Hiragana Preview */}
+      {value && hiraganaPreview !== value && (
+        <div className="mt-2 text-center font-display-game font-bold text-xs bg-primary/10 text-primary py-1 px-4 rounded-full mx-auto max-w-xs animate-fade-in select-none">
+          Preview: <span className="underline font-extrabold">{hiraganaPreview}</span>
+        </div>
+      )}
+
       {/* Voice Transcript Bubble */}
       <AnimatePresence>
         {isListening && transcript && (
