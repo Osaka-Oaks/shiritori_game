@@ -412,7 +412,7 @@ function ScoringContent() {
 
       <div className="bg-surface-container-highest rounded-2xl p-5 border border-outline-variant/10 text-center">
         <p className="text-xs text-on-surface-variant font-body italic">
-          💡 Pro tip: Aim for consistent valid words over risky rare words. Survival &gt; style!
+          💡 Pro tip: Aim for consistent valid words over risky rare words. Survival > style!
         </p>
       </div>
     </motion.div>
