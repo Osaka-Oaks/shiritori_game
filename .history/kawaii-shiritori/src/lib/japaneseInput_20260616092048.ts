@@ -97,11 +97,11 @@ export function initializeDictionaryCache() {
     }
 
     dictionary.forEach((entry) => {
-      if (!entry || !entry.word) return;
+      if (!entry || !entry.hiragana) return;
 
-      // Cache by hiragana (word field contains hiragana)
-      dictionaryCache.set(entry.word, true);
-      wordCache.set(entry.word, entry);
+      // Cache by hiragana
+      dictionaryCache.set(entry.hiragana, true);
+      wordCache.set(entry.hiragana, entry);
       
       // Cache by romaji if available
       if (entry.romaji) {
@@ -109,10 +109,10 @@ export function initializeDictionaryCache() {
         wordCache.set(entry.romaji.toLowerCase(), entry);
       }
       
-      // Cache by kanji if available
-      if (entry.kanji) {
-        dictionaryCache.set(entry.kanji, true);
-        wordCache.set(entry.kanji, entry);
+      // Cache by word name
+      if (entry.word) {
+        dictionaryCache.set(entry.word.toLowerCase(), true);
+        wordCache.set(entry.word.toLowerCase(), entry);
       }
     });
     
@@ -301,7 +301,7 @@ export function findWordsStartingWith(sound: string, limit: number = 8): any[] {
   const results: any[] = [];
   
   for (const entry of dictionary) {
-    if (entry.word.startsWith(sound)) {
+    if (entry.hiragana.startsWith(sound)) {
       results.push(entry);
       if (results.length >= limit) break;
     }
@@ -325,24 +325,24 @@ export function searchDictionary(query: string, requiredSound: string = "", limi
   
   for (const entry of dictionary) {
     // Skip if already found
-    if (seen.has(entry.word)) continue;
+    if (seen.has(entry.hiragana)) continue;
     
     // Skip if doesn't start with required sound
-    if (requiredSound && !entry.word.startsWith(requiredSound)) {
+    if (requiredSound && !entry.hiragana.startsWith(requiredSound)) {
       continue;
     }
     
     // Strategy 1: Exact hiragana match
-    if (entry.word === hiraganaQuery) {
+    if (entry.hiragana === hiraganaQuery) {
       results.unshift(entry); // Add to front
-      seen.add(entry.word);
+      seen.add(entry.hiragana);
       continue;
     }
     
     // Strategy 2: Hiragana starts with
-    if (entry.word.startsWith(hiraganaQuery)) {
+    if (entry.hiragana.startsWith(hiraganaQuery)) {
       results.push(entry);
-      seen.add(entry.word);
+      seen.add(entry.hiragana);
       if (results.length >= limit) break;
       continue;
     }
@@ -350,15 +350,15 @@ export function searchDictionary(query: string, requiredSound: string = "", limi
     // Strategy 3: Romaji match
     if (entry.romaji && entry.romaji.toLowerCase().startsWith(queryLower)) {
       results.push(entry);
-      seen.add(entry.word);
+      seen.add(entry.hiragana);
       if (results.length >= limit) break;
       continue;
     }
     
-    // Strategy 4: Kanji match
-    if (entry.kanji && entry.kanji.startsWith(query)) {
+    // Strategy 4: Word name match
+    if (entry.word.toLowerCase().startsWith(queryLower)) {
       results.push(entry);
-      seen.add(entry.word);
+      seen.add(entry.hiragana);
       if (results.length >= limit) break;
       continue;
     }
