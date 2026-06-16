@@ -339,22 +339,21 @@ export default function GameRoomView({
     setHints([]);
 
     try {
-      // Get suggestions from local dictionary
-      const usedWords = playedWords.map(w => w.word);
-      const suggestions = dictionary.getSuggestedWords(requiredLetter, 3, usedWords);
-      
-      const hintList = suggestions.map(word => ({
-        word: word.kanji || word.word,
-        translation: word.translation,
-        hiragana: word.word,
-        romaji: word.romaji
-      }));
-      
-      setHints(hintList);
+      const response = await fetch("/api/gemini/word-hint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lastSound: requiredLetter })
+      });
+
+      if (!response.ok) throw new Error("Hints fetch failing");
+      const resultData = await response.json();
+      setHints(resultData.hints || []);
       setHintCount(prev => prev - 1);
     } catch (err) {
-      console.error("Failed to get hints:", err);
-      setHints([]);
+      // Offline direct mock population
+      setHints([
+        { word: `${requiredLetter}ko`, translation: "Quick hint word", hiragana: `${requiredLetter}こ`, romaji: `${requiredLetter}ko` }
+      ]);
     } finally {
       setLoadingHints(false);
     }

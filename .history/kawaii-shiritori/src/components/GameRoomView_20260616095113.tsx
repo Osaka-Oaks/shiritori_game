@@ -146,28 +146,18 @@ export default function GameRoomView({
     const syllable = lastWord ? lastWord.endSound : "り";
     
     try {
-      // Get words played as strings to exclude
-      const usedWords = currentHistory.map(w => w.word);
-      
-      // Find a random word starting with the required syllable
-      const botWord = dictionary.getRandomWordStartingWith(syllable, usedWords);
-      
-      if (!botWord) {
-        // Bot can't find a word - player wins!
-        setBotChat(`I can't find any more words starting with "${syllable}"... You win!`);
-        setTimeout(() => triggerGameOver("player"), 2000);
-        return;
-      }
+      const response = await fetch("/api/gemini/opponent-turn", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lastSound: syllable,
+          difficulty: selectedBot.difficulty,
+          playedWords: currentHistory.map(w => w.word)
+        })
+      });
 
-      const botPlay = {
-        word: botWord.word,
-        romaji: botWord.romaji,
-        kanji: botWord.kanji,
-        translation: botWord.translation,
-        hiragana: botWord.word,
-        startSound: botWord.startSound,
-        endSound: botWord.endSound
-      };
+      if (!response.ok) throw new Error("Bot turn API error");
+      const botPlay = await response.json();
 
       // Check if bot tried to play a duplicate word
       const botLower = botPlay.word.toLowerCase();
@@ -339,22 +329,21 @@ export default function GameRoomView({
     setHints([]);
 
     try {
-      // Get suggestions from local dictionary
-      const usedWords = playedWords.map(w => w.word);
-      const suggestions = dictionary.getSuggestedWords(requiredLetter, 3, usedWords);
-      
-      const hintList = suggestions.map(word => ({
-        word: word.kanji || word.word,
-        translation: word.translation,
-        hiragana: word.word,
-        romaji: word.romaji
-      }));
-      
-      setHints(hintList);
+      const response = await fetch("/api/gemini/word-hint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lastSound: requiredLetter })
+      });
+
+      if (!response.ok) throw new Error("Hints fetch failing");
+      const resultData = await response.json();
+      setHints(resultData.hints || []);
       setHintCount(prev => prev - 1);
     } catch (err) {
-      console.error("Failed to get hints:", err);
-      setHints([]);
+      // Offline direct mock population
+      setHints([
+        { word: `${requiredLetter}ko`, translation: "Quick hint word", hiragana: `${requiredLetter}こ`, romaji: `${requiredLetter}ko` }
+      ]);
     } finally {
       setLoadingHints(false);
     }
