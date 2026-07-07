@@ -1,0 +1,38 @@
+# Automated dependency update PRs — review & merge when CI passes.
+# https://docs.github.com/en/code-security/dependabot
+
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /shiritori-online
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      vite-ecosystem:
+        patterns: ["vite", "@vitejs/*"]
+      types:
+        patterns: ["@types/*"]
+    labels: ["dependencies", "shiritori-online"]
+
+  - package-ecosystem: npm
+    directory: /kawaii-shiritori
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      vite-ecosystem:
+        patterns: ["vite", "@vitejs/*", "vitest", "@vitest/*"]
+      testing:
+        patterns: ["@testing-library/*", "jsdom"]
+      lint-format:
+        patterns: ["eslint*", "prettier", "@typescript-eslint/*"]
+    labels: ["dependencies", "kawaii-shiritori"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    labels: ["dependencies", "ci"]

@@ -1,11 +1,4 @@
-import {
-  ref,
-  set,
-  get,
-  onValue,
-  runTransaction,
-  serverTimestamp,
-} from "firebase/database";
+import { ref, set, get, onValue, runTransaction, serverTimestamp } from "firebase/database";
 import { db } from "../firebase";
 import type { GameState, PlayedWord } from "../types";
 import { validateMove, type RuleSettings, DEFAULT_RULES } from "./shiritori";
@@ -34,7 +27,7 @@ export function seatOf(state: GameState, uid: string): number {
 }
 
 function usedWordsOf(state: GameState): string[] {
-  return (state.words ?? []).map((w) => w.word);
+  return (state.words ?? []).map(w => w.word);
 }
 
 /** Normalize a raw RTDB snapshot into a fully-shaped GameState. */
@@ -99,16 +92,10 @@ export async function createRoom(
   throw new Error("Could not allocate a room code. Please try again.");
 }
 
-export type JoinResult =
-  | { ok: true; seat: number }
-  | { ok: false; reason: string };
+export type JoinResult = { ok: true; seat: number } | { ok: false; reason: string };
 
 /** Join an existing room as seat 1 (or rejoin a seat you already hold). */
-export async function joinRoom(
-  uid: string,
-  name: string,
-  rawCode: string
-): Promise<JoinResult> {
+export async function joinRoom(uid: string, name: string, rawCode: string): Promise<JoinResult> {
   const code = rawCode.trim().toUpperCase();
   if (!code) return { ok: false, reason: "Enter a room code." };
 
@@ -117,7 +104,7 @@ export async function joinRoom(
 
   let result: JoinResult = { ok: false, reason: "Room is full." };
 
-  await runTransaction(gameRef(code), (raw) => {
+  await runTransaction(gameRef(code), raw => {
     if (!raw) return raw;
 
     // Rejoining a seat you already hold (e.g. page refresh).
@@ -148,11 +135,8 @@ export async function joinRoom(
 }
 
 /** Subscribe to live room updates. Returns an unsubscribe function. */
-export function subscribeRoom(
-  code: string,
-  cb: (state: GameState | null) => void
-): () => void {
-  return onValue(gameRef(code), (snap) => {
+export function subscribeRoom(code: string, cb: (state: GameState | null) => void): () => void {
+  return onValue(gameRef(code), snap => {
     if (!snap.exists()) {
       cb(null);
       return;
@@ -168,7 +152,8 @@ export async function playWord(
   state: GameState,
   uid: string,
   rawWord: string,
-  meaning?: string
+  meaning?: string,
+  readingKana?: string
 ): Promise<PlayResult> {
   const seat = seatOf(state, uid);
   if (seat === -1) return { ok: false, reason: "You're not in this game." };
@@ -179,7 +164,8 @@ export async function playWord(
     rawWord,
     state.currentKana,
     usedWordsOf(state),
-    state.settings
+    state.settings,
+    readingKana
   );
   if (!check.ok) return { ok: false, reason: check.reason };
 
@@ -195,7 +181,7 @@ export async function playWord(
     ...(meaning ? { meaning } : {}),
   };
 
-  await runTransaction(gameRef(state.code), (raw) => {
+  await runTransaction(gameRef(state.code), raw => {
     if (!raw || raw.status !== "playing" || raw.turn !== seat) return; // abort: state moved on
     const words: PlayedWord[] = raw.words ?? [];
     words.push(played);
@@ -223,7 +209,7 @@ export async function playWord(
  * transaction only commits if the turn really expired and hasn't changed.
  */
 export async function finalizeTimeout(state: GameState): Promise<void> {
-  await runTransaction(gameRef(state.code), (raw) => {
+  await runTransaction(gameRef(state.code), raw => {
     if (!raw || raw.status !== "playing") return;
     const elapsed = Date.now() - (raw.turnStartedAt ?? 0);
     if (elapsed < raw.timeLimit * 1000 + TIMEOUT_GRACE_MS) return; // not expired
@@ -242,7 +228,7 @@ export async function voteRematch(state: GameState, uid: string): Promise<void> 
   const seat = seatOf(state, uid);
   if (seat === -1) return;
 
-  await runTransaction(gameRef(state.code), (raw) => {
+  await runTransaction(gameRef(state.code), raw => {
     if (!raw || raw.status !== "finished") return;
     const rematch = { ...(raw.rematch ?? {}), [seat]: true };
     raw.rematch = rematch;

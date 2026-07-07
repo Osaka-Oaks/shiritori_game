@@ -1,4 +1,5 @@
 import { toHiragana } from "./shiritori";
+import { needsReadingLookup } from "./japanese";
 
 interface JishoEntry {
   japanese: Array<{ word?: string; reading?: string }>;
@@ -9,42 +10,78 @@ interface JishoResponse {
   data: JishoEntry[];
 }
 
-const cache = new Map<string, { valid: boolean; meaning?: string }>();
+export interface LookupResult {
+  valid: boolean;
+  meaning?: string;
+  /** Hiragana reading used for shiritori chain rules */
+  reading?: string;
+}
+
+const cache = new Map<string, LookupResult>();
+
+function cacheKey(word: string): string {
+  return toHiragana(word.trim());
+}
+
+function pickMatch(entries: JishoEntry[], word: string): JishoEntry | undefined {
+  const key = toHiragana(word.trim());
+  return entries.find(entry =>
+    entry.japanese.some(j => {
+      const r = toHiragana((j.reading ?? "").trim());
+      const w = toHiragana((j.word ?? "").trim());
+      const raw = word.trim();
+      return r === key || w === key || j.word === raw || j.reading === raw;
+    })
+  );
+}
 
 /**
- * Check whether a kana string is a real Japanese word via the Jisho public API.
- * Returns { valid: true, meaning } on match, { valid: false } if not found.
- * Fails open (valid: true) on any network or API error so the game never breaks.
+ * Check whether a word is real Japanese via the Jisho public API.
+ * Returns reading for kanji words so chain rules work correctly.
+ * Fails open (valid: true) on network errors so the game never breaks offline.
  */
-export async function lookupWord(kana: string): Promise<{ valid: boolean; meaning?: string }> {
-  const key = toHiragana(kana.trim());
+export async function lookupWord(word: string): Promise<LookupResult> {
+  const trimmed = word.trim();
+  if (!trimmed) return { valid: false };
+
+  const key = cacheKey(trimmed);
   if (cache.has(key)) return cache.get(key)!;
+
+  // Pure kana — no API needed for reading, but still verify if possible.
+  const pureKana = !needsReadingLookup(trimmed);
 
   try {
     const res = await fetch(
-      `https://jisho.org/api/v1/search/words?keyword=${encodeURIComponent(kana)}`
+      `https://jisho.org/api/v1/search/words?keyword=${encodeURIComponent(trimmed)}`
     );
-    if (!res.ok) return { valid: true };
+    if (!res.ok) {
+      const fallback: LookupResult = pureKana
+        ? { valid: true, reading: toHiragana(trimmed) }
+        : { valid: true };
+      cache.set(key, fallback);
+      return fallback;
+    }
 
     const json: JishoResponse = await res.json();
+    const match = pickMatch(json.data, trimmed);
 
-    // Find an entry whose reading or kana writing exactly matches our word.
-    const match = json.data.find((entry) =>
-      entry.japanese.some((j) => {
-        const r = toHiragana((j.reading ?? "").trim());
-        const w = toHiragana((j.word ?? "").trim());
-        return r === key || w === key;
-      })
-    );
-
-    const result: { valid: boolean; meaning?: string } = match
-      ? { valid: true, meaning: match.senses[0]?.english_definitions.slice(0, 2).join(", ") }
+    const result: LookupResult = match
+      ? {
+          valid: true,
+          meaning: match.senses[0]?.english_definitions.slice(0, 2).join(", "),
+          reading: toHiragana(
+            (match.japanese[0]?.reading ?? match.japanese[0]?.word ?? trimmed).trim()
+          ),
+        }
       : { valid: false };
 
     cache.set(key, result);
     return result;
   } catch {
-    // Fail open — don't block the game if the dictionary is unreachable
-    return { valid: true };
+    const fallback: LookupResult = pureKana
+      ? { valid: true, reading: toHiragana(trimmed) }
+      : { valid: true };
+    cache.set(key, fallback);
+    return fallback;
   }
 }

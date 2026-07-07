@@ -48,6 +48,44 @@ export const WORD_BANK: BankWord[] = [
   { kana: "まど", romaji: "mado", meaning: "window" },
   { kana: "ドア", romaji: "doa", meaning: "door" },
   { kana: "ぬま", romaji: "numa", meaning: "swamp" },
+  // Pokemon (katakana)
+  { kana: "ピカチュウ", romaji: "pikachuu", meaning: "Pikachu" },
+  { kana: "フシギダネ", romaji: "fushigidane", meaning: "Bulbasaur" },
+  { kana: "ヒトカゲ", romaji: "hitokage", meaning: "Charmander" },
+  { kana: "ゼニガメ", romaji: "zenigame", meaning: "Squirtle" },
+  { kana: "イーブイ", romaji: "iibui", meaning: "Eevee" },
+  { kana: "リザードン", romaji: "rizaadon", meaning: "Charizard" },
+  { kana: "ミュウツー", romaji: "myuutsuu", meaning: "Mewtwo" },
+  // Ninja Turtles (katakana)
+  { kana: "レオナルド", romaji: "reonardo", meaning: "Leonardo" },
+  { kana: "ラファエル", romaji: "rafaeru", meaning: "Raphael" },
+  { kana: "ミケランジェロ", romaji: "mikeranjero", meaning: "Michelangelo" },
+  { kana: "ドナテロ", romaji: "donatero", meaning: "Donatello" },
+  // More everyday words
+  { kana: "りんご", romaji: "ringo", meaning: "apple" },
+  { kana: "ばなな", romaji: "banana", meaning: "banana" },
+  { kana: "パン", romaji: "pan", meaning: "bread" },
+  { kana: "コーヒー", romaji: "koohii", meaning: "coffee" },
+  { kana: "おちゃ", romaji: "ocha", meaning: "tea" },
+  { kana: "ラーメン", romaji: "raamen", meaning: "ramen" },
+  { kana: "カレー", romaji: "karee", meaning: "curry" },
+  { kana: "てんぷら", romaji: "tenpura", meaning: "tempura" },
+  { kana: "たこやき", romaji: "takoyaki", meaning: "takoyaki" },
+  { kana: "でんしゃ", romaji: "densha", meaning: "train" },
+  { kana: "ひこうき", romaji: "hikouki", meaning: "airplane" },
+  { kana: "じてんしゃ", romaji: "jitensha", meaning: "bicycle" },
+  { kana: "がっこう", romaji: "gakkou", meaning: "school" },
+  { kana: "としょかん", romaji: "toshokan", meaning: "library" },
+  { kana: "びょういん", romaji: "byouin", meaning: "hospital" },
+  { kana: "えいが", romaji: "eiga", meaning: "movie" },
+  { kana: "おんがく", romaji: "ongaku", meaning: "music" },
+  { kana: "サッカー", romaji: "sakkaa", meaning: "soccer" },
+  { kana: "テニス", romaji: "tenisu", meaning: "tennis" },
+  { kana: "スキー", romaji: "sukii", meaning: "skiing" },
+  { kana: "ふゆ", romaji: "fuyu", meaning: "winter" },
+  { kana: "なつ", romaji: "natsu", meaning: "summer" },
+  { kana: "はる", romaji: "haru", meaning: "spring" },
+  { kana: "あき", romaji: "aki", meaning: "autumn" },
 ];
 
 import { getFirstKana, toHiragana, getChainKana, DEFAULT_RULES } from "./shiritori";
@@ -56,11 +94,8 @@ import { getFirstKana, toHiragana, getChainKana, DEFAULT_RULES } from "./shirito
  * Pick a hint word that starts with the required kana, isn't already used,
  * and doesn't end in ん. Returns null if nothing fits.
  */
-export function findHint(
-  requiredKana: string | null,
-  usedWords: string[]
-): BankWord | null {
-  const used = new Set(usedWords.map((w) => toHiragana(w.trim())));
+export function findHint(requiredKana: string | null, usedWords: string[]): BankWord | null {
+  const used = new Set(usedWords.map(w => toHiragana(w.trim())));
   const need = requiredKana ? toHiragana(requiredKana) : null;
 
   for (const entry of WORD_BANK) {

@@ -1,0 +1,49 @@
+{
+  "apps": {
+    "shiritori-online": {
+      "version": "1.0.0",
+      "role": "Production 2-player game (deploy target)",
+      "stack": {
+        "runtime": "Node 20+",
+        "framework": "React 18",
+        "bundler": "Vite 6",
+        "language": "TypeScript 5.6",
+        "backend": "Firebase RTDB + Anonymous Auth",
+        "hosting": "Firebase Hosting (Spark)"
+      }
+    },
+    "kawaii-shiritori": {
+      "version": "1.0.0",
+      "role": "Feature-rich app (bots, 2D, leaderboard)",
+      "stack": {
+        "runtime": "Node 20+",
+        "framework": "React 19",
+        "bundler": "Vite 6",
+        "language": "TypeScript 5.8",
+        "backend": "Firestore + Analytics + Remote Config",
+        "game": "Phaser 3",
+        "hosting": "Firebase Hosting (Spark)"
+      }
+    },
+    "shiritori-word-chain": {
+      "version": "0.0.0",
+      "role": "Legacy alternate build",
+      "stack": {
+        "runtime": "Node 20+",
+        "framework": "React 19",
+        "bundler": "Vite 6"
+      }
+    }
+  },
+  "sharedTooling": {
+    "packageManager": "npm 10+",
+    "ci": "GitHub Actions",
+    "dependencyBot": "Dependabot (weekly)",
+    "versionSync": "syncpack",
+    "nodeVersionFile": ".nvmrc"
+  },
+  "intentionalDrift": {
+    "react": "shiritori-online stays on React 18 until migrated; kawaii-shiritori uses React 19",
+    "firebase": "SDK v10 (online) vs v11 (kawaii) — align when merging apps"
+  }
+}

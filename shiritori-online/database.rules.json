@@ -1,9 +1,56 @@
 {
   "rules": {
+    ".read": false,
+    ".write": false,
     "games": {
       "$gameId": {
         ".read": "auth != null",
-        ".write": "auth != null"
+        ".write": "auth != null && ((!data.exists() && newData.child('hostUid').val() === auth.uid && newData.child('seats').child('0').val() === auth.uid && newData.child('status').val() === 'waiting') || (data.exists() && newData.child('hostUid').val() === data.child('hostUid').val() && newData.child('seats').child('0').val() === data.child('seats').child('0').val() && (!data.child('seats').child('1').exists() || newData.child('seats').child('1').val() === data.child('seats').child('1').val()) && (data.child('seats').child('0').val() === auth.uid || data.child('seats').child('1').val() === auth.uid || (!data.child('seats').child('1').exists() && newData.child('seats').child('1').val() === auth.uid))))",
+        "code": {
+          ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9]{4}$/)"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'waiting' || newData.val() === 'playing' || newData.val() === 'finished')"
+        },
+        "turn": {
+          ".validate": "newData.isNumber() && (newData.val() === 0 || newData.val() === 1)"
+        },
+        "startSeat": {
+          ".validate": "newData.isNumber() && (newData.val() === 0 || newData.val() === 1)"
+        },
+        "timeLimit": {
+          ".validate": "newData.isNumber() && newData.val() >= 10 && newData.val() <= 120"
+        },
+        "winnerSeat": {
+          ".validate": "newData.val() === null || newData.val() === 0 || newData.val() === 1"
+        },
+        "loserSeat": {
+          ".validate": "newData.val() === null || newData.val() === 0 || newData.val() === 1"
+        },
+        "loseReasonCode": {
+          ".validate": "newData.val() === null || newData.val() === 'n' || newData.val() === 'timeout'"
+        },
+        "words": {
+          "$index": {
+            ".validate": "newData.hasChildren(['word', 'seat', 'by']) && newData.child('word').isString() && newData.child('by').isString()"
+          }
+        }
+      }
+    },
+    "presence": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['online', 'lastSeen']) && newData.child('online').isBoolean() && newData.child('lastSeen').isNumber()"
+      }
+    },
+    "reactions": {
+      "$gameId": {
+        ".read": "auth != null",
+        "$seat": {
+          ".write": "auth != null && root.child('games').child($gameId).child('seats').child($seat).val() === auth.uid",
+          ".validate": "newData.isString() && newData.val().length <= 8"
+        }
       }
     }
   }

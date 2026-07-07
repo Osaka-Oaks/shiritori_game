@@ -1,16 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  subscribeRoom,
-  playWord,
-  finalizeTimeout,
-  voteRematch,
-  seatOf,
-} from "../lib/roomService";
+import { subscribeRoom, playWord, finalizeTimeout, voteRematch, seatOf } from "../lib/roomService";
 import { romajiToHiragana, speak } from "../lib/romaji";
 import { findHint } from "../lib/words";
 import { validateMove } from "../lib/shiritori";
 import { lookupWord } from "../lib/dictionary";
+import { needsReadingLookup } from "../lib/japanese";
 import { useSettings, SettingsControls } from "../settings";
+import { initPresence, watchPresence } from "../lib/presence";
 import type { GameState } from "../types";
 
 interface Props {
@@ -30,12 +26,13 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
   const [liveMeaning, setLiveMeaning] = useState<string | undefined>();
   const [now, setNow] = useState(Date.now());
   const [copied, setCopied] = useState(false);
+  const [opponentOnline, setOpponentOnline] = useState<boolean | null>(null);
   const chainRef = useRef<HTMLDivElement>(null);
   const timeoutFiring = useRef(false);
 
   // Live room subscription.
   useEffect(() => {
-    const unsub = subscribeRoom(code, (s) => {
+    const unsub = subscribeRoom(code, s => {
       if (!s) {
         setClosed(true);
         return;
@@ -76,6 +73,20 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
 
   const mySeat = state ? seatOf(state, uid) : -1;
   const theirSeat = mySeat === 0 ? 1 : 0;
+
+  // Presence: show if opponent is online (Firebase RTDB onDisconnect).
+  useEffect(() => {
+    if (!state) return;
+    const cleanupSelf = initPresence(uid, code);
+    const theirUid = state.seats[String(theirSeat)];
+    if (!theirUid) return cleanupSelf;
+    const unsub = watchPresence(theirUid, p => setOpponentOnline(p?.online ?? false));
+    return () => {
+      unsub();
+      cleanupSelf();
+    };
+  }, [state, uid, code, theirSeat]);
+
   const isPlaying = state?.status === "playing";
   const myTurn = isPlaying && state?.turn === mySeat;
 
@@ -84,10 +95,12 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
     state && isPlaying
       ? state.timeLimit * 1000 - (now - state.turnStartedAt)
       : state
-      ? state.timeLimit * 1000
-      : 0;
+        ? state.timeLimit * 1000
+        : 0;
   const remaining = Math.max(0, Math.ceil(remainingMs / 1000));
-  const pct = state ? Math.max(0, Math.min(100, (remainingMs / (state.timeLimit * 1000)) * 100)) : 100;
+  const pct = state
+    ? Math.max(0, Math.min(100, (remainingMs / (state.timeLimit * 1000)) * 100))
+    : 100;
 
   // Either client finalizes an expired turn (transaction makes this safe).
   useEffect(() => {
@@ -129,7 +142,8 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
 
   const theirName = state.names[String(theirSeat)];
   const opponentJoined = !!state.seats[String(theirSeat)];
-  const converted = romajiToHiragana(raw);
+  // Romaji → hiragana for keyboard typing; kanji/katakana pass through unchanged.
+  const converted = needsReadingLookup(raw) ? raw.trim() : romajiToHiragana(raw);
 
   async function share() {
     const url = `${window.location.origin}${window.location.pathname}?room=${code}`;
@@ -149,20 +163,8 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
   async function submit() {
     if (!state || !converted.trim() || checking) return;
 
-    // Fast pre-check for obvious errors (wrong kana, duplicate, etc.) before hitting the API.
-    const preCheck = validateMove(
-      converted,
-      state.currentKana,
-      state.words.map((w) => w.word),
-      state.settings
-    );
-    if (!preCheck.ok) {
-      setMoveError(preCheck.reason);
-      return;
-    }
-
     setChecking(true);
-    const { valid, meaning } = await lookupWord(converted);
+    const { valid, meaning, reading } = await lookupWord(converted);
     setChecking(false);
 
     if (!valid) {
@@ -170,7 +172,24 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
       return;
     }
 
-    const res = await playWord(state, uid, converted, meaning);
+    const readingKana = reading ?? (needsReadingLookup(converted) ? undefined : converted);
+
+    const preCheck = validateMove(
+      converted,
+      state.currentKana,
+      state.words.map(w => w.word),
+      state.settings,
+      readingKana
+    );
+    if (!preCheck.ok) {
+      setMoveError(preCheck.reason);
+      return;
+    }
+
+    setChecking(true);
+    const res = await playWord(state, uid, converted, meaning, readingKana);
+    setChecking(false);
+
     if (res.ok) {
       setRaw("");
       setLiveMeaning(undefined);
@@ -181,7 +200,10 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
 
   function useHint() {
     if (!state) return;
-    const hint = findHint(state.currentKana, state.words.map((w) => w.word));
+    const hint = findHint(
+      state.currentKana,
+      state.words.map(w => w.word)
+    );
     if (hint) setRaw(hint.kana);
     else setMoveError(t("noHint"));
   }
@@ -226,6 +248,7 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
           side="them"
           active={isPlaying && state.turn === theirSeat}
           youLabel={t("opponent")}
+          online={opponentOnline}
         />
       </div>
 
@@ -255,7 +278,8 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
               const last = state.words[state.words.length - 1];
               return last ? (
                 <div className="last-word-hint">
-                  {last.word}{last.meaning ? ` — ${last.meaning}` : ""}
+                  {last.word}
+                  {last.meaning ? ` — ${last.meaning}` : ""}
                 </div>
               ) : null;
             })()}
@@ -303,15 +327,18 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
               {liveMeaning && converted && !checking && (
                 <div className="live-meaning">{liveMeaning}</div>
               )}
-              {checking
-                ? <div className="error" style={{ color: "var(--muted)" }}>{t("checking")}</div>
-                : moveError && <div className="error">{moveError}</div>
-              }
+              {checking ? (
+                <div className="error" style={{ color: "var(--muted)" }}>
+                  {t("checking")}
+                </div>
+              ) : (
+                moveError && <div className="error">{moveError}</div>
+              )}
               <div className="dock-row">
                 <input
                   className="field"
                   value={raw}
-                  onChange={(e) => setRaw(e.target.value)}
+                  onChange={e => setRaw(e.target.value)}
                   placeholder={t("inputPlaceholder")}
                   autoComplete="off"
                   autoCorrect="off"
@@ -319,14 +346,19 @@ export default function GameRoom({ uid, code, onLeave, onShowRules }: Props) {
                   spellCheck={false}
                   enterKeyHint="send"
                   disabled={checking}
-                  onKeyDown={(e) => {
+                  onKeyDown={e => {
                     if (e.key === "Enter") {
                       e.preventDefault();
                       submit();
                     }
                   }}
                 />
-                <button className="send" onClick={submit} disabled={!converted.trim() || checking} aria-label="Send">
+                <button
+                  className="send"
+                  onClick={submit}
+                  disabled={!converted.trim() || checking}
+                  aria-label="Send"
+                >
                   {checking ? "…" : "➤"}
                 </button>
               </div>
@@ -384,17 +416,23 @@ function PlayerPill({
   side,
   active,
   youLabel,
+  online,
 }: {
   name: string;
   side: "me" | "them";
   active: boolean;
   youLabel: string;
+  online?: boolean | null;
 }) {
   const { t } = useSettings();
   return (
     <div className={`player-pill ${side} ${active ? "active" : ""}`}>
       <div className="who">{youLabel}</div>
-      <div className="name">{name}</div>
+      <div className="name">
+        {name}
+        {online === true && <span title="Online"> 🟢</span>}
+        {online === false && <span title="Offline"> ⚫</span>}
+      </div>
       {active && <div className="turn-tag">● {t("playing")}</div>}
     </div>
   );
@@ -421,8 +459,8 @@ function GameOver({
     state.loseReasonCode === "n"
       ? t("endN", { word: state.loseWord ?? "" })
       : state.loseReasonCode === "timeout"
-      ? t("endTimeout")
-      : "";
+        ? t("endTimeout")
+        : "";
 
   return (
     <div className="overlay fade-in">

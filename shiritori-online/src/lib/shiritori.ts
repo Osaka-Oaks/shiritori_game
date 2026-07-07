@@ -1,6 +1,8 @@
 // Pure Shiritori game logic — no Firebase, no React. Easy to reason about & test.
 // Implements the rules from "How to Play Shiritori" (bilingual guide).
 
+import { isJapaneseInput } from "./japanese";
+
 export interface RuleSettings {
   // House rules (Section 4 of the guide). Defaults match the most common play.
   smallKanaLenient: boolean; // しゃ -> や (true) vs strict しゃ -> しゃ (false)
@@ -14,30 +16,62 @@ export const DEFAULT_RULES: RuleSettings = {
 
 // Small kana normalized to their full-size sound for chaining.
 const SMALL_TO_LARGE: Record<string, string> = {
-  "ゃ": "や", "ゅ": "ゆ", "ょ": "よ",
-  "ぁ": "あ", "ぃ": "い", "ぅ": "う", "ぇ": "え", "ぉ": "お",
-  "っ": "つ", "ゎ": "わ",
+  ゃ: "や",
+  ゅ: "ゆ",
+  ょ: "よ",
+  ぁ: "あ",
+  ぃ: "い",
+  ぅ: "う",
+  ぇ: "え",
+  ぉ: "お",
+  っ: "つ",
+  ゎ: "わ",
 };
 
 // Dakuten / handakuten -> base kana (lenient matching).
 const DAKUTEN_TO_BASE: Record<string, string> = {
-  "が": "か", "ぎ": "き", "ぐ": "く", "げ": "け", "ご": "こ",
-  "ざ": "さ", "じ": "し", "ず": "す", "ぜ": "せ", "ぞ": "そ",
-  "だ": "た", "ぢ": "ち", "づ": "つ", "で": "て", "ど": "と",
-  "ば": "は", "び": "ひ", "ぶ": "ふ", "べ": "へ", "ぼ": "ほ",
-  "ぱ": "は", "ぴ": "ひ", "ぷ": "ふ", "ぺ": "へ", "ぽ": "ほ",
+  が: "か",
+  ぎ: "き",
+  ぐ: "く",
+  げ: "け",
+  ご: "こ",
+  ざ: "さ",
+  じ: "し",
+  ず: "す",
+  ぜ: "せ",
+  ぞ: "そ",
+  だ: "た",
+  ぢ: "ち",
+  づ: "つ",
+  で: "て",
+  ど: "と",
+  ば: "は",
+  び: "ひ",
+  ぶ: "ふ",
+  べ: "へ",
+  ぼ: "ほ",
+  ぱ: "は",
+  ぴ: "ひ",
+  ぷ: "ふ",
+  ぺ: "へ",
+  ぽ: "ほ",
 };
 
 // Convert katakana to hiragana so チェーン and ちぇーん chain identically.
 export function toHiragana(str: string): string {
-  return str.replace(/[ァ-ヶ]/g, (ch) =>
-    String.fromCharCode(ch.charCodeAt(0) - 0x60)
-  );
+  return str.replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
 }
 
-// Accept only hiragana, katakana, and the long-vowel mark ー.
+// Accept hiragana, katakana, kanji, and the long-vowel mark ー.
 export function isKanaOnly(str: string): boolean {
-  return /^[ぁ-ゖァ-ヺー]+$/.test(str);
+  return isJapaneseInput(str);
+}
+
+/** Kana used for chain rules — reading for kanji words, otherwise the word itself. */
+export function chainWord(word: string, readingKana?: string): string {
+  const reading = readingKana?.trim();
+  if (reading && /^[ぁ-ゖァ-ヺー]+$/.test(reading)) return toHiragana(reading);
+  return toHiragana(word.trim());
 }
 
 // The kana the NEXT word must start with.
@@ -75,8 +109,7 @@ function kanaMatches(a: string, b: string, rules: RuleSettings): boolean {
 }
 
 export type MoveResult =
-  | { ok: true; chainKana: string; losesByN: boolean }
-  | { ok: false; reason: string };
+  { ok: true; chainKana: string; losesByN: boolean } | { ok: false; reason: string };
 
 /**
  * Validate a submitted word.
@@ -87,37 +120,39 @@ export function validateMove(
   rawWord: string,
   requiredKana: string | null,
   usedWords: string[],
-  rules: RuleSettings = DEFAULT_RULES
+  rules: RuleSettings = DEFAULT_RULES,
+  readingKana?: string
 ): MoveResult {
   const word = rawWord.trim();
+  const kanaForm = chainWord(word, readingKana);
 
   if (!word) return { ok: false, reason: "Type a word first. / ことばを入れてね" };
 
-  if (!isKanaOnly(word)) {
+  if (!isJapaneseInput(word)) {
     return {
       ok: false,
-      reason: "Kana only (ひらがな・カタカナ) — convert romaji or use kanaの入力.",
+      reason: "Japanese only (ひらがな・カタカナ・漢字) — romaji is converted automatically.",
     };
   }
-  if (word.length < 2) {
+  if (kanaForm.length < 2) {
     return { ok: false, reason: "Words must be at least 2 kana. / 2文字以上で" };
   }
 
   if (requiredKana) {
     const need = toHiragana(requiredKana);
-    if (!kanaMatches(getFirstKana(word), need, rules)) {
+    if (!kanaMatches(getFirstKana(kanaForm), need, rules)) {
       return { ok: false, reason: `Must start with「${requiredKana}」` };
     }
   }
 
-  const normalized = toHiragana(word);
-  if (usedWords.some((u) => toHiragana(u.trim()) === normalized)) {
+  const normalized = toHiragana(kanaForm);
+  if (usedWords.some(u => toHiragana(chainWord(u)) === normalized)) {
     return { ok: false, reason: "Already used — no repeats. / もう使ったよ" };
   }
 
   return {
     ok: true,
-    chainKana: getChainKana(word, rules),
-    losesByN: endsInN(word),
+    chainKana: getChainKana(kanaForm, rules),
+    losesByN: endsInN(kanaForm),
   };
 }

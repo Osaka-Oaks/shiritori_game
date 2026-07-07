@@ -1,0 +1,55 @@
+name: Dependency check
+
+on:
+  pull_request:
+    paths:
+      - "**/package.json"
+      - "**/package-lock.json"
+      - "syncpack.config.cjs"
+      - "scripts/deps-report.mjs"
+  push:
+    branches: [main]
+    paths:
+      - "**/package.json"
+      - "**/package-lock.json"
+
+jobs:
+  syncpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install syncpack
+        run: npm install syncpack@13.0.4 --no-save
+
+      - name: List version mismatches
+        run: npx syncpack list-mismatches --config syncpack.config.cjs
+
+      - name: Dependency inventory
+        run: node scripts/deps-report.mjs
+
+  lockfiles:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [shiritori-online, kawaii-shiritori]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+
+      - name: npm ci (${{ matrix.app }})
+        working-directory: ${{ matrix.app }}
+        run: npm ci
+
+      - name: Build (${{ matrix.app }})
+        working-directory: ${{ matrix.app }}
+        run: npm run build

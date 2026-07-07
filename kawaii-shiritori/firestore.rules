@@ -47,5 +47,67 @@ service cloud.firestore {
       allow update: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && incoming().uid == existing().uid;
       allow delete: if isOwner(userId) && isValidId(userId);
     }
+
+    // 5. Leaderboard — public read, owner write (Spark-friendly scores)
+    match /leaderboard/{userId} {
+      allow read: if true;
+      allow create, update: if isOwner(userId) && isValidId(userId);
+      allow delete: if isOwner(userId) && isValidId(userId);
+    }
+
+    // 6. Two-Player Game Rooms (Real-time multiplayer)
+    match /games/{gameId} {
+      // Anyone signed in can read games
+      allow read: if isSignedIn();
+      
+      // Only host can create a game
+      allow create: if isSignedIn() && 
+                       incoming().hostUid == request.auth.uid &&
+                       incoming().status == 'waiting';
+      
+      // Players in the game can update
+      allow update: if isSignedIn() && (
+        existing().hostUid == request.auth.uid ||
+        existing().guestUid == request.auth.uid ||
+        // Allow joining if guest slot is empty
+        (!('guestUid' in existing()) && incoming().guestUid == request.auth.uid)
+      );
+      
+      // Only host can delete
+      allow delete: if isSignedIn() && existing().hostUid == request.auth.uid;
+    }
+    
+    // 7. Game Moves (Append-only word history)
+    match /games/{gameId}/moves/{moveId} {
+      allow read: if isSignedIn();
+      
+      // Can only create moves, not update/delete (append-only)
+      allow create: if isSignedIn() &&
+                       incoming().playerId == request.auth.uid &&
+                       incoming().timestamp == request.time;
+      
+      allow update, delete: if false; // Moves are immutable
+    }
+    
+    // 8. Game Stats & History (Personal performance tracking)
+    match /gameHistory/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+    }
+    
+    // 9. Active Rooms List (For matchmaking)
+    match /activeRooms/{roomId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && incoming().hostUid == request.auth.uid;
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+    
+    // 10. Player Presence (Online/Offline status)
+    match /presence/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isOwner(userId);
+    }
   }
 }

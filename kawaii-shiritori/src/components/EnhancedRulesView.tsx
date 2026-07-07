@@ -1,9 +1,22 @@
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { 
-  HelpCircle, Star, ShieldAlert, BadgeCheck, Clock, Award, 
-  BookOpen, Target, Lightbulb, TrendingUp, Trophy, Brain, 
-  Zap, Sparkles, AlertCircle, CheckCircle2
+import {
+  HelpCircle,
+  Star,
+  ShieldAlert,
+  BadgeCheck,
+  Clock,
+  Award,
+  BookOpen,
+  Target,
+  Lightbulb,
+  TrendingUp,
+  Trophy,
+  Brain,
+  Zap,
+  Sparkles,
+  AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
 
 type TabType = "basic" | "strategy" | "advanced" | "scoring";
@@ -15,7 +28,7 @@ export default function EnhancedRulesView() {
     { id: "basic" as TabType, label: "📚 Basic", color: "bg-primary" },
     { id: "strategy" as TabType, label: "🎯 Strategy", color: "bg-secondary" },
     { id: "advanced" as TabType, label: "⚡ Advanced", color: "bg-tertiary-container" },
-    { id: "scoring" as TabType, label: "🏆 Scoring", color: "bg-yellow-500" }
+    { id: "scoring" as TabType, label: "🏆 Scoring", color: "bg-yellow-500" },
   ];
 
   return (
@@ -40,7 +53,7 @@ export default function EnhancedRulesView() {
 
           {/* Tab Navigation */}
           <div className="flex gap-2 justify-center flex-wrap pt-3">
-            {tabs.map((tab) => (
+            {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
@@ -75,26 +88,26 @@ function BasicRulesContent() {
       title: "1. Japanese Nouns Only",
       desc: "Words must be standard Japanese nouns (hiragana/katakana). No verbs, adjectives, or particles!",
       icon: <BadgeCheck className="w-5 h-5 text-secondary" />,
-      bg: "bg-secondary-container/10 border-secondary/20"
+      bg: "bg-secondary-container/10 border-secondary/20",
     },
     {
       title: "2. Word Chain Rule",
       desc: "Your word must start with the last sound of the previous word. Example: ねこ (neko) → こめ (kome)",
       icon: <Star className="w-5 h-5 text-tertiary-container" />,
-      bg: "bg-tertiary-container/20 border-tertiary-container/30"
+      bg: "bg-tertiary-container/20 border-tertiary-container/30",
     },
     {
       title: "3. Never End in ん (N)",
       desc: "No Japanese words start with ん, so ending with it means INSTANT LOSS! Avoid: らいおん, みかん, ぱん",
       icon: <ShieldAlert className="w-5 h-5 text-error" />,
-      bg: "bg-error-container/25 border-error/20"
+      bg: "bg-error-container/25 border-error/20",
     },
     {
       title: "4. No Repeating Words",
       desc: "You cannot repeat any word already used in this match. Keep track of the history!",
       icon: <Clock className="w-5 h-5 text-primary" />,
-      bg: "bg-primary-container/15 border-primary/20"
-    }
+      bg: "bg-primary-container/15 border-primary/20",
+    },
   ];
 
   return (
@@ -105,7 +118,7 @@ function BasicRulesContent() {
       className="space-y-6"
     >
       <h3 className="font-label-caps text-xs text-primary font-bold px-1">OFFICIAL RULES</h3>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {rules.map((rule, idx) => (
           <motion.div
@@ -146,13 +159,15 @@ function BasicRulesContent() {
           </span>
           <CheckCircle2 className="w-5 h-5 text-secondary" />
         </div>
-        
+
         <div className="flex flex-wrap items-center gap-2 font-display-game font-bold text-sm pt-2">
           <span className="px-3 py-2 bg-error/10 text-error rounded-xl border-2 border-error shadow-xs">
             みかん (mikan) 🍊
           </span>
           <AlertCircle className="w-5 h-5 text-error" />
-          <span className="text-error font-body font-medium text-xs">FATAL! Ends in ん = Game Over</span>
+          <span className="text-error font-body font-medium text-xs">
+            FATAL! Ends in ん = Game Over
+          </span>
         </div>
       </section>
     </motion.div>
@@ -169,7 +184,7 @@ function StrategyContent() {
     { kana: "さ", words: ["さかな (fish)", "さくら (cherry)", "さる (monkey)"] },
     { kana: "た", words: ["たまご (egg)", "たけ (bamboo)", "たぬき (raccoon)"] },
     { kana: "な", words: ["なつ (summer)", "なまえ (name)", "なす (eggplant)"] },
-    { kana: "ま", words: ["まど (window)", "まち (town)", "まつり (festival)"] }
+    { kana: "ま", words: ["まど (window)", "まち (town)", "まつり (festival)"] },
   ];
 
   return (
@@ -185,7 +200,8 @@ function StrategyContent() {
           Goal: Stay Alive Longer
         </h3>
         <p className="text-sm text-on-surface font-body">
-          When playing with a native speaker, your first goal isn't to win—it's to <strong>survive longer</strong> and build vocabulary through real practice.
+          When playing with a native speaker, your first goal isn't to win—it's to{" "}
+          <strong>survive longer</strong> and build vocabulary through real practice.
         </p>
       </div>
 
@@ -195,7 +211,8 @@ function StrategyContent() {
           Learn Safe Starter Words
         </h4>
         <p className="text-xs text-on-surface-variant font-body">
-          Memorize 3-5 words for each common kana. This gives you ~150-200 words total—enough to compete!
+          Memorize 3-5 words for each common kana. This gives you ~150-200 words total—enough to
+          compete!
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -208,7 +225,9 @@ function StrategyContent() {
                 <span className="bg-primary text-on-primary rounded-full w-8 h-8 flex items-center justify-center font-display-game font-black text-lg">
                   {group.kana}
                 </span>
-                <h5 className="font-headline font-bold text-sm text-on-surface">Starting with {group.kana}</h5>
+                <h5 className="font-headline font-bold text-sm text-on-surface">
+                  Starting with {group.kana}
+                </h5>
               </div>
               <ul className="space-y-1 text-xs text-on-surface-variant font-body pl-1">
                 {group.words.map((word, i) => (
@@ -232,7 +251,7 @@ function StrategyContent() {
           Try to end your words with these "safe" sounds that have many follow-up options:
         </p>
         <div className="flex flex-wrap gap-2">
-          {["か", "さ", "た", "な", "は", "ま", "ら"].map((sound) => (
+          {["か", "さ", "た", "な", "は", "ま", "ら"].map(sound => (
             <span
               key={sound}
               className="bg-tertiary-container text-white rounded-lg px-3 py-1.5 font-display-game font-bold text-sm shadow-sm"
@@ -249,9 +268,15 @@ function StrategyContent() {
           Dangerous Endings to Avoid
         </h4>
         <div className="space-y-2 text-sm text-on-surface font-body">
-          <p><strong className="text-error">ん (N)</strong> - INSTANT LOSS! Never end with this.</p>
-          <p><strong>ゆ, ぢ, ぴ, ぎ</strong> - Very few follow-up words. Risky!</p>
-          <p><strong>を (wo)</strong> - Almost no words start with this.</p>
+          <p>
+            <strong className="text-error">ん (N)</strong> - INSTANT LOSS! Never end with this.
+          </p>
+          <p>
+            <strong>ゆ, ぢ, ぴ, ぎ</strong> - Very few follow-up words. Risky!
+          </p>
+          <p>
+            <strong>を (wo)</strong> - Almost no words start with this.
+          </p>
         </div>
       </section>
     </motion.div>
@@ -264,23 +289,23 @@ function AdvancedContent() {
     {
       level: "Level 1: Beginner",
       rules: ["Romaji allowed", "No timer", "Hints allowed", "Common nouns only"],
-      icon: <Star className="w-5 h-5 text-green-500" />
+      icon: <Star className="w-5 h-5 text-green-500" />,
     },
     {
       level: "Level 2: Normal",
       rules: ["Hiragana/katakana only", "20-second timer", "No hints", "Nouns only"],
-      icon: <Target className="w-5 h-5 text-blue-500" />
+      icon: <Target className="w-5 h-5 text-blue-500" />,
     },
     {
       level: "Level 3: Speed Battle",
       rules: ["10-second timer", "Must say meaning", "No loanwords", "3+ kana minimum"],
-      icon: <Zap className="w-5 h-5 text-yellow-500" />
+      icon: <Zap className="w-5 h-5 text-yellow-500" />,
     },
     {
       level: "Level 4: Native Challenge",
       rules: ["5-second timer", "Kanji required", "Category limits", "Final 2-kana mode"],
-      icon: <Brain className="w-5 h-5 text-purple-500" />
-    }
+      icon: <Brain className="w-5 h-5 text-purple-500" />,
+    },
   ];
 
   return (
@@ -296,7 +321,8 @@ function AdvancedContent() {
           Advanced Game Modes
         </h3>
         <p className="text-sm text-on-surface-variant font-body">
-          As you improve, try these harder variations to challenge yourself and reach native-level play!
+          As you improve, try these harder variations to challenge yourself and reach native-level
+          play!
         </p>
       </div>
 
@@ -311,11 +337,16 @@ function AdvancedContent() {
           >
             <div className="flex items-center gap-3">
               {levelData.icon}
-              <h4 className="font-headline font-bold text-base text-on-surface">{levelData.level}</h4>
+              <h4 className="font-headline font-bold text-base text-on-surface">
+                {levelData.level}
+              </h4>
             </div>
             <ul className="space-y-1.5 pl-1">
               {levelData.rules.map((rule, i) => (
-                <li key={i} className="text-sm text-on-surface-variant font-body flex items-center gap-2">
+                <li
+                  key={i}
+                  className="text-sm text-on-surface-variant font-body flex items-center gap-2"
+                >
                   <CheckCircle2 className="w-4 h-4 text-secondary flex-shrink-0" />
                   {rule}
                 </li>
@@ -331,11 +362,13 @@ function AdvancedContent() {
           Final 2-Kana Mode (Expert)
         </h4>
         <p className="text-sm text-on-surface font-body mb-3">
-          Instead of matching just the last sound, match the <strong>last TWO sounds</strong>. Much harder!
+          Instead of matching just the last sound, match the <strong>last TWO sounds</strong>. Much
+          harder!
         </p>
         <div className="bg-surface rounded-xl p-4 font-display-game space-y-2">
           <p className="text-sm text-on-surface">
-            さく<strong className="text-primary text-base">ら</strong> → Next must start with <strong className="text-primary text-base">くら</strong>
+            さく<strong className="text-primary text-base">ら</strong> → Next must start with{" "}
+            <strong className="text-primary text-base">くら</strong>
           </p>
           <p className="text-xs text-on-surface-variant">
             Examples: <strong>くら</strong>げ (jellyfish), <strong>くら</strong>す (class)
@@ -357,7 +390,7 @@ function ScoringContent() {
     { action: "Invalid word", points: "-50", color: "text-error" },
     { action: "Repeated word", points: "-75", color: "text-error" },
     { action: "Ends in ん", points: "LOSE", color: "text-error font-black" },
-    { action: "Use hint", points: "-10", color: "text-outline" }
+    { action: "Use hint", points: "-10", color: "text-outline" },
   ];
 
   return (
@@ -373,7 +406,8 @@ function ScoringContent() {
           Point System
         </h3>
         <p className="text-sm text-on-surface-variant font-body">
-          Earn points for valid words, speed, and strategy. First to 500 points or last one standing wins!
+          Earn points for valid words, speed, and strategy. First to 500 points or last one standing
+          wins!
         </p>
       </div>
 
@@ -381,8 +415,12 @@ function ScoringContent() {
         <table className="w-full">
           <thead>
             <tr className="border-b border-outline-variant/20">
-              <th className="text-left py-2 font-headline font-bold text-sm text-primary">Action</th>
-              <th className="text-right py-2 font-headline font-bold text-sm text-primary">Points</th>
+              <th className="text-left py-2 font-headline font-bold text-sm text-primary">
+                Action
+              </th>
+              <th className="text-right py-2 font-headline font-bold text-sm text-primary">
+                Points
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -404,15 +442,21 @@ function ScoringContent() {
           Power-ups & Hints
         </h4>
         <div className="space-y-2 text-sm text-on-surface font-body">
-          <p><strong>💡 Word Hint</strong> - Get 3 suggested words (costs 10 points)</p>
-          <p><strong>🛡️ Shield</strong> - One-time protection from timer loss</p>
-          <p><strong>⏱️ Time Bonus</strong> - Answer in under 5 seconds for +30 points</p>
+          <p>
+            <strong>💡 Word Hint</strong> - Get 3 suggested words (costs 10 points)
+          </p>
+          <p>
+            <strong>🛡️ Shield</strong> - One-time protection from timer loss
+          </p>
+          <p>
+            <strong>⏱️ Time Bonus</strong> - Answer in under 5 seconds for +30 points
+          </p>
         </div>
       </section>
 
       <div className="bg-surface-container-highest rounded-2xl p-5 border border-outline-variant/10 text-center">
         <p className="text-xs text-on-surface-variant font-body italic">
-          💡 Pro tip: Aim for consistent valid words over risky rare words. Survival > style!
+          💡 Pro tip: Aim for consistent valid words over risky rare words. Survival {">"} style!
         </p>
       </div>
     </motion.div>
