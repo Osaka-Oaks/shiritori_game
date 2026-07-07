@@ -57,6 +57,16 @@ shiritori-game/
 │   │       ├── pre-commit           # Pre-commit validation
 │   │       └── commit-msg           # Commit message validation
 │   │
+├── 🏗️ Infrastructure (IaC)
+│   ├── infra/
+│   │   ├── README.md
+│   │   ├── terraform/               # HashiCorp Terraform
+│   │   │   ├── environments/dev/
+│   │   │   └── modules/_template/
+│   │   └── opentofu/                # OpenTofu (tofu CLI)
+│   │       ├── environments/dev/
+│   │       └── modules/_template/
+│   │
 ├── ⚙️ GitHub Configuration
 │   ├── .github/
 │   │   ├── workflows/               # CI/CD workflows
@@ -72,12 +82,19 @@ shiritori-game/
 │   │   │   └── cron-jobs.yml         # Legacy cron
 │   │   │
 │   │   ├── ISSUE_TEMPLATE/          # Issue templates
-│   │   │   ├── bug_report.yml       # Bug reports
-│   │   │   ├── feature_request.yml  # Feature requests
-│   │   │   ├── work_item.yml        # Work items
-│   │   │   ├── dev_test.yml         # Dev tests
+│   │   │   ├── bug_report.yml       # Bug reports (form)
+│   │   │   ├── bug_report.md        # Bug reports (markdown)
+│   │   │   ├── feature_request.yml  # Feature requests (form)
+│   │   │   ├── feature_request.md   # Feature requests (markdown)
+│   │   │   ├── work_item.yml        # Work items (form)
+│   │   │   ├── work_item.md         # Work items (markdown)
+│   │   │   ├── dev_test.yml         # Dev tests (form)
+│   │   │   ├── dev_test.md          # Dev tests (markdown)
+│   │   │   ├── infrastructure.yml   # Terraform / OpenTofu (form)
+│   │   │   ├── infrastructure.md    # Terraform / OpenTofu (markdown)
 │   │   │   └── config.yml           # Template config
-│   │   │
+│   │   ├── templates/               # Markdown flavor copy-paste library
+│   │   ├── TEMPLATES.md             # Templates index
 │   │   ├── COMMIT_CONVENTIONS.md    # Commit standards
 │   │   ├── BRANCHING.md             # Branching strategy
 │   │   └── labels.yml               # Label definitions
