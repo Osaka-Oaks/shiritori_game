@@ -23,33 +23,39 @@ Welcome to the comprehensive documentation for the Shiritori Game project - a mu
 ## 📚 Documentation Sections
 
 ### Getting Started
+
 - [Quick Start Guide](getting-started.html) - Run locally in minutes
 - [Project Structure](../README.md) - Repository layout
 - [Installation](getting-started.html#installation) - Prerequisites & setup
 
 ### Security
+
 - [Security Fixes](security/fixes.html) - Resolved vulnerabilities
 - [Security Policy](security/policy.html) - Responsible disclosure
 - [GitHub Secrets Setup](security/github-secrets.html) - CI/CD credentials
 - [Security Audit Report](security/audit.html) - Latest scan results
 
 ### Deployment
+
 - [GitHub Actions CI/CD](deployment/github.html) - Automated pipelines
 - [GitLab CI/CD](deployment/gitlab.html) - Alternative platform
 - [Firebase Deployment](deployment/firebase.html) - Firebase setup
 - [Flutter Deployment](deployment/flutter.html) - Flutter web/mobile
 
 ### Build & Optimization
+
 - [Build Optimization](build/optimization.html) - 60% faster builds
 - [Build Tracking](build/tracking.html) - Performance metrics
 - [Performance Guide](build/performance.html) - Speed improvements
 
 ### Monitoring
+
 - [Monitoring Setup](monitoring/setup.html) - ELK, Grafana, Datadog
 - [Docker Troubleshooting](monitoring/docker.html) - Common issues
 - [Observability Guide](monitoring/observability.html) - Complete setup
 
 ### Features
+
 - [Japanese Input Guide](../JAPANESE_INPUT_GUIDE.md) - Hiragana/Katakana/Kanji
 - [Multi-Dictionary System](../MULTI_DICTIONARY_GUIDE.md) - Word validation
 - [Port Management](../PORT_MANAGEMENT_GUIDE.md) - Development utilities
@@ -61,14 +67,17 @@ Welcome to the comprehensive documentation for the Shiritori Game project - a mu
 ### Applications
 
 **React Apps**
+
 - **shiritori-online** - Realtime Database multiplayer
 - **kawaii-shiritori** - Firestore + AI features
 - **shiritori-word-chain** - Tournament mode
 
 **Flutter App**
+
 - **shiritori_flutter** - Cross-platform (Web, iOS, Android)
 
 ### Infrastructure
+
 - Firebase (Hosting, Realtime Database, Firestore, Auth)
 - GitHub Actions CI/CD
 - GitLab CI/CD (alternative)
@@ -86,7 +95,7 @@ Welcome to the comprehensive documentation for the Shiritori Game project - a mu
 ✅ **Fast builds** - 60% faster with optimization  
 ✅ **Comprehensive monitoring** - ELK + Grafana + Datadog  
 ✅ **Security hardened** - Zero critical vulnerabilities  
-✅ **Well-documented** - 46+ guide files  
+✅ **Well-documented** - 46+ guide files
 
 ---
 
@@ -139,31 +148,37 @@ See [Getting Started Guide](getting-started.html) for detailed instructions.
 ## 📖 Documentation Index
 
 ### Core Documentation
+
 - [README.md](../README.md) - Project overview
 - [WIKI.md](../WIKI.md) - Documentation hub
 - [UPDATES_SUMMARY.md](../UPDATES_SUMMARY.md) - Recent changes
 
 ### Setup & Configuration
+
 - [FLUTTER_FIREBASE_SETUP.md](../FLUTTER_FIREBASE_SETUP.md) - Firebase integration
 - [GITHUB_SECRETS_SETUP.md](security/github-secrets.html) - CI/CD secrets
 - [GITLAB_SETUP.md](deployment/gitlab.html) - GitLab CI/CD
 
 ### Build & Performance
+
 - [BUILD_OPTIMIZATION_QUICKSTART.md](build/optimization.html) - Fast builds
 - [BUILD_TRACKING_SUMMARY.md](build/tracking.html) - Metrics
 - [PERFORMANCE_GUIDE.md](build/performance.html) - Optimization
 
 ### Security
+
 - [SECURITY.md](security/policy.html) - Security policy
 - [SECURITY_FIXES.md](security/fixes.html) - Vulnerability audit
 - [GITHUB_SECURITY_SETUP.md](../GITHUB_SECURITY_SETUP.md) - Security features
 
 ### Deployment & CI/CD
+
 - [DEPLOYMENT_CI_CD_SUMMARY.md](deployment/) - CI/CD overview
 - [FLUTTER_DEPLOYMENT_GUIDE.md](deployment/flutter.html) - Flutter deploy
 - [COMPLETE_CI_CD_SETUP.md](../COMPLETE_CI_CD_SETUP.md) - Full setup
 
 ### Monitoring & Operations
+
 - [MONITORING_OBSERVABILITY_GUIDE.md](monitoring/observability.html) - Observability
 - [DOCKER_TROUBLESHOOTING.md](monitoring/docker.html) - Docker issues
 - [PORT_MANAGEMENT_GUIDE.md](../PORT_MANAGEMENT_GUIDE.md) - Dev utilities
@@ -200,6 +215,7 @@ We welcome contributions! Please see:
 ## 🔗 External Resources
 
 ### Official Documentation
+
 - [React](https://react.dev/)
 - [Flutter](https://docs.flutter.dev/)
 - [Firebase](https://firebase.google.com/docs)
@@ -207,12 +223,14 @@ We welcome contributions! Please see:
 - [TypeScript](https://www.typescriptlang.org/docs/)
 
 ### Tools
+
 - [GitHub Actions](https://docs.github.com/actions)
 - [GitLab CI/CD](https://docs.gitlab.com/ee/ci/)
 - [Docker](https://docs.docker.com/)
 - [Terraform](https://www.terraform.io/docs)
 
 ### Community
+
 - [Repository](https://github.com/JorelFuji/shiritori_game)
 - [Issues](https://github.com/JorelFuji/shiritori_game/issues)
 - [Discussions](https://github.com/JorelFuji/shiritori_game/discussions)
@@ -238,7 +256,7 @@ Need help? Check:
 
 **Built with ❤️ by the Shiritori Game team**
 
-[View on GitHub](https://github.com/JorelFuji/shiritori_game) | 
+[View on GitHub](https://github.com/JorelFuji/shiritori_game) |
 [Report Issue](https://github.com/JorelFuji/shiritori_game/issues/new) |
 [Contribute](../CONTRIBUTING.md)
 

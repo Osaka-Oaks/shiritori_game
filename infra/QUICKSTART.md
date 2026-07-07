@@ -60,6 +60,7 @@ bash infra/setup.sh
 ```
 
 The script will:
+
 1. ✅ Check if Terraform/OpenTofu is installed
 2. ✅ Select environment (dev/staging/production)
 3. ✅ Copy example configuration
@@ -181,17 +182,20 @@ npm run infra:dev
 ## 🎨 Environment Configs
 
 ### Development (dev.tfvars.example)
+
 - Smaller resources (500m CPU, 256Mi RAM)
 - No monitoring/alerts
 - Allow destroy
 - Budget: $10/month
 
 ### Staging (staging.tfvars.example)
+
 - Medium resources (1000m CPU, 512Mi RAM)
 - Basic monitoring
 - Budget: $25/month
 
 ### Production (production.tfvars.example)
+
 - Full resources (2000m CPU, 1Gi RAM)
 - All monitoring enabled
 - Keep-alive instance
@@ -208,7 +212,7 @@ npm run infra:setup
 # Development
 npm run infra:dev
 
-# Staging  
+# Staging
 npm run infra:staging
 
 # Production

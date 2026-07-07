@@ -2,7 +2,7 @@
 
 Self-hosted **Prometheus + Grafana + Blackbox exporter** that synthetically probes
 the live Shiritori app for **uptime, latency, and SSL expiry**. This is the right
-shape for a *static* site (Firebase Hosting): there's no server to run an agent on,
+shape for a _static_ site (Firebase Hosting): there's no server to run an agent on,
 so we probe from outside instead.
 
 ## Run it
@@ -12,18 +12,18 @@ cd monitoring
 docker compose up -d
 ```
 
-| Service | URL | Notes |
-|---|---|---|
-| Grafana | http://localhost:3001 | login `admin` / `admin`; dashboard **"Shiritori — App Health & Pulse"** auto-loads |
-| Prometheus | http://localhost:9090 | raw metrics + targets |
-| Blackbox | http://localhost:9115 | probe engine |
+| Service    | URL                   | Notes                                                                              |
+| ---------- | --------------------- | ---------------------------------------------------------------------------------- |
+| Grafana    | http://localhost:3001 | login `admin` / `admin`; dashboard **"Shiritori — App Health & Pulse"** auto-loads |
+| Prometheus | http://localhost:9090 | raw metrics + targets                                                              |
+| Blackbox   | http://localhost:9115 | probe engine                                                                       |
 
 Stop: `docker compose down` (add `-v` to wipe stored history).
 
 ## What it watches
 
 - **Homepage** `https://shiritori-game-ccaae.web.app/` — expects HTTP 200
-- **RTDB** — expects 200/401 (401 = reachable *and* secured by rules)
+- **RTDB** — expects 200/401 (401 = reachable _and_ secured by rules)
 - Metrics: `probe_success`, `probe_duration_seconds`, `probe_ssl_earliest_cert_expiry`
 
 Add more endpoints by editing [`prometheus/prometheus.yml`](prometheus/prometheus.yml).

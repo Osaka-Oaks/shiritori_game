@@ -43,17 +43,17 @@ echo ""
 
 # Validate each JSON file
 for file in $JSON_FILES; do
-  ((TOTAL++))
-  
+  TOTAL=$((TOTAL + 1))
+
   # Check if file is valid JSON
   if python3 -m json.tool "$file" > /dev/null 2>&1; then
     echo -e "${GREEN}✅${NC} $file"
-    ((PASSED++))
+    PASSED=$((PASSED + 1))
   else
     echo -e "${RED}❌${NC} $file"
     echo -e "   ${RED}Invalid JSON syntax${NC}"
     python3 -m json.tool "$file" 2>&1 | head -5 | sed 's/^/   /'
-    ((FAILED++))
+    FAILED=$((FAILED + 1))
   fi
 done
 

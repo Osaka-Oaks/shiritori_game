@@ -7,16 +7,19 @@
 ## 🚀 3-Step Deployment
 
 ### Step 1: Deploy
+
 ```bash
 npm run deploy:flutter
 ```
 
 ### Step 2: Test
+
 ```bash
 npm run deploy:flutter:test
 ```
 
 ### Step 3: Visit
+
 ```bash
 open https://shiritori-game-ccaae.web.app
 ```
@@ -27,11 +30,11 @@ open https://shiritori-game-ccaae.web.app
 
 ## 📋 All Commands
 
-| Command | Description | When to Use |
-|---------|-------------|-------------|
-| `npm run deploy:flutter` | Deploy to production | Push to `main` branch |
-| `npm run deploy:flutter:staging` | Deploy to staging | Testing before production |
-| `npm run deploy:flutter:test` | Test deployment | After every deploy |
+| Command                          | Description          | When to Use               |
+| -------------------------------- | -------------------- | ------------------------- |
+| `npm run deploy:flutter`         | Deploy to production | Push to `main` branch     |
+| `npm run deploy:flutter:staging` | Deploy to staging    | Testing before production |
+| `npm run deploy:flutter:test`    | Test deployment      | After every deploy        |
 
 ---
 
@@ -55,6 +58,7 @@ GitHub → Actions → Deploy Flutter to Firebase
 ```
 
 **You'll see:**
+
 ```
 ✅ Deployment Successful
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -78,6 +82,7 @@ npm run deploy:flutter:test
 ```
 
 **10 Tests Run:**
+
 1. ✅ HTTP Status (200 OK)
 2. ✅ Response Time (<3s)
 3. ✅ Content Type (text/html)
@@ -108,16 +113,19 @@ curl -I https://shiritori-game-ccaae.web.app
 **Option 1: GitHub Badge**
 
 Add to README:
+
 ```markdown
 ![Deploy Status](https://github.com/YOUR_USERNAME/shiritori_game/workflows/Deploy%20Flutter%20to%20Firebase/badge.svg)
 ```
 
 **Option 2: GitHub Actions**
+
 ```
 https://github.com/YOUR_USERNAME/shiritori_game/actions
 ```
 
 **Option 3: Firebase Console**
+
 ```
 https://console.firebase.google.com/project/shiritori-game-ccaae/hosting
 ```
@@ -129,6 +137,7 @@ https://console.firebase.google.com/project/shiritori-game-ccaae/hosting
 ### What Gets Tracked
 
 **Every deployment tracks:**
+
 - ⏱️ Build time (seconds)
 - 📦 Build size (MB)
 - 📁 File count
@@ -153,11 +162,11 @@ GitHub → Actions → Deploy Flutter to Firebase → All runs
 
 ## 🌐 Deployment URLs
 
-| Environment | URL | Auto-Deploy On |
-|-------------|-----|----------------|
-| **Production** | [shiritori-game-ccaae.web.app](https://shiritori-game-ccaae.web.app) | Push to `main` |
-| **Staging** | [shiritori-game-ccaae--develop.web.app](https://shiritori-game-ccaae--develop.web.app) | Push to `develop` |
-| **Preview** | shiritori-game-ccaae--[branch].web.app | Push to feature branch |
+| Environment    | URL                                                                                    | Auto-Deploy On         |
+| -------------- | -------------------------------------------------------------------------------------- | ---------------------- |
+| **Production** | [shiritori-game-ccaae.web.app](https://shiritori-game-ccaae.web.app)                   | Push to `main`         |
+| **Staging**    | [shiritori-game-ccaae--develop.web.app](https://shiritori-game-ccaae--develop.web.app) | Push to `develop`      |
+| **Preview**    | shiritori-game-ccaae--[branch].web.app                                                 | Push to feature branch |
 
 ---
 
@@ -189,7 +198,7 @@ GitHub → Actions → Deploy Flutter to Firebase → All runs
 ✅ **Tests:** All 10 tests pass  
 ✅ **URL:** Returns HTTP 200  
 ✅ **Content:** Flutter app loads  
-✅ **Performance:** Response time <3s  
+✅ **Performance:** Response time <3s
 
 ### What to Check After Deploy
 
@@ -247,6 +256,7 @@ bash scripts/test-flutter-deployment.sh https://shiritori-game-ccaae.web.app
 ## 📚 Full Documentation
 
 **Detailed guides:**
+
 - `FLUTTER_DEPLOYMENT_GUIDE.md` - Complete deployment guide
 - `shiritori-flutter/README.md` - Flutter app documentation
 - `.github/workflows/deploy-flutter.yml` - CI/CD configuration
@@ -262,7 +272,7 @@ bash scripts/test-flutter-deployment.sh https://shiritori-game-ccaae.web.app
 ✅ **10 health checks** - Comprehensive testing  
 ✅ **Time tracking** - Every deployment tracked  
 ✅ **Status reporting** - Full visibility  
-✅ **3 environments** - Production, staging, preview  
+✅ **3 environments** - Production, staging, preview
 
 ### Typical Deployment
 

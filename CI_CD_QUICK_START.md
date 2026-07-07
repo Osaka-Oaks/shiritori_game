@@ -10,7 +10,7 @@ Get up and running with the complete CI/CD system in 5 minutes!
 ✅ **Smart Deployment** - Deploy only what changed  
 ✅ **JSON Validation** - Syntax and formatting checks  
 ✅ **Quality Gates** - Linting, type checking, testing  
-✅ **Branch Strategy** - Production, staging, and feature workflows  
+✅ **Branch Strategy** - Production, staging, and feature workflows
 
 ---
 
@@ -36,6 +36,7 @@ firebase login:ci
 **GitHub → Settings → Branches → Add rule**
 
 **For `main` branch:**
+
 ```
 ✅ Require pull request before merging
 ✅ Require approvals: 1
@@ -143,13 +144,13 @@ Total: ~10-12 minutes
 
 ### What Gets Scanned
 
-| Check | What It Does | Blocks On |
-|-------|--------------|-----------|
-| **Gitleaks** | Secret detection in code | Any secrets found |
-| **CodeQL** | Code vulnerability analysis | Critical issues |
-| **npm audit** | Dependency vulnerabilities | Critical in prod deps |
-| **Rules Check** | Firebase rules validation | Syntax errors |
-| **JSON Check** | JSON syntax validation | Malformed JSON |
+| Check           | What It Does                | Blocks On             |
+| --------------- | --------------------------- | --------------------- |
+| **Gitleaks**    | Secret detection in code    | Any secrets found     |
+| **CodeQL**      | Code vulnerability analysis | Critical issues       |
+| **npm audit**   | Dependency vulnerabilities  | Critical in prod deps |
+| **Rules Check** | Firebase rules validation   | Syntax errors         |
+| **JSON Check**  | JSON syntax validation      | Malformed JSON        |
 
 ### If Security Fails
 
@@ -175,12 +176,12 @@ npm run validate:json  # Shows errors locally
 
 ### What Triggers Deploy
 
-| Changed Files | Deploy Action | Example |
-|---------------|---------------|---------|
-| `shiritori-online/**` | Hosting + RTDB rules | Game features |
+| Changed Files                      | Deploy Action        | Example        |
+| ---------------------------------- | -------------------- | -------------- |
+| `shiritori-online/**`              | Hosting + RTDB rules | Game features  |
 | `kawaii-shiritori/firestore.rules` | Firestore rules only | Security rules |
-| `README.md` | **Nothing** | Docs only |
-| `.github/workflows/**` | Full redeploy | CI changes |
+| `README.md`                        | **Nothing**          | Docs only      |
+| `.github/workflows/**`             | Full redeploy        | CI changes     |
 
 ### Benefits
 
@@ -349,19 +350,20 @@ firebase deploy --only hosting --debug
 
 ## 📚 Documentation Links
 
-| Document | Purpose | When to Read |
-|----------|---------|--------------|
-| [Complete Setup](./COMPLETE_CI_CD_SETUP.md) | Full system docs | Detailed reference |
-| [CI/CD Pipeline](./CI_CD_PIPELINE.md) | Pipeline details | Understanding flow |
-| [Deployment Guide](./DEPLOYMENT_GUIDE.md) | Deploy instructions | Manual deploys |
-| [Dependency Monitoring](./DEPENDENCY_MONITORING_SETUP.md) | Dependency management | Updates & audits |
-| [Branching Strategy](./.github/BRANCHING.md) | Branch workflow | Development flow |
+| Document                                                  | Purpose               | When to Read       |
+| --------------------------------------------------------- | --------------------- | ------------------ |
+| [Complete Setup](./COMPLETE_CI_CD_SETUP.md)               | Full system docs      | Detailed reference |
+| [CI/CD Pipeline](./CI_CD_PIPELINE.md)                     | Pipeline details      | Understanding flow |
+| [Deployment Guide](./DEPLOYMENT_GUIDE.md)                 | Deploy instructions   | Manual deploys     |
+| [Dependency Monitoring](./DEPENDENCY_MONITORING_SETUP.md) | Dependency management | Updates & audits   |
+| [Branching Strategy](./.github/BRANCHING.md)              | Branch workflow       | Development flow   |
 
 ---
 
 ## ✅ Checklist
 
 ### Initial Setup
+
 - [ ] Firebase token added to GitHub secrets
 - [ ] Branch protection enabled on `main`
 - [ ] Branch protection enabled on `develop`
@@ -369,6 +371,7 @@ firebase deploy --only hosting --debug
 - [ ] Verify all checks pass
 
 ### Per Feature
+
 - [ ] Branch from `develop`
 - [ ] Name: `feature/descriptive-name`
 - [ ] All checks pass locally
@@ -380,6 +383,7 @@ firebase deploy --only hosting --debug
 - [ ] PR `develop` → `main` when ready
 
 ### Pre-Production
+
 - [ ] All develop tests pass
 - [ ] Preview environment tested
 - [ ] Security scans clean
@@ -391,13 +395,13 @@ firebase deploy --only hosting --debug
 
 ## 🎯 Success Metrics
 
-| Metric | Target | Current |
-|--------|--------|---------|
-| Pipeline time | <15 min | ~10-12 min ✅ |
-| Success rate | >95% | ~98% ✅ |
-| Security issues | 0 critical | 0 ✅ |
-| Deploy frequency | 2-3x/week | Variable |
-| Rollback time | <5 min | <3 min ✅ |
+| Metric           | Target     | Current       |
+| ---------------- | ---------- | ------------- |
+| Pipeline time    | <15 min    | ~10-12 min ✅ |
+| Success rate     | >95%       | ~98% ✅       |
+| Security issues  | 0 critical | 0 ✅          |
+| Deploy frequency | 2-3x/week  | Variable      |
+| Rollback time    | <5 min     | <3 min ✅     |
 
 ---
 
@@ -443,12 +447,12 @@ Your CI/CD pipeline is:
 ✅ **Fast** - Smart path-based deployment  
 ✅ **Reliable** - Comprehensive validation  
 ✅ **Documented** - Complete guides  
-✅ **Production-ready** - Battle-tested  
+✅ **Production-ready** - Battle-tested
 
 **Just push to main and watch the magic happen!** 🚀
 
 ---
 
-*Quick Start v1.0*  
-*Last updated: July 7, 2026*  
-*Status: ✅ Ready for Production*
+_Quick Start v1.0_  
+_Last updated: July 7, 2026_  
+_Status: ✅ Ready for Production_

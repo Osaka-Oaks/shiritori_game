@@ -22,26 +22,27 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/) specifica
 
 **Must** be one of the following:
 
-| Type | Description | Example |
-|------|-------------|---------|
-| `feat` | New feature | `feat: add floating dictionary widget` |
-| `fix` | Bug fix | `fix: resolve deployment script error` |
-| `docs` | Documentation only | `docs: update README with deployment guide` |
-| `style` | Code style changes (formatting, etc.) | `style: format code with prettier` |
-| `refactor` | Code refactoring | `refactor: simplify game logic` |
-| `perf` | Performance improvements | `perf: optimize build time with caching` |
-| `test` | Adding or updating tests | `test: add unit tests for dictionary` |
-| `build` | Build system or dependencies | `build: upgrade vite to v8` |
-| `ci` | CI/CD changes | `ci: add automated deployment` |
-| `chore` | Maintenance tasks | `chore: update dependencies` |
-| `revert` | Revert previous commit | `revert: revert "feat: add feature X"` |
-| `security` | Security fixes | `security: patch XSS vulnerability` |
+| Type       | Description                           | Example                                     |
+| ---------- | ------------------------------------- | ------------------------------------------- |
+| `feat`     | New feature                           | `feat: add floating dictionary widget`      |
+| `fix`      | Bug fix                               | `fix: resolve deployment script error`      |
+| `docs`     | Documentation only                    | `docs: update README with deployment guide` |
+| `style`    | Code style changes (formatting, etc.) | `style: format code with prettier`          |
+| `refactor` | Code refactoring                      | `refactor: simplify game logic`             |
+| `perf`     | Performance improvements              | `perf: optimize build time with caching`    |
+| `test`     | Adding or updating tests              | `test: add unit tests for dictionary`       |
+| `build`    | Build system or dependencies          | `build: upgrade vite to v8`                 |
+| `ci`       | CI/CD changes                         | `ci: add automated deployment`              |
+| `chore`    | Maintenance tasks                     | `chore: update dependencies`                |
+| `revert`   | Revert previous commit                | `revert: revert "feat: add feature X"`      |
+| `security` | Security fixes                        | `security: patch XSS vulnerability`         |
 
 ### Scope
 
 **Optional** but recommended. Indicates what part of the codebase is affected.
 
 **Common scopes:**
+
 - `online` - shiritori-online app
 - `kawaii` - kawaii-shiritori app
 - `ci` - CI/CD pipeline
@@ -63,6 +64,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/) specifica
 ### Body
 
 **Optional** - Provide additional context:
+
 - Wrap at 72 characters
 - Explain what and why, not how
 - Use bullet points for multiple items
@@ -70,6 +72,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/) specifica
 ### Footer
 
 **Optional** - Reference issues and breaking changes:
+
 - Reference issues: `Closes #123`, `Fixes #456`, `Resolves #789`
 - Breaking changes: `BREAKING CHANGE: <description>`
 
@@ -168,6 +171,7 @@ release/<version>
 **Format:** `<type>/<issue-number>-<short-description>`
 
 **Examples:**
+
 ```bash
 feature/123-floating-dictionary
 fix/456-game-freeze
@@ -177,6 +181,7 @@ docs/improve-readme
 ```
 
 **Rules:**
+
 - Use lowercase
 - Use hyphens for spaces
 - Keep it short but descriptive
@@ -270,6 +275,7 @@ git push origin develop
 ### Labels
 
 #### Type Labels
+
 - `bug` - Something isn't working
 - `enhancement` - New feature or request
 - `feature` - New feature implementation
@@ -279,12 +285,14 @@ git push origin develop
 - `dependencies` - Dependency updates
 
 #### Priority Labels
+
 - `priority:critical` - Drop everything and fix
 - `priority:high` - Fix ASAP
 - `priority:medium` - Normal priority
 - `priority:low` - Nice to have
 
 #### Status Labels
+
 - `status:in-progress` - Currently being worked on
 - `status:blocked` - Blocked by something
 - `status:review` - Needs review
@@ -292,6 +300,7 @@ git push origin develop
 - `stale` - No recent activity
 
 #### Component Labels
+
 - `app:online` - shiritori-online
 - `app:kawaii` - kawaii-shiritori
 - `ci/cd` - CI/CD pipeline
@@ -299,6 +308,7 @@ git push origin develop
 - `ui` - User interface
 
 #### Size Labels (Auto-added)
+
 - `size/XS` - <10 lines changed
 - `size/S` - <50 lines
 - `size/M` - <200 lines
@@ -317,31 +327,38 @@ Use appropriate template when creating issues:
 ### PR Best Practices
 
 **Title:** Follow commit convention
+
 ```
 feat(kawaii): add floating dictionary
 fix(online): resolve connection timeout
 ```
 
 **Description:** Use the template
+
 ```markdown
 ## Changes
+
 - Added floating dictionary widget
 - Integrated Jisho.org API
 - Added tests
 
 ## Testing
+
 - [ ] Local build passes
 - [ ] Tests pass
 - [ ] Manually tested on mobile
 
 ## Screenshots
+
 [Add if UI changes]
 
 ## Related Issues
+
 Closes #123
 ```
 
 **Reviews:**
+
 - Request review from team member
 - Address all comments
 - Update branch if needed
@@ -354,6 +371,7 @@ Closes #123
 ### Auto-Labeling
 
 Issues and PRs are automatically labeled based on:
+
 - Title prefix (feat:, fix:, docs:, etc.)
 - Content keywords
 - File paths changed
@@ -392,6 +410,7 @@ Issues and PRs are automatically labeled based on:
 ### Automation
 
 Issues/PRs automatically move between columns:
+
 - **Opened** → Backlog
 - **Assigned** → Todo
 - **PR opened** → In Progress → Review
@@ -432,6 +451,7 @@ git revert <commit-hash>
 ### Commit Message Template
 
 Save to `.gitmessage`:
+
 ```
 <type>(<scope>): <subject>
 
@@ -450,6 +470,7 @@ Save to `.gitmessage`:
 ```
 
 Set as default:
+
 ```bash
 git config commit.template .gitmessage
 ```
@@ -468,6 +489,7 @@ git config commit.template .gitmessage
 ## ✅ Checklist
 
 ### Before Commit
+
 - [ ] Code follows style guide
 - [ ] Tests added/updated
 - [ ] Documentation updated
@@ -475,6 +497,7 @@ git config commit.template .gitmessage
 - [ ] Commit message follows convention
 
 ### Before PR
+
 - [ ] Branch up to date with develop
 - [ ] All tests pass locally
 - [ ] PR template filled out
@@ -483,6 +506,7 @@ git config commit.template .gitmessage
 - [ ] Reviewer assigned
 
 ### Before Merge
+
 - [ ] All CI checks pass
 - [ ] Code reviewed and approved
 - [ ] No merge conflicts
@@ -492,6 +516,7 @@ git config commit.template .gitmessage
 ---
 
 **Following these conventions helps:**
+
 - 📝 Generate changelogs automatically
 - 🔍 Search commits by type
 - 🤖 Automate workflows
@@ -500,6 +525,6 @@ git config commit.template .gitmessage
 
 ---
 
-*Last updated: July 2026*  
-*Enforced by: CI/CD automation*  
-*Questions? Create an issue!*
+_Last updated: July 2026_  
+_Enforced by: CI/CD automation_  
+_Questions? Create an issue!_

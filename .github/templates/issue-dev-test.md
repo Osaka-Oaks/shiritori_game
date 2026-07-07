@@ -22,9 +22,9 @@
 
 ## Steps to test
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Expected result
 
@@ -32,10 +32,10 @@
 
 ## Environment
 
-| App | shiritori-online / kawaii-shiritori / shiritori_flutter |
-|-----|--------------------------------------------------------|
-| Browser / device | |
-| Commit / build | |
+| App              | shiritori-online / kawaii-shiritori / shiritori_flutter |
+| ---------------- | ------------------------------------------------------- |
+| Browser / device |                                                         |
+| Commit / build   |                                                         |
 
 ---
 

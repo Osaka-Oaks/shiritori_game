@@ -23,9 +23,9 @@
 
 Describe resources, modules, or config to add/update/destroy.
 
-| Resource | Action | Notes |
-|----------|--------|-------|
-| | create / update / destroy | |
+| Resource | Action                    | Notes |
+| -------- | ------------------------- | ----- |
+|          | create / update / destroy |       |
 
 ## Module path (if applicable)
 

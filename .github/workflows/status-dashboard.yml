@@ -3,10 +3,10 @@ name: Status Dashboard
 # Real-time status dashboard - runs frequently
 on:
   push:
-    branches: [main, develop, 'feature/**']
+    branches: [main, develop, "feature/**"]
   schedule:
     # Every 6 hours
-    - cron: '0 */6 * * *'
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 permissions:
@@ -29,30 +29,30 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const fs = require('fs');
-            
+
             // Get all branches
             const { data: branches } = await github.rest.repos.listBranches({
               owner,
               repo,
               per_page: 100
             });
-            
+
             // Get workflows
             const { data: workflows } = await github.rest.actions.listRepoWorkflows({
               owner,
               repo
             });
-            
+
             // Get recent workflow runs
             const { data: runs } = await github.rest.actions.listWorkflowRunsForRepo({
               owner,
               repo,
               per_page: 50
             });
-            
+
             // Calculate success rate
             const successRate = (runs.workflow_runs.filter(r => r.conclusion === 'success').length / runs.workflow_runs.length * 100).toFixed(1);
-            
+
             // Get open issues and PRs
             const { data: issues } = await github.rest.issues.listForRepo({
               owner,
@@ -60,18 +60,18 @@ jobs:
               state: 'open',
               per_page: 100
             });
-            
+
             const bugs = issues.filter(i => !i.pull_request && i.labels.some(l => l.name === 'bug')).length;
             const features = issues.filter(i => !i.pull_request && i.labels.some(l => l.name === 'feature')).length;
             const prs = issues.filter(i => i.pull_request).length;
-            
+
             // Get deployment status
             const { data: deployments } = await github.rest.repos.listDeployments({
               owner,
               repo,
               per_page: 10
             });
-            
+
             const latestDeploy = deployments[0];
             let deployStatus = 'N/A';
             if (latestDeploy) {
@@ -82,26 +82,26 @@ jobs:
               });
               deployStatus = statuses[0]?.state || 'unknown';
             }
-            
+
             // Get commit activity
             const { data: commits } = await github.rest.repos.listCommits({
               owner,
               repo,
               per_page: 100
             });
-            
+
             const last24h = commits.filter(c => {
               const date = new Date(c.commit.author.date);
               return Date.now() - date.getTime() < 24 * 60 * 60 * 1000;
             }).length;
-            
+
             // Build dashboard
             const dashboard = `# 📊 Project Status Dashboard
-            
+
             > Last updated: ${new Date().toUTCString()}
-            
+
             ## 🎯 Overall Health
-            
+
             | Metric | Status | Value |
             |--------|--------|-------|
             | **Build Success Rate** | ${successRate > 90 ? '🟢' : successRate > 70 ? '🟡' : '🔴'} | ${successRate}% |
@@ -109,9 +109,9 @@ jobs:
             | **Open PRs** | ${prs < 5 ? '🟢' : prs < 10 ? '🟡' : '🔴'} | ${prs} |
             | **Latest Deployment** | ${deployStatus === 'success' ? '🟢' : deployStatus === 'pending' ? '🟡' : '🔴'} | ${deployStatus} |
             | **Commits (24h)** | ${last24h > 5 ? '🟢' : last24h > 0 ? '🟡' : '⚪'} | ${last24h} |
-            
+
             ## 🌿 Branch Status
-            
+
             | Branch | Commits | Status | Last Update |
             |--------|---------|--------|-------------|
             ${await Promise.all(branches.slice(0, 10).map(async b => {
@@ -136,14 +136,14 @@ jobs:
               
               return `| \`${b.name}\` | ${commit.commit.message.split('\n')[0].substring(0, 40)} | ${statusIcon} | ${daysAgo}d ago |`;
             })).then(rows => rows.join('\n'))}
-            
+
             ## 🎯 Active Work
-            
+
             ### Open Issues by Type
             - 🐛 **Bugs**: ${bugs}
             - ✨ **Features**: ${features}
             - 📋 **Other**: ${issues.length - prs - bugs - features}
-            
+
             ### Pull Requests
             ${prs > 0 ? `
             ${issues.filter(i => i.pull_request).slice(0, 5).map(pr => 
@@ -151,9 +151,9 @@ jobs:
             ).join('\n')}
             ${prs > 5 ? `\n*...and ${prs - 5} more*` : ''}
             ` : '_No open pull requests_'}
-            
+
             ## 📈 Recent Activity
-            
+
             ### Top Contributors (Last 100 commits)
             ${Array.from(commits.reduce((map, c) => {
               const author = c.commit.author.name;
@@ -164,7 +164,7 @@ jobs:
               .slice(0, 5)
               .map(([author, count], i) => `${i + 1}. **${author}** - ${count} commits`)
               .join('\n')}
-            
+
             ### Workflow Status
             ${workflows.workflows.slice(0, 5).map(w => {
               const recentRun = runs.workflow_runs.find(r => r.workflow_id === w.id);
@@ -173,9 +173,9 @@ jobs:
                             recentRun?.status === 'in_progress' ? '🔄' : '⚪';
               return `- ${status} **${w.name}**`;
             }).join('\n')}
-            
+
             ## 🚀 Deployment History
-            
+
             | Environment | Status | Time | SHA |
             |-------------|--------|------|-----|
             ${deployments.slice(0, 5).map(d => {
@@ -184,20 +184,20 @@ jobs:
               const sha = d.sha.substring(0, 7);
               return `| ${env} | ${deployStatus} | ${time} | \`${sha}\` |`;
             }).join('\n') || '| - | No deployments | - | - |'}
-            
+
             ## 🔗 Quick Links
-            
+
             - [🎯 View Issues](https://github.com/${owner}/${repo}/issues)
             - [🔀 View Pull Requests](https://github.com/${owner}/${repo}/pulls)
             - [⚙️ View Actions](https://github.com/${owner}/${repo}/actions)
             - [📊 View Insights](https://github.com/${owner}/${repo}/pulse)
             - [🚀 View Deployments](https://github.com/${owner}/${repo}/deployments)
-            
+
             ---
-            
+
             _Auto-generated every 6 hours • [Refresh](https://github.com/${owner}/${repo}/actions/workflows/status-dashboard.yml)_
             `;
-            
+
             // Write to file
             fs.writeFileSync('STATUS.md', dashboard);
             console.log('Dashboard generated');
@@ -206,7 +206,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           git add STATUS.md
           if git diff --staged --quiet; then
             echo "No changes to dashboard"

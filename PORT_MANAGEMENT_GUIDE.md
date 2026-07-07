@@ -33,14 +33,14 @@ npm run port:kill:all
 
 ## 📋 Common Ports
 
-| Port | Service | Command |
-|------|---------|---------|
-| **3000** | React/Vite Dev Server | `npm run port:kill:3000` |
-| **5173** | Vite Dev Server | `npm run port:kill:5173` |
-| **5601** | Kibana | `npm run port:kill:5601` |
-| **9200** | Elasticsearch | `npm run port:kill -- 9200` |
-| **5000** | Firebase Emulator | `npm run port:kill -- 5000` |
-| **8080** | Dev Server | `npm run port:kill -- 8080` |
+| Port     | Service               | Command                     |
+| -------- | --------------------- | --------------------------- |
+| **3000** | React/Vite Dev Server | `npm run port:kill:3000`    |
+| **5173** | Vite Dev Server       | `npm run port:kill:5173`    |
+| **5601** | Kibana                | `npm run port:kill:5601`    |
+| **9200** | Elasticsearch         | `npm run port:kill -- 9200` |
+| **5000** | Firebase Emulator     | `npm run port:kill -- 5000` |
+| **8080** | Dev Server            | `npm run port:kill -- 8080` |
 
 ---
 
@@ -91,6 +91,7 @@ npm run monitor:elk:start
 ### kill-port.sh
 
 **Features:**
+
 - ✅ Finds process using specific port
 - ✅ Shows process details (PID, command, user)
 - ✅ Asks for confirmation
@@ -99,6 +100,7 @@ npm run monitor:elk:start
 - ✅ Verifies port is free
 
 **Usage:**
+
 ```bash
 # Kill specific port
 bash scripts/kill-port.sh 5601
@@ -108,6 +110,7 @@ npm run port:kill -- 5601
 ```
 
 **Output:**
+
 ```
 🔪 Kill Process on Port 5601
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -131,12 +134,14 @@ Sending SIGTERM to PID 12345...
 ### kill-all-ports.sh
 
 **Features:**
+
 - ✅ Scans 20+ common development ports
 - ✅ Shows all processes found
 - ✅ Batch kills with confirmation
 - ✅ Reports success/failure
 
 **Ports Checked:**
+
 - React/Vite (3000, 3001, 5173, 5174, 4173)
 - Firebase (5000, 5001, 9000-9399)
 - ELK Stack (5601, 9200, 9300, 5044)
@@ -144,6 +149,7 @@ Sending SIGTERM to PID 12345...
 - Other Dev Servers (8080, 8081)
 
 **Usage:**
+
 ```bash
 # Kill all dev ports
 bash scripts/kill-all-ports.sh
@@ -153,6 +159,7 @@ npm run port:kill:all
 ```
 
 **Output:**
+
 ```
 🔪 Kill All Development Server Ports
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -184,6 +191,7 @@ Port 9200 (Elasticsearch): Found PID 12347
 ### Scenario 1: Starting ELK Stack
 
 **Problem:**
+
 ```bash
 npm run monitor:elk:start
 # Error: Port 5601 already in use
@@ -191,6 +199,7 @@ npm run monitor:elk:start
 ```
 
 **Solution:**
+
 ```bash
 # Kill Kibana
 npm run port:kill:5601
@@ -208,12 +217,14 @@ npm run monitor:elk:start
 ### Scenario 2: Running Multiple Dev Servers
 
 **Problem:**
+
 ```bash
 npm run dev        # Port 3000
 npm run dev:kawaii # Port 3000 already in use!
 ```
 
 **Solution:**
+
 ```bash
 # Kill port 3000
 npm run port:kill:3000
@@ -226,6 +237,7 @@ PORT=3001 npm run dev
 ### Scenario 3: Zombie Processes
 
 **Problem:**
+
 ```bash
 # Server crashed but port still in use
 npm run dev
@@ -233,6 +245,7 @@ npm run dev
 ```
 
 **Solution:**
+
 ```bash
 # Kill the zombie process
 npm run port:kill:3000
@@ -329,6 +342,7 @@ netstat -an | grep LISTEN
 ```
 
 **Usage:**
+
 ```bash
 # Predefined ports
 npm run port:kill:5601
@@ -376,6 +390,7 @@ npm run port:kill:all
 ## 💡 Pro Tips
 
 **1. Create aliases:**
+
 ```bash
 # Add to ~/.zshrc or ~/.bashrc
 alias killport='bash ~/path/to/scripts/kill-port.sh'
@@ -387,18 +402,21 @@ killports
 ```
 
 **2. Check before starting:**
+
 ```bash
 # Check if port is free
 lsof -i :5601 || npm run dev
 ```
 
 **3. Use different ports:**
+
 ```bash
 # Start on alternative port instead of killing
 PORT=3001 npm run dev
 ```
 
 **4. Stop all servers cleanly:**
+
 ```bash
 # Kill all dev processes at end of day
 npm run port:kill:all
@@ -416,7 +434,7 @@ npm run port:kill:all
 ✅ **Check processes** - Shows PID, command, user  
 ✅ **Graceful shutdown** - Tries SIGTERM first  
 ✅ **Force kill** - Uses SIGKILL if needed  
-✅ **Verification** - Confirms port is free  
+✅ **Verification** - Confirms port is free
 
 ### Quick Reference
 

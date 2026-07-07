@@ -34,6 +34,7 @@
 **Result:** GitHub will notify you of vulnerable dependencies.
 
 **Alternative (via CLI):**
+
 ```bash
 gh repo edit JorelFuji/shiritori_game \
   --enable-vulnerability-alerts
@@ -119,6 +120,7 @@ updates:
 **Result:** Researchers can report issues without public disclosure.
 
 **Alternative (via CLI):**
+
 ```bash
 gh repo edit JorelFuji/shiritori_game \
   --enable-private-vulnerability-reporting
@@ -154,6 +156,7 @@ gh repo edit JorelFuji/shiritori_game \
 - [x] **Require branches to be up to date before merging**
 
 **Required checks:**
+
 - `lint`
 - `typecheck`
 - `test:shiritori-online`
@@ -317,13 +320,13 @@ jobs:
 ✅ **Unlimited minutes** - No GitHub Actions minute limits  
 ✅ **Faster builds** - More CPU/RAM  
 ✅ **Custom software** - Pre-installed tools  
-✅ **Network access** - Private networks  
+✅ **Network access** - Private networks
 
 ### Security Considerations
 
 ⚠️ **Only for private repos** - Public repos can run arbitrary code  
 ⚠️ **Isolation required** - Use VMs or containers  
-⚠️ **Regular updates** - Keep runner software updated  
+⚠️ **Regular updates** - Keep runner software updated
 
 ---
 
@@ -425,10 +428,10 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 ```yaml
 jobs:
   build:
-    runs-on: self-hosted  # Use self-hosted runner
+    runs-on: self-hosted # Use self-hosted runner
     # Or with labels:
     # runs-on: [self-hosted, linux, x64]
-    
+
     steps:
       - uses: actions/checkout@v4
       - name: Build
@@ -440,6 +443,7 @@ jobs:
 ### Runner Labels
 
 **Default labels:**
+
 - `self-hosted`
 - OS: `linux`, `macOS`, `windows`
 - Architecture: `x64`, `ARM`, `ARM64`
@@ -447,6 +451,7 @@ jobs:
 **Custom labels:**
 
 Add during configuration:
+
 ```bash
 ./config.sh --url https://github.com/JorelFuji/shiritori_game \
   --token YOUR_TOKEN \
@@ -454,6 +459,7 @@ Add during configuration:
 ```
 
 Use in workflow:
+
 ```yaml
 runs-on: [self-hosted, flutter, fast-build]
 ```
@@ -467,6 +473,7 @@ runs-on: [self-hosted, flutter, fast-build]
 **Location:** **Security** → **Overview**
 
 **Metrics:**
+
 - Code scanning alerts
 - Secret scanning alerts
 - Dependabot alerts
@@ -492,6 +499,7 @@ runs-on: [self-hosted, flutter, fast-build]
 **Settings** → **Notifications** → **Email preferences**
 
 Enable:
+
 - [ ] Dependabot alerts
 - [ ] Security alerts
 - [ ] Vulnerability reports
@@ -508,6 +516,7 @@ Settings → **Code security and analysis** → **Alert notifications**
 **Default:** Owner receives emails
 
 **Add watchers:**
+
 - **Settings** → **Manage access** → **Invite collaborator**
 - Give role with security alert access
 
@@ -534,6 +543,7 @@ Settings → **Code security and analysis** → **Alert notifications**
 **Payload URL:** Your endpoint
 
 **Events:**
+
 - [x] Security advisories
 - [x] Security alerts
 - [x] Dependabot alerts
@@ -578,20 +588,20 @@ Settings → **Code security and analysis** → **Alert notifications**
 ✅ **Passing tests required** - CI must pass  
 ✅ **Private vulnerability reporting** - Researchers can report safely  
 ✅ **Code scanning** - CodeQL finds issues  
-✅ **Secret scanning** - Exposed secrets detected  
+✅ **Secret scanning** - Exposed secrets detected
 
 ---
 
 ### Security Score Improvement
 
-| Feature | Before | After |
-|---------|--------|-------|
-| Branch protection | ❌ | ✅ |
-| Dependabot | ❌ | ✅ |
-| Vulnerability reporting | ❌ | ✅ |
-| Code scanning | ✅ | ✅ |
-| Secret scanning | ✅ | ✅ |
-| **Overall Score** | 40% | 100% |
+| Feature                 | Before | After |
+| ----------------------- | ------ | ----- |
+| Branch protection       | ❌     | ✅    |
+| Dependabot              | ❌     | ✅    |
+| Vulnerability reporting | ❌     | ✅    |
+| Code scanning           | ✅     | ✅    |
+| Secret scanning         | ✅     | ✅    |
+| **Overall Score**       | 40%    | 100%  |
 
 ---
 
@@ -621,6 +631,6 @@ Enable these features to secure your repository.
 
 **Time Required:** 15 minutes  
 **Difficulty:** Easy  
-**Impact:** High  
+**Impact:** High
 
 </div>

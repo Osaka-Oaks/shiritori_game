@@ -73,6 +73,7 @@ npm run flutter:setup
 ```
 
 **What happens:**
+
 ```
 🔥 Flutter + Firebase Setup
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -158,6 +159,7 @@ flutterfire configure --project=shiritori-game-ccaae
 ```
 
 **This will:**
+
 - Register your app with Firebase
 - Create `lib/firebase_options.dart`
 - Configure for all platforms (iOS, Android, Web, macOS)
@@ -203,12 +205,12 @@ import 'firebase_options.dart';
 void main() async {
   // Ensure Flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   runApp(const MyApp());
 }
 
@@ -271,15 +273,18 @@ class _MyHomePageState extends State<MyHomePage> {
 ### Key Parts Explained
 
 1. **Import Firebase Core**
+
    ```dart
    import 'package:firebase_core/firebase_core.dart';
    import 'firebase_options.dart';
    ```
 
 2. **Ensure Binding**
+
    ```dart
    WidgetsFlutterBinding.ensureInitialized();
    ```
+
    Required before using Firebase in Flutter.
 
 3. **Initialize Firebase**
@@ -438,7 +443,7 @@ import 'package:firebase_core/firebase_core.dart';
 void testFirebase() async {
   // Check if Firebase is initialized
   print('Firebase apps: ${Firebase.apps.length}');
-  
+
   if (Firebase.apps.isNotEmpty) {
     print('Firebase initialized successfully!');
     print('App name: ${Firebase.app().name}');
@@ -454,11 +459,13 @@ void testFirebase() async {
 ### Issue: FlutterFire CLI not found
 
 **Error:**
+
 ```
 flutterfire: command not found
 ```
 
 **Solution:**
+
 ```bash
 # Add to PATH
 export PATH="$PATH:$HOME/.pub-cache/bin"
@@ -475,6 +482,7 @@ $HOME/.pub-cache/bin/flutterfire configure --project=shiritori-game-ccaae
 ### Issue: Firebase not initialized
 
 **Error:**
+
 ```
 [core/no-app] No Firebase App '[DEFAULT]' has been created
 ```
@@ -497,6 +505,7 @@ void main() async {
 ### Issue: firebase_options.dart not found
 
 **Error:**
+
 ```
 Error: Cannot find 'firebase_options.dart'
 ```
@@ -514,6 +523,7 @@ flutterfire configure --project=shiritori-game-ccaae
 ### Issue: Platform not supported
 
 **Error:**
+
 ```
 Unsupported platform
 ```
@@ -537,11 +547,13 @@ flutter run -d android     # Android
 ### Issue: Permission denied
 
 **Error:**
+
 ```
 Permission denied: firebase_options.dart
 ```
 
 **Solution:**
+
 ```bash
 # Fix permissions
 chmod 644 shiritori-flutter/lib/firebase_options.dart
@@ -558,12 +570,12 @@ flutterfire configure --project=shiritori-game-ccaae
 
 ### Core Packages
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `firebase_core` | Latest | Firebase initialization |
-| `firebase_auth` | Latest | Authentication |
-| `cloud_firestore` | Latest | Firestore database |
-| `firebase_database` | Latest | Realtime Database |
+| Package             | Version | Purpose                 |
+| ------------------- | ------- | ----------------------- |
+| `firebase_core`     | Latest  | Firebase initialization |
+| `firebase_auth`     | Latest  | Authentication          |
+| `cloud_firestore`   | Latest  | Firestore database      |
+| `firebase_database` | Latest  | Realtime Database       |
 
 ### Optional Packages
 
@@ -631,7 +643,7 @@ npm run deploy:flutter
 # Run on specific platform
 flutter run -d chrome      # Web
 flutter run -d macos       # macOS
-flutter run -d ios         # iOS  
+flutter run -d ios         # iOS
 flutter run -d android     # Android
 ```
 
@@ -701,7 +713,7 @@ flutter pub add firebase_storage
 ✅ **Firebase initialized** - Ready to use in Flutter  
 ✅ **All platforms configured** - iOS, Android, Web, macOS  
 ✅ **Firebase packages installed** - Auth, Firestore, Realtime DB  
-✅ **Complete documentation** - This guide  
+✅ **Complete documentation** - This guide
 
 ### Quick Commands
 

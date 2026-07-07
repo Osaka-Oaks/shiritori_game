@@ -2,10 +2,10 @@
 
 Terraform and OpenTofu templates for cloud resources that complement Firebase hosting.
 
-| Tool | Path | CLI |
-|------|------|-----|
+| Tool          | Path               | CLI         |
+| ------------- | ------------------ | ----------- |
 | **Terraform** | `infra/terraform/` | `terraform` |
-| **OpenTofu** | `infra/opentofu/` | `tofu` |
+| **OpenTofu**  | `infra/opentofu/`  | `tofu`      |
 
 Both use the same HCL syntax. Keep module interfaces aligned when changing either tree.
 

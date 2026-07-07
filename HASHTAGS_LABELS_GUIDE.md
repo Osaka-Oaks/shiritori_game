@@ -12,7 +12,7 @@ Your repository now supports **hashtags and labels** for:
 ✅ **Commit tracking** - Extract hashtags from commit messages  
 ✅ **Automated labeling** - Auto-label issues and deployments  
 ✅ **Firebase URL testing** - Test deployments with labeled reports  
-✅ **Status tracking** - Monitor deployments by tags  
+✅ **Status tracking** - Monitor deployments by tags
 
 ---
 
@@ -27,6 +27,7 @@ git commit -m "feat(kawaii): add dark mode #feature #ui #darkmode"
 ```
 
 **Hashtags are automatically:**
+
 - ✅ Extracted from commit message
 - ✅ Added to deployment labels
 - ✅ Included in test reports
@@ -35,6 +36,7 @@ git commit -m "feat(kawaii): add dark mode #feature #ui #darkmode"
 ### Recommended Hashtags
 
 #### By Type
+
 ```bash
 #feature    - New feature
 #bugfix     - Bug fix
@@ -45,6 +47,7 @@ git commit -m "feat(kawaii): add dark mode #feature #ui #darkmode"
 ```
 
 #### By Component
+
 ```bash
 #online     - shiritori-online app
 #kawaii     - kawaii-shiritori app
@@ -55,6 +58,7 @@ git commit -m "feat(kawaii): add dark mode #feature #ui #darkmode"
 ```
 
 #### By Priority
+
 ```bash
 #critical   - Critical/urgent
 #high       - High priority
@@ -63,6 +67,7 @@ git commit -m "feat(kawaii): add dark mode #feature #ui #darkmode"
 ```
 
 #### By Status
+
 ```bash
 #wip        - Work in progress
 #ready      - Ready for review
@@ -116,6 +121,7 @@ npm run deploy:with-tags
 ```
 
 **What happens:**
+
 1. Script extracts hashtags from last commit
 2. Combines with custom tags you provide
 3. Adds auto-generated tags (branch, SHA, date, env)
@@ -206,6 +212,7 @@ When you deploy, an issue is automatically created:
 **Title:** `🚀 Deploy 20260707.031400-abc123 to production`
 
 **Labels:**
+
 - `deployment`
 - `env-production`
 - `feature`
@@ -214,6 +221,7 @@ When you deploy, an issue is automatically created:
 - `version-20260707.031400-abc123`
 
 **Body:**
+
 ```markdown
 ## 🚀 Deployment: 20260707.031400-abc123
 
@@ -224,6 +232,7 @@ When you deploy, an issue is automatically created:
 **Triggered by**: @jarrel
 
 ### 🏷️ Tags
+
 - `#feature`
 - `#ui`
 - `#production-ready`
@@ -232,16 +241,19 @@ When you deploy, an issue is automatically created:
 - `branch:main`
 
 ### ⏱️ Timeline
+
 - **Started**: 2026-07-07T03:14:00Z
 - **Status**: 🔄 In Progress
 
 ---
-*This issue will be auto-updated with deployment status*
+
+_This issue will be auto-updated with deployment status_
 ```
 
 ### Issue Updates
 
 The issue is automatically updated with:
+
 - ✅ Deployment completion status
 - 🧪 Test results
 - 🔗 Live URL
@@ -254,6 +266,7 @@ The issue is automatically updated with:
 ### Using GitHub Search
 
 **Find by hashtag:**
+
 ```
 is:issue label:deployment #hotfix
 is:issue label:deployment #security
@@ -261,12 +274,14 @@ is:issue label:deployment #feature
 ```
 
 **Find by environment:**
+
 ```
 is:issue label:env-production
 is:issue label:env-staging
 ```
 
 **Find by status:**
+
 ```
 is:issue label:deployment is:open     # In progress
 is:issue label:deployment is:closed   # Completed
@@ -302,12 +317,14 @@ gh issue list --label deployment --label feature --state all --limit 10
 ### Deployment Labels
 
 **Automatically added:**
+
 - `deployment` - All deployments
 - `env-production` - Production deploys
 - `env-staging` - Staging deploys
 - `version-X` - Version identifier
 
 **From hashtags:**
+
 - `feature` - From #feature
 - `bugfix` - From #bugfix
 - `security` - From #security
@@ -338,6 +355,7 @@ deployment
 ### Commit Messages with Hashtags
 
 ✅ **DO:**
+
 ```bash
 # Clear, descriptive with relevant hashtags
 git commit -m "feat(kawaii): add user authentication #feature #authentication #firebase"
@@ -350,6 +368,7 @@ git commit -m "refactor: optimize game engine #performance #refactor #online #ka
 ```
 
 ❌ **DON'T:**
+
 ```bash
 # Too many hashtags
 git commit -m "update code #a #b #c #d #e #f #g #h #i"
@@ -364,12 +383,14 @@ git commit -m "feat: new feature #this_is_too_long! #with@special$chars"
 ### Hashtag Naming
 
 ✅ **Good hashtags:**
+
 - `#darkmode` - Clear, one word
 - `#user-auth` - Hyphenated for clarity
 - `#v2-migration` - Version prefix
 - `#api-v3` - Specific version
 
 ❌ **Bad hashtags:**
+
 - `#dark mode` - Spaces don't work
 - `#toomanycharsinthishashtag` - Too long
 - `#123` - Just numbers
@@ -378,6 +399,7 @@ git commit -m "feat: new feature #this_is_too_long! #with@special$chars"
 ### Deployment Tags
 
 **Use for:**
+
 - Version identification
 - Feature tracking
 - Rollback identification
@@ -385,6 +407,7 @@ git commit -m "feat: new feature #this_is_too_long! #with@special$chars"
 - A/B testing groups
 
 **Examples:**
+
 ```bash
 # Version releases
 #v1.0.0 #v2.0.0-beta
@@ -529,6 +552,7 @@ Closes #123
 **Problem:** Hashtags in commit not appearing in deployment
 
 **Solution:**
+
 - Ensure hashtags in commit message (not just subject)
 - Use format: `#word` or `#word-with-hyphens`
 - No spaces in hashtags
@@ -539,6 +563,7 @@ Closes #123
 **Problem:** Deployed but no issue created
 
 **Solution:**
+
 - Check GitHub Actions logs
 - Verify `issues: write` permission
 - Ensure workflow triggered correctly
@@ -549,6 +574,7 @@ Closes #123
 **Problem:** Tests run but no labels/hashtags in report
 
 **Solution:**
+
 - Run `npm run test:firebase` after deployment
 - Check `.github/test-summary-*.md` files
 - Verify URL is accessible
@@ -564,9 +590,10 @@ You now have:
 ✅ **Automatic labeling** for issues and deployments  
 ✅ **Firebase URL testing** with labeled reports  
 ✅ **Deployment tracking** with searchable tags  
-✅ **Complete workflow** from commit to test  
+✅ **Complete workflow** from commit to test
 
 **Usage:**
+
 1. Commit with hashtags: `git commit -m "feat: add feature #feature #ui"`
 2. Deploy: `npm run deploy:with-tags`
 3. Test: `npm run test:firebase`
@@ -576,6 +603,6 @@ You now have:
 
 ---
 
-*Last updated: July 2026*  
-*System version: 1.0*  
-*Status: ✅ Production Ready*
+_Last updated: July 2026_  
+_System version: 1.0_  
+_Status: ✅ Production Ready_

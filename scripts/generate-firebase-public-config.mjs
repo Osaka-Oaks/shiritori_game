@@ -8,7 +8,10 @@ import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const appDir = resolve(process.argv[2] || "shiritori-online");
+// Resolve the app dir against the repo root, not cwd — the app build
+// scripts invoke this from inside the app directory itself.
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const appDir = resolve(repoRoot, process.argv[2] || "shiritori-online");
 const envPath = resolve(appDir, ".env");
 
 if (existsSync(envPath)) {
@@ -19,10 +22,7 @@ if (existsSync(envPath)) {
     if (eq === -1) continue;
     const key = trimmed.slice(0, eq).trim();
     let val = trimmed.slice(eq + 1).trim();
-    if (
-      (val.startsWith('"') && val.endsWith('"')) ||
-      (val.startsWith("'") && val.endsWith("'"))
-    ) {
+    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
       val = val.slice(1, -1);
     }
     if (!process.env[key]) process.env[key] = val;

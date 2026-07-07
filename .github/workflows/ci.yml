@@ -40,7 +40,7 @@ jobs:
       shared: ${{ steps.filter.outputs.shared }}
       deps: ${{ steps.filter.outputs.deps }}
       ci-config: ${{ steps.filter.outputs.ci-config }}
-      docs-only: ${{ steps.filter.outputs.docs-only }}
+      docs-only: ${{ steps.nondocs.outputs.non-docs == 'false' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -72,10 +72,19 @@ jobs:
             ci-config:
               - '.github/workflows/**'
               - 'scripts/security-check.sh'
-            docs-only:
-              - '**.md'
-              - 'docs/**'
-              - 'LICENSE'
+
+      # docs-only must mean "nothing but docs changed". A file counts as
+      # non-doc only if it matches every negated pattern below, so this
+      # filter is false exactly when all changed files are docs.
+      - uses: dorny/paths-filter@v3
+        id: nondocs
+        with:
+          predicate-quantifier: every
+          filters: |
+            non-docs:
+              - '!**.md'
+              - '!docs/**'
+              - '!LICENSE'
 
   docs-pass:
     name: Docs only (skip build)

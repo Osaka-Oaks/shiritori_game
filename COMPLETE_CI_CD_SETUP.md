@@ -45,18 +45,19 @@ Complete guide to your production-ready CI/CD pipeline with security scanning, s
 
 ### Active Security Workflows
 
-| Scan Type | Tool | Frequency | Blocking |
-|-----------|------|-----------|----------|
-| **Secret Detection** | Gitleaks | Every push, weekly | ✅ Yes |
-| **Code Analysis** | CodeQL | Every push, weekly | ✅ Yes |
-| **Dependency Audit** | npm audit | Every push, weekly | ✅ Critical only |
-| **Dependency Review** | GitHub | PRs only | ✅ High+ severity |
-| **Rules Validation** | Custom | Every push | ✅ Yes |
-| **JSON Validation** | Python | Every push | ✅ Yes |
+| Scan Type             | Tool      | Frequency          | Blocking          |
+| --------------------- | --------- | ------------------ | ----------------- |
+| **Secret Detection**  | Gitleaks  | Every push, weekly | ✅ Yes            |
+| **Code Analysis**     | CodeQL    | Every push, weekly | ✅ Yes            |
+| **Dependency Audit**  | npm audit | Every push, weekly | ✅ Critical only  |
+| **Dependency Review** | GitHub    | PRs only           | ✅ High+ severity |
+| **Rules Validation**  | Custom    | Every push         | ✅ Yes            |
+| **JSON Validation**   | Python    | Every push         | ✅ Yes            |
 
 ### Security Workflow Files
 
 **`.github/workflows/security.yml`** - Comprehensive security scanning
+
 - CodeQL analysis for JavaScript/TypeScript
 - npm audit for both apps (critical vulnerabilities block)
 - Gitleaks secret scanning
@@ -64,6 +65,7 @@ Complete guide to your production-ready CI/CD pipeline with security scanning, s
 - Firebase rules validation
 
 **`scripts/security-check.sh`** - Local security validation
+
 - Blocks committed `.env` files
 - Validates Firebase rules JSON
 - Checks for hardcoded API keys
@@ -100,12 +102,14 @@ Push to GitHub
 ### Why Path-Based?
 
 **Efficiency:**
+
 - Deploy only what changed
 - Faster deployment times
 - Reduced Firebase quota usage
 - Less risk of unintended changes
 
 **Safety:**
+
 - Documentation changes don't trigger deploys
 - Test changes don't affect production
 - Clear separation of concerns
@@ -136,18 +140,19 @@ changes:
 
 ### Deployment Matrix
 
-| Changed Paths | What Gets Deployed | Example Use Case |
-|---------------|-------------------|------------------|
-| `shiritori-online/src/**` | Hosting + RTDB rules | New game features |
-| `shiritori-online/database.rules.json` | RTDB rules only | Security updates |
-| `kawaii-shiritori/firestore.rules` | Firestore rules only | Data model changes |
-| `kawaii-shiritori/src/**` | Nothing (hosting manual) | App development |
-| `README.md`, `docs/**` | Nothing | Documentation updates |
-| `.github/workflows/**` | Full redeploy | CI/CD changes |
+| Changed Paths                          | What Gets Deployed       | Example Use Case      |
+| -------------------------------------- | ------------------------ | --------------------- |
+| `shiritori-online/src/**`              | Hosting + RTDB rules     | New game features     |
+| `shiritori-online/database.rules.json` | RTDB rules only          | Security updates      |
+| `kawaii-shiritori/firestore.rules`     | Firestore rules only     | Data model changes    |
+| `kawaii-shiritori/src/**`              | Nothing (hosting manual) | App development       |
+| `README.md`, `docs/**`                 | Nothing                  | Documentation updates |
+| `.github/workflows/**`                 | Full redeploy            | CI/CD changes         |
 
 ### Conditional Deployment
 
 **Shiritori Online Deploy (main branch):**
+
 ```yaml
 deploy-online:
   name: Deploy shiritori-online
@@ -160,6 +165,7 @@ deploy-online:
 ```
 
 **Firestore Rules Deploy (main branch):**
+
 ```yaml
 deploy-firestore-rules:
   name: Deploy Firestore rules
@@ -193,12 +199,12 @@ fix/critical-bug     ──────┘
 
 ### Branch Rules
 
-| Branch | Protection | Required Checks | Deploy Target |
-|--------|------------|-----------------|---------------|
-| `main` | ✅ Protected | All checks must pass | **Production** |
-| `develop` | ✅ Protected | All checks must pass | **Preview channel** |
-| `feature/*` | ⚠️ Optional | All checks recommended | None |
-| `fix/*` | ⚠️ Optional | All checks recommended | None |
+| Branch      | Protection   | Required Checks        | Deploy Target       |
+| ----------- | ------------ | ---------------------- | ------------------- |
+| `main`      | ✅ Protected | All checks must pass   | **Production**      |
+| `develop`   | ✅ Protected | All checks must pass   | **Preview channel** |
+| `feature/*` | ⚠️ Optional  | All checks recommended | None                |
+| `fix/*`     | ⚠️ Optional  | All checks recommended | None                |
 
 ### Workflow Examples
 
@@ -277,6 +283,7 @@ git push origin develop
 **Purpose:** Determine what changed
 
 **Outputs:**
+
 - `online`: true/false
 - `kawaii-rules`: true/false
 - `ci-config`: true/false
@@ -407,14 +414,15 @@ git push origin develop
 
 ### GitHub Secrets
 
-| Secret | Purpose | How to Get |
-|--------|---------|------------|
+| Secret           | Purpose               | How to Get          |
+| ---------------- | --------------------- | ------------------- |
 | `FIREBASE_TOKEN` | Deploy authentication | `firebase login:ci` |
-| `GITHUB_TOKEN` | Automatic (no setup) | Provided by GitHub |
+| `GITHUB_TOKEN`   | Automatic (no setup)  | Provided by GitHub  |
 
 ### GitHub Settings
 
 **Branch Protection (main):**
+
 - ✅ Require pull request before merging
 - ✅ Require approvals: 1
 - ✅ Require status checks to pass
@@ -429,6 +437,7 @@ git push origin develop
   - `build`
 
 **Branch Protection (develop):**
+
 - ✅ Require pull request before merging
 - ✅ Require status checks to pass
 - ⚠️ Approvals: Optional (for speed)
@@ -439,16 +448,16 @@ git push origin develop
 
 ### Available Artifacts (30-day retention)
 
-| Artifact Name | Contents | When Created |
-|---------------|----------|--------------|
-| `security-audit-reports` | npm audit JSON | Every run |
-| `audit-online` | shiritori-online audit | Every run |
-| `audit-kawaii` | kawaii-shiritori audit | Every run |
-| `json-validation-report` | All JSON files | Every run |
-| `test-results-kawaii` | Test coverage | After tests |
-| `dist-shiritori-online` | Production build | After build |
-| `dist-kawaii-shiritori` | Production build | After build |
-| `validation-report` | Validation logs | deploy-and-test workflow |
+| Artifact Name            | Contents               | When Created             |
+| ------------------------ | ---------------------- | ------------------------ |
+| `security-audit-reports` | npm audit JSON         | Every run                |
+| `audit-online`           | shiritori-online audit | Every run                |
+| `audit-kawaii`           | kawaii-shiritori audit | Every run                |
+| `json-validation-report` | All JSON files         | Every run                |
+| `test-results-kawaii`    | Test coverage          | After tests              |
+| `dist-shiritori-online`  | Production build       | After build              |
+| `dist-kawaii-shiritori`  | Production build       | After build              |
+| `validation-report`      | Validation logs        | deploy-and-test workflow |
 
 ### Downloading Artifacts
 
@@ -471,6 +480,7 @@ gh run download <run-id> -n security-audit-reports
 **Problem:** Gitleaks detects potential secret
 
 **Solution:**
+
 ```bash
 # Check what was detected
 cat gitleaks-report.json
@@ -486,6 +496,7 @@ cat gitleaks-report.json
 **Problem:** npm audit fails with critical vulnerability
 
 **Solution:**
+
 ```bash
 # Update vulnerable package
 npm update <package-name>
@@ -505,6 +516,7 @@ npm audit --json > audit-report.json
 **Problem:** Changes detected but not deploying
 
 **Check:**
+
 ```yaml
 # Verify path filters in ci.yml
 filters: |
@@ -516,6 +528,7 @@ filters: |
 **Problem:** Wrong paths being deployed
 
 **Debug:**
+
 ```bash
 # Test path filter locally
 npx path-filter \
@@ -530,11 +543,13 @@ npx path-filter \
 **Problem:** Pushed to develop but no preview deploy
 
 **Check:**
+
 1. Branch name matches exactly: `develop` not `dev` or `development`
 2. Firebase project supports preview channels
 3. Check workflow file `on:` triggers include branch
 
 **Manual trigger:**
+
 ```bash
 # Use workflow_dispatch
 gh workflow run ci.yml --ref develop
@@ -547,6 +562,7 @@ gh workflow run ci.yml --ref develop
 ### Pipeline Performance
 
 **Target Times:**
+
 - Security: <3 min
 - JSON Validation: <1 min
 - Code Quality: <3 min
@@ -558,6 +574,7 @@ gh workflow run ci.yml --ref develop
 ### Success Rates
 
 **Track in GitHub:**
+
 - Actions → Workflows → Success rate %
 - Target: >95% success rate
 - Monitor failing checks
@@ -565,12 +582,14 @@ gh workflow run ci.yml --ref develop
 ### Cost Monitoring
 
 **GitHub Actions (Free tier):**
+
 - 2,000 minutes/month (public repos: unlimited)
 - Current usage: ~12 min/run
 - Typical runs: 50-100/month
 - Cost: $0 (within free tier)
 
 **Firebase (Spark plan):**
+
 - Deploy quota: Not counted
 - Hosting bandwidth: Monitor in Console
 - Database operations: Monitor in Console
@@ -593,6 +612,7 @@ git commit -m "security: patch vuln"     # Security fix
 ### Pull Requests
 
 **Title format:**
+
 ```
 feat: Add floating dictionary widget
 fix: Resolve deployment script error
@@ -600,27 +620,33 @@ docs: Update CI/CD documentation
 ```
 
 **Description template:**
+
 ```markdown
 ## Changes
+
 - Added X feature
 - Fixed Y bug
 - Updated Z documentation
 
 ## Testing
+
 - [ ] Local build passes
 - [ ] Tests pass
 - [ ] Manually tested on device
 
 ## Screenshots
+
 [If applicable]
 
 ## Breaking Changes
+
 None / [Describe if any]
 ```
 
 ### Code Reviews
 
 **Checklist:**
+
 - ✅ All CI checks pass
 - ✅ Code follows style guide
 - ✅ Tests added for new features
@@ -668,13 +694,13 @@ npm run deps:sync               # Version sync
 
 ### Important URLs
 
-| Resource | URL |
-|----------|-----|
-| **Live Site** | https://shiritori-game-ccaae.web.app |
+| Resource             | URL                                                              |
+| -------------------- | ---------------------------------------------------------------- |
+| **Live Site**        | https://shiritori-game-ccaae.web.app                             |
 | **Firebase Console** | https://console.firebase.google.com/project/shiritori-game-ccaae |
-| **GitHub Actions** | https://github.com/JorelFuji/shiritori_game/actions |
-| **Security Alerts** | https://github.com/JorelFuji/shiritori_game/security |
-| **Dependabot** | https://github.com/JorelFuji/shiritori_game/security/dependabot |
+| **GitHub Actions**   | https://github.com/JorelFuji/shiritori_game/actions              |
+| **Security Alerts**  | https://github.com/JorelFuji/shiritori_game/security             |
+| **Dependabot**       | https://github.com/JorelFuji/shiritori_game/security/dependabot  |
 
 ---
 
@@ -683,6 +709,7 @@ npm run deps:sync               # Version sync
 Your CI/CD pipeline now includes:
 
 ✅ **Comprehensive Security**
+
 - Secret scanning (Gitleaks)
 - Code analysis (CodeQL)
 - Dependency auditing (npm audit)
@@ -690,24 +717,28 @@ Your CI/CD pipeline now includes:
 - Firebase rules validation
 
 ✅ **Smart Deployment**
+
 - Path-based deployment
 - Only deploy what changed
 - Conditional workflows
 - Preview channels for staging
 
 ✅ **Clear Branching Strategy**
+
 - main → Production
 - develop → Staging
 - feature/* → Validation only
 - fix/* → Validation only
 
 ✅ **Complete Validation**
+
 - JSON linting & formatting
 - Code quality checks
 - Automated testing
 - Security scanning
 
 ✅ **Full Documentation**
+
 - Setup guides
 - Troubleshooting
 - Best practices
@@ -717,6 +748,6 @@ Your CI/CD pipeline now includes:
 
 ---
 
-*Last updated: July 7, 2026*  
-*Pipeline version: 3.0*  
-*Status: ✅ Production Ready*
+_Last updated: July 7, 2026_  
+_Pipeline version: 3.0_  
+_Status: ✅ Production Ready_

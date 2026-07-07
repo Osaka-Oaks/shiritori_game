@@ -4,13 +4,13 @@ name: Scheduled Tasks
 on:
   schedule:
     # Daily tasks - 2 AM UTC (9 PM EST)
-    - cron: '0 2 * * *'
+    - cron: "0 2 * * *"
   workflow_dispatch:
     inputs:
       task:
-        description: 'Task to run'
+        description: "Task to run"
         required: false
-        default: 'all'
+        default: "all"
         type: choice
         options:
           - all
@@ -36,14 +36,14 @@ jobs:
         id: check-prod
         run: |
           URL="https://shiritori-game-ccaae.web.app"
-          
+
           echo "Checking $URL..."
           STATUS=$(curl -o /dev/null -s -w "%{http_code}" $URL)
           TIME=$(curl -o /dev/null -s -w "%{time_total}" $URL)
-          
+
           echo "status=$STATUS" >> $GITHUB_OUTPUT
           echo "time=$TIME" >> $GITHUB_OUTPUT
-          
+
           if [ "$STATUS" -eq 200 ]; then
             echo "✅ Site is healthy (HTTP $STATUS, ${TIME}s)"
           else
@@ -57,7 +57,7 @@ jobs:
           DB_URL="https://shiritori-game-ccaae-default-rtdb.firebaseio.com/.json"
           DB_STATUS=$(curl -o /dev/null -s -w "%{http_code}" $DB_URL)
           echo "Realtime DB: HTTP $DB_STATUS"
-          
+
           # Check hosting
           if [ "${{ steps.check-prod.outputs.status }}" -eq 200 ]; then
             echo "✅ Firebase Hosting: UP"
@@ -70,28 +70,28 @@ jobs:
           script: |
             const status = '${{ steps.check-prod.outputs.status }}';
             const time = '${{ steps.check-prod.outputs.time }}';
-            
+
             const report = `## 🏥 Daily Health Check Report
-            
+
             **Date**: ${new Date().toISOString().split('T')[0]}
             **Time**: ${new Date().toUTCString()}
-            
+
             ### Production Site
             - **Status**: HTTP ${status} ${status === '200' ? '✅' : '❌'}
             - **Response Time**: ${time}s
             - **URL**: https://shiritori-game-ccaae.web.app
-            
+
             ### Services Status
             - **Firebase Hosting**: ${status === '200' ? '✅ UP' : '❌ DOWN'}
             - **Realtime Database**: ✅ UP
             - **Firestore**: ✅ UP
-            
+
             ---
             *Generated automatically by scheduled task*
             `;
-            
+
             console.log(report);
-            
+
             // Create issue if site is down
             if (status !== '200') {
               await github.rest.issues.create({
@@ -113,20 +113,20 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            
+
             // Get all artifacts
             const { data: artifacts } = await github.rest.actions.listArtifactsForRepo({
               owner,
               repo,
               per_page: 100
             });
-            
+
             console.log(`Found ${artifacts.artifacts.length} artifacts`);
-            
+
             // Delete artifacts older than 30 days
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            
+
             let deleted = 0;
             for (const artifact of artifacts.artifacts) {
               const createdAt = new Date(artifact.created_at);
@@ -141,7 +141,7 @@ jobs:
                 console.log(`Deleted: ${artifact.name} (${artifact.created_at})`);
               }
             }
-            
+
             console.log(`Cleanup complete: ${deleted} artifacts deleted`);
 
   cleanup-old-workflow-runs:
@@ -154,15 +154,15 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            
+
             // Get all workflows
             const { data: workflows } = await github.rest.actions.listRepoWorkflows({
               owner,
               repo
             });
-            
+
             let totalDeleted = 0;
-            
+
             for (const workflow of workflows.workflows) {
               // Get runs for this workflow
               const { data: runs } = await github.rest.actions.listWorkflowRuns({
@@ -192,7 +192,7 @@ jobs:
                 }
               }
             }
-            
+
             console.log(`Deleted ${totalDeleted} old workflow runs`);
 
   weekly-dependency-report:
@@ -205,7 +205,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
           cache: npm
 
       - name: Install dependencies
@@ -226,35 +226,35 @@ jobs:
             const report = fs.readFileSync('deps-report.txt', 'utf8');
             const outdated = fs.readFileSync('deps-outdated.txt', 'utf8');
             const sync = fs.readFileSync('deps-sync.txt', 'utf8');
-            
+
             const body = `## 📦 Weekly Dependency Report
-            
+
             **Generated**: ${new Date().toISOString().split('T')[0]}
-            
+
             ### Dependency Inventory
             \`\`\`
             ${report}
             \`\`\`
-            
+
             ### Outdated Packages
             \`\`\`
             ${outdated}
             \`\`\`
-            
+
             ### Version Mismatches
             \`\`\`
             ${sync}
             \`\`\`
-            
+
             ### Actions
             - [ ] Review outdated packages
             - [ ] Plan updates for next sprint
             - [ ] Fix version mismatches if any
-            
+
             ---
             *Automated weekly report*
             `;
-            
+
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -273,7 +273,7 @@ jobs:
       - name: Create backup
         run: |
           mkdir -p backups
-          
+
           # Backup critical files
           tar -czf backups/configs-$(date +%Y%m%d).tar.gz \
             .github/workflows/*.yml \
@@ -285,7 +285,7 @@ jobs:
             .prettierrc.json \
             .eslintrc.cjs \
             tsconfig.json
-          
+
           ls -lh backups/
 
       - name: Upload backup artifact
@@ -306,12 +306,12 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            
+
             // Calculate date range (last 30 days)
             const endDate = new Date();
             const startDate = new Date();
             startDate.setDate(startDate.getDate() - 30);
-            
+
             // Get commits
             const { data: commits } = await github.rest.repos.listCommits({
               owner,
@@ -320,7 +320,7 @@ jobs:
               until: endDate.toISOString(),
               per_page: 100
             });
-            
+
             // Get closed issues
             const { data: closedIssues } = await github.rest.issues.listForRepo({
               owner,
@@ -329,7 +329,7 @@ jobs:
               since: startDate.toISOString(),
               per_page: 100
             });
-            
+
             // Get PRs
             const { data: prs } = await github.rest.pulls.list({
               owner,
@@ -337,38 +337,38 @@ jobs:
               state: 'closed',
               per_page: 100
             });
-            
+
             const mergedPRs = prs.filter(pr => pr.merged_at);
-            
+
             // Generate report
             const report = `## 📊 Monthly Analytics Report
-            
+
             **Period**: ${startDate.toISOString().split('T')[0]} to ${endDate.toISOString().split('T')[0]}
-            
+
             ### Activity Summary
             - **Commits**: ${commits.length}
             - **Issues Closed**: ${closedIssues.length}
             - **PRs Merged**: ${mergedPRs.length}
             - **Contributors**: ${new Set(commits.map(c => c.author?.login).filter(Boolean)).size}
-            
+
             ### Top Contributors
             ${Array.from(new Set(commits.map(c => c.author?.login).filter(Boolean)))
               .slice(0, 5)
               .map((author, i) => `${i + 1}. @${author}`)
               .join('\n')}
-            
+
             ### Commit Activity
             - Average: ${(commits.length / 30).toFixed(1)} commits/day
             - Peak day: ${commits.length > 0 ? new Date(commits[0].commit.author.date).toLocaleDateString() : 'N/A'}
-            
+
             ### Issue Resolution
             - Average time to close: ~${closedIssues.length > 0 ? '3 days' : 'N/A'}
             - Open issues: ${(await github.rest.issues.listForRepo({ owner, repo, state: 'open' })).data.length}
-            
+
             ---
             *Generated automatically on the 1st of each month*
             `;
-            
+
             // Create issue with report
             await github.rest.issues.create({
               owner,
@@ -390,7 +390,7 @@ jobs:
         run: |
           # Install markdown-link-check if needed
           npm install -g markdown-link-check
-          
+
           # Check all markdown files
           find . -name "*.md" -not -path "*/node_modules/*" -exec markdown-link-check {} \;
 
@@ -409,10 +409,10 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const fs = require('fs');
-            
+
             // Get repo data
             const { data: repoData } = await github.rest.repos.get({ owner, repo });
-            
+
             const stats = `
             [![Stars](https://img.shields.io/github/stars/${owner}/${repo}?style=social)](https://github.com/${owner}/${repo})
             [![Forks](https://img.shields.io/github/forks/${owner}/${repo}?style=social)](https://github.com/${owner}/${repo}/fork)
@@ -420,6 +420,6 @@ jobs:
             [![PRs](https://img.shields.io/github/issues-pr/${owner}/${repo})](https://github.com/${owner}/${repo}/pulls)
             [![Last Commit](https://img.shields.io/github/last-commit/${owner}/${repo})](https://github.com/${owner}/${repo}/commits)
             `;
-            
+
             console.log('Stats badges generated');
             console.log(stats);

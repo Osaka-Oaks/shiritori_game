@@ -24,7 +24,7 @@ report() {
   tail -50 "$HISTORY" | jq -s '
     group_by(.app + "/" + .step)
     | map({
-        key: .[0].app + "/" + .[0].step,
+        key: (.[0].app + "/" + .[0].step),
         avg_s: (map(.duration_s) | add / length | floor),
         count: length,
         success: (map(select(.status=="success")) | length)

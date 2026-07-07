@@ -9,23 +9,27 @@ Complete guide to using the **floating dictionary** feature with Picture-in-Pict
 ### ✨ Display Modes
 
 **1. Full Mode (Default)**
+
 - Full-size dictionary with search
 - Complete word definitions
 - Multiple results
 - All features accessible
 
 **2. Picture-in-Picture (PiP) Mode**
+
 - Compact 280px × 320px window
 - Shows only selected word
 - Minimal interference with gameplay
 - Perfect for quick reference
 
 **3. Minimized Mode**
+
 - Floating icon with Japanese text (辞書)
 - Draggable anywhere
 - Click to restore
 
 **4. Hidden Mode**
+
 - Small icon in bottom-right corner
 - Click to show dictionary
 - Completely out of the way
@@ -51,6 +55,7 @@ Complete guide to using the **floating dictionary** feature with Picture-in-Pict
 ### Opening the Dictionary
 
 The floating dictionary can be opened from:
+
 - Game interface button
 - Keyboard shortcut (if implemented)
 - Component integration
@@ -60,17 +65,20 @@ The floating dictionary can be opened from:
 #### **Picture-in-Picture Mode**
 
 **How to enter:**
+
 1. Click the PiP icon (📺) in the header
 2. Dictionary shrinks to compact size
 3. Shows only the currently selected word
 
 **Perfect for:**
+
 - Playing while learning
 - Quick word reference
 - Minimizing screen clutter
 - Mobile/tablet gameplay
 
 **Features in PiP:**
+
 - Word display (kanji + reading)
 - Top 2 definitions
 - Audio pronunciation button
@@ -81,15 +89,18 @@ The floating dictionary can be opened from:
 #### **Hiding the Dictionary**
 
 **How to hide:**
+
 1. Click the eye-off icon (👁️) in any mode
 2. Dictionary minimizes to small icon
 3. Icon appears in bottom-right corner
 
 **How to show:**
+
 1. Click the floating icon
 2. Dictionary restores to previous state
 
 **Use when:**
+
 - Playing competitively
 - Need full screen space
 - Taking breaks
@@ -97,15 +108,18 @@ The floating dictionary can be opened from:
 #### **Opacity Control**
 
 **Location:**
+
 - Footer of full/PiP modes
 - Slider with eye icon
 
 **How to adjust:**
+
 1. Drag slider left/right
 2. See real-time transparency
 3. Percentage shown (30% - 100%)
 
 **Recommended settings:**
+
 - **100%** - Default, fully visible
 - **70-80%** - See game behind dictionary
 - **50-60%** - Minimal interference
@@ -158,13 +172,13 @@ The floating dictionary can be opened from:
 
 ### Header Buttons (Left to Right)
 
-| Icon | Action | Description |
-|------|--------|-------------|
-| 📺 | PiP Mode | Switch to compact view |
-| ⛶ | Expand/Minimize | Toggle window size |
-| 👁️ | Hide | Minimize to corner icon |
-| ▼ | Minimize | Show floating icon |
-| ✕ | Close | Close dictionary |
+| Icon | Action          | Description             |
+| ---- | --------------- | ----------------------- |
+| 📺   | PiP Mode        | Switch to compact view  |
+| ⛶    | Expand/Minimize | Toggle window size      |
+| 👁️   | Hide            | Minimize to corner icon |
+| ▼    | Minimize        | Show floating icon      |
+| ✕    | Close           | Close dictionary        |
 
 ### Keyboard Interactions
 
@@ -178,6 +192,7 @@ The floating dictionary can be opened from:
 ## 🎨 Visual States
 
 ### Full Mode
+
 ```
 ┌──────────────────────────┐
 │ 📖 Japanese Dictionary   │ ← Draggable header
@@ -198,6 +213,7 @@ Height: Up to 500px / 80vh
 ```
 
 ### PiP Mode
+
 ```
 ┌──────────────┐
 │ 📖 辞書   [⛶][👁️] │ ← Compact header
@@ -216,18 +232,20 @@ Height: Up to 320px
 ```
 
 ### Hidden State
+
 ```
                     Screen
 
-                    
-                    
-                    
-                    
-                    
+
+
+
+
+
               [📖] ← Click to show
 ```
 
 ### Minimized State
+
 ```
 [📖 辞書] ← Draggable, click to expand
 ```
@@ -240,18 +258,18 @@ Height: Up to 320px
 
 ```typescript
 interface FloatingDictionaryProps {
-  onClose?: () => void;  // Optional close callback
+  onClose?: () => void; // Optional close callback
 }
 ```
 
 ### State Management
 
 ```typescript
-const [isPipMode, setIsPipMode] = useState(false);      // PiP mode
-const [isMinimized, setIsMinimized] = useState(false);   // Minimized
-const [isHidden, setIsHidden] = useState(false);         // Hidden
-const [opacity, setOpacity] = useState(1);               // 0.3 - 1.0
-const [position, setPosition] = useState({ x, y });      // Position
+const [isPipMode, setIsPipMode] = useState(false); // PiP mode
+const [isMinimized, setIsMinimized] = useState(false); // Minimized
+const [isHidden, setIsHidden] = useState(false); // Hidden
+const [opacity, setOpacity] = useState(1); // 0.3 - 1.0
+const [position, setPosition] = useState({ x, y }); // Position
 ```
 
 ### Features
@@ -270,6 +288,7 @@ const [position, setPosition] = useState({ x, y });      // Position
 ### For Players
 
 ✅ **DO:**
+
 - Use PiP mode during active gameplay
 - Adjust opacity to see game behind
 - Hide dictionary when not needed
@@ -277,6 +296,7 @@ const [position, setPosition] = useState({ x, y });      // Position
 - Use audio pronunciation
 
 ❌ **DON'T:**
+
 - Block game interface completely
 - Use full mode in competitive play
 - Keep at 100% opacity when playing
@@ -285,6 +305,7 @@ const [position, setPosition] = useState({ x, y });      // Position
 ### For Developers
 
 ✅ **DO:**
+
 - Import and mount component
 - Provide close callback
 - Test all modes
@@ -292,6 +313,7 @@ const [position, setPosition] = useState({ x, y });      // Position
 - Check z-index conflicts
 
 ❌ **DON'T:**
+
 - Override z-index (9999)
 - Block pointer events
 - Interfere with drag behavior
@@ -302,7 +324,7 @@ const [position, setPosition] = useState({ x, y });      // Position
 ## 🔧 Integration Example
 
 ```tsx
-import FloatingDictionary from './components/FloatingDictionary';
+import FloatingDictionary from "./components/FloatingDictionary";
 
 function GameComponent() {
   const [showDict, setShowDict] = useState(false);
@@ -310,16 +332,10 @@ function GameComponent() {
   return (
     <>
       {/* Game UI */}
-      <button onClick={() => setShowDict(true)}>
-        📖 Dictionary
-      </button>
+      <button onClick={() => setShowDict(true)}>📖 Dictionary</button>
 
       {/* Floating Dictionary */}
-      {showDict && (
-        <FloatingDictionary 
-          onClose={() => setShowDict(false)} 
-        />
-      )}
+      {showDict && <FloatingDictionary onClose={() => setShowDict(false)} />}
     </>
   );
 }
@@ -351,6 +367,7 @@ function GameComponent() {
 ### Tip 1: Quick Toggle
 
 Set opacity to 40% and use PiP mode for:
+
 - Always-visible reference
 - Minimal distraction
 - Quick glances during play
@@ -358,6 +375,7 @@ Set opacity to 40% and use PiP mode for:
 ### Tip 2: Study Sessions
 
 Use full mode with:
+
 - 90% opacity
 - Expanded view
 - Positioned on side
@@ -366,6 +384,7 @@ Use full mode with:
 ### Tip 3: Mobile Gaming
 
 On mobile/tablet:
+
 - Start in hidden mode
 - Show only when needed
 - Use PiP for quick reference
@@ -374,6 +393,7 @@ On mobile/tablet:
 ### Tip 4: Streaming/Recording
 
 For streamers:
+
 - Position in corner
 - 80% opacity
 - PiP mode recommended
@@ -388,6 +408,7 @@ For streamers:
 **Problem:** Can't drag dictionary
 
 **Solutions:**
+
 - Grab the **header** (top bar only)
 - Not in Hidden mode
 - Check for z-index conflicts
@@ -397,6 +418,7 @@ For streamers:
 **Problem:** Slider doesn't work
 
 **Solutions:**
+
 - Check browser support
 - Verify CSS `opacity` property
 - Try different browser
@@ -406,6 +428,7 @@ For streamers:
 **Problem:** Can't see dictionary
 
 **Solutions:**
+
 - Check z-index (should be 9999)
 - Verify not hidden
 - Increase opacity
@@ -415,6 +438,7 @@ For streamers:
 **Problem:** No word showing in PiP
 
 **Solutions:**
+
 - Search for a word first
 - Select result
 - Then switch to PiP mode
@@ -433,9 +457,10 @@ The floating dictionary now has:
 ✅ **Compact PiP mode** - 280px minimal interference  
 ✅ **Quick hide/show** - Bottom-right icon  
 ✅ **Smooth animations** - Framer Motion  
-✅ **Real-time opacity** - See changes instantly  
+✅ **Real-time opacity** - See changes instantly
 
 **Perfect for:**
+
 - Learning while playing
 - Quick word lookups
 - Study sessions
@@ -446,6 +471,6 @@ The floating dictionary now has:
 
 ---
 
-*Last updated: July 2026*  
-*Component: FloatingDictionary.tsx*  
-*Status: ✅ Production Ready*
+_Last updated: July 2026_  
+_Component: FloatingDictionary.tsx_  
+_Status: ✅ Production Ready_

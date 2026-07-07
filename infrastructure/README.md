@@ -9,6 +9,7 @@ Complete infrastructure configuration for the Shiritori Game using Terraform/Ope
 This directory contains Infrastructure as Code (IaC) configurations for deploying and managing the Shiritori Game infrastructure on Google Cloud Platform (GCP) with Firebase.
 
 **Compatible with:**
+
 - ✅ Terraform (v1.0+)
 - ✅ OpenTofu (v1.6+)
 
@@ -110,6 +111,7 @@ terraform apply -auto-approve
 ### Core Infrastructure
 
 **Firebase:**
+
 - ✅ Firebase Project
 - ✅ Firestore Database (Native mode)
 - ✅ Firebase Hosting
@@ -118,22 +120,26 @@ terraform apply -auto-approve
 - ✅ Firebase Analytics
 
 **Cloud Storage:**
+
 - ✅ Hosting bucket (with website config)
 - ✅ Firebase storage bucket (with CORS)
 - ✅ Terraform state bucket (versioned)
 
 **Cloud Run:**
+
 - ✅ API service (Node.js/Express)
 - ✅ Auto-scaling (0-10 instances)
 - ✅ Public access (unauthenticated)
 - ✅ Environment variables
 
 **Cloud Scheduler:**
+
 - ✅ Cleanup old games (daily)
 - ✅ Update leaderboard (hourly)
 - ✅ Analytics report (daily)
 
 **Monitoring:**
+
 - ✅ Uptime checks
 - ✅ Alert policies
 - ✅ Cloud Logging
@@ -162,6 +168,7 @@ logging.googleapis.com
 ### Variables
 
 **Required:**
+
 ```hcl
 project_id  = "shiritori-game-ccaae"  # Your GCP project ID
 region      = "us-central1"            # Primary region
@@ -169,6 +176,7 @@ environment = "production"             # Environment name
 ```
 
 **Optional:**
+
 ```hcl
 cloud_run_config = {
   cpu_limit     = "1000m"
@@ -189,16 +197,19 @@ features = {
 ### Environments
 
 **Development:**
+
 ```bash
 terraform apply -var-file="environments/dev.tfvars"
 ```
 
 **Staging:**
+
 ```bash
 terraform apply -var-file="environments/staging.tfvars"
 ```
 
 **Production:**
+
 ```bash
 terraform apply -var-file="environments/production.tfvars"
 ```
@@ -236,6 +247,7 @@ Storage: gs://shiritori-game-ccaae.appspot.com
 ### Security Rules
 
 Security rules are managed separately via:
+
 ```bash
 firebase deploy --only firestore:rules
 firebase deploy --only storage:rules
@@ -250,18 +262,21 @@ firebase deploy --only storage:rules
 **Endpoint:** Auto-generated URL from Terraform output
 
 **Environment Variables:**
+
 ```
 FIREBASE_PROJECT_ID=shiritori-game-ccaae
 ENVIRONMENT=production
 ```
 
 **Resources:**
+
 - CPU: 1000m (1 vCPU)
 - Memory: 512Mi
 - Timeout: 300s
 - Concurrency: 80
 
 **Scaling:**
+
 - Min instances: 0 (scale to zero)
 - Max instances: 10
 - Target CPU: 80%
@@ -316,11 +331,12 @@ Action: Generate daily report
 **Target:** `https://shiritori-game-ccaae.web.app`  
 **Frequency:** Every 60 seconds  
 **Timeout:** 10 seconds  
-**Expected:** HTTP 200 + "Shiritori" in content  
+**Expected:** HTTP 200 + "Shiritori" in content
 
 ### Alert Policies
 
 **Uptime Alert:**
+
 - Condition: Uptime check fails
 - Duration: 60 seconds
 - Action: Send notification
@@ -329,6 +345,7 @@ Action: Generate daily report
 ### Dashboards
 
 View in Cloud Console:
+
 ```bash
 gcloud monitoring dashboards list --project shiritori-game-ccaae
 ```
@@ -340,6 +357,7 @@ gcloud monitoring dashboards list --project shiritori-game-ccaae
 ### Service Accounts
 
 **Scheduler SA:**
+
 - Email: `scheduler-sa@shiritori-game-ccaae.iam.gserviceaccount.com`
 - Role: `roles/run.invoker`
 - Purpose: Invoke Cloud Run services from Cloud Scheduler
@@ -357,11 +375,13 @@ google_project_iam_member.scheduler_cloudrun
 ### Secrets Management
 
 **Don't commit:**
+
 - `terraform.tfvars` (contains secrets)
 - `.terraform/` (state and providers)
 - `*.tfstate` (state files)
 
 **Use:**
+
 - Google Secret Manager for API keys
 - Environment variables for runtime config
 - GCS backend for state encryption
@@ -674,9 +694,10 @@ You now have:
 ✅ **Scheduled jobs** - Cron for cleanup & analytics  
 ✅ **Monitoring** - Uptime checks & alerts  
 ✅ **State management** - GCS backend with versioning  
-✅ **Documentation** - Complete reference  
+✅ **Documentation** - Complete reference
 
 **Deploy infrastructure:**
+
 ```bash
 cd infrastructure/terraform
 terraform init
@@ -684,13 +705,14 @@ terraform apply
 ```
 
 **View results:**
+
 ```bash
 terraform output urls
 ```
 
 ---
 
-*Infrastructure as Code: Terraform & OpenTofu*  
-*Compatible: Terraform v1.0+ | OpenTofu v1.6+*  
-*Provider: Google Cloud Platform*  
-*Status: ✅ Production Ready*
+_Infrastructure as Code: Terraform & OpenTofu_  
+_Compatible: Terraform v1.0+ | OpenTofu v1.6+_  
+_Provider: Google Cloud Platform_  
+_Status: ✅ Production Ready_

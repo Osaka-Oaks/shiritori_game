@@ -23,11 +23,11 @@ npm run deploy:flutter:test
 
 ## 📋 Deployment URLs
 
-| Environment | URL | Branch |
-|-------------|-----|--------|
-| **Production** | https://shiritori-game-ccaae.web.app | `main` |
-| **Staging** | https://shiritori-game-ccaae--develop.web.app | `develop` |
-| **Preview** | https://shiritori-game-ccaae--[branch].web.app | Feature branches |
+| Environment    | URL                                            | Branch           |
+| -------------- | ---------------------------------------------- | ---------------- |
+| **Production** | https://shiritori-game-ccaae.web.app           | `main`           |
+| **Staging**    | https://shiritori-game-ccaae--develop.web.app  | `develop`        |
+| **Preview**    | https://shiritori-game-ccaae--[branch].web.app | Feature branches |
 
 ---
 
@@ -42,16 +42,18 @@ The GitHub Actions workflow `.github/workflows/deploy-flutter.yml` **automatical
 ✅ **Deploys** to Firebase Hosting  
 ✅ **Verifies** deployment health  
 ✅ **Tracks** deployment time  
-✅ **Reports** status  
+✅ **Reports** status
 
 ### Trigger Conditions
 
 **Automatic deployment on:**
+
 - Push to `main` branch → Production
 - Push to `develop` branch → Staging
 - Push to feature branch → Preview channel
 
 **Manual deployment:**
+
 ```bash
 # Trigger manual deployment from GitHub UI
 Actions → Deploy Flutter to Firebase → Run workflow
@@ -62,6 +64,7 @@ Actions → Deploy Flutter to Firebase → Run workflow
 ## 📊 What Gets Checked
 
 ### Build Phase
+
 - ✅ Flutter dependencies installed
 - ✅ Tests pass
 - ✅ Code analysis (no errors)
@@ -69,11 +72,13 @@ Actions → Deploy Flutter to Firebase → Run workflow
 - ✅ Build size calculated
 
 ### Deployment Phase
+
 - ✅ Deployed to Firebase Hosting
 - ✅ Deployment channel determined
 - ✅ Deployment time tracked
 
 ### Verification Phase
+
 - ✅ HTTP status (200 OK)
 - ✅ Content verification (Flutter app loaded)
 - ✅ Performance test (response time)
@@ -87,16 +92,19 @@ Actions → Deploy Flutter to Firebase → Run workflow
 ### Tracked Metrics
 
 **Build Time:**
+
 - Dependency installation
 - Test execution
 - Code analysis
 - Web compilation
 
 **Deploy Time:**
+
 - Firebase upload
 - CDN propagation
 
 **Verification Time:**
+
 - Health checks
 - Content verification
 - Performance tests
@@ -104,16 +112,18 @@ Actions → Deploy Flutter to Firebase → Run workflow
 ### View Deployment Times
 
 **In GitHub Actions:**
+
 ```
 Actions → Deploy Flutter to Firebase → Latest run
 ```
 
 **In workflow output:**
+
 ```
 ✅ Deployment Successful
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✅ Build: Passed
-✅ Deploy: Completed  
+✅ Deploy: Completed
 ✅ Verification: Passed
 
 🌐 URL: https://shiritori-game-ccaae.web.app
@@ -188,11 +198,13 @@ Testing URL: https://shiritori-game-ccaae.web.app
 **1. GitHub Actions Badge**
 
 Add to README:
+
 ```markdown
 ![Deploy Flutter](https://github.com/YOUR_USERNAME/shiritori_game/workflows/Deploy%20Flutter%20to%20Firebase/badge.svg)
 ```
 
 **2. View Workflow Runs**
+
 ```
 GitHub → Actions → Deploy Flutter to Firebase
 ```
@@ -200,6 +212,7 @@ GitHub → Actions → Deploy Flutter to Firebase
 **3. Deployment Report**
 
 Each deployment generates a report:
+
 - Build time and size
 - Deploy time
 - Verification results
@@ -213,24 +226,28 @@ Each deployment generates a report:
 ### What Gets Verified
 
 **1. HTTP Status Check**
+
 ```bash
 curl -I https://shiritori-game-ccaae.web.app
 # Expected: 200 OK
 ```
 
 **2. Content Verification**
+
 ```bash
 curl -s https://shiritori-game-ccaae.web.app | grep -q "flutter"
 # Expected: Flutter content found
 ```
 
 **3. Performance Test**
+
 ```bash
 curl -o /dev/null -s -w '%{time_total}\n' https://shiritori-game-ccaae.web.app
 # Expected: < 3 seconds
 ```
 
 **4. SSL Certificate**
+
 ```bash
 openssl s_client -servername shiritori-game-ccaae.web.app -connect shiritori-game-ccaae.web.app:443
 # Expected: Valid certificate
@@ -243,11 +260,13 @@ openssl s_client -servername shiritori-game-ccaae.web.app -connect shiritori-gam
 ### Success Notifications
 
 **GitHub:**
+
 - ✅ Green checkmark on commit
 - ✅ Status badge updated
 - ✅ Deployment report in Actions
 
 **Logs:**
+
 ```
 ::notice title=✅ Deployment Successful::Flutter app deployed and verified successfully!
 ```
@@ -255,11 +274,13 @@ openssl s_client -servername shiritori-game-ccaae.web.app -connect shiritori-gam
 ### Failure Notifications
 
 **GitHub:**
+
 - ❌ Red X on commit
 - ❌ Email notification (if enabled)
 - ❌ Detailed error logs
 
 **Logs:**
+
 ```
 ::error title=❌ Deployment Failed::One or more deployment steps failed
 ```
@@ -325,11 +346,13 @@ Each deployment saves metadata:
 ### View Deployment History
 
 **In Firebase Console:**
+
 ```
 Firebase Console → Hosting → View All Releases
 ```
 
 **In GitHub:**
+
 ```
 Actions → Deploy Flutter to Firebase → All workflow runs
 ```
@@ -398,12 +421,14 @@ firebase hosting:channel:list --project shiritori-game-ccaae
 ### Verification Fails
 
 **Issue: HTTP 404**
+
 ```bash
 # Solution: Wait for CDN propagation (30-60 seconds)
 sleep 60 && npm run deploy:flutter:test
 ```
 
 **Issue: Slow response time**
+
 ```bash
 # Solution: Enable caching in firebase.json
 # Check build size: du -sh shiritori-flutter/build/web
@@ -436,6 +461,7 @@ Value: [paste token]
 **Location:** `.github/workflows/deploy-flutter.yml`
 
 **Jobs:**
+
 1. `build-flutter` - Build the app
 2. `deploy-firebase` - Deploy to hosting
 3. `verify-deployment` - Health checks
@@ -452,7 +478,7 @@ Value: [paste token]
 ✅ **Time Tracking** - Build, deploy, verify times  
 ✅ **Health Checks** - 10 comprehensive tests  
 ✅ **Deployment Reports** - Detailed status for each deploy  
-✅ **Multiple Environments** - Production, staging, preview  
+✅ **Multiple Environments** - Production, staging, preview
 
 ### Commands Reference
 

@@ -2,14 +2,14 @@
 
 Copy-paste templates for issues, work items, and PRs. GitHub form templates live in [../ISSUE_TEMPLATE/](../ISSUE_TEMPLATE/).
 
-| Template | Use when |
-|----------|----------|
-| [issue-bug.md](issue-bug.md) | Something is broken |
-| [issue-feature.md](issue-feature.md) | New capability or enhancement |
-| [issue-work-item.md](issue-work-item.md) | Kanban task / spike / chore |
-| [issue-dev-test.md](issue-dev-test.md) | QA, solo mode, dev-mode testing |
+| Template                                           | Use when                         |
+| -------------------------------------------------- | -------------------------------- |
+| [issue-bug.md](issue-bug.md)                       | Something is broken              |
+| [issue-feature.md](issue-feature.md)               | New capability or enhancement    |
+| [issue-work-item.md](issue-work-item.md)           | Kanban task / spike / chore      |
+| [issue-dev-test.md](issue-dev-test.md)             | QA, solo mode, dev-mode testing  |
 | [issue-infrastructure.md](issue-infrastructure.md) | Terraform / OpenTofu / cloud IaC |
-| [pull-request.md](pull-request.md) | Pull request body |
+| [pull-request.md](pull-request.md)                 | Pull request body                |
 
 ## Quick use
 

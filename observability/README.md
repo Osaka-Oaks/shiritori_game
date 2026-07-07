@@ -43,13 +43,13 @@ Source: `shiritori-online/public/health.json` (copied to `dist/` on build).
 
 ## GitHub Actions secrets (optional)
 
-| Secret | Purpose |
-|--------|---------|
-| `DATADOG_API_KEY` | Push `shiritori.uptime` + response metrics |
-| `DATADOG_SITE` | Default `datadoghq.com` (use `datadoghq.eu` for EU) |
-| `GRAFANA_CLOUD_API_KEY` | Grafana Cloud service account token |
-| `GRAFANA_CLOUD_STACK_URL` | e.g. `https://yourstack.grafana.net` |
-| `ELASTICSEARCH_URL` | Remote ES (or `http://host.docker.internal:9200` from Actions) |
+| Secret                    | Purpose                                                        |
+| ------------------------- | -------------------------------------------------------------- |
+| `DATADOG_API_KEY`         | Push `shiritori.uptime` + response metrics                     |
+| `DATADOG_SITE`            | Default `datadoghq.com` (use `datadoghq.eu` for EU)            |
+| `GRAFANA_CLOUD_API_KEY`   | Grafana Cloud service account token                            |
+| `GRAFANA_CLOUD_STACK_URL` | e.g. `https://yourstack.grafana.net`                           |
+| `ELASTICSEARCH_URL`       | Remote ES (or `http://host.docker.internal:9200` from Actions) |
 
 Workflow: `.github/workflows/uptime.yml` runs every **5 minutes**.
 

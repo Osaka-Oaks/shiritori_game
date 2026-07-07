@@ -27,8 +27,8 @@ Describe the feature and how it should work.
 
 ## Acceptance criteria
 
-- [ ] 
-- [ ] 
+- [ ]
+- [ ]
 
 ## Alternatives considered
 

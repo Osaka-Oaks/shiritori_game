@@ -3,7 +3,7 @@ name: ✨ Feature request (markdown)
 about: Suggest an idea — markdown flavor
 title: "[Feat]: "
 labels: ["type: feature", "status: triage"]
-assignees: ''
+assignees: ""
 ---
 
 <!-- Full template: .github/templates/issue-feature.md -->
@@ -27,8 +27,8 @@ What problem does this solve?
 
 ## Acceptance criteria
 
-- [ ] 
-- [ ] 
+- [ ]
+- [ ]
 
 ---
 

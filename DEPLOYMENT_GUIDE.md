@@ -7,6 +7,7 @@ Complete guide for deploying the Shiritori game to Firebase.
 ## 🎯 Quick Deploy
 
 ### Automated (Recommended)
+
 ```bash
 # Just push to main - GitHub Actions handles everything!
 git add .
@@ -18,6 +19,7 @@ git push origin main
 ```
 
 ### Manual Deploy
+
 ```bash
 # 1. Run pre-deployment checks
 npm run pre-deploy
@@ -82,6 +84,7 @@ When you push to `main`, the pipeline:
 ### View Deployment Progress
 
 1. **Go to GitHub Actions:**
+
    ```
    https://github.com/JorelFuji/shiritori_game/actions
    ```
@@ -107,9 +110,9 @@ When you push to `main`, the pipeline:
 ✅ Build successful!
 
 Files:
--rw-r--r-- 1 runner runner  23K index.html
+-rw-r--r-- 1 runner runner 23K index.html
 -rw-r--r-- 1 runner runner 450K main.js
--rw-r--r-- 1 runner runner  56K main.css
+-rw-r--r-- 1 runner runner 56K main.css
 
 Size: 2.3M
 
@@ -121,11 +124,13 @@ Size: 2.3M
 - ✅ Assets loaded
 
 ### Performance Metrics
+
 - **Response Time**: 0.523s
 - **Page Size**: 45231 bytes
 - ✅ Performance acceptable
 
 ### Security Headers
+
 - ✅ Served by Firebase Hosting
 - ✅ Caching headers present
 
@@ -139,11 +144,13 @@ Size: 2.3M
 ### Prerequisites
 
 **Required:**
+
 - Node.js 20+
 - npm 10+
 - Firebase CLI
 
 **Optional:**
+
 - Firebase login credentials
 - FIREBASE_TOKEN (for CI/CD)
 
@@ -179,6 +186,7 @@ npm run deploy
 ```
 
 **Expected output:**
+
 ```
 ✔  Deploy complete!
 
@@ -216,6 +224,7 @@ npm run test:deployment
 ```
 
 **Tests:**
+
 - ✅ Homepage accessibility (HTTP 200)
 - ✅ Content verification (Japanese text)
 - ✅ Assets loading (scripts, styles)
@@ -227,21 +236,25 @@ npm run test:deployment
 ### Manual Testing
 
 **1. Homepage:**
+
 ```bash
 curl https://shiritori-game-ccaae.web.app/
 ```
 
 **2. Check HTTP status:**
+
 ```bash
 curl -I https://shiritori-game-ccaae.web.app/
 ```
 
 **3. Test specific route:**
+
 ```bash
 curl https://shiritori-game-ccaae.web.app/game
 ```
 
 **4. Measure response time:**
+
 ```bash
 curl -o /dev/null -s -w "Time: %{time_total}s\n" https://shiritori-game-ccaae.web.app/
 ```
@@ -257,6 +270,7 @@ npm run pre-deploy
 ```
 
 **Checks:**
+
 1. ✅ Git status (clean, on main)
 2. ✅ Dependencies installed
 3. ✅ Security audit
@@ -267,6 +281,7 @@ npm run pre-deploy
 8. ✅ Security rules present
 
 **Example output:**
+
 ```
 ╔════════════════════════════════════════════════════════╗
 ║      🚀 PRE-DEPLOYMENT VALIDATION CHECKLIST          ║
@@ -303,12 +318,12 @@ Ready to deploy!
 
 ### Production
 
-| Service | URL | Status |
-|---------|-----|--------|
-| **Shiritori Online** | https://shiritori-game-ccaae.web.app | ✅ Live |
-| **Kawaii Shiritori** | https://shiritori-game-ccaae.web.app | ✅ Live |
-| **Firebase Console** | https://console.firebase.google.com/project/shiritori-game-ccaae | 🔧 Admin |
-| **Realtime DB** | https://shiritori-game-ccaae-default-rtdb.firebaseio.com | 🔒 Secure |
+| Service              | URL                                                              | Status    |
+| -------------------- | ---------------------------------------------------------------- | --------- |
+| **Shiritori Online** | https://shiritori-game-ccaae.web.app                             | ✅ Live   |
+| **Kawaii Shiritori** | https://shiritori-game-ccaae.web.app                             | ✅ Live   |
+| **Firebase Console** | https://console.firebase.google.com/project/shiritori-game-ccaae | 🔧 Admin  |
+| **Realtime DB**      | https://shiritori-game-ccaae-default-rtdb.firebaseio.com         | 🔒 Secure |
 
 ### Monitoring
 
@@ -325,6 +340,7 @@ Ready to deploy!
 **`FIREBASE_TOKEN`** (Required for automated deployment)
 
 **How to get:**
+
 ```bash
 # Generate token
 firebase login:ci
@@ -336,6 +352,7 @@ firebase login:ci
 ```
 
 **Verify secret:**
+
 ```bash
 # In GitHub Actions logs, you'll see:
 # ✓ FIREBASE_TOKEN secret available
@@ -350,6 +367,7 @@ firebase login:ci
 **Problem:** `npm run build` fails
 
 **Solutions:**
+
 ```bash
 # Clear cache and reinstall
 rm -rf node_modules dist
@@ -367,6 +385,7 @@ npm install --legacy-peer-deps
 **Problem:** Firebase deploy fails with auth error
 
 **Solutions:**
+
 ```bash
 # Re-login
 firebase logout
@@ -384,6 +403,7 @@ echo $FIREBASE_TOKEN  # Should output token
 **Problem:** Deployed but site shows 404
 
 **Solutions:**
+
 ```bash
 # Check firebase.json rewrites
 cat firebase.json | grep -A 5 rewrites
@@ -400,6 +420,7 @@ firebase hosting:channel:list
 **Problem:** Database rules not updated
 
 **Solutions:**
+
 ```bash
 # Deploy only rules
 firebase deploy --only database
@@ -418,10 +439,12 @@ cat database.rules.json
 ### Build Optimization
 
 **Current sizes:**
+
 - Shiritori Online: ~800 KB
 - Kawaii Shiritori: ~2.3 MB
 
 **Optimization tips:**
+
 ```bash
 # Analyze bundle
 cd kawaii-shiritori
@@ -435,11 +458,13 @@ npm run deps:report
 ### Caching Strategy
 
 **Firebase Hosting automatically caches:**
+
 - Static assets: 1 year
 - HTML: No cache (always fresh)
 - Service worker: Updates on deployment
 
 **Verify caching:**
+
 ```bash
 curl -I https://shiritori-game-ccaae.web.app/ | grep -i cache
 ```
@@ -451,6 +476,7 @@ curl -I https://shiritori-game-ccaae.web.app/ | grep -i cache
 ### Emergency Rollback
 
 **Option 1: GitHub Revert**
+
 ```bash
 # Find last working commit
 git log --oneline
@@ -463,6 +489,7 @@ git push origin main
 ```
 
 **Option 2: Firebase Hosting Rollback**
+
 ```bash
 # List releases
 firebase hosting:channel:list
@@ -472,6 +499,7 @@ firebase hosting:clone source:PREVIOUS_RELEASE destination:live
 ```
 
 **Option 3: Manual Redeploy**
+
 ```bash
 # Checkout previous version
 git checkout <previous-commit-hash>
@@ -487,13 +515,13 @@ npm run deploy
 
 ### Expected Timings
 
-| Phase | Time | Status |
-|-------|------|--------|
-| Validate Code | 2 min | ⚡ Fast |
-| Build & Test | 3 min | 🏗️ Building |
-| Deploy | 2 min | 🚀 Deploying |
-| Test | 1 min | 🧪 Testing |
-| **Total** | **~9 min** | ✅ Complete |
+| Phase         | Time       | Status       |
+| ------------- | ---------- | ------------ |
+| Validate Code | 2 min      | ⚡ Fast      |
+| Build & Test  | 3 min      | 🏗️ Building  |
+| Deploy        | 2 min      | 🚀 Deploying |
+| Test          | 1 min      | 🧪 Testing   |
+| **Total**     | **~9 min** | ✅ Complete  |
 
 ### Success Rate
 
@@ -524,6 +552,7 @@ npm run deploy
 ### Deployment Schedule
 
 **Recommended:**
+
 - 🌅 **Best time:** Morning/early afternoon (easy to monitor)
 - ❌ **Avoid:** Late evening, weekends, holidays
 - 🔄 **Frequency:** After major features or bug fixes
@@ -536,12 +565,14 @@ npm run deploy
 ### Deployment Issues
 
 **Check these first:**
+
 1. GitHub Actions logs
 2. Firebase Console → Hosting → Release history
 3. Browser console errors
 4. Network tab in DevTools
 
 **Get help:**
+
 - 📚 [Firebase Docs](https://firebase.google.com/docs)
 - 💬 [GitHub Discussions](https://github.com/JorelFuji/shiritori_game/discussions)
 - 🐛 [Report Issue](https://github.com/JorelFuji/shiritori_game/issues)

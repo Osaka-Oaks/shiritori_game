@@ -7,6 +7,7 @@ Complete guide to infrastructure templates, issue templates, and IaC for the Shi
 ## 🎯 Overview
 
 This guide covers:
+
 - ✅ **Issue Templates** - GitHub issue/work item templates in Markdown
 - ✅ **Terraform Templates** - Infrastructure as Code configuration
 - ✅ **OpenTofu Support** - Open-source Terraform alternative
@@ -32,6 +33,7 @@ This guide covers:
 **File:** `bug_report.md`
 
 **Sections:**
+
 - Bug description
 - Steps to reproduce
 - Expected vs actual behavior
@@ -43,6 +45,7 @@ This guide covers:
 - Definition of done
 
 **Example Usage:**
+
 ```bash
 # Create bug report
 gh issue create --template bug_report.md --title "[BUG] Game crashes on word submit"
@@ -52,6 +55,7 @@ gh issue create --template bug_report.md --label "bug,critical,shiritori-online"
 ```
 
 **Hashtags:**
+
 ```markdown
 #bug #needs-fix #critical #high-priority
 ```
@@ -61,6 +65,7 @@ gh issue create --template bug_report.md --label "bug,critical,shiritori-online"
 **File:** `feature_request.md`
 
 **Sections:**
+
 - Feature description
 - Problem statement
 - User stories
@@ -74,6 +79,7 @@ gh issue create --template bug_report.md --label "bug,critical,shiritori-online"
 - Timeline
 
 **Example Usage:**
+
 ```bash
 # Create feature request
 gh issue create --template feature_request.md --title "[FEATURE] Add multiplayer mode"
@@ -85,6 +91,7 @@ gh issue create --template feature_request.md \
 ```
 
 **Hashtags:**
+
 ```markdown
 #feature #enhancement #new-feature #multiplayer
 ```
@@ -94,6 +101,7 @@ gh issue create --template feature_request.md \
 **File:** `work_item.md`
 
 **Sections:**
+
 - Work item summary
 - Objective
 - Type (feature, bug fix, refactor, docs, testing, devops, security, performance, chore, research)
@@ -106,6 +114,7 @@ gh issue create --template feature_request.md \
 - Priority & estimate
 
 **Example Usage:**
+
 ```bash
 # Create work item
 gh issue create --template work_item.md --title "[WORK] Refactor game state management"
@@ -117,6 +126,7 @@ gh issue create --template work_item.md \
 ```
 
 **Hashtags:**
+
 ```markdown
 #work-item #task #development #sprint
 ```
@@ -141,6 +151,7 @@ infrastructure/terraform/
 ### What Gets Created
 
 **Firebase:**
+
 ```hcl
 - Firebase Project
 - Firestore Database (Native mode)
@@ -151,6 +162,7 @@ infrastructure/terraform/
 ```
 
 **Cloud Infrastructure:**
+
 ```hcl
 - Cloud Storage buckets (hosting, storage, state)
 - Cloud Run API service
@@ -224,6 +236,7 @@ resource "google_firestore_database" "database" {
 ```
 
 **Outputs:**
+
 - Firebase Web URL: `https://shiritori-game-ccaae.web.app`
 - Database URL: `https://shiritori-game-ccaae-default-rtdb.firebaseio.com`
 - Storage: `gs://shiritori-game-ccaae.appspot.com`
@@ -239,7 +252,7 @@ resource "google_cloud_run_service" "api" {
     spec {
       containers {
         image = "gcr.io/${var.project_id}/shiritori-api:latest"
-        
+
         resources {
           limits = {
             cpu    = "1000m"
@@ -253,6 +266,7 @@ resource "google_cloud_run_service" "api" {
 ```
 
 **Features:**
+
 - Auto-scaling (0-10 instances)
 - Public access (unauthenticated)
 - Environment variables configured
@@ -265,7 +279,7 @@ resource "google_cloud_scheduler_job" "cleanup_old_games" {
   name        = "cleanup-old-games"
   schedule    = "0 2 * * *"  # Daily at 2 AM
   time_zone   = "America/New_York"
-  
+
   http_target {
     uri = "${google_cloud_run_service.api.status[0].url}/api/cleanup"
   }
@@ -273,6 +287,7 @@ resource "google_cloud_scheduler_job" "cleanup_old_games" {
 ```
 
 **Scheduled Jobs:**
+
 - `cleanup_old_games` - Daily at 2 AM
 - `update_leaderboard` - Every hour
 - `analytics_report` - Daily at midnight
@@ -294,6 +309,7 @@ resource "google_monitoring_uptime_check_config" "web_app" {
 ```
 
 **Alerts:**
+
 - Uptime check failures
 - High error rates
 - Resource exhaustion
@@ -305,15 +321,15 @@ resource "google_monitoring_uptime_check_config" "web_app" {
 
 ### Comparison
 
-| Feature | Terraform | OpenTofu |
-|---------|-----------|----------|
-| **License** | BSL 1.1 (proprietary) | MPL 2.0 (open-source) |
-| **Compatibility** | Original | Fork of Terraform 1.5 |
-| **Commands** | `terraform` | `tofu` |
-| **State** | Compatible | Compatible |
-| **Providers** | HashiCorp registry | OpenTofu registry |
-| **Community** | Large | Growing |
-| **Support** | HashiCorp | Linux Foundation |
+| Feature           | Terraform             | OpenTofu              |
+| ----------------- | --------------------- | --------------------- |
+| **License**       | BSL 1.1 (proprietary) | MPL 2.0 (open-source) |
+| **Compatibility** | Original              | Fork of Terraform 1.5 |
+| **Commands**      | `terraform`           | `tofu`                |
+| **State**         | Compatible            | Compatible            |
+| **Providers**     | HashiCorp registry    | OpenTofu registry     |
+| **Community**     | Large                 | Growing               |
+| **Support**       | HashiCorp             | Linux Foundation      |
 
 ### Migration: Terraform → OpenTofu
 
@@ -335,6 +351,7 @@ tofu apply
 ```
 
 **All commands are identical:**
+
 ```bash
 terraform init  →  tofu init
 terraform plan  →  tofu plan
@@ -445,7 +462,7 @@ cat > websocket.tf <<EOF
 resource "google_cloud_run_service" "websocket" {
   name     = "shiritori-websocket"
   location = var.region
-  
+
   template {
     spec {
       containers {
@@ -515,37 +532,37 @@ name: Terraform
 on:
   push:
     paths:
-      - 'infrastructure/terraform/**'
+      - "infrastructure/terraform/**"
   pull_request:
     paths:
-      - 'infrastructure/terraform/**'
+      - "infrastructure/terraform/**"
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.6.0
-      
+
       - name: Terraform Init
         run: terraform init
         working-directory: infrastructure/terraform
-      
+
       - name: Terraform Validate
         run: terraform validate
         working-directory: infrastructure/terraform
-      
+
       - name: Terraform Plan
         run: terraform plan
         working-directory: infrastructure/terraform
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
-      
+
       - name: Terraform Apply (main only)
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
@@ -640,6 +657,7 @@ gh issue comment <number> --body "Deployed to $(terraform output url)"
 ### Issue Templates
 
 ✅ **DO:**
+
 - Use descriptive titles with prefixes ([BUG], [FEATURE], [WORK])
 - Add relevant labels and hashtags
 - Include acceptance criteria
@@ -647,6 +665,7 @@ gh issue comment <number> --body "Deployed to $(terraform output url)"
 - Track in project boards
 
 ❌ **DON'T:**
+
 - Create issues without templates
 - Skip required fields
 - Duplicate existing issues
@@ -655,6 +674,7 @@ gh issue comment <number> --body "Deployed to $(terraform output url)"
 ### Infrastructure Code
 
 ✅ **DO:**
+
 - Use version control for all IaC
 - Separate environments (dev, staging, prod)
 - Use remote state backend
@@ -663,6 +683,7 @@ gh issue comment <number> --body "Deployed to $(terraform output url)"
 - Use modules for reusability
 
 ❌ **DON'T:**
+
 - Manually create resources in console
 - Commit sensitive data
 - Skip planning before apply
@@ -680,14 +701,16 @@ You now have:
 ✅ **OpenTofu Support** - Open-source alternative ready  
 ✅ **Integration Guide** - Issue → Code → Infrastructure  
 ✅ **CI/CD Examples** - Automated deployment workflows  
-✅ **Documentation** - Complete reference guides  
+✅ **Documentation** - Complete reference guides
 
 **Create an issue:**
+
 ```bash
 gh issue create --template bug_report.md --title "[BUG] Description"
 ```
 
 **Deploy infrastructure:**
+
 ```bash
 cd infrastructure/terraform
 terraform init
@@ -695,6 +718,7 @@ terraform apply
 ```
 
 **Use OpenTofu instead:**
+
 ```bash
 tofu init
 tofu apply
@@ -709,7 +733,7 @@ tofu apply
 
 ---
 
-*Last updated: July 2026*  
-*Terraform compatible: v1.0+*  
-*OpenTofu compatible: v1.6+*  
-*Status: ✅ Complete*
+_Last updated: July 2026_  
+_Terraform compatible: v1.0+_  
+_OpenTofu compatible: v1.6+_  
+_Status: ✅ Complete_

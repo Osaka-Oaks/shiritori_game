@@ -7,6 +7,7 @@ Complete guide to project structure, file organization, and naming conventions f
 ## 🎯 Overview
 
 This document provides:
+
 - ✅ Current file structure visualization
 - ✅ Naming conventions for all file types
 - ✅ Directory organization standards
@@ -222,6 +223,7 @@ shiritori-game/
 ### Files
 
 #### **React Components**
+
 ```
 Format: PascalCase + descriptive name + file type
 
@@ -241,6 +243,7 @@ Format: PascalCase + descriptive name + file type
 ```
 
 #### **TypeScript Libraries**
+
 ```
 Format: camelCase + descriptive name
 
@@ -259,6 +262,7 @@ Format: camelCase + descriptive name
 ```
 
 #### **Test Files**
+
 ```
 Format: [fileName].test.ts
 
@@ -274,6 +278,7 @@ Format: [fileName].test.ts
 ```
 
 #### **Configuration Files**
+
 ```
 Format: lowercase + extension or dot-prefixed
 
@@ -291,6 +296,7 @@ Format: lowercase + extension or dot-prefixed
 ```
 
 #### **Scripts**
+
 ```
 Format: kebab-case.sh or camelCase.mjs
 
@@ -307,6 +313,7 @@ Format: kebab-case.sh or camelCase.mjs
 ```
 
 #### **Documentation**
+
 ```
 Format: UPPERCASE_SNAKE_CASE.md or Title_Case.md
 
@@ -386,9 +393,11 @@ src/lib/
 ### By Type
 
 #### **1. View Components (Full Pages)**
+
 **Naming:** `[Feature]View.tsx`
 **Purpose:** Complete page layouts
 **Examples:**
+
 - `HomeView.tsx` - Landing page
 - `GameRoomView.tsx` - Game room
 - `LeaderboardView.tsx` - Leaderboard page
@@ -396,9 +405,11 @@ src/lib/
 - `SettingsView.tsx` - Settings panel
 
 #### **2. Game Components**
+
 **Naming:** `[GameType][Mode].tsx`
 **Purpose:** Game mode implementations
 **Examples:**
+
 - `Game2D.tsx` - 2D game
 - `UnityGameView.tsx` - 3D Unity game
 - `PracticeModeView.tsx` - Practice mode
@@ -406,18 +417,22 @@ src/lib/
 - `MultiplayerView.tsx` - Online multiplayer
 
 #### **3. UI Components**
+
 **Naming:** `[Function][ComponentType].tsx`
 **Purpose:** Reusable UI elements
 **Examples:**
+
 - `FloatingDictionary.tsx` - Dictionary widget
 - `VoiceInputButton.tsx` - Voice button
 - `CustomizerPanel.tsx` - Theme customizer
 - `AvatarPickerView.tsx` - Avatar picker
 
 #### **4. Feature Components**
+
 **Naming:** `[Feature]View.tsx`
 **Purpose:** Specific features
 **Examples:**
+
 - `AuthView.tsx` - Authentication
 - `RulesView.tsx` - Game rules
 - `EnhancedRulesView.tsx` - Enhanced rules
@@ -430,6 +445,7 @@ src/lib/
 ### File Naming
 
 ✅ **DO:**
+
 - Use descriptive, clear names
 - Follow case conventions strictly
 - Include version if multiple (e.g., `EnhancedRulesView.tsx`)
@@ -437,6 +453,7 @@ src/lib/
 - Use standard extensions
 
 ❌ **DON'T:**
+
 - Abbreviate unnecessarily
 - Use generic names (e.g., `helper.ts`, `util.ts`)
 - Mix naming conventions
@@ -446,6 +463,7 @@ src/lib/
 ### Directory Organization
 
 ✅ **DO:**
+
 - Group related files together
 - Create subdirectories at 5+ files
 - Use consistent structure across apps
@@ -453,6 +471,7 @@ src/lib/
 - Document structure in README
 
 ❌ **DON'T:**
+
 - Create deep nesting (max 3-4 levels)
 - Mix unrelated files
 - Create empty directories
@@ -461,6 +480,7 @@ src/lib/
 ### Component Structure
 
 ✅ **DO:**
+
 ```typescript
 // FloatingDictionary.tsx
 import React, { useState } from 'react';
@@ -479,9 +499,10 @@ export default function FloatingDictionary({ onClose }: FloatingDictionaryProps)
 ```
 
 ❌ **DON'T:**
+
 ```typescript
 // Bad: Multiple exports, no types
-export const FloatingDictionary = (props) => {
+export const FloatingDictionary = props => {
   // Logic
 };
 
@@ -494,17 +515,17 @@ export const OtherComponent = () => {
 
 ## 📊 File Type Reference
 
-| Extension | Purpose | Example |
-|-----------|---------|---------|
-| `.tsx` | React component with JSX | `FloatingDictionary.tsx` |
-| `.ts` | TypeScript file | `wordValidator.ts` |
-| `.test.ts` | Unit test file | `wordValidator.test.ts` |
-| `.json` | JSON data/config | `dictionary.json` |
-| `.md` | Markdown documentation | `README.md` |
-| `.yml` | YAML workflow/config | `ci.yml` |
-| `.sh` | Shell script | `validate-json.sh` |
-| `.mjs` | ES Module JavaScript | `deps-report.mjs` |
-| `.cjs` | CommonJS JavaScript | `.eslintrc.cjs` |
+| Extension  | Purpose                  | Example                  |
+| ---------- | ------------------------ | ------------------------ |
+| `.tsx`     | React component with JSX | `FloatingDictionary.tsx` |
+| `.ts`      | TypeScript file          | `wordValidator.ts`       |
+| `.test.ts` | Unit test file           | `wordValidator.test.ts`  |
+| `.json`    | JSON data/config         | `dictionary.json`        |
+| `.md`      | Markdown documentation   | `README.md`              |
+| `.yml`     | YAML workflow/config     | `ci.yml`                 |
+| `.sh`      | Shell script             | `validate-json.sh`       |
+| `.mjs`     | ES Module JavaScript     | `deps-report.mjs`        |
+| `.cjs`     | CommonJS JavaScript      | `.eslintrc.cjs`          |
 
 ---
 
@@ -513,12 +534,14 @@ export const OtherComponent = () => {
 ### Reorganizing Existing Files
 
 **Before making changes:**
+
 1. ✅ Run tests: `npm test`
 2. ✅ Check builds: `npm run build`
 3. ✅ Commit current state
 4. ✅ Create new branch for reorganization
 
 **Steps:**
+
 1. Create new directory structure
 2. Move files one by one
 3. Update imports
@@ -526,6 +549,7 @@ export const OtherComponent = () => {
 5. Commit incrementally
 
 **Example:**
+
 ```bash
 # 1. Create structure
 mkdir -p src/components/{Views,Game,UI,Features}
@@ -573,13 +597,13 @@ npm run ci:fast
 
 ### Component Naming Patterns
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Page View | `[Name]View.tsx` | `HomeView.tsx` |
-| Game Mode | `[Type][Mode].tsx` | `Game2D.tsx` |
+| Type      | Pattern                | Example                  |
+| --------- | ---------------------- | ------------------------ |
+| Page View | `[Name]View.tsx`       | `HomeView.tsx`           |
+| Game Mode | `[Type][Mode].tsx`     | `Game2D.tsx`             |
 | UI Widget | `[Function][Type].tsx` | `FloatingDictionary.tsx` |
-| Button | `[Action]Button.tsx` | `VoiceInputButton.tsx` |
-| Panel | `[Feature]Panel.tsx` | `CustomizerPanel.tsx` |
+| Button    | `[Action]Button.tsx`   | `VoiceInputButton.tsx`   |
+| Panel     | `[Feature]Panel.tsx`   | `CustomizerPanel.tsx`    |
 
 ### File Organization Commands
 
@@ -609,12 +633,12 @@ Your project now has:
 ✅ **File type standards** - Consistent extensions  
 ✅ **Best practices** - Do's and don'ts  
 ✅ **Migration guide** - Safe reorganization  
-✅ **Verification checklist** - Ensure nothing breaks  
+✅ **Verification checklist** - Ensure nothing breaks
 
 **Follow these conventions for maintainable, scalable code!** 📁✨
 
 ---
 
-*Last updated: July 2026*  
-*Version: 1.0*  
-*Status: ✅ Production Ready*
+_Last updated: July 2026_  
+_Version: 1.0_  
+_Status: ✅ Production Ready_
