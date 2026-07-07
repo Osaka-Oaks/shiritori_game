@@ -286,13 +286,13 @@ jobs:
             --arg run_id "${{ github.run_id }}" \
             '{timestamp:$ts,app:$app,step:"build",status:"success",duration_s:$duration_s,sha:$sha,branch:$branch,run_id:$run_id}' \
             >> .github/build-history.jsonl
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist-shiritori-flutter
           path: shiritori_flutter/build/web/
           retention-days: 14
           compression-level: 6
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: build-metrics-flutter
@@ -365,14 +365,14 @@ jobs:
             '{timestamp:$ts,app:$app,step:"build",status:"success",duration_s:$duration_s,sha:$sha,branch:$branch,run_id:$run_id}' \
             >> .github/build-history.jsonl
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist-shiritori-online
           path: shiritori-online/dist/
           retention-days: 14
           compression-level: 6
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: build-metrics-online
@@ -445,14 +445,14 @@ jobs:
             '{timestamp:$ts,app:$app,step:"build",status:"success",duration_s:$duration_s,sha:$sha,branch:$branch,run_id:$run_id}' \
             >> .github/build-history.jsonl
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist-kawaii-shiritori
           path: kawaii-shiritori/dist/
           retention-days: 7
           compression-level: 6
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: build-metrics-kawaii
@@ -717,7 +717,7 @@ jobs:
             --env staging \
             --ci-status "${{ steps.ci_gate.outputs.status }}"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: deployment-records

@@ -68,7 +68,7 @@ jobs:
           node scripts/format-audit.mjs >> $GITHUB_STEP_SUMMARY || true
 
       - name: Upload reports as artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dependency-reports
           path: |
