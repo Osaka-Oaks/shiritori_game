@@ -16,6 +16,7 @@
     "dev:kawaii": "npm --prefix kawaii-shiritori run dev",
     "dev:flutter": "cd shiritori_flutter && flutter run -d chrome",
     "setup:flutterfire": "bash scripts/setup-flutterfire.sh",
+    "env:check": "bash scripts/security-check.sh",
     "flutter:setup": "bash scripts/setup-flutter-firebase.sh",
     "flutter:doctor": "cd shiritori-flutter && flutter doctor",
     "flutter:clean": "cd shiritori-flutter && flutter clean && flutter pub get",
