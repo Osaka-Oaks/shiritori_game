@@ -37,6 +37,23 @@ flutter analyze
 flutter build web
 ```
 
+## Deploy (Firebase Hosting)
+
+Production URL: **https://shiritori-flutter.web.app**
+
+```bash
+# From repo root
+npm run build:flutter
+npm run deploy:flutter
+
+# Or manually
+cd shiritori_flutter
+flutter build web
+npx firebase-tools deploy --only hosting --project shiritori-game-ccaae
+```
+
+CI deploys automatically on push to `main` when `shiritori_flutter/` changes. Post-deploy verification runs in the **Deployment verify & record** job and writes timestamps to `.github/deployments.jsonl`.
+
 ## Features
 
 - Create / join room (same RTDB schema as React app)

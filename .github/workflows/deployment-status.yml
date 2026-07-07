@@ -1,0 +1,101 @@
+# Runs after every CI completion on main/develop — probes live URLs and records deployment status.
+name: Deployment status
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      check_flutter:
+        description: Probe Flutter production URL
+        type: boolean
+        default: true
+      check_online:
+        description: Probe React production URL
+        type: boolean
+        default: true
+
+env:
+  LIVE_URL: https://shiritori-game-ccaae.web.app
+  FLUTTER_LIVE_URL: https://shiritori-flutter.web.app
+
+jobs:
+  status:
+    name: Live deployment status
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       contains(fromJSON('["main","develop"]'), github.event.workflow_run.head_branch))
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Triggering CI run
+        if: github.event_name == 'workflow_run'
+        run: |
+          echo "CI workflow: ${{ github.event.workflow_run.html_url }}"
+          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo "SHA: ${{ github.event.workflow_run.head_sha }}"
+
+      - name: Probe React app
+        if: github.event_name == 'workflow_dispatch' && inputs.check_online == true || github.event_name == 'workflow_run'
+        id: online
+        run: |
+          chmod +x scripts/deployment-verify.sh
+          if bash scripts/deployment-verify.sh \
+            --app shiritori-online \
+            --url "$LIVE_URL" \
+            --env production \
+            --ci-status "${{ github.event.workflow_run.conclusion == 'success' && 'ok' || 'fail' }}"; then
+            echo "online=healthy" >> "$GITHUB_OUTPUT"
+          else
+            echo "online=degraded" >> "$GITHUB_OUTPUT"
+          fi
+        continue-on-error: true
+
+      - name: Probe Flutter app
+        if: github.event_name == 'workflow_dispatch' && inputs.check_flutter == true || github.event_name == 'workflow_run'
+        id: flutter
+        run: |
+          chmod +x scripts/deployment-verify.sh scripts/test-flutter-url.sh
+          if bash scripts/deployment-verify.sh \
+            --app shiritori_flutter \
+            --url "$FLUTTER_LIVE_URL" \
+            --env production \
+            --ci-status "${{ github.event.workflow_run.conclusion == 'success' && 'ok' || 'fail' }}"; then
+            echo "flutter=healthy" >> "$GITHUB_OUTPUT"
+          else
+            echo "flutter=not_deployed" >> "$GITHUB_OUTPUT"
+          fi
+        continue-on-error: true
+
+      - name: Write status summary
+        run: |
+          DEPLOYED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          {
+            echo "## Deployment status"
+            echo ""
+            echo "| App | URL | Status | Checked at (UTC) |"
+            echo "|-----|-----|--------|------------------|"
+            echo "| React | $LIVE_URL | ${{ steps.online.outputs.online || 'skipped' }} | \`$DEPLOYED_AT\` |"
+            echo "| Flutter | $FLUTTER_LIVE_URL | ${{ steps.flutter.outputs.flutter || 'skipped' }} | \`$DEPLOYED_AT\` |"
+            echo ""
+            if [ -f .github/deployments.jsonl ]; then
+              echo "### Latest deployment records"
+              echo '```json'
+              tail -4 .github/deployments.jsonl
+              echo '```'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deployment-status-${{ github.run_id }}
+          path: .github/deployments.jsonl
+          retention-days: 90
+          if-no-files-found: ignore
