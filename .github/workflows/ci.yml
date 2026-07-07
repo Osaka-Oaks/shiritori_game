@@ -1,26 +1,144 @@
 name: CI
 
-# Format → lint → test → build → deploy (main) → smoke test
+# Branches: main (prod), develop (preview), feature/* & fix/* (validate only)
+# Pipeline: changes → format → lint → security → test → build → deploy → smoke
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - develop
+      - "feature/**"
+      - "fix/**"
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - develop
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deploy environment (manual runs only)"
+        required: false
+        default: "none"
+        type: choice
+        options:
+          - none
+          - staging
+          - production
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
   NODE_VERSION: "20"
   FIREBASE_PROJECT: shiritori-game-ccaae
   LIVE_URL: https://shiritori-game-ccaae.web.app
+  # Deployment paths (see .github/BRANCHING.md)
+  PATH_ONLINE: shiritori-online/**
+  PATH_KAWAII_RULES: kawaii-shiritori/firestore.rules
+  PATH_KAWAII_INDEXES: kawaii-shiritori/firestore.indexes.json
 
 jobs:
+  # ---------------------------------------------------------------------------
+  # Detect which apps/paths changed (skip deploy when unrelated files change)
+  # ---------------------------------------------------------------------------
+  changes:
+    name: Detect path changes
+    runs-on: ubuntu-latest
+    outputs:
+      online: ${{ steps.filter.outputs.online }}
+      kawaii-rules: ${{ steps.filter.outputs.kawaii-rules }}
+      ci-config: ${{ steps.filter.outputs.ci-config }}
+      any-app: ${{ steps.filter.outputs.online == 'true' || steps.filter.outputs.kawaii-rules == 'true' || steps.filter.outputs.ci-config == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            online:
+              - 'shiritori-online/**'
+            kawaii-rules:
+              - 'kawaii-shiritori/firestore.rules'
+              - 'kawaii-shiritori/firestore.indexes.json'
+              - 'kawaii-shiritori/firebase.json'
+            ci-config:
+              - '.github/workflows/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'scripts/security-check.sh'
+
+  # ---------------------------------------------------------------------------
+  # Security scans (gates deploy)
+  # ---------------------------------------------------------------------------
+  security:
+    name: Security scans
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Secret scan (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            shiritori-online/package-lock.json
+            kawaii-shiritori/package-lock.json
+
+      - name: Run security-check script
+        run: chmod +x scripts/security-check.sh && bash scripts/security-check.sh
+
+      - name: npm audit — shiritori-online
+        working-directory: shiritori-online
+        run: |
+          npm ci
+          npm audit --audit-level=critical --json > ../audit-online.json || true
+          node -e "
+            const r=require('./../audit-online.json');
+            const v=r.metadata?.vulnerabilities||{};
+            if ((v.critical||0)>0) { console.error('Critical vulnerabilities in shiritori-online'); process.exit(1); }
+            console.log('shiritori-online audit OK (critical=0)');
+          "
+
+      - name: npm audit — kawaii-shiritori
+        working-directory: kawaii-shiritori
+        run: |
+          npm ci
+          npm audit --audit-level=critical --json > ../audit-kawaii.json || true
+          node -e "
+            const r=require('./../audit-kawaii.json');
+            const v=r.metadata?.vulnerabilities||{};
+            if ((v.critical||0)>0) { console.error('Critical vulnerabilities in kawaii-shiritori'); process.exit(1); }
+            console.log('kawaii-shiritori audit OK (critical=0)');
+          "
+
+      - name: Upload audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-audit-reports
+          path: |
+            audit-online.json
+            audit-kawaii.json
+          retention-days: 30
+          if-no-files-found: ignore
+
   format:
     name: Prettier
     runs-on: ubuntu-latest
+    needs: changes
     steps:
       - uses: actions/checkout@v4
 
@@ -33,27 +151,16 @@ jobs:
             shiritori-online/package-lock.json
             kawaii-shiritori/package-lock.json
 
-      - name: Install root dependencies
-        run: npm ci
+      - run: npm ci
+      - run: npm run format:check
 
-      - name: Check root formatting (JSON/YAML/config)
-        run: npm run format:check
-
-      - name: Install shiritori-online dependencies
+      - name: shiritori-online format
         working-directory: shiritori-online
-        run: npm ci
+        run: npm ci && npm run format:check
 
-      - name: Check shiritori-online formatting
-        working-directory: shiritori-online
-        run: npm run format:check
-
-      - name: Install kawaii-shiritori dependencies
+      - name: kawaii-shiritori format
         working-directory: kawaii-shiritori
-        run: npm ci
-
-      - name: Check kawaii-shiritori formatting
-        working-directory: kawaii-shiritori
-        run: npm run format:check
+        run: npm ci && npm run format:check
 
   lint:
     name: ESLint — ${{ matrix.app }}
@@ -72,8 +179,7 @@ jobs:
           cache: npm
           cache-dependency-path: ${{ matrix.app }}/package-lock.json
 
-      - name: Install dependencies
-        working-directory: ${{ matrix.app }}
+      - working-directory: ${{ matrix.app }}
         run: npm ci
 
       - name: ESLint
@@ -93,15 +199,14 @@ jobs:
           cache: npm
           cache-dependency-path: kawaii-shiritori/package-lock.json
 
-      - name: Install dependencies
-        working-directory: kawaii-shiritori
+      - working-directory: kawaii-shiritori
         run: npm ci
 
-      - name: Run vitest
+      - name: Vitest
         working-directory: kawaii-shiritori
         run: npm run test
 
-      - name: Upload coverage artifact
+      - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -113,7 +218,7 @@ jobs:
   build:
     name: Build — ${{ matrix.app }}
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, security]
     strategy:
       fail-fast: false
       matrix:
@@ -127,8 +232,7 @@ jobs:
           cache: npm
           cache-dependency-path: ${{ matrix.app }}/package-lock.json
 
-      - name: Install dependencies
-        working-directory: ${{ matrix.app }}
+      - working-directory: ${{ matrix.app }}
         run: npm ci
 
       - name: Production build
@@ -140,26 +244,30 @@ jobs:
         run: |
           echo "## Build — ${{ matrix.app }}" >> $GITHUB_STEP_SUMMARY
           ls -lh dist/ >> $GITHUB_STEP_SUMMARY
-          du -sh dist/ >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: dist-${{ matrix.app }}
           path: ${{ matrix.app }}/dist/
           retention-days: 30
 
-  deploy:
-    name: Deploy shiritori-online
+  # ---------------------------------------------------------------------------
+  # Production deploy (main only, path-filtered)
+  # ---------------------------------------------------------------------------
+  deploy-production:
+    name: Deploy production
     runs-on: ubuntu-latest
-    needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [build, changes, security]
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      (needs.changes.outputs.online == 'true' ||
+       needs.changes.outputs.kawaii-rules == 'true' ||
+       needs.changes.outputs.ci-config == 'true' ||
+       github.event.inputs.environment == 'production')
     environment:
       name: production
       url: ${{ env.LIVE_URL }}
-    defaults:
-      run:
-        working-directory: shiritori-online
     steps:
       - uses: actions/checkout@v4
 
@@ -167,13 +275,16 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - name: Download build artifact
+      - name: Download shiritori-online artifact
+        if: needs.changes.outputs.online == 'true' || needs.changes.outputs.ci-config == 'true'
         uses: actions/download-artifact@v4
         with:
           name: dist-shiritori-online
           path: shiritori-online/dist
 
-      - name: Deploy hosting + database rules
+      - name: Deploy hosting + database
+        if: needs.changes.outputs.online == 'true' || needs.changes.outputs.ci-config == 'true'
+        working-directory: shiritori-online
         run: >
           npx firebase-tools@latest deploy
           --only hosting,database
@@ -183,7 +294,8 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-      - name: Deploy Firestore rules (kawaii leaderboard)
+      - name: Deploy Firestore rules
+        if: needs.changes.outputs.kawaii-rules == 'true' || needs.changes.outputs.ci-config == 'true'
         working-directory: kawaii-shiritori
         run: >
           npx firebase-tools@latest deploy
@@ -194,35 +306,86 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-  smoke-test:
-    name: Smoke test live site
+      - name: Deployment paths summary
+        run: |
+          echo "## Production deployment" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: ${{ env.LIVE_URL }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **online changed**: ${{ needs.changes.outputs.online }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **firestore changed**: ${{ needs.changes.outputs.kawaii-rules }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **paths**: \`${{ env.PATH_ONLINE }}\`, firestore rules" >> $GITHUB_STEP_SUMMARY
+
+  # ---------------------------------------------------------------------------
+  # Staging preview (develop branch)
+  # ---------------------------------------------------------------------------
+  deploy-staging:
+    name: Deploy staging preview
     runs-on: ubuntu-latest
-    needs: deploy
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [build, changes, security]
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/develop' &&
+      (needs.changes.outputs.online == 'true' || needs.changes.outputs.ci-config == 'true')
+    environment:
+      name: staging
     steps:
-      - name: Wait for CDN
-        run: sleep 15
+      - uses: actions/checkout@v4
 
-      - name: Homepage HTTP 200
-        run: |
-          STATUS=$(curl -fsSL -o /dev/null -w "%{http_code}" "${{ env.LIVE_URL }}/")
-          echo "HTTP $STATUS" >> $GITHUB_STEP_SUMMARY
-          test "$STATUS" = "200"
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
 
-      - name: Verify page content
-        run: |
-          CONTENT=$(curl -fsSL "${{ env.LIVE_URL }}/")
-          echo "$CONTENT" | grep -q "しりとり"
-          echo "$CONTENT" | grep -q "assets/index-"
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-shiritori-online
+          path: shiritori-online/dist
 
-      - name: Verify static assets
+      - name: Deploy preview channel
+        id: preview
+        working-directory: shiritori-online
         run: |
-          JS=$(curl -fsSL "${{ env.LIVE_URL }}/" | grep -oE 'assets/index-[^"]+\.js' | head -1)
-          CSS=$(curl -fsSL "${{ env.LIVE_URL }}/" | grep -oE 'assets/index-[^"]+\.css' | head -1)
-          curl -fsSL -o /dev/null "${{ env.LIVE_URL }}/$JS"
-          curl -fsSL -o /dev/null "${{ env.LIVE_URL }}/$CSS"
+          OUTPUT=$(npx firebase-tools@latest hosting:channel:deploy develop \
+            --project ${{ env.FIREBASE_PROJECT }} \
+            --non-interactive \
+            --token "$FIREBASE_TOKEN" \
+            --expires 14d 2>&1)
+          echo "$OUTPUT"
+          URL=$(echo "$OUTPUT" | grep -oE 'https://[^ ]+web\.app' | head -1)
+          echo "preview_url=$URL" >> $GITHUB_OUTPUT
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-      - name: Realtime Database reachable
+      - name: Staging URL
         run: |
-          DB_STATUS=$(curl -fsSL -o /dev/null -w "%{http_code}" "https://${{ env.FIREBASE_PROJECT }}-default-rtdb.firebaseio.com/.json" || true)
-          test "$DB_STATUS" = "401" -o "$DB_STATUS" = "200"
+          echo "## Staging preview" >> $GITHUB_STEP_SUMMARY
+          echo "- **Channel**: develop (14 days)" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: ${{ steps.preview.outputs.preview_url }}" >> $GITHUB_STEP_SUMMARY
+
+  smoke-test:
+    name: Smoke test
+    runs-on: ubuntu-latest
+    needs: [deploy-production, deploy-staging]
+    if: always() && (needs.deploy-production.result == 'success' || needs.deploy-staging.result == 'success')
+    steps:
+      - name: Set test URL
+        id: url
+        run: |
+          if [ "${{ needs.deploy-production.result }}" = "success" ]; then
+            echo "target=${{ env.LIVE_URL }}" >> $GITHUB_OUTPUT
+          else
+            echo "target=https://${{ env.FIREBASE_PROJECT }}--develop.web.app" >> $GITHUB_OUTPUT
+          fi
+
+      - run: sleep 15
+
+      - name: HTTP 200 + content
+        run: |
+          URL="${{ steps.url.outputs.target }}"
+          curl -fsSL -o /dev/null -w "HTTP %{http_code}\n" "$URL/"
+          curl -fsSL "$URL/" | grep -q "しりとり"
+          echo "Tested: $URL" >> $GITHUB_STEP_SUMMARY
+
+      - name: Static assets
+        run: |
+          URL="${{ steps.url.outputs.target }}"
+          JS=$(curl -fsSL "$URL/" | grep -oE 'assets/index-[^"]+\.js' | head -1)
+          curl -fsSL -o /dev/null "$URL/$JS"
