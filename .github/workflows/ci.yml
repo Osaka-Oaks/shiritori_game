@@ -1,68 +1,307 @@
 name: CI
 
-# Format → lint → test → build → deploy (main) → smoke test
+# Fast path-filtered pipeline: parallel checks, skip unchanged apps, cached builds.
 on:
   push:
-    branches: [main]
+    branches: [main, develop, "feature/**", "fix/**"]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Force deploy environment"
+        required: false
+        default: "none"
+        type: choice
+        options: [none, staging, production]
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
   NODE_VERSION: "20"
   FIREBASE_PROJECT: shiritori-game-ccaae
+  FIREBASE_TOOLS_VERSION: "13.29.1"
   LIVE_URL: https://shiritori-game-ccaae.web.app
+  FLUTTER_LIVE_URL: https://shiritori-flutter.web.app
+  CACHE_VERSION: v2
 
 jobs:
-  format:
-    name: Prettier
+  changes:
+    name: Detect changes
     runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      online: ${{ steps.filter.outputs.online }}
+      kawaii: ${{ steps.filter.outputs.kawaii }}
+      flutter: ${{ steps.filter.outputs.flutter }}
+      kawaii-rules: ${{ steps.filter.outputs.kawaii-rules }}
+      shared: ${{ steps.filter.outputs.shared }}
+      deps: ${{ steps.filter.outputs.deps }}
+      ci-config: ${{ steps.filter.outputs.ci-config }}
+      docs-only: ${{ steps.filter.outputs.docs-only }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            online:
+              - 'shiritori-online/**'
+            kawaii:
+              - 'kawaii-shiritori/src/**'
+              - 'kawaii-shiritori/public/**'
+              - 'kawaii-shiritori/index.html'
+              - 'kawaii-shiritori/vite.config.ts'
+              - 'kawaii-shiritori/server.ts'
+            flutter:
+              - 'shiritori_flutter/**'
+            kawaii-rules:
+              - 'kawaii-shiritori/firestore.rules'
+              - 'kawaii-shiritori/firestore.indexes.json'
+            shared:
+              - 'shiritori-online/firebase.json'
+              - 'shiritori-online/database.rules.json'
+            deps:
+              - '**/package.json'
+              - '**/package-lock.json'
+            ci-config:
+              - '.github/workflows/**'
+              - 'scripts/security-check.sh'
+            docs-only:
+              - '**.md'
+              - 'docs/**'
+              - 'LICENSE'
+
+  docs-pass:
+    name: Docs only (skip build)
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.docs-only == 'true'
+    steps:
+      - run: echo "Documentation-only change — skipping app builds." >> $GITHUB_STEP_SUMMARY
+
+  security:
+    name: Security
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    needs: changes
+    if: needs.changes.outputs.docs-only != 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
 
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: |
-            package-lock.json
             shiritori-online/package-lock.json
             kawaii-shiritori/package-lock.json
 
-      - name: Install root dependencies
-        run: npm ci
+      - run: chmod +x scripts/security-check.sh && bash scripts/security-check.sh
 
-      - name: Check root formatting (JSON/YAML/config)
-        run: npm run format:check
-
-      - name: Install shiritori-online dependencies
-        working-directory: shiritori-online
-        run: npm ci
-
-      - name: Check shiritori-online formatting
-        working-directory: shiritori-online
-        run: npm run format:check
-
-      - name: Install kawaii-shiritori dependencies
-        working-directory: kawaii-shiritori
-        run: npm ci
-
-      - name: Check kawaii-shiritori formatting
-        working-directory: kawaii-shiritori
-        run: npm run format:check
-
-  lint:
-    name: ESLint — ${{ matrix.app }}
+  validate-fast:
+    name: Validate (JSON + Prettier)
     runs-on: ubuntu-latest
-    needs: format
-    strategy:
-      fail-fast: false
-      matrix:
-        app: [shiritori-online, kawaii-shiritori]
+    timeout-minutes: 3
+    needs: changes
+    if: needs.changes.outputs.docs-only != 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --prefer-offline --no-audit
+      - run: npm run validate:json && npm run format:json:check && npm run format:check
+
+  lint-online:
+    name: Lint — shiritori-online
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    needs: changes
+    if: |
+      needs.changes.outputs.docs-only != 'true' &&
+      (needs.changes.outputs.online == 'true' || needs.changes.outputs.deps == 'true' || needs.changes.outputs.ci-config == 'true')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: shiritori-online/package-lock.json
+      - working-directory: shiritori-online
+        run: npm ci --prefer-offline --no-audit
+      - uses: actions/cache@v4
+        with:
+          path: shiritori-online/.eslintcache
+          key: eslint-online-${{ hashFiles('shiritori-online/src/**', 'shiritori-online/eslint.config.*') }}
+          restore-keys: eslint-online-
+      - working-directory: shiritori-online
+        run: npm run lint
+
+  lint-kawaii:
+    name: Lint — kawaii-shiritori
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    needs: changes
+    if: |
+      needs.changes.outputs.docs-only != 'true' &&
+      (needs.changes.outputs.kawaii == 'true' || needs.changes.outputs.deps == 'true')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: kawaii-shiritori/package-lock.json
+      - working-directory: kawaii-shiritori
+        run: npm ci --prefer-offline --no-audit
+      - uses: actions/cache@v4
+        with:
+          path: kawaii-shiritori/.eslintcache
+          key: eslint-kawaii-${{ hashFiles('kawaii-shiritori/src/**', 'kawaii-shiritori/eslint.config.*') }}
+          restore-keys: eslint-kawaii-
+      - working-directory: kawaii-shiritori
+        run: npm run lint
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: changes
+    if: |
+      needs.changes.outputs.docs-only != 'true' &&
+      (needs.changes.outputs.kawaii == 'true' || needs.changes.outputs.deps == 'true')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: kawaii-shiritori/package-lock.json
+      - working-directory: kawaii-shiritori
+        run: npm ci --prefer-offline --no-audit && npm run test
+
+  lint-flutter:
+    name: Analyze — shiritori_flutter
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    needs: changes
+    if: |
+      needs.changes.outputs.docs-only != 'true' &&
+      (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.deps == 'true')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - working-directory: shiritori_flutter
+        run: flutter pub get && flutter analyze lib test
+
+  test-flutter:
+    name: Test — shiritori_flutter
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: changes
+    if: |
+      needs.changes.outputs.docs-only != 'true' &&
+      (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.deps == 'true')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - working-directory: shiritori_flutter
+        run: flutter pub get && flutter test
+
+  build-flutter:
+    name: Build — shiritori_flutter (web)
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    needs: [changes, security, lint-flutter, test-flutter]
+    if: |
+      always() &&
+      needs.changes.outputs.docs-only != 'true' &&
+      needs.security.result == 'success' &&
+      (needs.lint-flutter.result == 'success' || needs.lint-flutter.result == 'skipped') &&
+      (needs.test-flutter.result == 'success' || needs.test-flutter.result == 'skipped') &&
+      (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.deps == 'true' || needs.changes.outputs.ci-config == 'true')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - working-directory: shiritori_flutter
+        run: flutter pub get
+      - name: Build web (timed)
+        id: build_timer
+        working-directory: shiritori_flutter
+        run: |
+          START=$SECONDS
+          flutter build web --release
+          echo "duration_sec=$((SECONDS - START))" >> "$GITHUB_OUTPUT"
+      - name: Stamp health.json with deploy time
+        working-directory: shiritori_flutter
+        run: |
+          DEPLOYED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          jq -n \
+            --arg deployed_at "$DEPLOYED_AT" \
+            --arg sha "${{ github.sha }}" \
+            '{status:"ok",app:"shiritori_flutter",version:"1.0.0",deployed_at:$deployed_at,sha:$sha}' \
+            > build/web/health.json
+      - name: Record build metrics
+        if: always()
+        run: |
+          mkdir -p .github
+          jq -nc \
+            --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --arg app "shiritori_flutter" \
+            --argjson duration_s "${{ steps.build_timer.outputs.duration_sec != '' && steps.build_timer.outputs.duration_sec || '0' }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg run_id "${{ github.run_id }}" \
+            '{timestamp:$ts,app:$app,step:"build",status:"success",duration_s:$duration_s,sha:$sha,branch:$branch,run_id:$run_id}' \
+            >> .github/build-history.jsonl
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-shiritori-flutter
+          path: shiritori_flutter/build/web/
+          retention-days: 14
+          compression-level: 6
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-metrics-flutter
+          path: .github/build-history.jsonl
+          retention-days: 30
+          if-no-files-found: ignore
+
+  build-online:
+    name: Build — shiritori-online
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [changes, security, lint-online]
+    if: |
+      always() &&
+      needs.changes.outputs.docs-only != 'true' &&
+      needs.security.result == 'success' &&
+      (needs.lint-online.result == 'success' || needs.lint-online.result == 'skipped') &&
+      (needs.changes.outputs.online == 'true' || needs.changes.outputs.deps == 'true' || needs.changes.outputs.ci-config == 'true')
     steps:
       - uses: actions/checkout@v4
 
@@ -70,20 +309,71 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+          cache-dependency-path: shiritori-online/package-lock.json
 
-      - name: Install dependencies
-        working-directory: ${{ matrix.app }}
-        run: npm ci
+      - uses: actions/cache@v4
+        with:
+          path: |
+            shiritori-online/node_modules
+            shiritori-online/node_modules/.vite
+            shiritori-online/.tsbuildinfo
+          key: build-${{ env.CACHE_VERSION }}-online-${{ hashFiles('shiritori-online/package-lock.json') }}
+          restore-keys: build-${{ env.CACHE_VERSION }}-online-
 
-      - name: ESLint
-        working-directory: ${{ matrix.app }}
-        run: npm run lint
+      - working-directory: shiritori-online
+        run: npm ci --prefer-offline --no-audit
 
-  test:
-    name: Unit tests
+      - name: Build (timed)
+        id: build_timer
+        working-directory: shiritori-online
+        run: |
+          START=$SECONDS
+          npm run build
+          echo "duration_sec=$((SECONDS - START))" >> "$GITHUB_OUTPUT"
+        env:
+          CI: true
+          NODE_ENV: production
+
+      - name: Record build metrics
+        if: always()
+        run: |
+          mkdir -p .github
+          jq -nc \
+            --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --arg app "shiritori-online" \
+            --argjson duration_s "${{ steps.build_timer.outputs.duration_sec != '' && steps.build_timer.outputs.duration_sec || '0' }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg run_id "${{ github.run_id }}" \
+            '{timestamp:$ts,app:$app,step:"build",status:"success",duration_s:$duration_s,sha:$sha,branch:$branch,run_id:$run_id}' \
+            >> .github/build-history.jsonl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-shiritori-online
+          path: shiritori-online/dist/
+          retention-days: 14
+          compression-level: 6
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-metrics-online
+          path: .github/build-history.jsonl
+          retention-days: 30
+          if-no-files-found: ignore
+
+  build-kawaii:
+    name: Build — kawaii-shiritori
     runs-on: ubuntu-latest
-    needs: lint
+    timeout-minutes: 8
+    needs: [changes, security, test]
+    if: |
+      always() &&
+      needs.changes.outputs.docs-only != 'true' &&
+      needs.security.result == 'success' &&
+      (needs.test.result == 'success' || needs.test.result == 'skipped') &&
+      (needs.changes.outputs.kawaii == 'true' || needs.changes.outputs.deps == 'true')
     steps:
       - uses: actions/checkout@v4
 
@@ -93,73 +383,71 @@ jobs:
           cache: npm
           cache-dependency-path: kawaii-shiritori/package-lock.json
 
-      - name: Install dependencies
-        working-directory: kawaii-shiritori
-        run: npm ci
-
-      - name: Run vitest
-        working-directory: kawaii-shiritori
-        run: npm run test
-
-      - name: Upload coverage artifact
-        if: always()
-        uses: actions/upload-artifact@v4
+      - uses: actions/cache@v4
         with:
-          name: coverage-kawaii-shiritori
-          path: kawaii-shiritori/coverage/
-          retention-days: 14
+          path: |
+            kawaii-shiritori/node_modules
+            kawaii-shiritori/node_modules/.vite
+          key: build-${{ env.CACHE_VERSION }}-kawaii-${{ hashFiles('kawaii-shiritori/package-lock.json') }}
+          restore-keys: build-${{ env.CACHE_VERSION }}-kawaii-
+
+      - working-directory: kawaii-shiritori
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Build (timed)
+        working-directory: kawaii-shiritori
+        id: build_timer
+        run: |
+          START=$SECONDS
+          npm run build
+          echo "duration_sec=$((SECONDS - START))" >> "$GITHUB_OUTPUT"
+        env:
+          CI: true
+          NODE_ENV: production
+
+      - name: Record build metrics
+        if: always()
+        run: |
+          mkdir -p .github
+          jq -nc \
+            --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --arg app "kawaii-shiritori" \
+            --argjson duration_s "${{ steps.build_timer.outputs.duration_sec != '' && steps.build_timer.outputs.duration_sec || '0' }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg run_id "${{ github.run_id }}" \
+            '{timestamp:$ts,app:$app,step:"build",status:"success",duration_s:$duration_s,sha:$sha,branch:$branch,run_id:$run_id}' \
+            >> .github/build-history.jsonl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-kawaii-shiritori
+          path: kawaii-shiritori/dist/
+          retention-days: 7
+          compression-level: 6
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-metrics-kawaii
+          path: .github/build-history.jsonl
+          retention-days: 30
           if-no-files-found: ignore
 
-  build:
-    name: Build — ${{ matrix.app }}
+  deploy-production:
+    name: Deploy production
     runs-on: ubuntu-latest
-    needs: test
-    strategy:
-      fail-fast: false
-      matrix:
-        app: [shiritori-online, kawaii-shiritori]
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-          cache-dependency-path: ${{ matrix.app }}/package-lock.json
-
-      - name: Install dependencies
-        working-directory: ${{ matrix.app }}
-        run: npm ci
-
-      - name: Production build
-        working-directory: ${{ matrix.app }}
-        run: npm run build
-
-      - name: Build summary
-        working-directory: ${{ matrix.app }}
-        run: |
-          echo "## Build — ${{ matrix.app }}" >> $GITHUB_STEP_SUMMARY
-          ls -lh dist/ >> $GITHUB_STEP_SUMMARY
-          du -sh dist/ >> $GITHUB_STEP_SUMMARY
-
-      - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-${{ matrix.app }}
-          path: ${{ matrix.app }}/dist/
-          retention-days: 30
-
-  deploy:
-    name: Deploy shiritori-online
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    timeout-minutes: 4
+    needs: [changes, build-online, security]
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      needs.security.result == 'success' &&
+      (needs.build-online.result == 'success' || needs.changes.outputs.kawaii-rules == 'true' || needs.changes.outputs.shared == 'true') &&
+      (needs.changes.outputs.online == 'true' || needs.changes.outputs.kawaii-rules == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.ci-config == 'true' || github.event.inputs.environment == 'production')
     environment:
       name: production
       url: ${{ env.LIVE_URL }}
-    defaults:
-      run:
-        working-directory: shiritori-online
     steps:
       - uses: actions/checkout@v4
 
@@ -167,15 +455,23 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - name: Download build artifact
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm/_npx
+          key: firebase-tools-${{ env.FIREBASE_TOOLS_VERSION }}
+
+      - name: Download build
+        if: needs.build-online.result == 'success'
         uses: actions/download-artifact@v4
         with:
           name: dist-shiritori-online
           path: shiritori-online/dist
 
-      - name: Deploy hosting + database rules
+      - name: Deploy hosting + database
+        if: needs.build-online.result == 'success' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.ci-config == 'true'
+        working-directory: shiritori-online
         run: >
-          npx firebase-tools@latest deploy
+          npx firebase-tools@${{ env.FIREBASE_TOOLS_VERSION }} deploy
           --only hosting,database
           --project ${{ env.FIREBASE_PROJECT }}
           --non-interactive
@@ -183,10 +479,11 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-      - name: Deploy Firestore rules (kawaii leaderboard)
+      - name: Deploy Firestore rules
+        if: needs.changes.outputs.kawaii-rules == 'true' || needs.changes.outputs.ci-config == 'true'
         working-directory: kawaii-shiritori
         run: >
-          npx firebase-tools@latest deploy
+          npx firebase-tools@${{ env.FIREBASE_TOOLS_VERSION }} deploy
           --only firestore
           --project ${{ env.FIREBASE_PROJECT }}
           --non-interactive
@@ -194,35 +491,300 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-  smoke-test:
-    name: Smoke test live site
+  deploy-flutter-production:
+    name: Deploy Flutter production
     runs-on: ubuntu-latest
-    needs: deploy
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    timeout-minutes: 6
+    needs: [changes, build-flutter, security]
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      needs.security.result == 'success' &&
+      needs.build-flutter.result == 'success' &&
+      (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.ci-config == 'true' || github.event.inputs.environment == 'production')
+    environment:
+      name: production-flutter
+      url: ${{ env.FLUTTER_LIVE_URL }}
     steps:
-      - name: Wait for CDN
-        run: sleep 15
-
-      - name: Homepage HTTP 200
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm/_npx
+          key: firebase-tools-${{ env.FIREBASE_TOOLS_VERSION }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-shiritori-flutter
+          path: shiritori_flutter/build/web
+      - name: Ensure Firebase hosting site exists
+        working-directory: shiritori_flutter
         run: |
-          STATUS=$(curl -fsSL -o /dev/null -w "%{http_code}" "${{ env.LIVE_URL }}/")
-          echo "HTTP $STATUS" >> $GITHUB_STEP_SUMMARY
-          test "$STATUS" = "200"
+          npx firebase-tools@${{ env.FIREBASE_TOOLS_VERSION }} hosting:sites:create shiritori-flutter \
+            --project ${{ env.FIREBASE_PROJECT }} --non-interactive --token "$FIREBASE_TOKEN" 2>/dev/null || true
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Deploy Flutter hosting
+        working-directory: shiritori_flutter
+        run: >
+          npx firebase-tools@${{ env.FIREBASE_TOOLS_VERSION }} deploy
+          --only hosting
+          --project ${{ env.FIREBASE_PROJECT }}
+          --non-interactive
+          --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-      - name: Verify page content
+  deploy-staging:
+    name: Deploy staging preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    needs: [changes, build-online, security]
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/develop' &&
+      needs.build-online.result == 'success' &&
+      needs.security.result == 'success'
+    outputs:
+      preview_url: ${{ steps.preview.outputs.preview_url }}
+    environment:
+      name: staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm/_npx
+          key: firebase-tools-${{ env.FIREBASE_TOOLS_VERSION }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-shiritori-online
+          path: shiritori-online/dist
+      - name: Deploy preview channel
+        id: preview
+        working-directory: shiritori-online
         run: |
-          CONTENT=$(curl -fsSL "${{ env.LIVE_URL }}/")
-          echo "$CONTENT" | grep -q "しりとり"
-          echo "$CONTENT" | grep -q "assets/index-"
+          OUTPUT=$(npx firebase-tools@${{ env.FIREBASE_TOOLS_VERSION }} hosting:channel:deploy develop \
+            --project ${{ env.FIREBASE_PROJECT }} --non-interactive --expires 14d \
+            --token "$FIREBASE_TOKEN" 2>&1)
+          echo "$OUTPUT"
+          echo "preview_url=$(echo "$OUTPUT" | grep -oE 'https://[^ ]+web\.app' | head -1)" >> $GITHUB_OUTPUT
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-      - name: Verify static assets
+  deploy-flutter-staging:
+    name: Deploy Flutter staging preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    needs: [changes, build-flutter, security]
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/develop' &&
+      needs.build-flutter.result == 'success' &&
+      needs.security.result == 'success'
+    outputs:
+      preview_url: ${{ steps.preview.outputs.preview_url }}
+    environment:
+      name: staging-flutter
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm/_npx
+          key: firebase-tools-${{ env.FIREBASE_TOOLS_VERSION }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-shiritori-flutter
+          path: shiritori_flutter/build/web
+      - name: Deploy Flutter preview channel
+        id: preview
+        working-directory: shiritori_flutter
         run: |
-          JS=$(curl -fsSL "${{ env.LIVE_URL }}/" | grep -oE 'assets/index-[^"]+\.js' | head -1)
-          CSS=$(curl -fsSL "${{ env.LIVE_URL }}/" | grep -oE 'assets/index-[^"]+\.css' | head -1)
-          curl -fsSL -o /dev/null "${{ env.LIVE_URL }}/$JS"
-          curl -fsSL -o /dev/null "${{ env.LIVE_URL }}/$CSS"
+          OUTPUT=$(npx firebase-tools@${{ env.FIREBASE_TOOLS_VERSION }} hosting:channel:deploy develop-flutter \
+            --project ${{ env.FIREBASE_PROJECT }} --non-interactive --expires 14d \
+            --token "$FIREBASE_TOKEN" 2>&1)
+          echo "$OUTPUT"
+          echo "preview_url=$(echo "$OUTPUT" | grep -oE 'https://[^ ]+web\.app' | head -1)" >> $GITHUB_OUTPUT
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-      - name: Realtime Database reachable
+  deployment-verify:
+    name: Deployment verify & record
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      [
+        changes,
+        security,
+        build-online,
+        build-flutter,
+        deploy-production,
+        deploy-staging,
+        deploy-flutter-production,
+        deploy-flutter-staging,
+      ]
+    if: |
+      always() && (
+        needs.deploy-production.result == 'success' ||
+        needs.deploy-staging.result == 'success' ||
+        needs.deploy-flutter-production.result == 'success' ||
+        needs.deploy-flutter-staging.result == 'success'
+      )
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: CI gate status
+        id: ci_gate
         run: |
-          DB_STATUS=$(curl -fsSL -o /dev/null -w "%{http_code}" "https://${{ env.FIREBASE_PROJECT }}-default-rtdb.firebaseio.com/.json" || true)
-          test "$DB_STATUS" = "401" -o "$DB_STATUS" = "200"
+          FAIL=0
+          for j in security build-online build-flutter; do
+            R="${{ needs.security.result }}"
+            [ "$j" = "build-online" ] && R="${{ needs.build-online.result }}"
+            [ "$j" = "build-flutter" ] && R="${{ needs.build-flutter.result }}"
+            if [ "$R" = "failure" ]; then FAIL=1; fi
+          done
+          if [ "$FAIL" -eq 0 ]; then echo "status=ok" >> "$GITHUB_OUTPUT"; else echo "status=fail" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Verify online production
+        if: needs.deploy-production.result == 'success'
+        run: |
+          chmod +x scripts/deployment-verify.sh
+          bash scripts/deployment-verify.sh \
+            --app shiritori-online \
+            --url "${{ env.LIVE_URL }}" \
+            --env production \
+            --ci-status "${{ steps.ci_gate.outputs.status }}"
+
+      - name: Verify online staging
+        if: needs.deploy-staging.result == 'success'
+        run: |
+          chmod +x scripts/deployment-verify.sh
+          bash scripts/deployment-verify.sh \
+            --app shiritori-online \
+            --url "${{ needs.deploy-staging.outputs.preview_url }}" \
+            --env staging \
+            --ci-status "${{ steps.ci_gate.outputs.status }}"
+
+      - name: Verify Flutter production
+        if: needs.deploy-flutter-production.result == 'success'
+        run: |
+          chmod +x scripts/deployment-verify.sh scripts/test-flutter-url.sh
+          bash scripts/deployment-verify.sh \
+            --app shiritori_flutter \
+            --url "${{ env.FLUTTER_LIVE_URL }}" \
+            --env production \
+            --ci-status "${{ steps.ci_gate.outputs.status }}"
+
+      - name: Verify Flutter staging
+        if: needs.deploy-flutter-staging.result == 'success'
+        run: |
+          chmod +x scripts/deployment-verify.sh scripts/test-flutter-url.sh
+          bash scripts/deployment-verify.sh \
+            --app shiritori_flutter \
+            --url "${{ needs.deploy-flutter-staging.outputs.preview_url }}" \
+            --env staging \
+            --ci-status "${{ steps.ci_gate.outputs.status }}"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deployment-records
+          path: .github/deployments.jsonl
+          retention-days: 90
+          if-no-files-found: ignore
+
+  summary:
+    name: Pipeline summary
+    runs-on: ubuntu-latest
+    needs:
+      [
+        changes,
+        security,
+        validate-fast,
+        lint-online,
+        lint-kawaii,
+        lint-flutter,
+        build-online,
+        build-kawaii,
+        build-flutter,
+        deploy-production,
+        deploy-staging,
+        deploy-flutter-production,
+        deploy-flutter-staging,
+        deployment-verify,
+      ]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build metrics
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: build-metrics-*
+          merge-multiple: true
+          path: .github
+
+      - name: Download deployment records
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: deployment-records
+          path: .github
+
+      - name: Push build metrics to Datadog
+        env:
+          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+          DATADOG_SITE: ${{ secrets.DATADOG_SITE }}
+        run: |
+          [ -n "${DATADOG_API_KEY:-}" ] || exit 0
+          [ -f .github/build-history.jsonl ] || exit 0
+          SITE="${DATADOG_SITE:-datadoghq.com}"
+          tail -5 .github/build-history.jsonl | while read -r line; do
+            DUR=$(echo "$line" | jq -r '.duration_s')
+            APP=$(echo "$line" | jq -r '.app')
+            TS=$(date +%s)
+            curl -fsSL -X POST "https://api.${SITE}/api/v2/series" \
+              -H "DD-API-KEY: ${DATADOG_API_KEY}" \
+              -H "Content-Type: application/json" \
+              -d "{\"series\":[{\"metric\":\"ci.build.duration_seconds\",\"type\":3,\"points\":[{\"timestamp\":${TS},\"value\":${DUR}}],\"tags\":[\"app:${APP}\",\"branch:${{ github.ref_name }}\"]}]}" || true
+          done
+
+      - name: Write summary
+        run: |
+          chmod +x scripts/build-metrics-report.sh
+          {
+            echo "## CI summary"
+            echo "| Job | Result |"
+            echo "|-----|--------|"
+            echo "| Security | ${{ needs.security.result }} |"
+            echo "| Validate | ${{ needs.validate-fast.result }} |"
+            echo "| Lint online | ${{ needs.lint-online.result }} |"
+            echo "| Lint kawaii | ${{ needs.lint-kawaii.result }} |"
+            echo "| Build online | ${{ needs.build-online.result }} |"
+            echo "| Build kawaii | ${{ needs.build-kawaii.result }} |"
+            echo "| Build flutter | ${{ needs.build-flutter.result }} |"
+            echo "| Deploy prod | ${{ needs.deploy-production.result }} |"
+            echo "| Deploy flutter | ${{ needs.deploy-flutter-production.result }} |"
+            echo "| Deployment verify | ${{ needs.deployment-verify.result }} |"
+            echo "| Docs only | ${{ needs.changes.outputs.docs-only }} |"
+            echo ""
+            echo "### Live URLs"
+            echo "- React: ${{ env.LIVE_URL }}"
+            echo "- Flutter: ${{ env.FLUTTER_LIVE_URL }}"
+            echo ""
+            if [ -f .github/deployments.jsonl ]; then
+              echo "### Latest deployments"
+              echo '```json'
+              tail -3 .github/deployments.jsonl
+              echo '```'
+            fi
+            echo ""
+            bash scripts/build-metrics-report.sh .github/build-history.jsonl
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,66 @@
+name: 📋 Work item
+description: Kanban work item — feature, task, or spike
+title: "[Work]: "
+labels: ["status: backlog"]
+body:
+  - type: dropdown
+    id: column
+    attributes:
+      label: Kanban column
+      options:
+        - Backlog
+        - Ready
+        - In progress
+        - Review
+        - Done
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Low
+        - Medium
+        - High
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - shiritori-online
+        - kawaii-shiritori
+        - shiritori_flutter
+        - CI/CD
+        - Dictionary
+        - Solo / levels
+        - Infra (Terraform / OpenTofu)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What needs to be done?
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How do we know it's done?
+    validations:
+      required: true
+
+  - type: input
+    id: branch
+    attributes:
+      label: Branch name (optional)
+      placeholder: feature/my-work-item

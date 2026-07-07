@@ -1,0 +1,78 @@
+# Path-based auto-labeling for PRs (actions/labeler v5 syntax).
+"area: shiritori-online":
+  - changed-files:
+      - any-glob-to-any-file: ["shiritori-online/**"]
+
+"area: kawaii-shiritori":
+  - changed-files:
+      - any-glob-to-any-file: ["kawaii-shiritori/**"]
+
+"area: flutter":
+  - changed-files:
+      - any-glob-to-any-file: ["shiritori_flutter/**"]
+
+"area: infra":
+  - changed-files:
+      - any-glob-to-any-file: ["infra/**", "infrastructure/**", "observability/**"]
+
+"area: observability":
+  - changed-files:
+      - any-glob-to-any-file: ["observability/**", "scripts/health-pulse.sh", "scripts/push-observability-metrics.sh", ".github/workflows/uptime.yml"]
+
+"area: ci/cd":
+  - changed-files:
+      - any-glob-to-any-file: [".github/**"]
+
+"area: dictionary":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/dictionary*.ts"
+          - "**/dictionary*.json"
+          - "**/words.ts"
+
+"dependencies":
+  - changed-files:
+      - any-glob-to-any-file: ["**/package.json", "**/package-lock.json"]
+
+"game: solo":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "shiritori-online/src/components/SinglePlayer.tsx"
+          - "shiritori-online/src/lib/soloEngine.ts"
+          - "shiritori-online/src/lib/levels.ts"
+          - "shiritori-online/src/lib/devMode.ts"
+
+"game: levels":
+  - changed-files:
+      - any-glob-to-any-file: ["shiritori-online/src/lib/levels.ts"]
+
+"game: dev-tools":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "shiritori-online/src/lib/devMode.ts"
+          - "**/devMode.ts"
+
+"game: multiplayer":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "shiritori-online/src/components/GameRoom.tsx"
+          - "shiritori-online/src/lib/roomService.ts"
+
+"action: ci":
+  - changed-files:
+      - any-glob-to-any-file: [".github/workflows/ci*.yml", ".github/workflows/deps*.yml"]
+
+"action: deploy":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/deploy*.yml"
+          - "**/firebase.json"
+          - "**/database.rules.json"
+          - "**/firestore.rules"
+
+"action: security":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/security.yml"
+          - "scripts/security-check.sh"
+          - ".gitleaks.toml"

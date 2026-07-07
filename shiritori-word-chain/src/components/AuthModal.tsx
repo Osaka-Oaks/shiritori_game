@@ -1,5 +1,16 @@
 import React, { useState } from "react";
-import { X, Mail, Lock, User, Sparkles, AlertCircle, LogIn, ChevronRight, Loader2, Info } from "lucide-react";
+import {
+  X,
+  Mail,
+  Lock,
+  User,
+  Sparkles,
+  AlertCircle,
+  LogIn,
+  ChevronRight,
+  Loader2,
+  Info,
+} from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 interface AuthModalProps {
@@ -37,7 +48,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       console.error(err);
       let errMsg = err.message || "An authentication error occurred.";
       if (err.code === "auth/operation-not-allowed") {
-        errMsg = "Email/Password provider is not yet enabled in your Firebase console. Go to Authentication -> Sign-in Method to enable it, or use Google Login!";
+        errMsg =
+          "Email/Password provider is not yet enabled in your Firebase console. Go to Authentication -> Sign-in Method to enable it, or use Google Login!";
       } else if (err.code === "auth/invalid-credential") {
         errMsg = "Incorrect email or password. Please try again.";
       } else if (err.code === "auth/email-already-in-use") {
@@ -69,10 +81,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
       {/* Container */}
       <div className="glass-card w-full max-w-md rounded-sm p-6 md:p-8 relative overflow-hidden shadow-2xl border border-white/10 flex flex-col max-h-[90vh]">
-        
         {/* Decorative elements */}
         <div className="absolute -right-12 -top-12 w-32 h-32 bg-[#C5A059]/10 rounded-full filter blur-xl opacity-30 pointer-events-none"></div>
-        
+
         {/* Close Button Button */}
         <button
           onClick={onClose}
@@ -99,7 +110,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         <div className="flex bg-white/5 border border-white/10 rounded-sm p-1 mb-6">
           <button
             type="button"
-            onClick={() => { setTab("login"); setError(null); }}
+            onClick={() => {
+              setTab("login");
+              setError(null);
+            }}
             className={`flex-1 py-2 text-[10px] font-bold tracking-widest uppercase transition-all rounded-sm ${
               tab === "login"
                 ? "bg-[#C5A059] text-black shadow-md font-bold"
@@ -110,7 +124,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </button>
           <button
             type="button"
-            onClick={() => { setTab("signup"); setError(null); }}
+            onClick={() => {
+              setTab("signup");
+              setError(null);
+            }}
             className={`flex-1 py-2 text-[10px] font-bold tracking-widest uppercase transition-all rounded-sm ${
               tab === "signup"
                 ? "bg-[#C5A059] text-black shadow-md font-bold"
@@ -133,7 +150,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto pr-1">
           {tab === "signup" && (
             <div className="space-y-1.5">
-              <label className="text-[9px] uppercase tracking-wider text-white/50 font-bold block">Display Name</label>
+              <label className="text-[9px] uppercase tracking-wider text-white/50 font-bold block">
+                Display Name
+              </label>
               <div className="relative">
                 <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#C5A059] opacity-80" />
                 <input
@@ -141,7 +160,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   type="text"
                   placeholder="e.g. Kenji, Sakura..."
                   value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
+                  onChange={e => setDisplayName(e.target.value)}
                   className="w-full bg-white/5 text-white font-light text-xs sm:text-sm py-3 pl-10 pr-4 rounded-sm border border-white/10 focus:outline-none focus:border-[#C5A059] transition-all"
                 />
               </div>
@@ -149,7 +168,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           )}
 
           <div className="space-y-1.5">
-            <label className="text-[9px] uppercase tracking-wider text-white/50 font-bold block">Email Address</label>
+            <label className="text-[9px] uppercase tracking-wider text-white/50 font-bold block">
+              Email Address
+            </label>
             <div className="relative">
               <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#C5A059] opacity-80" />
               <input
@@ -157,14 +178,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 type="email"
                 placeholder="your@email.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 className="w-full bg-white/5 text-white font-light text-xs sm:text-sm py-3 pl-10 pr-4 rounded-sm border border-white/10 focus:outline-none focus:border-[#C5A059] transition-all"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[9px] uppercase tracking-wider text-white/50 font-bold block">Password</label>
+            <label className="text-[9px] uppercase tracking-wider text-white/50 font-bold block">
+              Password
+            </label>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#C5A059] opacity-80" />
               <input
@@ -172,7 +195,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 type="password"
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 className="w-full bg-white/5 text-white font-light text-xs sm:text-sm py-3 pl-10 pr-4 rounded-sm border border-white/10 focus:outline-none focus:border-[#C5A059] transition-all"
               />
             </div>
@@ -197,7 +220,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         {/* Divider */}
         <div className="relative flex items-center justify-center my-5">
           <div className="border-t border-white/10 w-full"></div>
-          <span className="absolute bg-[#050505] px-3 font-mono text-[8px] text-white/30 tracking-widest font-bold uppercase">OR</span>
+          <span className="absolute bg-[#050505] px-3 font-mono text-[8px] text-white/30 tracking-widest font-bold uppercase">
+            OR
+          </span>
         </div>
 
         {/* Social Sign In button */}
@@ -228,11 +253,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <div>
             <p className="font-semibold text-white/60 mb-0.5 leading-none">Console Notice / 注意</p>
             <p className="leading-snug">
-              Google Login works out-of-the-box. To sign up with a custom email, ensure "Email/Password" is enabled in your Firebase console.
+              Google Login works out-of-the-box. To sign up with a custom email, ensure
+              "Email/Password" is enabled in your Firebase console.
             </p>
           </div>
         </div>
-
       </div>
     </div>
   );

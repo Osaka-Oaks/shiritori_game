@@ -27,7 +27,7 @@ export default function ThreeBoard() {
       renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
       renderer.setSize(width, height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      
+
       // Clean up previous canvas if any
       container.innerHTML = "";
       container.appendChild(renderer.domElement);
@@ -46,7 +46,7 @@ export default function ThreeBoard() {
         secondary: 0xe0d5f6,
         accent: 0xa7f3d0,
         board: 0xfdf7ff,
-        tile: 0xffffff
+        tile: 0xffffff,
       };
 
       // Create the Board (Monopoly style 5x5 grid)
@@ -85,11 +85,7 @@ export default function ThreeBoard() {
             );
             const stripeMat = new THREE.MeshPhongMaterial({ color: colors.primary });
             const stripe = new THREE.Mesh(stripeGeom, stripeMat);
-            stripe.position.set(
-              tile.position.x,
-              0.3,
-              tile.position.z + (tileSize / 2 - 0.2)
-            );
+            stripe.position.set(tile.position.x, 0.3, tile.position.z + (tileSize / 2 - 0.2));
             boardGroup.add(stripe);
           }
         }
@@ -105,7 +101,7 @@ export default function ThreeBoard() {
 
       const earGeom = new THREE.ConeGeometry(0.2, 0.4, 4);
       const earMat = new THREE.MeshPhongMaterial({ color: colors.primary });
-      
+
       const leftEar = new THREE.Mesh(earGeom, earMat);
       leftEar.position.set(-0.3, 0.5, 0);
       leftEar.rotation.z = 0.3;

@@ -13,10 +13,10 @@ interface UnityInstance {
   Quit: () => Promise<void>;
 }
 
-export default function UnityGameView({ 
+export default function UnityGameView({
   unityBuildPath = "/unity/Build",
   onGameEvent,
-  onBack 
+  onBack,
 }: UnityGameViewProps) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [loadingProgress, setLoadingProgress] = React.useState(0);
@@ -27,7 +27,7 @@ export default function UnityGameView({
 
   React.useEffect(() => {
     loadUnityGame();
-    
+
     return () => {
       if (unityInstance) {
         unityInstance.Quit().catch(console.error);
@@ -40,21 +40,22 @@ export default function UnityGameView({
       setIsLoading(true);
       setError(null);
 
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.src = `${unityBuildPath}/shiritori.loader.js`;
       script.async = true;
-      
+
       script.onload = () => {
         initializeUnity();
       };
 
       script.onerror = () => {
-        setError("Failed to load Unity WebGL build. Make sure the build files exist in public/unity/Build/");
+        setError(
+          "Failed to load Unity WebGL build. Make sure the build files exist in public/unity/Build/"
+        );
         setIsLoading(false);
       };
 
       document.body.appendChild(script);
-
     } catch (err: any) {
       setError(err.message || "Unknown error loading Unity");
       setIsLoading(false);
@@ -78,16 +79,19 @@ export default function UnityGameView({
       productVersion: "1.0.0",
     };
 
-    window.createUnityInstance(canvasRef.current, config, (progress: number) => {
-      setLoadingProgress(Math.round(progress * 100));
-    }).then((instance: UnityInstance) => {
-      setUnityInstance(instance);
-      setIsLoading(false);
-      console.log("Unity instance loaded successfully");
-    }).catch((err: Error) => {
-      setError(`Unity initialization failed: ${err.message}`);
-      setIsLoading(false);
-    });
+    window
+      .createUnityInstance(canvasRef.current, config, (progress: number) => {
+        setLoadingProgress(Math.round(progress * 100));
+      })
+      .then((instance: UnityInstance) => {
+        setUnityInstance(instance);
+        setIsLoading(false);
+        console.log("Unity instance loaded successfully");
+      })
+      .catch((err: Error) => {
+        setError(`Unity initialization failed: ${err.message}`);
+        setIsLoading(false);
+      });
   };
 
   const sendMessageToUnity = (objectName: string, method: string, value: any) => {
@@ -113,13 +117,21 @@ export default function UnityGameView({
             <h2 className="font-headline font-black text-2xl text-error">Unity Load Error</h2>
             <p className="text-sm text-on-error-container font-body">{error}</p>
           </div>
-          
+
           <div className="bg-surface rounded-2xl p-4 text-left space-y-2 mt-4">
             <p className="text-xs font-label-caps text-primary font-bold">SETUP INSTRUCTIONS:</p>
             <ol className="text-xs text-on-surface-variant font-body space-y-1 list-decimal list-inside">
               <li>Build your Unity project for WebGL</li>
-              <li>Copy build files to: <code className="bg-surface-container px-1 py-0.5 rounded text-primary">public/unity/Build/</code></li>
-              <li>Rename files to match: shiritori.loader.js, shiritori.data, shiritori.framework.js, shiritori.wasm</li>
+              <li>
+                Copy build files to:{" "}
+                <code className="bg-surface-container px-1 py-0.5 rounded text-primary">
+                  public/unity/Build/
+                </code>
+              </li>
+              <li>
+                Rename files to match: shiritori.loader.js, shiritori.data, shiritori.framework.js,
+                shiritori.wasm
+              </li>
               <li>Refresh the page</li>
             </ol>
           </div>
@@ -146,7 +158,7 @@ export default function UnityGameView({
             3D game board with animations
           </p>
         </div>
-        
+
         <div className="flex gap-2">
           <button
             onClick={handleFullscreen}
@@ -155,7 +167,7 @@ export default function UnityGameView({
           >
             <Maximize2 className="w-5 h-5" />
           </button>
-          
+
           {onBack && (
             <button
               onClick={onBack}
@@ -167,7 +179,7 @@ export default function UnityGameView({
         </div>
       </header>
 
-      <div 
+      <div
         ref={containerRef}
         className="relative bg-surface-container rounded-3xl overflow-hidden border-4 border-primary shadow-2xl"
         style={{ aspectRatio: "16/9" }}
@@ -202,7 +214,7 @@ export default function UnityGameView({
           style={{
             width: "100%",
             height: "100%",
-            display: isLoading ? "none" : "block"
+            display: isLoading ? "none" : "block",
           }}
         />
       </div>
@@ -219,8 +231,9 @@ export default function UnityGameView({
 
       <div className="bg-surface-container-highest rounded-2xl p-4 border border-outline-variant/10">
         <p className="text-xs text-on-surface-variant font-body text-center">
-          💡 <strong>Dev Note:</strong> React handles game logic, Firebase handles multiplayer state, 
-          Unity handles visual effects and animations. This keeps the architecture clean and maintainable.
+          💡 <strong>Dev Note:</strong> React handles game logic, Firebase handles multiplayer
+          state, Unity handles visual effects and animations. This keeps the architecture clean and
+          maintainable.
         </p>
       </div>
     </div>

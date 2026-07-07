@@ -1,5 +1,14 @@
 import React from "react";
-import { HelpCircle, ChevronRight, Play, BookOpen, AlertTriangle, Clock, History, AlertCircle } from "lucide-react";
+import {
+  HelpCircle,
+  ChevronRight,
+  Play,
+  BookOpen,
+  AlertTriangle,
+  Clock,
+  History,
+  AlertCircle,
+} from "lucide-react";
 
 interface HowToPlayProps {
   onStartGame: () => void;
@@ -26,7 +35,7 @@ export default function HowToPlay({ onStartGame }: HowToPlayProps) {
           </div>
           <div>
             <h2 className="serif-italic text-xl text-white font-light tracking-wide">
-              しりとりとは? 
+              しりとりとは?
             </h2>
             <span className="text-white/40 block text-[9px] uppercase tracking-wider mt-0.5">
               What is Shiritori?
@@ -35,8 +44,8 @@ export default function HowToPlay({ onStartGame }: HowToPlayProps) {
         </div>
         <p className="text-white/70 font-light mb-5 leading-relaxed text-sm">
           Shiritori (しりとり) is a traditional Japanese word game. The word literally means
-          <strong> "taking the end."</strong> You take the last sound of your opponent's word
-          and use it to start your own!
+          <strong> "taking the end."</strong> You take the last sound of your opponent's word and
+          use it to start your own!
         </p>
         <div className="relative w-full h-44 rounded-sm overflow-hidden bg-black/40 border border-white/5 group">
           <img
@@ -57,7 +66,9 @@ export default function HowToPlay({ onStartGame }: HowToPlayProps) {
             <h2 className="serif-italic text-xl text-white font-light tracking-wide">
               Basic Rules
             </h2>
-            <span className="text-white/40 block text-[9px] uppercase tracking-wider mt-0.5">基本ルール</span>
+            <span className="text-white/40 block text-[9px] uppercase tracking-wider mt-0.5">
+              基本ルール
+            </span>
           </div>
         </div>
 
@@ -70,7 +81,9 @@ export default function HowToPlay({ onStartGame }: HowToPlayProps) {
               </span>
               <p className="text-sm text-white/80 leading-snug">
                 Players take turns saying a word.
-                <span className="text-[11px] text-white/40 block mt-0.5">交代で単語を言います。</span>
+                <span className="text-[11px] text-white/40 block mt-0.5">
+                  交代で単語を言います。
+                </span>
               </p>
             </div>
             <div className="flex items-start gap-4">
@@ -88,7 +101,9 @@ export default function HowToPlay({ onStartGame }: HowToPlayProps) {
               </span>
               <p className="text-sm text-white/80 leading-snug">
                 Start your word with the last kana of the previous word.
-                <span className="text-[11px] text-white/40 block mt-0.5">前の単語の最後の音から始めます。</span>
+                <span className="text-[11px] text-white/40 block mt-0.5">
+                  前の単語の最後の音から始めます。
+                </span>
               </p>
             </div>
             <div className="flex items-start gap-4">
@@ -97,7 +112,9 @@ export default function HowToPlay({ onStartGame }: HowToPlayProps) {
               </span>
               <p className="text-sm text-white/80 leading-snug">
                 No repeating words!
-                <span className="text-[11px] text-white/40 block mt-0.5">一度出た単語は使えません。</span>
+                <span className="text-[11px] text-white/40 block mt-0.5">
+                  一度出た単語は使えません。
+                </span>
               </p>
             </div>
           </div>
@@ -140,30 +157,40 @@ export default function HowToPlay({ onStartGame }: HowToPlayProps) {
             <h2 className="serif-italic text-xl text-white font-light tracking-wide">
               Game Over Conditions
             </h2>
-            <span className="text-white/40 block text-[9px] uppercase tracking-wider mt-0.5">負けの条件</span>
+            <span className="text-white/40 block text-[9px] uppercase tracking-wider mt-0.5">
+              負けの条件
+            </span>
           </div>
         </div>
 
         <ul className="space-y-4">
           <li className="flex items-center gap-4 bg-white/[0.01] border border-white/5 p-4 rounded-sm shadow-sm">
-            <span className="font-serif text-[#C5A059] text-2xl font-light px-2 shrink-0">「ん」</span>
+            <span className="font-serif text-[#C5A059] text-2xl font-light px-2 shrink-0">
+              「ん」
+            </span>
             <div className="font-sans text-sm">
               <p className="font-semibold text-white/90 leading-tight">Ending with 'n' (ん)</p>
-              <p className="text-slate-400 text-xs mt-0.5">No Japanese words start with 'n', so you instantly lose.</p>
+              <p className="text-slate-400 text-xs mt-0.5">
+                No Japanese words start with 'n', so you instantly lose.
+              </p>
             </div>
           </li>
           <li className="flex items-center gap-4 bg-white/[0.01] border border-white/5 p-4 rounded-sm shadow-sm">
             <History className="w-6 h-6 text-red-400/80 shrink-0 ml-2" />
             <div className="font-sans text-sm pl-1">
               <p className="font-semibold text-white/90 leading-tight">Repeating a word</p>
-              <p className="text-slate-400 text-xs mt-0.5">Once a word is placed in the chain during the match, it cannot be reused.</p>
+              <p className="text-slate-400 text-xs mt-0.5">
+                Once a word is placed in the chain during the match, it cannot be reused.
+              </p>
             </div>
           </li>
           <li className="flex items-center gap-4 bg-white/[0.01] border border-white/5 p-4 rounded-sm shadow-sm">
             <Clock className="w-6 h-6 text-red-400/80 shrink-0 ml-2" />
             <div className="font-sans text-sm pl-1">
               <p className="font-semibold text-white/90 leading-tight">Running out of time</p>
-              <p className="text-slate-400 text-xs mt-0.5">You have 30 seconds for each turn. Think, type, and submit fast!</p>
+              <p className="text-slate-400 text-xs mt-0.5">
+                You have 30 seconds for each turn. Think, type, and submit fast!
+              </p>
             </div>
           </li>
         </ul>
@@ -179,7 +206,9 @@ export default function HowToPlay({ onStartGame }: HowToPlayProps) {
             <h2 className="serif-italic text-xl text-white font-light tracking-wide">
               Pro Tips & Edge Cases
             </h2>
-            <span className="text-white/40 block text-[9px] uppercase tracking-wider mt-0.5">特殊なルール</span>
+            <span className="text-white/40 block text-[9px] uppercase tracking-wider mt-0.5">
+              特殊なルール
+            </span>
           </div>
         </div>
 
@@ -190,8 +219,8 @@ export default function HowToPlay({ onStartGame }: HowToPlayProps) {
               Small Kana (ぁ, ぃ, ぅ, ゃ, ゅ, ょ...)
             </h3>
             <p className="text-white/60 text-xs pl-5 mt-1 leading-relaxed">
-              You can choose to start your next word with the combined syllable or just the ending small kana.
-              For example: <strong>Kaisha (かいしゃ)</strong> ends in "ya" or "sha".
+              You can choose to start your next word with the combined syllable or just the ending
+              small kana. For example: <strong>Kaisha (かいしゃ)</strong> ends in "ya" or "sha".
             </p>
           </div>
           <div className="bg-white/[0.01] border border-white/5 rounded-sm p-4">
@@ -200,8 +229,8 @@ export default function HowToPlay({ onStartGame }: HowToPlayProps) {
               Long Vowels (ー)
             </h3>
             <p className="text-white/60 text-xs pl-5 mt-1 leading-relaxed">
-              In Katakana terms, look at the vowel sound preceding the dash.
-              For example: <strong>Takushii (タクシー)</strong> ends with the vowel sound "i".
+              In Katakana terms, look at the vowel sound preceding the dash. For example:{" "}
+              <strong>Takushii (タクシー)</strong> ends with the vowel sound "i".
             </p>
           </div>
         </div>

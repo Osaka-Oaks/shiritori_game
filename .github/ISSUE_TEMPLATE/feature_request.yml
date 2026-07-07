@@ -1,0 +1,30 @@
+name: ✨ Feature request
+description: Suggest an idea or enhancement
+title: "[Feat]: "
+labels: ["type: feature", "status: triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Gameplay
+        - Dictionary / learning
+        - Multiplayer / realtime
+        - UI / UX
+        - shiritori_flutter
+        - CI/CD / tooling
+        - Infrastructure (Terraform / OpenTofu)
+        - Other

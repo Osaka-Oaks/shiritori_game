@@ -2,7 +2,7 @@
 
 A bilingual (JP/EN) **two-player Shiritori** word-chain game you can play across
 two different phones or computers in real time. Built as a mobile-first **PWA**
-(installable on iPhone via *Add to Home Screen*) using **React + TypeScript +
+(installable on iPhone via _Add to Home Screen_) using **React + TypeScript +
 Vite** and **Firebase Realtime Database** for live multiplayer.
 
 This game is already wired to your Firebase project **`shiritori-game-ccaae`**
@@ -94,13 +94,13 @@ games/
     settings:     { smallKanaLenient, dakutenLenient }
 ```
 
-- Both clients **subscribe** to their room node ([`subscribeRoom`](src/lib/roomService.ts))
+- Both clients **subscribe** to their room node ([`subscribeRoom`](src/lib/game/room-service.ts))
   and re-render on every change.
 - Moves, joins, timeouts, and rematches are committed with **transactions** so the
   two devices can't clobber each other (e.g. only the player whose turn it is can
   submit; either device can safely finalize an expired timer).
 - All game rules (last-kana chaining, ん detection, small-kana / dakuten house
-  rules, repeats) live in pure, testable logic: [`src/lib/shiritori.ts`](src/lib/shiritori.ts).
+  rules, repeats) live in pure, testable logic: [`src/lib/game/shiritori.ts`](src/lib/game/shiritori.ts).
 
 ### Database security rules
 
@@ -108,10 +108,16 @@ games/
 signed in anonymously on load) can read/write game data:
 
 ```json
-{ "rules": { "games": { "$gameId": {
-  ".read": "auth != null",
-  ".write": "auth != null"
-} } } }
+{
+  "rules": {
+    "games": {
+      "$gameId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    }
+  }
+}
 ```
 
 This is fine for a casual friends-and-family game. To harden it (e.g. only let

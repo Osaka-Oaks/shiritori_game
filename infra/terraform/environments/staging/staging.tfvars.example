@@ -1,0 +1,71 @@
+# Staging Environment Configuration
+# Copy this file to staging.tfvars and customize
+
+project_id  = "shiritori-game-ccaae-staging"
+region      = "us-central1"
+environment = "staging"
+
+# Cloud Run Configuration (medium resources)
+cloud_run_config = {
+  cpu_limit       = "1000m"
+  memory_limit    = "512Mi"
+  min_instances   = 0
+  max_instances   = 5
+  timeout_seconds = 300
+}
+
+# Firestore Configuration
+firestore_config = {
+  location_id = "us-central1"
+  type        = "FIRESTORE_NATIVE"
+}
+
+# Storage Configuration
+storage_config = {
+  location      = "US"
+  storage_class = "STANDARD"
+  force_destroy = false
+}
+
+# Monitoring Configuration
+monitoring_config = {
+  uptime_check_period  = "60s"
+  uptime_check_timeout = "10s"
+  alert_auto_close     = "1800s"
+}
+
+# Scheduler Jobs
+scheduler_jobs = {
+  cleanup_games = {
+    description = "Clean up games older than 30 days"
+    schedule    = "0 2 * * *"  # Daily at 2 AM
+    time_zone   = "America/New_York"
+    endpoint    = "/api/cleanup"
+  }
+  update_leaderboard = {
+    description = "Update leaderboard rankings"
+    schedule    = "0 * * * *"  # Every hour
+    time_zone   = "America/New_York"
+    endpoint    = "/api/leaderboard/update"
+  }
+}
+
+# Labels
+labels = {
+  project     = "shiritori-game"
+  environment = "staging"
+  managed_by  = "terraform"
+}
+
+# Feature Flags
+features = {
+  cloud_run       = true
+  cloud_functions = false
+  cloud_scheduler = true
+  monitoring      = true
+  custom_domain   = false
+  cdn             = true
+}
+
+# Budget
+budget_amount = 25  # Medium budget for staging

@@ -88,7 +88,7 @@ export default function Home() {
         <span>Your name</span>
         <input
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
           placeholder="e.g. Jarrel"
           maxLength={20}
         />
@@ -104,7 +104,7 @@ export default function Home() {
         <span>Room code</span>
         <input
           value={joinCode}
-          onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+          onChange={e => setJoinCode(e.target.value.toUpperCase())}
           placeholder="ABCD"
           maxLength={4}
           className="code-input"

@@ -1,0 +1,8 @@
+# Uncomment and set backend for team state. Example: GCS
+#
+# terraform {
+#   backend "gcs" {
+#     bucket = "shiritori-game-tfstate"
+#     prefix = "terraform/dev"
+#   }
+# }

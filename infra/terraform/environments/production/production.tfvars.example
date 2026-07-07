@@ -1,0 +1,99 @@
+# Production Environment Configuration
+# Copy this file to production.tfvars and customize
+
+project_id  = "shiritori-game-ccaae"
+region      = "us-central1"
+environment = "production"
+
+# Cloud Run Configuration (full resources)
+cloud_run_config = {
+  cpu_limit       = "2000m"
+  memory_limit    = "1Gi"
+  min_instances   = 1  # Keep 1 warm
+  max_instances   = 20
+  timeout_seconds = 300
+}
+
+# Firestore Configuration
+firestore_config = {
+  location_id = "us-central1"
+  type        = "FIRESTORE_NATIVE"
+}
+
+# Storage Configuration
+storage_config = {
+  location      = "US"
+  storage_class = "STANDARD"
+  force_destroy = false  # Never destroy in production
+}
+
+# Monitoring Configuration
+monitoring_config = {
+  uptime_check_period  = "60s"
+  uptime_check_timeout = "10s"
+  alert_auto_close     = "1800s"
+}
+
+# Scheduler Jobs
+scheduler_jobs = {
+  cleanup_games = {
+    description = "Clean up games older than 30 days"
+    schedule    = "0 2 * * *"  # Daily at 2 AM
+    time_zone   = "America/New_York"
+    endpoint    = "/api/cleanup"
+  }
+  update_leaderboard = {
+    description = "Update leaderboard rankings"
+    schedule    = "0 * * * *"  # Every hour
+    time_zone   = "America/New_York"
+    endpoint    = "/api/leaderboard/update"
+  }
+  analytics_report = {
+    description = "Generate daily analytics report"
+    schedule    = "0 0 * * *"  # Daily at midnight
+    time_zone   = "America/New_York"
+    endpoint    = "/api/analytics/report"
+  }
+}
+
+# Labels
+labels = {
+  project     = "shiritori-game"
+  environment = "production"
+  managed_by  = "terraform"
+  cost_center = "engineering"
+}
+
+# Notification Channels (add your channel IDs)
+notification_channels = [
+  # "projects/shiritori-game-ccaae/notificationChannels/12345",
+]
+
+# Custom Domain (optional)
+domain = ""  # e.g., "shiritorigame.com"
+
+# Feature Flags (all enabled in production)
+features = {
+  cloud_run       = true
+  cloud_functions = false
+  cloud_scheduler = true
+  monitoring      = true
+  custom_domain   = false
+  cdn             = true
+}
+
+# CORS Configuration (restrict in production)
+cors_origins = [
+  "https://shiritori-game-ccaae.web.app",
+  "https://shiritori-game-ccaae.firebaseapp.com"
+]
+
+# Retention Settings
+retention_days     = 90
+log_retention_days = 30
+enable_backups     = true
+backup_schedule    = "0 3 * * *"  # Daily at 3 AM
+
+# Budget
+budget_amount = 50  # Full budget for production
+budget_alert_thresholds = [50, 75, 90, 100]

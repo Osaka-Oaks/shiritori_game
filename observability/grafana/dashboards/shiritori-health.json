@@ -1,0 +1,68 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "elasticsearch", "uid": "Elasticsearch" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            { "options": { "0": { "color": "red", "text": "DOWN" } }, "type": "value" },
+            { "options": { "1": { "color": "green", "text": "UP" } }, "type": "value" }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        }
+      },
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "title": "Uptime",
+      "type": "stat",
+      "targets": [{ "query": "metrics.uptime_gauge:1", "refId": "A" }]
+    },
+    {
+      "datasource": { "type": "elasticsearch", "uid": "Elasticsearch" },
+      "fieldConfig": { "defaults": { "unit": "ms", "color": { "mode": "palette-classic" } } },
+      "gridPos": { "h": 8, "w": 12, "x": 6, "y": 0 },
+      "id": 2,
+      "title": "Response time (homepage)",
+      "type": "timeseries",
+      "targets": [{ "query": "metrics.homepage_response_ms:1", "refId": "A" }]
+    },
+    {
+      "datasource": { "type": "elasticsearch", "uid": "Elasticsearch" },
+      "gridPos": { "h": 8, "w": 6, "x": 0, "y": 6 },
+      "id": 3,
+      "title": "Health JSON latency",
+      "type": "timeseries",
+      "targets": [{ "query": "metrics.health_json_response_ms:1", "refId": "A" }]
+    },
+    {
+      "datasource": { "type": "elasticsearch", "uid": "Elasticsearch" },
+      "gridPos": { "h": 8, "w": 12, "x": 6, "y": 8 },
+      "id": 4,
+      "title": "Recent pulse events",
+      "type": "logs",
+      "targets": [{ "query": "*", "refId": "A" }]
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": ["shiritori", "health", "uptime"],
+  "templating": { "list": [] },
+  "time": { "from": "now-6h", "to": "now" },
+  "title": "Shiritori — Health Pulse",
+  "uid": "shiritori-health",
+  "version": 1
+}

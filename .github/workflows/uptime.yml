@@ -1,0 +1,115 @@
+name: Uptime monitor
+
+# Every 5 minutes: health pulse + Datadog/Grafana/ELK metrics + incident auto-resolve.
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  LIVE_URL: https://shiritori-game-ccaae.web.app
+  FIREBASE_PROJECT: shiritori-game-ccaae
+  INCIDENT_TITLE: "🚨 Uptime: site is down"
+  DEPLOY_ENV: production
+
+jobs:
+  health:
+    name: Health pulse
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run health pulse
+        id: pulse
+        run: |
+          chmod +x scripts/health-pulse.sh scripts/push-observability-metrics.sh
+          bash scripts/health-pulse.sh "$LIVE_URL" && echo "status=up" >> "$GITHUB_OUTPUT" || echo "status=down" >> "$GITHUB_OUTPUT"
+        continue-on-error: true
+
+      - name: Push metrics (Datadog / Grafana / ELK)
+        if: always()
+        env:
+          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+          DATADOG_SITE: ${{ secrets.DATADOG_SITE }}
+          GRAFANA_CLOUD_API_KEY: ${{ secrets.GRAFANA_CLOUD_API_KEY }}
+          GRAFANA_CLOUD_STACK_URL: ${{ secrets.GRAFANA_CLOUD_STACK_URL }}
+          ELASTICSEARCH_URL: ${{ secrets.ELASTICSEARCH_URL }}
+        run: bash scripts/push-observability-metrics.sh .github/health-pulse.json || true
+
+      - name: Upload pulse artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-pulse-${{ github.run_id }}
+          path: .github/health-pulse.json
+          retention-days: 7
+
+      - name: Open or update incident
+        if: steps.pulse.outputs.status == 'down'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let detail = 'Health pulse failed';
+            try {
+              const j = JSON.parse(fs.readFileSync('.github/health-pulse.json', 'utf8'));
+              detail = (j.failures || []).join('\n') || detail;
+            } catch (_) {}
+            const title = "${{ env.INCIDENT_TITLE }}";
+            const { owner, repo } = context.repo;
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner, repo, state: "open", labels: "action: uptime",
+            });
+            const existing = issues.find(i => i.title === title);
+            const body = `**Uptime check failed** — ${new Date().toISOString()}\n\n\`\`\`\n${detail}\`\`\`\n\nURL: ${{ env.LIVE_URL }}`;
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: existing.number, body: `Still failing:\n\n${body}`,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner, repo, title, body,
+                labels: ["type: bug", "priority: high", "action: uptime"],
+              });
+            }
+
+      - name: Resolve incident when recovered
+        if: steps.pulse.outputs.status == 'up'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let rt = 'n/a';
+            try {
+              const j = JSON.parse(fs.readFileSync('.github/health-pulse.json', 'utf8'));
+              rt = j.metrics?.homepage_response_ms + 'ms';
+            } catch (_) {}
+            const title = "${{ env.INCIDENT_TITLE }}";
+            const { owner, repo } = context.repo;
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner, repo, state: "open", labels: "action: uptime",
+            });
+            const incident = issues.find(i => i.title === title);
+            if (!incident) return;
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: incident.number,
+              body: `✅ **Recovered** at ${new Date().toISOString()}\n\nResponse: ${rt}\nAll endpoints healthy.`,
+            });
+            await github.rest.issues.update({
+              owner, repo, issue_number: incident.number, state: "closed",
+            });
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Health pulse — ${{ steps.pulse.outputs.status }}" >> $GITHUB_STEP_SUMMARY
+          [ -f .github/health-pulse.json ] && cat .github/health-pulse.json >> $GITHUB_STEP_SUMMARY
+
+      - name: Fail workflow if down
+        if: steps.pulse.outputs.status == 'down'
+        run: exit 1

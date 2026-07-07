@@ -1,0 +1,111 @@
+# Terraform/OpenTofu Variables - Example Configuration
+# Copy this file to terraform.tfvars and customize for your environment
+
+# Project Configuration
+project_id  = "shiritori-game-ccaae"
+region      = "us-central1"
+environment = "production"
+
+# Cloud Run Configuration
+cloud_run_config = {
+  cpu_limit       = "1000m"
+  memory_limit    = "512Mi"
+  min_instances   = 0
+  max_instances   = 10
+  timeout_seconds = 300
+}
+
+# Firestore Configuration
+firestore_config = {
+  location_id = "us-central1"
+  type        = "FIRESTORE_NATIVE"
+}
+
+# Storage Configuration
+storage_config = {
+  location      = "US"
+  storage_class = "STANDARD"
+  force_destroy = false
+}
+
+# Monitoring Configuration
+monitoring_config = {
+  uptime_check_period  = "60s"
+  uptime_check_timeout = "10s"
+  alert_auto_close     = "1800s"
+}
+
+# Scheduler Jobs Configuration
+scheduler_jobs = {
+  cleanup_games = {
+    description = "Clean up games older than 30 days"
+    schedule    = "0 2 * * *"  # Daily at 2 AM
+    time_zone   = "America/New_York"
+    endpoint    = "/api/cleanup"
+  }
+  update_leaderboard = {
+    description = "Update leaderboard rankings"
+    schedule    = "0 * * * *"  # Every hour
+    time_zone   = "America/New_York"
+    endpoint    = "/api/leaderboard/update"
+  }
+  analytics_report = {
+    description = "Generate daily analytics report"
+    schedule    = "0 0 * * *"  # Daily at midnight
+    time_zone   = "America/New_York"
+    endpoint    = "/api/analytics/report"
+  }
+}
+
+# Common Labels
+labels = {
+  project    = "shiritori-game"
+  managed_by = "terraform"
+  repository = "github"
+  team       = "development"
+}
+
+# Notification Channels (Add your channel IDs)
+notification_channels = [
+  # "projects/shiritori-game-ccaae/notificationChannels/12345",
+]
+
+# Custom Domain (Optional)
+domain = ""  # e.g., "shiritorigame.com"
+
+# Feature Flags
+enable_cdn        = true
+enable_ssl        = true
+enable_backups    = true
+enable_monitoring = true
+enable_logging    = true
+
+# CORS Configuration
+cors_origins = ["*"]  # Restrict in production
+
+# Retention Settings
+retention_days      = 90
+log_retention_days  = 30
+
+# Backup Schedule
+backup_schedule = "0 3 * * *"  # Daily at 3 AM
+
+# Budget Configuration
+budget_amount = 50  # USD per month
+budget_alert_thresholds = [50, 75, 90, 100]
+
+# Feature Flags
+features = {
+  cloud_run       = true
+  cloud_functions = false
+  cloud_scheduler = true
+  monitoring      = true
+  custom_domain   = false
+  cdn             = true
+}
+
+# Additional Tags
+tags = {
+  cost_center = "engineering"
+  owner       = "devops-team"
+}

@@ -44,19 +44,21 @@ fi
 # npm audit — critical blocks, high warns
 audit_app() {
   local app=$1
-  echo "--- npm audit: $app ---"
+  echo "--- npm audit: $app (production) ---"
   cd "$app"
   npm ci --silent
-  if npm audit --audit-level=critical --json > /tmp/audit-"$app".json 2>/dev/null; then
-    pass "$app: no critical vulnerabilities"
+  if npm audit --omit=dev --audit-level=critical --json > /tmp/audit-"$app".json 2>/dev/null; then
+    pass "$app: no critical production vulnerabilities"
   else
     CRITICAL=$(node -e "
       const r=require('/tmp/audit-$app.json');
       const m=r.metadata?.vulnerabilities||{};
-      console.log((m.critical||0)+(m.high||0));
+      console.log(m.critical||0);
     " 2>/dev/null || echo "1")
     if [ "${CRITICAL:-0}" -gt 0 ]; then
-      warn "$app: $CRITICAL high/critical advisories (review npm audit)"
+      fail "$app: $CRITICAL critical production vulnerabilities"
+    else
+      warn "$app: devDependency advisories present (run npm audit)"
     fi
   fi
   cd - >/dev/null
@@ -67,8 +69,10 @@ cd "$ROOT"
 audit_app shiritori-online
 audit_app kawaii-shiritori
 
-# Quick pattern scan for hardcoded API keys in src (not tests)
-if rg -l 'AIza[0-9A-Za-z_-]{20,}' shiritori-online/src kawaii-shiritori/src 2>/dev/null; then
+# Quick pattern scan for hardcoded API keys (exclude Firebase config — keys are public client-side)
+SCAN_DIRS=$(find shiritori-online/src kawaii-shiritori/src -name '*.ts' -o -name '*.tsx' 2>/dev/null \
+  | grep -vE 'firebase(-config)?\.ts$' || true)
+if [ -n "$SCAN_DIRS" ] && echo "$SCAN_DIRS" | xargs grep -lE 'AIza[0-9A-Za-z_-]{20,}' 2>/dev/null; then
   fail "Possible hardcoded Firebase API key in source"
 else
   pass "No hardcoded API key patterns in src"

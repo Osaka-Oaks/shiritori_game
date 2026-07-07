@@ -1,0 +1,45 @@
+global:
+  scrape_interval: 30s
+  scrape_timeout: 15s
+
+scrape_configs:
+  # Synthetic probes of the live app via the Blackbox exporter.
+  - job_name: blackbox-http
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          - https://shiritori-game-ccaae.web.app/
+        labels:
+          app: shiritori-online
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115
+
+  # RTDB reachability (401 = up & secured — treated as healthy by http_up_or_401).
+  - job_name: blackbox-rtdb
+    metrics_path: /probe
+    params:
+      module: [http_up_or_401]
+    static_configs:
+      - targets:
+          - https://shiritori-game-ccaae-default-rtdb.firebaseio.com/.json
+        labels:
+          app: rtdb
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115
+
+  # Blackbox exporter's own health.
+  - job_name: blackbox-exporter
+    static_configs:
+      - targets: ["blackbox:9115"]

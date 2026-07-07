@@ -1,27 +1,20 @@
-export type AppView = 
-  | "HOME" 
-  | "AVATAR_PICKER" 
-  | "GAME_ROOM" 
-  | "HISTORY" 
-  | "LIBRARY" 
-  | "LEADERBOARD" 
-  | "RULES"
-  | "AUTH";
+export type AppView =
+  "HOME" | "AVATAR_PICKER" | "GAME_ROOM" | "HISTORY" | "LIBRARY" | "LEADERBOARD" | "RULES" | "AUTH";
 
 export interface AppCustomizations {
   accentColor: string;
-  gridStyle: 'dense' | 'sparse' | 'dot' | 'none';
-  font: 'Space Grotesk' | 'Playfair Display' | 'JetBrains Mono';
-  headingStyle: 'uppercase' | 'normal';
-  layoutDensity: 'compact' | 'standard' | 'spacious';
+  gridStyle: "dense" | "sparse" | "dot" | "none";
+  font: "Space Grotesk" | "Playfair Display" | "JetBrains Mono";
+  headingStyle: "uppercase" | "normal";
+  layoutDensity: "compact" | "standard" | "spacious";
 }
 
 export const DEFAULT_CUSTOMIZATIONS: AppCustomizations = {
-  accentColor: '#f27d26',
-  gridStyle: 'sparse',
-  font: 'Space Grotesk',
-  headingStyle: 'uppercase',
-  layoutDensity: 'standard'
+  accentColor: "#f27d26",
+  gridStyle: "sparse",
+  font: "Space Grotesk",
+  headingStyle: "uppercase",
+  layoutDensity: "standard",
 };
 
 export interface PlayedWord {

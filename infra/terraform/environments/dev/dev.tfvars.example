@@ -1,0 +1,65 @@
+# Development Environment Configuration
+# Copy this file to dev.tfvars and customize
+
+project_id  = "shiritori-game-ccaae-dev"
+region      = "us-central1"
+environment = "dev"
+
+# Cloud Run Configuration (smaller for dev)
+cloud_run_config = {
+  cpu_limit       = "500m"
+  memory_limit    = "256Mi"
+  min_instances   = 0
+  max_instances   = 3
+  timeout_seconds = 300
+}
+
+# Firestore Configuration
+firestore_config = {
+  location_id = "us-central1"
+  type        = "FIRESTORE_NATIVE"
+}
+
+# Storage Configuration
+storage_config = {
+  location      = "US"
+  storage_class = "STANDARD"
+  force_destroy = true  # Allow destroy in dev
+}
+
+# Monitoring Configuration
+monitoring_config = {
+  uptime_check_period  = "300s"  # Less frequent in dev
+  uptime_check_timeout = "10s"
+  alert_auto_close     = "1800s"
+}
+
+# Scheduler Jobs (less frequent in dev)
+scheduler_jobs = {
+  cleanup_games = {
+    description = "Clean up old games (30+ days)"
+    schedule    = "0 3 * * *"  # Daily at 3 AM
+    time_zone   = "America/New_York"
+    endpoint    = "/api/cleanup"
+  }
+}
+
+# Labels
+labels = {
+  project     = "shiritori-game"
+  environment = "dev"
+  managed_by  = "terraform"
+}
+
+# Feature Flags (fewer features in dev)
+features = {
+  cloud_run       = true
+  cloud_functions = false
+  cloud_scheduler = false  # Disable in dev
+  monitoring      = false  # Disable in dev
+  custom_domain   = false
+  cdn             = false
+}
+
+# Budget
+budget_amount = 10  # Lower budget for dev

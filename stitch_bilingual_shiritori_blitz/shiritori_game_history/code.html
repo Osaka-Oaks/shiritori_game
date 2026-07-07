@@ -1,331 +1,515 @@
-<!DOCTYPE html><html class="light" lang="en"><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
-<title>Shiritori! - Game History</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "surface-container-high": "#eee4ff",
-                        "outline-variant": "#d9c0c5",
-                        "tertiary-fixed": "#ffe088",
-                        "tertiary": "#735c00",
-                        "primary-fixed-dim": "#ffb1c6",
-                        "on-primary": "#ffffff",
-                        "on-background": "#1e1830",
-                        "surface-tint": "#98415e",
-                        "primary": "#98415e",
-                        "outline": "#867276",
-                        "primary-container": "#ff94b4",
-                        "surface": "#fdf7ff",
-                        "on-secondary-container": "#007260",
-                        "surface-container-highest": "#e9ddff",
-                        "background": "#fdf7ff",
-                        "secondary-fixed": "#92f5dc",
-                        "tertiary-fixed-dim": "#e7c353",
-                        "on-primary-container": "#7a2846",
-                        "on-surface": "#1e1830",
-                        "inverse-surface": "#332c46",
-                        "surface-variant": "#e9ddff",
-                        "on-secondary-fixed-variant": "#005143",
-                        "surface-bright": "#fdf7ff",
-                        "on-tertiary-fixed": "#241a00",
-                        "error": "#ba1a1a",
-                        "on-primary-fixed": "#3f001b",
-                        "error-container": "#ffdad6",
-                        "on-error-container": "#93000a",
-                        "surface-container": "#f3eaff",
-                        "on-tertiary": "#ffffff",
-                        "on-secondary-fixed": "#00201a",
-                        "inverse-on-surface": "#f6eeff",
-                        "on-tertiary-container": "#564400",
-                        "surface-container-low": "#f8f1ff",
-                        "tertiary-container": "#d4b142",
-                        "on-surface-variant": "#544246",
-                        "on-primary-fixed-variant": "#7b2947",
-                        "secondary-fixed-dim": "#76d8c0",
-                        "inverse-primary": "#ffb1c6",
-                        "primary-fixed": "#ffd9e1",
-                        "on-secondary": "#ffffff",
-                        "surface-container-lowest": "#ffffff",
-                        "on-tertiary-fixed-variant": "#574500",
-                        "surface-dim": "#e0d5f6",
-                        "on-error": "#ffffff",
-                        "secondary": "#006b5a",
-                        "secondary-container": "#92f5dc"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "unit": "8px",
-                        "gutter": "16px",
-                        "container-margin": "24px",
-                        "bubble-padding": "16px"
-                    },
-                    "fontFamily": {
-                        "headline-lg": ["Plus Jakarta Sans"],
-                        "label-caps": ["Quicksand"],
-                        "display-game": ["Plus Jakarta Sans"],
-                        "body-lg": ["Quicksand"],
-                        "headline-lg-mobile": ["Plus Jakarta Sans"],
-                        "body-md": ["Quicksand"]
-                    },
-                    "fontSize": {
-                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
-                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
-                        "display-game": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
-                        "body-lg": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
-                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
-                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "500" }]
-                    }
-                }
-            }
-        }
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+      name="viewport"
+    />
+    <title>Shiritori! - Game History</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-high": "#eee4ff",
+              "outline-variant": "#d9c0c5",
+              "tertiary-fixed": "#ffe088",
+              tertiary: "#735c00",
+              "primary-fixed-dim": "#ffb1c6",
+              "on-primary": "#ffffff",
+              "on-background": "#1e1830",
+              "surface-tint": "#98415e",
+              primary: "#98415e",
+              outline: "#867276",
+              "primary-container": "#ff94b4",
+              surface: "#fdf7ff",
+              "on-secondary-container": "#007260",
+              "surface-container-highest": "#e9ddff",
+              background: "#fdf7ff",
+              "secondary-fixed": "#92f5dc",
+              "tertiary-fixed-dim": "#e7c353",
+              "on-primary-container": "#7a2846",
+              "on-surface": "#1e1830",
+              "inverse-surface": "#332c46",
+              "surface-variant": "#e9ddff",
+              "on-secondary-fixed-variant": "#005143",
+              "surface-bright": "#fdf7ff",
+              "on-tertiary-fixed": "#241a00",
+              error: "#ba1a1a",
+              "on-primary-fixed": "#3f001b",
+              "error-container": "#ffdad6",
+              "on-error-container": "#93000a",
+              "surface-container": "#f3eaff",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed": "#00201a",
+              "inverse-on-surface": "#f6eeff",
+              "on-tertiary-container": "#564400",
+              "surface-container-low": "#f8f1ff",
+              "tertiary-container": "#d4b142",
+              "on-surface-variant": "#544246",
+              "on-primary-fixed-variant": "#7b2947",
+              "secondary-fixed-dim": "#76d8c0",
+              "inverse-primary": "#ffb1c6",
+              "primary-fixed": "#ffd9e1",
+              "on-secondary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#574500",
+              "surface-dim": "#e0d5f6",
+              "on-error": "#ffffff",
+              secondary: "#006b5a",
+              "secondary-container": "#92f5dc",
+            },
+            borderRadius: {
+              DEFAULT: "1rem",
+              lg: "2rem",
+              xl: "3rem",
+              full: "9999px",
+            },
+            spacing: {
+              unit: "8px",
+              gutter: "16px",
+              "container-margin": "24px",
+              "bubble-padding": "16px",
+            },
+            fontFamily: {
+              "headline-lg": ["Plus Jakarta Sans"],
+              "label-caps": ["Quicksand"],
+              "display-game": ["Plus Jakarta Sans"],
+              "body-lg": ["Quicksand"],
+              "headline-lg-mobile": ["Plus Jakarta Sans"],
+              "body-md": ["Quicksand"],
+            },
+            fontSize: {
+              "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "700" }],
+              "label-caps": [
+                "12px",
+                { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" },
+              ],
+              "display-game": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "800" },
+              ],
+              "body-lg": ["20px", { lineHeight: "28px", fontWeight: "500" }],
+              "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "700" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "500" }],
+            },
+          },
+        },
+      };
     </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .icon-fill {
-            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body {
-            background-color: theme('colors.background');
-            color: theme('colors.on-background');
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        /* Bubbly card entrance animation */
-        @keyframes popIn {
-            0% { transform: scale(0.95) translateY(10px); opacity: 0; }
-            70% { transform: scale(1.02) translateY(-2px); opacity: 1; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-        .history-card {
-            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            opacity: 0;
-        }
-        .history-card:nth-child(1) { animation-delay: 0.1s; }
-        .history-card:nth-child(2) { animation-delay: 0.2s; }
-        .history-card:nth-child(3) { animation-delay: 0.3s; }
-        .history-card:nth-child(4) { animation-delay: 0.4s; }
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .icon-fill {
+        font-variation-settings:
+          "FILL" 1,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      body {
+        background-color: theme("colors.background");
+        color: theme("colors.on-background");
+        -webkit-tap-highlight-color: transparent;
+      }
 
-        /* Tactile press effect */
-        .tactile-press {
-            transition: all 0.15s ease;
+      /* Bubbly card entrance animation */
+      @keyframes popIn {
+        0% {
+          transform: scale(0.95) translateY(10px);
+          opacity: 0;
         }
-        .tactile-press:active {
-            transform: translateY(2px) scale(0.98);
-            box-shadow: 0 1px 0 0 rgba(152,65,94,0.2) !important;
+        70% {
+          transform: scale(1.02) translateY(-2px);
+          opacity: 1;
         }
-        
-        /* Hide scrollbar but keep functionality */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
+        100% {
+          transform: scale(1) translateY(0);
+          opacity: 1;
         }
-        .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
+      }
+      .history-card {
+        animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        opacity: 0;
+      }
+      .history-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .history-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .history-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .history-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+
+      /* Tactile press effect */
+      .tactile-press {
+        transition: all 0.15s ease;
+      }
+      .tactile-press:active {
+        transform: translateY(2px) scale(0.98);
+        box-shadow: 0 1px 0 0 rgba(152, 65, 94, 0.2) !important;
+      }
+
+      /* Hide scrollbar but keep functionality */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+      }
     </style>
-</head>
-<body class="font-body-md text-body-md flex flex-col min-h-screen relative pb-24 pt-20">
-<!-- TopAppBar -->
-<header class="fixed top-0 w-full z-40 bg-surface dark:bg-surface-dim shadow-[0_4px_0_0_rgba(152,65,94,0.1)] flex justify-between items-center px-container-margin py-unit">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden border-2 border-primary/20">
-<img alt="Cute Neko Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNjkozUuoxu5L1ez64GYNKXnPeU36EaEXoLd8NxDEcZgkPhvOg-oplyxBCAIumUE3BmOyc2uXjbfORZCyZEyaUki67i2UqUPRInSCNfJ50y24n1HOdg7Rgf8qt-wf-pDU8WYz4lZAC9d7Gup1jMUQQTOM7vvsszs5lfXZX9EYv2ru_lhn6TbzmNQcTahKLbF950Iu7_fknWvAm1r6mzaOEu2iiRO3WUNm-Yp5vSay1PKww-SJ-VmicY6nHT19zG-yphPcrKqsS_vu8">
-</div>
-</div>
-<h1 class="font-display-game text-headline-lg-mobile text-primary dark:text-primary-fixed translate-y-0.5 transition-all">Shiritori!</h1>
-<button class="w-10 h-10 rounded-full flex items-center justify-center text-primary dark:text-primary-fixed hover:bg-primary-container/20 transition-colors">
-<span class="material-symbols-outlined text-[28px]">help</span>
-</button>
-</header>
-<!-- Main Content Canvas -->
-<main class="flex-1 px-container-margin w-full max-w-2xl mx-auto flex flex-col gap-gutter">
-<!-- Summary Stats Section -->
-<section class="grid grid-cols-3 gap-unit mt-unit mb-unit">
-<!-- Stat Card 1 -->
-<div class="bg-primary-container rounded-lg p-unit flex flex-col items-center justify-center shadow-[0_2px_0_0_#7a2846] relative overflow-hidden">
-<span class="material-symbols-outlined text-on-primary-container opacity-20 absolute -right-2 -bottom-2 text-[48px] pointer-events-none icon-fill">emoji_events</span>
-<span class="font-label-caps text-label-caps text-on-primary-container mb-1 z-10">Total Wins</span>
-<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary-container z-10">42</span>
-</div>
-<!-- Stat Card 2 -->
-<div class="bg-secondary-container rounded-lg p-unit flex flex-col items-center justify-center shadow-[0_2px_0_0_#007260] relative overflow-hidden">
-<span class="material-symbols-outlined text-on-secondary-container opacity-20 absolute -right-2 -bottom-2 text-[48px] pointer-events-none icon-fill">local_fire_department</span>
-<span class="font-label-caps text-label-caps text-on-secondary-container mb-1 z-10">Win Streak</span>
-<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-secondary-container z-10">5</span>
-</div>
-<!-- Stat Card 3 -->
-<div class="bg-tertiary-fixed rounded-lg p-unit flex flex-col items-center justify-center shadow-[0_2px_0_0_#735c00] relative overflow-hidden">
-<span class="material-symbols-outlined text-on-tertiary-container opacity-20 absolute -right-2 -bottom-2 text-[48px] pointer-events-none icon-fill">chat_bubble</span>
-<span class="font-label-caps text-label-caps text-on-tertiary-container mb-1 z-10">Words</span>
-<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-tertiary-container z-10">890</span>
-</div>
-</section>
-<!-- History Feed Header -->
-<div class="flex items-center justify-between mt-2">
-<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background">Recent Matches</h2>
-<div class="flex items-center gap-1 text-primary cursor-pointer hover:opacity-80 transition-opacity">
-<span class="font-label-caps text-label-caps">Filter</span>
-<span class="material-symbols-outlined text-[18px]">filter_list</span>
-</div>
-</div>
-<!-- History List -->
-<div class="flex flex-col gap-gutter">
-<!-- Game Card 1: Win -->
-<article class="history-card bg-surface-container-lowest rounded-xl p-bubble-padding shadow-[0_4px_12px_rgba(152,65,94,0.08)] border border-surface-variant relative overflow-hidden tactile-press cursor-pointer">
-<!-- Status indicator strip -->
-<div class="absolute left-0 top-0 bottom-0 w-2 bg-secondary rounded-l-xl"></div>
-<div class="flex justify-between items-start mb-3 pl-2">
-<div class="flex items-center gap-3">
-<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center overflow-hidden border-2 border-secondary/20">
-<img alt="Inu Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Oe6l0j2tigOHutbZUUor-NLiogEZ0D_9vaTvYAmYyokvnAqPov2m1h1tVAj5WWK87Lo89hmo1WpTemg499PvfShpEOSNusLzCkGRCf_1ScAgosC16WK3dTgXBIWASHLt1av1edCKqag-IH9VWnRPKLL4oGRABL9B7zLHRk9IVzxNjeyzVWt7Ex7-1GdJZVwNbiAacnTucSwctpxmWfvf8e6aexnsYVkcqQR4EdEM4eajEn7rFYbUsH5rZghYHDV_5YyyZtACECb4">
-</div>
-<div>
-<h3 class="font-body-lg text-body-lg text-on-background">Inu Sensei</h3>
-<p class="font-label-caps text-label-caps text-on-surface-variant flex items-center gap-1">
-<span class="material-symbols-outlined text-[14px]">calendar_today</span>
-                                Today, 2:30 PM
-                            </p>
-</div>
-</div>
-<div class="flex flex-col items-end">
-<span class="font-headline-lg-mobile text-headline-lg-mobile text-secondary">WIN</span>
-<span class="font-label-caps text-label-caps text-on-surface-variant">Score: 45 - 32</span>
-</div>
-</div>
-<div class="bg-surface-container rounded-lg p-3 flex justify-between items-center ml-2 border border-surface-variant border-dashed">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-[20px]">error</span>
-<span class="font-label-caps text-label-caps text-on-surface-variant">Fatal Word:</span>
-</div>
-<div class="bg-surface-container-lowest px-3 py-1 rounded-full shadow-sm">
-<span class="font-body-lg text-body-lg text-primary font-bold tracking-wider">APPLE</span>
-</div>
-</div>
-</article>
-<!-- Game Card 2: Loss -->
-<article class="history-card bg-surface-container-lowest rounded-xl p-bubble-padding shadow-[0_4px_12px_rgba(152,65,94,0.08)] border border-surface-variant relative overflow-hidden tactile-press cursor-pointer">
-<!-- Status indicator strip -->
-<div class="absolute left-0 top-0 bottom-0 w-2 bg-error rounded-l-xl"></div>
-<div class="flex justify-between items-start mb-3 pl-2">
-<div class="flex items-center gap-3">
-<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center overflow-hidden border-2 border-error/20">
-<img alt="Usagi Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKYtJw9NLHtc_Rw-TkbqxxSK2vkzHGHGVmWi72lvyDxpJunc_MfTSnlQ-5CX684zOi5V0WkwBbCopRRzrBmiEIQPE2GUo5ON8NdJL1K734nkqbEsOqZ54-BhLNnNAoxbzsWoqIiWE9o401Imck2o0S_i4X89Ovlm9BJIsEVpOeoZHi1m5urt6Fh1kSSABGU92msFthrSCx-hQWle5FXB9dAALIlieE7x6UYtt-bQ31XL2N7D6kXo90kM2Bjj6KFuzJOZJDAEpFhzn8">
-</div>
-<div>
-<h3 class="font-body-lg text-body-lg text-on-background">Usagi Chan</h3>
-<p class="font-label-caps text-label-caps text-on-surface-variant flex items-center gap-1">
-<span class="material-symbols-outlined text-[14px]">calendar_today</span>
-                                Yesterday, 8:15 PM
-                            </p>
-</div>
-</div>
-<div class="flex flex-col items-end">
-<span class="font-headline-lg-mobile text-headline-lg-mobile text-error">LOSS</span>
-<span class="font-label-caps text-label-caps text-on-surface-variant">Score: 18 - 22</span>
-</div>
-</div>
-<div class="bg-surface-container rounded-lg p-3 flex justify-between items-center ml-2 border border-surface-variant border-dashed">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-[20px]">error</span>
-<span class="font-label-caps text-label-caps text-on-surface-variant">Fatal Word:</span>
-</div>
-<div class="bg-surface-container-lowest px-3 py-1 rounded-full shadow-sm">
-<span class="font-body-lg text-body-lg text-primary font-bold tracking-wider">BANANA</span>
-</div>
-</div>
-</article>
-<!-- Game Card 3: Win -->
-<article class="history-card bg-surface-container-lowest rounded-xl p-bubble-padding shadow-[0_4px_12px_rgba(152,65,94,0.08)] border border-surface-variant relative overflow-hidden tactile-press cursor-pointer">
-<div class="absolute left-0 top-0 bottom-0 w-2 bg-secondary rounded-l-xl"></div>
-<div class="flex justify-between items-start mb-3 pl-2">
-<div class="flex items-center gap-3">
-<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center overflow-hidden border-2 border-secondary/20">
-<img alt="Kuma Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjPmbvSqseWy6kAcYwG_9W_9rKTtk6ZNfTteMH-0WnUFe2N-feDJTqA5eTTXq3t0zCRyqSJwlDBCYBdHNoa5zYTL-7mzFAL4vfgOSAevqaLGdwlPcxkBjhYhCEod2RzwxGXnx-CJs5W_LowrTx8jUIEJGg7tk6haH2H_naxClrUzwBXSNHg6HvSU-p_s4JeFpXhy8Mec9CbRzuV45Ur8HGpWZ3p1kr904vGSSWr0E2kC-vU8-bJjka4uDJp2WT125B1EHBuoZa3oor">
-</div>
-<div>
-<h3 class="font-body-lg text-body-lg text-on-background">Kuma Bear</h3>
-<p class="font-label-caps text-label-caps text-on-surface-variant flex items-center gap-1">
-<span class="material-symbols-outlined text-[14px]">calendar_today</span>
-                                Oct 12, 10:00 AM
-                            </p>
-</div>
-</div>
-<div class="flex flex-col items-end">
-<span class="font-headline-lg-mobile text-headline-lg-mobile text-secondary">WIN</span>
-<span class="font-label-caps text-label-caps text-on-surface-variant">Score: 56 - 55</span>
-</div>
-</div>
-<div class="bg-surface-container rounded-lg p-3 flex justify-between items-center ml-2 border border-surface-variant border-dashed">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-[20px]">error</span>
-<span class="font-label-caps text-label-caps text-on-surface-variant">Fatal Word:</span>
-</div>
-<div class="bg-surface-container-lowest px-3 py-1 rounded-full shadow-sm">
-<span class="font-body-lg text-body-lg text-primary font-bold tracking-wider">ELEPHANT</span>
-</div>
-</div>
-</article>
-<!-- Load More Button -->
-<button class="bg-surface-container text-primary font-label-caps text-label-caps py-3 rounded-full border-2 border-primary/20 tactile-press mt-2 hover:bg-primary-container hover:text-on-primary-container hover:border-primary-container transition-colors shadow-[0_2px_0_0_rgba(152,65,94,0.1)] mb-4">
-                LOAD OLDER MATCHES
-            </button>
-</div>
-</main>
-<!-- BottomNavBar -->
-<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container dark:bg-surface-container-highest rounded-t-xl border-t-2 border-primary/10 shadow-[0_-4px_12px_0_rgba(152,65,94,0.05)]"><!-- Play (Inactive) -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform" href="#">
-<span class="material-symbols-outlined text-[24px] mb-1">videogame_asset</span>
-<span class="font-label-caps text-label-caps">Play</span>
-</a>
-<!-- History (Active) -->
-<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-6 py-2 shadow-[0_2px_0_0_#7a2846] scale-95 translate-y-0.5 duration-100 hover:scale-105 transition-transform pointer-events-none" href="#">
-<span class="material-symbols-outlined text-[24px] mb-1 icon-fill">history</span>
-<span class="font-label-caps text-label-caps">History</span>
-</a>
-<!-- Library (Inactive) -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform" href="#">
-<span class="material-symbols-outlined text-[24px] mb-1">library_books</span>
-<span class="font-label-caps text-label-caps">Library</span>
-</a>
-<!-- Rules (Inactive) -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform" href="#">
-<span class="material-symbols-outlined text-[24px] mb-1">menu_book</span>
-<span class="font-label-caps text-label-caps">Rules</span>
-</a></nav>
-<!-- Desktop Sidebar Navigation (Hidden on Mobile) -->
-<aside class="hidden md:flex fixed left-0 top-0 h-full w-64 bg-surface-container flex-col border-r border-surface-variant pt-24 px-4 shadow-sm z-30">
-<nav class="flex flex-col gap-2"><a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors" href="#">
-<span class="material-symbols-outlined">videogame_asset</span>
-<span class="font-body-lg text-body-lg">Play</span>
-</a>
-<a class="flex items-center gap-3 p-3 rounded-lg bg-primary-container text-on-primary-container font-bold shadow-sm" href="#">
-<span class="material-symbols-outlined icon-fill">history</span>
-<span class="font-body-lg text-body-lg">History</span>
-</a>
-<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors" href="#">
-<span class="material-symbols-outlined">library_books</span>
-<span class="font-body-lg text-body-lg">Library</span>
-</a>
-<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors" href="#">
-<span class="material-symbols-outlined">menu_book</span>
-<span class="font-body-lg text-body-lg">Rules</span>
-</a></nav>
-</aside>
-
-
-</body></html>
+  </head>
+  <body class="font-body-md text-body-md flex flex-col min-h-screen relative pb-24 pt-20">
+    <!-- TopAppBar -->
+    <header
+      class="fixed top-0 w-full z-40 bg-surface dark:bg-surface-dim shadow-[0_4px_0_0_rgba(152,65,94,0.1)] flex justify-between items-center px-container-margin py-unit"
+    >
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden border-2 border-primary/20"
+        >
+          <img
+            alt="Cute Neko Avatar"
+            class="w-full h-full object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNjkozUuoxu5L1ez64GYNKXnPeU36EaEXoLd8NxDEcZgkPhvOg-oplyxBCAIumUE3BmOyc2uXjbfORZCyZEyaUki67i2UqUPRInSCNfJ50y24n1HOdg7Rgf8qt-wf-pDU8WYz4lZAC9d7Gup1jMUQQTOM7vvsszs5lfXZX9EYv2ru_lhn6TbzmNQcTahKLbF950Iu7_fknWvAm1r6mzaOEu2iiRO3WUNm-Yp5vSay1PKww-SJ-VmicY6nHT19zG-yphPcrKqsS_vu8"
+          />
+        </div>
+      </div>
+      <h1
+        class="font-display-game text-headline-lg-mobile text-primary dark:text-primary-fixed translate-y-0.5 transition-all"
+      >
+        Shiritori!
+      </h1>
+      <button
+        class="w-10 h-10 rounded-full flex items-center justify-center text-primary dark:text-primary-fixed hover:bg-primary-container/20 transition-colors"
+      >
+        <span class="material-symbols-outlined text-[28px]">help</span>
+      </button>
+    </header>
+    <!-- Main Content Canvas -->
+    <main class="flex-1 px-container-margin w-full max-w-2xl mx-auto flex flex-col gap-gutter">
+      <!-- Summary Stats Section -->
+      <section class="grid grid-cols-3 gap-unit mt-unit mb-unit">
+        <!-- Stat Card 1 -->
+        <div
+          class="bg-primary-container rounded-lg p-unit flex flex-col items-center justify-center shadow-[0_2px_0_0_#7a2846] relative overflow-hidden"
+        >
+          <span
+            class="material-symbols-outlined text-on-primary-container opacity-20 absolute -right-2 -bottom-2 text-[48px] pointer-events-none icon-fill"
+            >emoji_events</span
+          >
+          <span class="font-label-caps text-label-caps text-on-primary-container mb-1 z-10"
+            >Total Wins</span
+          >
+          <span
+            class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary-container z-10"
+            >42</span
+          >
+        </div>
+        <!-- Stat Card 2 -->
+        <div
+          class="bg-secondary-container rounded-lg p-unit flex flex-col items-center justify-center shadow-[0_2px_0_0_#007260] relative overflow-hidden"
+        >
+          <span
+            class="material-symbols-outlined text-on-secondary-container opacity-20 absolute -right-2 -bottom-2 text-[48px] pointer-events-none icon-fill"
+            >local_fire_department</span
+          >
+          <span class="font-label-caps text-label-caps text-on-secondary-container mb-1 z-10"
+            >Win Streak</span
+          >
+          <span
+            class="font-headline-lg-mobile text-headline-lg-mobile text-on-secondary-container z-10"
+            >5</span
+          >
+        </div>
+        <!-- Stat Card 3 -->
+        <div
+          class="bg-tertiary-fixed rounded-lg p-unit flex flex-col items-center justify-center shadow-[0_2px_0_0_#735c00] relative overflow-hidden"
+        >
+          <span
+            class="material-symbols-outlined text-on-tertiary-container opacity-20 absolute -right-2 -bottom-2 text-[48px] pointer-events-none icon-fill"
+            >chat_bubble</span
+          >
+          <span class="font-label-caps text-label-caps text-on-tertiary-container mb-1 z-10"
+            >Words</span
+          >
+          <span
+            class="font-headline-lg-mobile text-headline-lg-mobile text-on-tertiary-container z-10"
+            >890</span
+          >
+        </div>
+      </section>
+      <!-- History Feed Header -->
+      <div class="flex items-center justify-between mt-2">
+        <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background">
+          Recent Matches
+        </h2>
+        <div
+          class="flex items-center gap-1 text-primary cursor-pointer hover:opacity-80 transition-opacity"
+        >
+          <span class="font-label-caps text-label-caps">Filter</span>
+          <span class="material-symbols-outlined text-[18px]">filter_list</span>
+        </div>
+      </div>
+      <!-- History List -->
+      <div class="flex flex-col gap-gutter">
+        <!-- Game Card 1: Win -->
+        <article
+          class="history-card bg-surface-container-lowest rounded-xl p-bubble-padding shadow-[0_4px_12px_rgba(152,65,94,0.08)] border border-surface-variant relative overflow-hidden tactile-press cursor-pointer"
+        >
+          <!-- Status indicator strip -->
+          <div class="absolute left-0 top-0 bottom-0 w-2 bg-secondary rounded-l-xl"></div>
+          <div class="flex justify-between items-start mb-3 pl-2">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center overflow-hidden border-2 border-secondary/20"
+              >
+                <img
+                  alt="Inu Avatar"
+                  class="w-full h-full object-cover"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Oe6l0j2tigOHutbZUUor-NLiogEZ0D_9vaTvYAmYyokvnAqPov2m1h1tVAj5WWK87Lo89hmo1WpTemg499PvfShpEOSNusLzCkGRCf_1ScAgosC16WK3dTgXBIWASHLt1av1edCKqag-IH9VWnRPKLL4oGRABL9B7zLHRk9IVzxNjeyzVWt7Ex7-1GdJZVwNbiAacnTucSwctpxmWfvf8e6aexnsYVkcqQR4EdEM4eajEn7rFYbUsH5rZghYHDV_5YyyZtACECb4"
+                />
+              </div>
+              <div>
+                <h3 class="font-body-lg text-body-lg text-on-background">Inu Sensei</h3>
+                <p
+                  class="font-label-caps text-label-caps text-on-surface-variant flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                  Today, 2:30 PM
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col items-end">
+              <span class="font-headline-lg-mobile text-headline-lg-mobile text-secondary"
+                >WIN</span
+              >
+              <span class="font-label-caps text-label-caps text-on-surface-variant"
+                >Score: 45 - 32</span
+              >
+            </div>
+          </div>
+          <div
+            class="bg-surface-container rounded-lg p-3 flex justify-between items-center ml-2 border border-surface-variant border-dashed"
+          >
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[20px]">error</span>
+              <span class="font-label-caps text-label-caps text-on-surface-variant"
+                >Fatal Word:</span
+              >
+            </div>
+            <div class="bg-surface-container-lowest px-3 py-1 rounded-full shadow-sm">
+              <span class="font-body-lg text-body-lg text-primary font-bold tracking-wider"
+                >APPLE</span
+              >
+            </div>
+          </div>
+        </article>
+        <!-- Game Card 2: Loss -->
+        <article
+          class="history-card bg-surface-container-lowest rounded-xl p-bubble-padding shadow-[0_4px_12px_rgba(152,65,94,0.08)] border border-surface-variant relative overflow-hidden tactile-press cursor-pointer"
+        >
+          <!-- Status indicator strip -->
+          <div class="absolute left-0 top-0 bottom-0 w-2 bg-error rounded-l-xl"></div>
+          <div class="flex justify-between items-start mb-3 pl-2">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center overflow-hidden border-2 border-error/20"
+              >
+                <img
+                  alt="Usagi Avatar"
+                  class="w-full h-full object-cover"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKYtJw9NLHtc_Rw-TkbqxxSK2vkzHGHGVmWi72lvyDxpJunc_MfTSnlQ-5CX684zOi5V0WkwBbCopRRzrBmiEIQPE2GUo5ON8NdJL1K734nkqbEsOqZ54-BhLNnNAoxbzsWoqIiWE9o401Imck2o0S_i4X89Ovlm9BJIsEVpOeoZHi1m5urt6Fh1kSSABGU92msFthrSCx-hQWle5FXB9dAALIlieE7x6UYtt-bQ31XL2N7D6kXo90kM2Bjj6KFuzJOZJDAEpFhzn8"
+                />
+              </div>
+              <div>
+                <h3 class="font-body-lg text-body-lg text-on-background">Usagi Chan</h3>
+                <p
+                  class="font-label-caps text-label-caps text-on-surface-variant flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                  Yesterday, 8:15 PM
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col items-end">
+              <span class="font-headline-lg-mobile text-headline-lg-mobile text-error">LOSS</span>
+              <span class="font-label-caps text-label-caps text-on-surface-variant"
+                >Score: 18 - 22</span
+              >
+            </div>
+          </div>
+          <div
+            class="bg-surface-container rounded-lg p-3 flex justify-between items-center ml-2 border border-surface-variant border-dashed"
+          >
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[20px]">error</span>
+              <span class="font-label-caps text-label-caps text-on-surface-variant"
+                >Fatal Word:</span
+              >
+            </div>
+            <div class="bg-surface-container-lowest px-3 py-1 rounded-full shadow-sm">
+              <span class="font-body-lg text-body-lg text-primary font-bold tracking-wider"
+                >BANANA</span
+              >
+            </div>
+          </div>
+        </article>
+        <!-- Game Card 3: Win -->
+        <article
+          class="history-card bg-surface-container-lowest rounded-xl p-bubble-padding shadow-[0_4px_12px_rgba(152,65,94,0.08)] border border-surface-variant relative overflow-hidden tactile-press cursor-pointer"
+        >
+          <div class="absolute left-0 top-0 bottom-0 w-2 bg-secondary rounded-l-xl"></div>
+          <div class="flex justify-between items-start mb-3 pl-2">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center overflow-hidden border-2 border-secondary/20"
+              >
+                <img
+                  alt="Kuma Avatar"
+                  class="w-full h-full object-cover"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjPmbvSqseWy6kAcYwG_9W_9rKTtk6ZNfTteMH-0WnUFe2N-feDJTqA5eTTXq3t0zCRyqSJwlDBCYBdHNoa5zYTL-7mzFAL4vfgOSAevqaLGdwlPcxkBjhYhCEod2RzwxGXnx-CJs5W_LowrTx8jUIEJGg7tk6haH2H_naxClrUzwBXSNHg6HvSU-p_s4JeFpXhy8Mec9CbRzuV45Ur8HGpWZ3p1kr904vGSSWr0E2kC-vU8-bJjka4uDJp2WT125B1EHBuoZa3oor"
+                />
+              </div>
+              <div>
+                <h3 class="font-body-lg text-body-lg text-on-background">Kuma Bear</h3>
+                <p
+                  class="font-label-caps text-label-caps text-on-surface-variant flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                  Oct 12, 10:00 AM
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col items-end">
+              <span class="font-headline-lg-mobile text-headline-lg-mobile text-secondary"
+                >WIN</span
+              >
+              <span class="font-label-caps text-label-caps text-on-surface-variant"
+                >Score: 56 - 55</span
+              >
+            </div>
+          </div>
+          <div
+            class="bg-surface-container rounded-lg p-3 flex justify-between items-center ml-2 border border-surface-variant border-dashed"
+          >
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[20px]">error</span>
+              <span class="font-label-caps text-label-caps text-on-surface-variant"
+                >Fatal Word:</span
+              >
+            </div>
+            <div class="bg-surface-container-lowest px-3 py-1 rounded-full shadow-sm">
+              <span class="font-body-lg text-body-lg text-primary font-bold tracking-wider"
+                >ELEPHANT</span
+              >
+            </div>
+          </div>
+        </article>
+        <!-- Load More Button -->
+        <button
+          class="bg-surface-container text-primary font-label-caps text-label-caps py-3 rounded-full border-2 border-primary/20 tactile-press mt-2 hover:bg-primary-container hover:text-on-primary-container hover:border-primary-container transition-colors shadow-[0_2px_0_0_rgba(152,65,94,0.1)] mb-4"
+        >
+          LOAD OLDER MATCHES
+        </button>
+      </div>
+    </main>
+    <!-- BottomNavBar -->
+    <nav
+      class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container dark:bg-surface-container-highest rounded-t-xl border-t-2 border-primary/10 shadow-[0_-4px_12px_0_rgba(152,65,94,0.05)]"
+    >
+      <!-- Play (Inactive) -->
+      <a
+        class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform"
+        href="#"
+      >
+        <span class="material-symbols-outlined text-[24px] mb-1">videogame_asset</span>
+        <span class="font-label-caps text-label-caps">Play</span>
+      </a>
+      <!-- History (Active) -->
+      <a
+        class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-6 py-2 shadow-[0_2px_0_0_#7a2846] scale-95 translate-y-0.5 duration-100 hover:scale-105 transition-transform pointer-events-none"
+        href="#"
+      >
+        <span class="material-symbols-outlined text-[24px] mb-1 icon-fill">history</span>
+        <span class="font-label-caps text-label-caps">History</span>
+      </a>
+      <!-- Library (Inactive) -->
+      <a
+        class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform"
+        href="#"
+      >
+        <span class="material-symbols-outlined text-[24px] mb-1">library_books</span>
+        <span class="font-label-caps text-label-caps">Library</span>
+      </a>
+      <!-- Rules (Inactive) -->
+      <a
+        class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform"
+        href="#"
+      >
+        <span class="material-symbols-outlined text-[24px] mb-1">menu_book</span>
+        <span class="font-label-caps text-label-caps">Rules</span>
+      </a>
+    </nav>
+    <!-- Desktop Sidebar Navigation (Hidden on Mobile) -->
+    <aside
+      class="hidden md:flex fixed left-0 top-0 h-full w-64 bg-surface-container flex-col border-r border-surface-variant pt-24 px-4 shadow-sm z-30"
+    >
+      <nav class="flex flex-col gap-2">
+        <a
+          class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors"
+          href="#"
+        >
+          <span class="material-symbols-outlined">videogame_asset</span>
+          <span class="font-body-lg text-body-lg">Play</span>
+        </a>
+        <a
+          class="flex items-center gap-3 p-3 rounded-lg bg-primary-container text-on-primary-container font-bold shadow-sm"
+          href="#"
+        >
+          <span class="material-symbols-outlined icon-fill">history</span>
+          <span class="font-body-lg text-body-lg">History</span>
+        </a>
+        <a
+          class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors"
+          href="#"
+        >
+          <span class="material-symbols-outlined">library_books</span>
+          <span class="font-body-lg text-body-lg">Library</span>
+        </a>
+        <a
+          class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors"
+          href="#"
+        >
+          <span class="material-symbols-outlined">menu_book</span>
+          <span class="font-body-lg text-body-lg">Rules</span>
+        </a>
+      </nav>
+    </aside>
+  </body>
+</html>

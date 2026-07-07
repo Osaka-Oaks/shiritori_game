@@ -1,6 +1,16 @@
 import React from "react";
 import { dictionary } from "../lib/dictionaryHelper";
-import { BookOpen, Target, Zap, Volume2, RefreshCw, CheckCircle2, XCircle, Trophy, Lightbulb } from "lucide-react";
+import {
+  BookOpen,
+  Target,
+  Zap,
+  Volume2,
+  RefreshCw,
+  CheckCircle2,
+  XCircle,
+  Trophy,
+  Lightbulb,
+} from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { speakWord } from "../utils";
 
@@ -20,23 +30,65 @@ export default function PracticeModeView() {
   const [isActive, setIsActive] = React.useState(false);
   const [currentSound, setCurrentSound] = React.useState<string>("あ");
   const [userInput, setUserInput] = React.useState("");
-  const [feedback, setFeedback] = React.useState<{ type: "success" | "error"; message: string } | null>(null);
-  const [stats, setStats] = React.useState<PracticeStats>({ correct: 0, incorrect: 0, streak: 0, bestStreak: 0 });
+  const [feedback, setFeedback] = React.useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+  const [stats, setStats] = React.useState<PracticeStats>({
+    correct: 0,
+    incorrect: 0,
+    streak: 0,
+    bestStreak: 0,
+  });
   const [suggestedWords, setSuggestedWords] = React.useState<string[]>([]);
   const [timeLeft, setTimeLeft] = React.useState(30);
   const [isTimerActive, setIsTimerActive] = React.useState(false);
 
   const hiraganaChart = [
-    { sound: "あ", romaji: "a" }, { sound: "い", romaji: "i" }, { sound: "う", romaji: "u" }, { sound: "え", romaji: "e" }, { sound: "お", romaji: "o" },
-    { sound: "か", romaji: "ka" }, { sound: "き", romaji: "ki" }, { sound: "く", romaji: "ku" }, { sound: "け", romaji: "ke" }, { sound: "こ", romaji: "ko" },
-    { sound: "さ", romaji: "sa" }, { sound: "し", romaji: "shi" }, { sound: "す", romaji: "su" }, { sound: "せ", romaji: "se" }, { sound: "そ", romaji: "so" },
-    { sound: "た", romaji: "ta" }, { sound: "ち", romaji: "chi" }, { sound: "つ", romaji: "tsu" }, { sound: "て", romaji: "te" }, { sound: "と", romaji: "to" },
-    { sound: "な", romaji: "na" }, { sound: "に", romaji: "ni" }, { sound: "ぬ", romaji: "nu" }, { sound: "ね", romaji: "ne" }, { sound: "の", romaji: "no" },
-    { sound: "は", romaji: "ha" }, { sound: "ひ", romaji: "hi" }, { sound: "ふ", romaji: "fu" }, { sound: "へ", romaji: "he" }, { sound: "ほ", romaji: "ho" },
-    { sound: "ま", romaji: "ma" }, { sound: "み", romaji: "mi" }, { sound: "む", romaji: "mu" }, { sound: "め", romaji: "me" }, { sound: "も", romaji: "mo" },
-    { sound: "や", romaji: "ya" }, { sound: "ゆ", romaji: "yu" }, { sound: "よ", romaji: "yo" },
-    { sound: "ら", romaji: "ra" }, { sound: "り", romaji: "ri" }, { sound: "る", romaji: "ru" }, { sound: "れ", romaji: "re" }, { sound: "ろ", romaji: "ro" },
-    { sound: "わ", romaji: "wa" }
+    { sound: "あ", romaji: "a" },
+    { sound: "い", romaji: "i" },
+    { sound: "う", romaji: "u" },
+    { sound: "え", romaji: "e" },
+    { sound: "お", romaji: "o" },
+    { sound: "か", romaji: "ka" },
+    { sound: "き", romaji: "ki" },
+    { sound: "く", romaji: "ku" },
+    { sound: "け", romaji: "ke" },
+    { sound: "こ", romaji: "ko" },
+    { sound: "さ", romaji: "sa" },
+    { sound: "し", romaji: "shi" },
+    { sound: "す", romaji: "su" },
+    { sound: "せ", romaji: "se" },
+    { sound: "そ", romaji: "so" },
+    { sound: "た", romaji: "ta" },
+    { sound: "ち", romaji: "chi" },
+    { sound: "つ", romaji: "tsu" },
+    { sound: "て", romaji: "te" },
+    { sound: "と", romaji: "to" },
+    { sound: "な", romaji: "na" },
+    { sound: "に", romaji: "ni" },
+    { sound: "ぬ", romaji: "nu" },
+    { sound: "ね", romaji: "ne" },
+    { sound: "の", romaji: "no" },
+    { sound: "は", romaji: "ha" },
+    { sound: "ひ", romaji: "hi" },
+    { sound: "ふ", romaji: "fu" },
+    { sound: "へ", romaji: "he" },
+    { sound: "ほ", romaji: "ho" },
+    { sound: "ま", romaji: "ma" },
+    { sound: "み", romaji: "mi" },
+    { sound: "む", romaji: "mu" },
+    { sound: "め", romaji: "me" },
+    { sound: "も", romaji: "mo" },
+    { sound: "や", romaji: "ya" },
+    { sound: "ゆ", romaji: "yu" },
+    { sound: "よ", romaji: "yo" },
+    { sound: "ら", romaji: "ra" },
+    { sound: "り", romaji: "ri" },
+    { sound: "る", romaji: "ru" },
+    { sound: "れ", romaji: "re" },
+    { sound: "ろ", romaji: "ro" },
+    { sound: "わ", romaji: "wa" },
   ];
 
   React.useEffect(() => {
@@ -53,7 +105,7 @@ export default function PracticeModeView() {
     setStats({ correct: 0, incorrect: 0, streak: 0, bestStreak: 0 });
     setFeedback(null);
     generateNewChallenge();
-    
+
     if (drillType === "speed") {
       setIsTimerActive(true);
       setTimeLeft(30);
@@ -64,7 +116,7 @@ export default function PracticeModeView() {
     const randomIndex = Math.floor(Math.random() * hiraganaChart.length);
     const sound = hiraganaChart[randomIndex].sound;
     setCurrentSound(sound);
-    
+
     const words = dictionary.getWordsByStartSound(sound);
     const suggested = words.slice(0, 5).map(w => `${w.word} (${w.translation})`);
     setSuggestedWords(suggested);
@@ -76,18 +128,27 @@ export default function PracticeModeView() {
     if (!trimmed) return;
 
     const foundWord = dictionary.findWord(trimmed);
-    
+
     if (foundWord && foundWord.startSound === currentSound) {
       if (dictionary.endsInN(foundWord.word)) {
-        setFeedback({ type: "error", message: `⚠️ "${foundWord.word}" ends in ん! This would lose the game!` });
+        setFeedback({
+          type: "error",
+          message: `⚠️ "${foundWord.word}" ends in ん! This would lose the game!`,
+        });
         updateStats(false);
       } else {
-        setFeedback({ type: "success", message: `✨ Perfect! "${foundWord.kanji || foundWord.word}" (${foundWord.translation})` });
+        setFeedback({
+          type: "success",
+          message: `✨ Perfect! "${foundWord.kanji || foundWord.word}" (${foundWord.translation})`,
+        });
         speakWord(foundWord.word);
         updateStats(true);
       }
     } else if (foundWord) {
-      setFeedback({ type: "error", message: `❌ Wrong starting sound! "${foundWord.word}" starts with "${foundWord.startSound}", need "${currentSound}"` });
+      setFeedback({
+        type: "error",
+        message: `❌ Wrong starting sound! "${foundWord.word}" starts with "${foundWord.startSound}", need "${currentSound}"`,
+      });
       updateStats(false);
     } else {
       setFeedback({ type: "error", message: `❌ Word not found in dictionary. Try another word!` });
@@ -108,7 +169,7 @@ export default function PracticeModeView() {
       correct: correct ? prev.correct + 1 : prev.correct,
       incorrect: correct ? prev.incorrect : prev.incorrect + 1,
       streak: correct ? prev.streak + 1 : 0,
-      bestStreak: correct ? Math.max(prev.bestStreak, prev.streak + 1) : prev.bestStreak
+      bestStreak: correct ? Math.max(prev.bestStreak, prev.streak + 1) : prev.bestStreak,
     }));
   };
 
@@ -127,7 +188,6 @@ export default function PracticeModeView() {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-6 pb-28 space-y-6">
-      
       <header className="text-center space-y-2">
         <div className="flex items-center justify-center gap-2">
           <Target className="w-8 h-8 text-primary" />
@@ -157,7 +217,9 @@ export default function PracticeModeView() {
               >
                 <BookOpen className="w-6 h-6 text-primary mb-2" />
                 <h3 className="font-headline font-bold text-sm">Flashcard Mode</h3>
-                <p className="text-xs text-on-surface-variant mt-1">Learn words for each hiragana</p>
+                <p className="text-xs text-on-surface-variant mt-1">
+                  Learn words for each hiragana
+                </p>
               </button>
 
               <button
@@ -226,7 +288,9 @@ export default function PracticeModeView() {
           <div className="grid grid-cols-4 gap-3">
             <div className="bg-surface-container rounded-2xl p-3 text-center border border-outline-variant/10">
               <span className="text-xs text-on-surface-variant font-label-caps block">CORRECT</span>
-              <span className="text-2xl font-headline font-bold text-secondary">{stats.correct}</span>
+              <span className="text-2xl font-headline font-bold text-secondary">
+                {stats.correct}
+              </span>
             </div>
             <div className="bg-surface-container rounded-2xl p-3 text-center border border-outline-variant/10">
               <span className="text-xs text-on-surface-variant font-label-caps block">WRONG</span>
@@ -238,7 +302,9 @@ export default function PracticeModeView() {
             </div>
             <div className="bg-surface-container rounded-2xl p-3 text-center border border-outline-variant/10">
               <span className="text-xs text-on-surface-variant font-label-caps block">BEST</span>
-              <span className="text-2xl font-headline font-bold text-tertiary-container">{stats.bestStreak}</span>
+              <span className="text-2xl font-headline font-bold text-tertiary-container">
+                {stats.bestStreak}
+              </span>
             </div>
           </div>
 
@@ -250,7 +316,9 @@ export default function PracticeModeView() {
           )}
 
           <div className="bg-surface-container-highest rounded-3xl p-8 text-center border-4 border-primary shadow-lg">
-            <p className="text-sm font-label-caps text-on-surface-variant mb-2">FIND A WORD STARTING WITH:</p>
+            <p className="text-sm font-label-caps text-on-surface-variant mb-2">
+              FIND A WORD STARTING WITH:
+            </p>
             <div className="bg-primary text-on-primary rounded-full w-24 h-24 mx-auto flex items-center justify-center font-display-game font-black text-5xl mb-2 shadow-xl">
               {currentSound}
             </div>
@@ -263,7 +331,7 @@ export default function PracticeModeView() {
             <input
               type="text"
               value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
+              onChange={e => setUserInput(e.target.value)}
               placeholder="Enter word in hiragana or romaji..."
               className="w-full bg-surface border-2 border-primary rounded-xl py-4 px-6 text-on-surface font-body font-bold placeholder:text-outline/40 focus:outline-none focus:ring-2 focus:ring-primary/40"
               autoFocus
@@ -294,9 +362,11 @@ export default function PracticeModeView() {
                 ) : (
                   <XCircle className="w-6 h-6 text-error flex-shrink-0" />
                 )}
-                <p className={`text-sm font-body font-bold ${
-                  feedback.type === "success" ? "text-secondary" : "text-error"
-                }`}>
+                <p
+                  className={`text-sm font-body font-bold ${
+                    feedback.type === "success" ? "text-secondary" : "text-error"
+                  }`}
+                >
                   {feedback.message}
                 </p>
               </motion.div>

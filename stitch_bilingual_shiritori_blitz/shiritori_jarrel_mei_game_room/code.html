@@ -1,348 +1,510 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html lang="ja"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Shiritori! - Game Room</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100..900&amp;family=Quicksand:wght@100..900&amp;display=swap" rel="stylesheet"/>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Shiritori! - Game Room</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100..900&amp;family=Quicksand:wght@100..900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 1,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .shiritori-shadow {
+        box-shadow: 0 4px 0 0 rgba(152, 65, 94, 0.1);
+      }
+      .pressable-button {
+        transition:
+          transform 0.1s,
+          box-shadow 0.1s;
+        box-shadow: 0 4px 0 0 #7a2846;
+      }
+      .pressable-button:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 0 #7a2846;
+      }
+      .pulse-avatar {
+        animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes pulse-ring {
+        0%,
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(152, 65, 94, 0.4);
         }
-        .shiritori-shadow {
-            box-shadow: 0 4px 0 0 rgba(152, 65, 94, 0.1);
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 0 0 12px rgba(152, 65, 94, 0);
         }
-        .pressable-button {
-            transition: transform 0.1s, box-shadow 0.1s;
-            box-shadow: 0 4px 0 0 #7a2846;
+      }
+      .timer-bar {
+        transition: width 1s linear;
+      }
+      @keyframes bounce-subtle {
+        0%,
+        100% {
+          transform: translateY(0);
         }
-        .pressable-button:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 0 #7a2846;
+        50% {
+          transform: translateY(-5px);
         }
-        .pulse-avatar {
-            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .kawaii-bubble {
+        border-radius: 2rem 2rem 2rem 0.5rem;
+      }
+      .kawaii-bubble-alt {
+        border-radius: 2rem 2rem 0.5rem 2rem;
+      }
+      .floating-heart {
+        animation: float-up 10s linear infinite;
+      }
+      @keyframes float-up {
+        0% {
+          transform: translateY(100vh) scale(0.5) rotate(0deg);
+          opacity: 0;
         }
-        @keyframes pulse-ring {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(152, 65, 94, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(152, 65, 94, 0); }
+        10% {
+          opacity: 0.1;
         }
-        .timer-bar {
-            transition: width 1s linear;
+        90% {
+          opacity: 0.1;
         }
-        @keyframes bounce-subtle {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        100% {
+          transform: translateY(-20vh) scale(1.2) rotate(45deg);
+          opacity: 0;
         }
-        .kawaii-bubble {
-            border-radius: 2rem 2rem 2rem 0.5rem;
-        }
-        .kawaii-bubble-alt {
-            border-radius: 2rem 2rem 0.5rem 2rem;
-        }
-        .floating-heart {
-            animation: float-up 10s linear infinite;
-        }
-        @keyframes float-up {
-            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.1; }
-            90% { opacity: 0.1; }
-            100% { transform: translateY(-20vh) scale(1.2) rotate(45deg); opacity: 0; }
-        }
+      }
     </style>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "secondary": "#006b5a",
-                        "error-container": "#ffdad6",
-                        "secondary-container": "#92f5dc",
-                        "on-error": "#ffffff",
-                        "tertiary": "#735c00",
-                        "surface-dim": "#e0d5f6",
-                        "outline-variant": "#d9c0c5",
-                        "on-primary-container": "#7a2846",
-                        "surface-container": "#f3eaff",
-                        "error": "#ba1a1a",
-                        "primary": "#98415e",
-                        "secondary-fixed-dim": "#76d8c0",
-                        "outline": "#867276",
-                        "tertiary-container": "#d4b142",
-                        "on-tertiary-fixed": "#241a00",
-                        "on-surface-variant": "#544246",
-                        "on-tertiary-container": "#564400",
-                        "primary-fixed": "#ffd9e1",
-                        "surface": "#fdf7ff",
-                        "surface-variant": "#e9ddff",
-                        "background": "#fdf7ff",
-                        "inverse-primary": "#ffb1c6",
-                        "primary-fixed-dim": "#ffb1c6",
-                        "on-secondary": "#ffffff",
-                        "tertiary-fixed-dim": "#e7c353",
-                        "inverse-surface": "#332c46",
-                        "surface-container-low": "#f8f1ff",
-                        "inverse-on-surface": "#f6eeff",
-                        "on-tertiary": "#ffffff",
-                        "on-surface": "#1e1830",
-                        "on-background": "#1e1830",
-                        "surface-container-highest": "#e9ddff",
-                        "on-primary-fixed": "#3f001b",
-                        "on-secondary-fixed-variant": "#005143",
-                        "on-secondary-container": "#007260",
-                        "surface-tint": "#98415e",
-                        "secondary-fixed": "#92f5dc",
-                        "surface-container-high": "#eee4ff",
-                        "tertiary-fixed": "#ffe088",
-                        "on-error-container": "#93000a",
-                        "on-secondary-fixed": "#00201a",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-bright": "#fdf7ff",
-                        "on-tertiary-fixed-variant": "#574500",
-                        "primary-container": "#ff94b4",
-                        "on-primary": "#ffffff",
-                        "on-primary-fixed-variant": "#7b2947"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "gutter": "16px",
-                        "unit": "8px",
-                        "container-margin": "24px",
-                        "bubble-padding": "16px"
-                    },
-                    "fontFamily": {
-                        "body-md": ["Quicksand"],
-                        "display-game": ["Plus Jakarta Sans"],
-                        "body-lg": ["Quicksand"],
-                        "headline-lg-mobile": ["Plus Jakarta Sans"],
-                        "headline-lg": ["Plus Jakarta Sans"],
-                        "label-caps": ["Quicksand"]
-                    },
-                    "fontSize": {
-                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
-                        "display-game": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
-                        "body-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
-                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
-                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
-                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
-                    }
-                },
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              secondary: "#006b5a",
+              "error-container": "#ffdad6",
+              "secondary-container": "#92f5dc",
+              "on-error": "#ffffff",
+              tertiary: "#735c00",
+              "surface-dim": "#e0d5f6",
+              "outline-variant": "#d9c0c5",
+              "on-primary-container": "#7a2846",
+              "surface-container": "#f3eaff",
+              error: "#ba1a1a",
+              primary: "#98415e",
+              "secondary-fixed-dim": "#76d8c0",
+              outline: "#867276",
+              "tertiary-container": "#d4b142",
+              "on-tertiary-fixed": "#241a00",
+              "on-surface-variant": "#544246",
+              "on-tertiary-container": "#564400",
+              "primary-fixed": "#ffd9e1",
+              surface: "#fdf7ff",
+              "surface-variant": "#e9ddff",
+              background: "#fdf7ff",
+              "inverse-primary": "#ffb1c6",
+              "primary-fixed-dim": "#ffb1c6",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed-dim": "#e7c353",
+              "inverse-surface": "#332c46",
+              "surface-container-low": "#f8f1ff",
+              "inverse-on-surface": "#f6eeff",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#1e1830",
+              "on-background": "#1e1830",
+              "surface-container-highest": "#e9ddff",
+              "on-primary-fixed": "#3f001b",
+              "on-secondary-fixed-variant": "#005143",
+              "on-secondary-container": "#007260",
+              "surface-tint": "#98415e",
+              "secondary-fixed": "#92f5dc",
+              "surface-container-high": "#eee4ff",
+              "tertiary-fixed": "#ffe088",
+              "on-error-container": "#93000a",
+              "on-secondary-fixed": "#00201a",
+              "surface-container-lowest": "#ffffff",
+              "surface-bright": "#fdf7ff",
+              "on-tertiary-fixed-variant": "#574500",
+              "primary-container": "#ff94b4",
+              "on-primary": "#ffffff",
+              "on-primary-fixed-variant": "#7b2947",
             },
-        }
+            borderRadius: {
+              DEFAULT: "1rem",
+              lg: "2rem",
+              xl: "3rem",
+              full: "9999px",
+            },
+            spacing: {
+              gutter: "16px",
+              unit: "8px",
+              "container-margin": "24px",
+              "bubble-padding": "16px",
+            },
+            fontFamily: {
+              "body-md": ["Quicksand"],
+              "display-game": ["Plus Jakarta Sans"],
+              "body-lg": ["Quicksand"],
+              "headline-lg-mobile": ["Plus Jakarta Sans"],
+              "headline-lg": ["Plus Jakarta Sans"],
+              "label-caps": ["Quicksand"],
+            },
+            fontSize: {
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "500" }],
+              "display-game": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "800" },
+              ],
+              "body-lg": ["20px", { lineHeight: "28px", fontWeight: "500" }],
+              "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "700" }],
+              "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "700" }],
+              "label-caps": [
+                "12px",
+                { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" },
+              ],
+            },
+          },
+        },
+      };
     </script>
-</head>
-<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col overflow-x-hidden relative">
-<!-- Hidden Background Hearts -->
-<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden text-primary/10">
-<span class="material-symbols-outlined absolute floating-heart" style="left: 10%; animation-delay: 0s; font-size: 3rem;">favorite</span>
-<span class="material-symbols-outlined absolute floating-heart" style="left: 30%; animation-delay: 2s; font-size: 5rem;">favorite</span>
-<span class="material-symbols-outlined absolute floating-heart" style="left: 60%; animation-delay: 4s; font-size: 2rem;">favorite</span>
-<span class="material-symbols-outlined absolute floating-heart" style="left: 80%; animation-delay: 1s; font-size: 4rem;">favorite</span>
-<span class="material-symbols-outlined absolute floating-heart" style="left: 50%; animation-delay: 5s; font-size: 3.5rem;">favorite</span>
-</div>
-<!-- Top Navigation Shell -->
-<header class="bg-surface/90 backdrop-blur-sm dark:bg-surface-dim/90 shadow-[0_4px_0_0_rgba(152,65,94,0.1)] fixed top-0 w-full z-50 px-container-margin py-unit flex justify-between items-center h-16">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full border-2 border-primary bg-primary-fixed overflow-hidden">
-<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A cute, high-energy anime-style adventurer avatar with big expressive eyes and soft pastel clothing. The art style is minimalist kawaii with bold outlines and vibrant colors, fitting a modern game interface. The background is a soft lavender tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD-0xFlMJoGr1RST4hByi07rC_6PAviMKob8wj8uioHoe4f4E92-JmQDXgh68sUWTe8HXRvsYMq1-sh6YQPQGAuQzqkDlxLTbZWrhSDAz0D9ncR-nTE-bZUeMT21DVWBlah5mWPl_GzvP1e0jLJ0Rp-_pFdEg_PS26_k8JpoKK_MkyyZ2__lzdPwrIi9kRjaEbOGZFDZpKHo6aUnHvq06fxLS4-w5gF2QgiIS8hhHvHqOOSqvBiHM2JbrcdbYSZbHHFdgMm5AR2_8k"/>
-</div>
-<div class="flex flex-col">
-<h1 class="font-display-game text-lg leading-tight text-primary dark:text-primary-fixed">Jarrel &amp; Mei</h1>
-<span class="text-[10px] text-primary/70 font-bold tracking-wider">ジェレル ❤️ めい</span>
-</div>
-</div>
-<div class="flex items-center gap-2">
-<div class="flex items-center gap-1 bg-primary-container text-on-primary-container px-3 py-1 rounded-full shadow-sm">
-<span class="material-symbols-outlined text-sm text-primary">favorite</span>
-<span class="font-label-caps font-bold">143</span>
-</div>
-<button class="w-10 h-10 flex items-center justify-center rounded-full text-primary hover:bg-primary-container/20 transition-colors">
-<span class="material-symbols-outlined" data-icon="help">help</span>
-</button>
-</div>
-</header>
-<!-- Timer Countdown Bar -->
-<div class="fixed top-16 left-0 w-full h-2 bg-surface-container-high z-40">
-<div class="h-full timer-bar bg-primary" id="timer-fill" style="width: 100%;"></div>
-</div>
-<!-- Main Game Canvas -->
-<main class="flex-1 mt-20 mb-24 px-container-margin max-w-2xl mx-auto w-full flex flex-col items-center">
-<!-- Active Turn Section -->
-<section class="flex flex-col items-center py-unit w-full">
-<div class="relative mb-6">
-<div class="w-24 h-24 rounded-full border-4 border-primary bg-primary-fixed pulse-avatar overflow-hidden">
-<img alt="Mei Turn" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUnDvc5Ngx-eQ4RbPoOOIuVDkzzqukPK4XUL_Hmotwz80cSnaC8UVMK1nfkR9yOz1QI435mG4s3NqpRAleoxX0wzAcORQUMfQXaIRdhRjphN3hCPhDG541jKMlL1FX4zvzoq_ki4jJyf3BmQBprBFCFFNcLlevKureB4e8A2H4eov6XCfrGmrd2ctR_Eu4hIsGrngj6SZF-Xe8ZNjGnTyO6hwb0zP3AuE7vTOwoc1gSk8-Yho2JffgNyix-33b82k6kWddUMk6NQ_w"/>
-</div>
-<div class="absolute -bottom-2 bg-primary text-on-primary px-4 py-1 rounded-full font-label-caps text-label-caps shadow-sm whitespace-nowrap border border-primary-container">
-                    Ganbare, Mei-chan! ❤️
-                </div>
-</div>
-<!-- Current Word Display -->
-<div class="bg-surface-container-highest p-6 rounded-lg w-full flex flex-col items-center gap-2 mb-8 border-2 border-primary/20 shadow-sm relative overflow-hidden">
-<div class="absolute top-0 right-0 p-2 text-primary/10">
-<span class="material-symbols-outlined text-4xl">favorite</span>
-</div>
-<p class="font-label-caps text-label-caps text-primary text-center">WORD TO MATCH <br/><span class="text-[10px] opacity-80">(お題)</span></p>
-<div class="flex items-center gap-4 z-10">
-<span class="font-display-game text-headline-lg text-on-surface">さく</span>
-<div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-on-primary font-display-game text-headline-lg shadow-lg border-2 border-primary-container">ら</div>
-</div>
-<p class="font-body-md text-primary font-bold mt-2 z-10">Starts with: ら (ra)</p>
-</div>
-</section>
-<!-- Feedback Area (Initially Hidden/Interactive) -->
-<div class="transition-all duration-300 transform flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-error-container text-on-error-container opacity-0 -translate-y-4" id="feedback-toast">
-<span class="material-symbols-outlined" id="feedback-icon">cancel</span>
-<span class="font-label-caps text-label-caps" id="feedback-text">TIME UP!</span>
-</div>
-<!-- Input Section -->
-<section class="w-full mb-8">
-<div class="relative group">
-<input class="w-full bg-surface-container-lowest border-2 border-primary rounded-full px-8 py-5 text-body-lg font-body-lg focus:outline-none focus:ring-4 focus:ring-primary/20 placeholder:text-on-surface-variant/40 transition-all shadow-sm" placeholder="Type a word..." type="text"/>
-<button class="absolute right-2 top-2 bottom-2 bg-primary text-on-primary px-6 rounded-full font-label-caps text-label-caps pressable-button flex items-center gap-1">
-                    SUBMIT
-                    <span class="text-[10px] opacity-80 ml-1">(送信)</span>
-<span class="material-symbols-outlined text-sm ml-1" data-icon="send">send</span>
-</button>
-</div>
-<p class="text-center mt-3 text-primary/70 text-label-caps font-label-caps">HINT: USE HIRAGANA ONLY! (ひらがなで入力してね)</p>
-</section>
-<!-- History Feed / Word Chain -->
-<section class="w-full">
-<div class="flex items-center justify-between mb-4 px-2 border-b border-primary/10 pb-2">
-<h3 class="font-label-caps text-label-caps text-primary flex items-center gap-1"><span class="material-symbols-outlined text-sm">link</span> WORD CHAIN <span class="text-[10px] opacity-80">(しりとり)</span></h3>
-<span class="font-label-caps text-label-caps text-primary bg-primary-container/30 px-3 py-1 rounded-full">CHAIN <span class="text-[10px] opacity-80">(連鎖)</span>: 12</span>
-</div>
-<div class="space-y-4 relative">
-<!-- Visual connecting line -->
-<div class="absolute left-6 top-8 bottom-8 w-0.5 border-l-2 border-dashed border-primary/30"></div>
-<!-- History Items -->
-<div class="flex items-start gap-4">
-<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center border-2 border-primary/30 shrink-0 z-10 overflow-hidden relative">
-<img alt="Mei" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOq8fFtugN46SFnws-jGSulZVp-OKP7VY64m0YOFXeucN91j53T0zcgs1i1eYkutnauqywI0CD9G737FQS0BC8GfSzAEQjnLb4ws5UqmktUVABU8XJHyrmk4ZGpv0KvyTYiwFS_j-ww2cGGFsGYtSfuEJ3DHRvQ70HnED1mnrqcpCH9xwOx43GcTT3-aL0mQScI_klgxPfWAwuJlYDk-jBOuZT2gaAaaHrQnFrxLbAhkZwMegHh1d4PKZaDilaAGLjj9LU7tUKdgt2"/>
-</div>
-<div class="kawaii-bubble-alt bg-surface-container-high px-bubble-padding py-3 shadow-sm border border-primary/10 flex-1 relative">
-<span class="absolute -top-2 -left-2 text-primary/50 material-symbols-outlined text-xs">favorite</span>
-<div class="flex items-center gap-2">
-<span class="font-body-lg text-on-surface">ね</span>
-<span class="font-body-lg font-bold text-primary">こ</span>
-</div>
-</div>
-</div>
-<div class="flex items-start gap-4 flex-row-reverse">
-<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center border-2 border-primary shrink-0 z-10 overflow-hidden">
-<img alt="Jarrel" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdMeD6B9lg52l5xQkCV_5QvalT05LeFFNjXs_BeZWcnmPBLDkN2KSrPGogTI3eQyuTrZe13sA9pdS_AGn3oD8wEt_y_i3ZqnVD6w3QcKa51bGYBCFqp2y8dRU6D7bJX0qjS1Wf5P9jynZ5r-MiNpPySe4tzz789i5GWDAASXR0B6SeL6nh8RzvzjRTjz6pNcJPZwuClFzl2SWTvWZUIlisRDBxmHuaMQ8KlkVzRR0CUAWAAl2q2TbYs9rDO2Sd3bpX0yhJg5jumh_k"/>
-</div>
-<div class="kawaii-bubble bg-primary-container/30 px-bubble-padding py-3 shadow-sm border border-primary/20 flex-1 text-right">
-<div class="flex items-center gap-2 justify-end">
-<span class="font-body-lg text-on-surface">こい</span>
-<span class="font-body-lg font-bold text-primary">ぬ</span>
-</div>
-</div>
-</div>
-<div class="flex items-start gap-4">
-<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center border-2 border-primary/30 shrink-0 z-10 overflow-hidden relative">
-<img alt="Mei" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUexSVMtMCU9FK7iD7RrsA2En4jXGPqr_C7sQhz_K2s0opPS23NNfvgLx2NmlxkO0uR0IJPRS9jCKMUKS_k-4vNsBOJ8hrjF8MlGpPG58bAa0mY5nGcxGU8X5FVMLSl74IADdLrc_WAVUX6azyffF5kbetH1y1HEbLwLEq0oz4V6qYMFGKEAtQIAdJSpIUxFSfCdCzZ-jfCcE-8cJsHlY4ZO_WtOKP9UAwOwaxwI3C6JGER4GPwVengg6JaU6HZwenxBDauU6z1fOf"/>
-</div>
-<div class="kawaii-bubble-alt bg-surface-container-high px-bubble-padding py-3 shadow-sm border border-primary/10 flex-1">
-<div class="flex items-center gap-2">
-<span class="font-body-lg text-on-surface">ぬ</span>
-<span class="font-body-lg font-bold text-primary">ま</span>
-</div>
-</div>
-</div>
-</div>
-</section>
-</main>
-<!-- Bottom Navigation Shell -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container/90 backdrop-blur-sm dark:bg-surface-container-highest/90 border-t-2 border-primary/10">
-<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-6 py-2 shadow-[0_2px_0_0_#7a2846] transition-transform hover:scale-105 active:scale-95 active:translate-y-0.5" href="#">
-<span class="material-symbols-outlined" data-icon="videogame_asset">videogame_asset</span>
-<span class="font-label-caps text-label-caps">Play</span>
-</a>
-<a class="flex flex-col items-center justify-center text-primary/70 dark:text-outline p-2 transition-transform hover:scale-105 hover:text-primary" href="#">
-<span class="material-symbols-outlined" data-icon="history">history</span>
-<span class="font-label-caps text-label-caps">History</span>
-</a>
-<a class="flex flex-col items-center justify-center text-primary/70 dark:text-outline p-2 transition-transform hover:scale-105 hover:text-primary" href="#"><span class="material-symbols-outlined" data-icon="library_books">library_books</span><span class="font-label-caps text-label-caps">Library</span></a><a class="flex flex-col items-center justify-center text-primary/70 dark:text-outline p-2 transition-transform hover:scale-105 hover:text-primary" href="#">
-<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
-<span class="font-label-caps text-label-caps">Rules</span>
-</a>
-</nav>
-<script>
-        // Micro-interactions and Timer logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const timerFill = document.getElementById('timer-fill');
-            const input = document.querySelector('input');
-            const submitBtn = document.querySelector('button.pressable-button');
-            const feedbackToast = document.getElementById('feedback-toast');
-            const feedbackIcon = document.getElementById('feedback-icon');
-            const feedbackText = document.getElementById('feedback-text');
+  </head>
+  <body
+    class="bg-background text-on-background font-body-md min-h-screen flex flex-col overflow-x-hidden relative"
+  >
+    <!-- Hidden Background Hearts -->
+    <div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden text-primary/10">
+      <span
+        class="material-symbols-outlined absolute floating-heart"
+        style="left: 10%; animation-delay: 0s; font-size: 3rem"
+        >favorite</span
+      >
+      <span
+        class="material-symbols-outlined absolute floating-heart"
+        style="left: 30%; animation-delay: 2s; font-size: 5rem"
+        >favorite</span
+      >
+      <span
+        class="material-symbols-outlined absolute floating-heart"
+        style="left: 60%; animation-delay: 4s; font-size: 2rem"
+        >favorite</span
+      >
+      <span
+        class="material-symbols-outlined absolute floating-heart"
+        style="left: 80%; animation-delay: 1s; font-size: 4rem"
+        >favorite</span
+      >
+      <span
+        class="material-symbols-outlined absolute floating-heart"
+        style="left: 50%; animation-delay: 5s; font-size: 3.5rem"
+        >favorite</span
+      >
+    </div>
+    <!-- Top Navigation Shell -->
+    <header
+      class="bg-surface/90 backdrop-blur-sm dark:bg-surface-dim/90 shadow-[0_4px_0_0_rgba(152,65,94,0.1)] fixed top-0 w-full z-50 px-container-margin py-unit flex justify-between items-center h-16"
+    >
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 rounded-full border-2 border-primary bg-primary-fixed overflow-hidden"
+        >
+          <img
+            alt="User Avatar"
+            class="w-full h-full object-cover"
+            data-alt="A cute, high-energy anime-style adventurer avatar with big expressive eyes and soft pastel clothing. The art style is minimalist kawaii with bold outlines and vibrant colors, fitting a modern game interface. The background is a soft lavender tone."
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD-0xFlMJoGr1RST4hByi07rC_6PAviMKob8wj8uioHoe4f4E92-JmQDXgh68sUWTe8HXRvsYMq1-sh6YQPQGAuQzqkDlxLTbZWrhSDAz0D9ncR-nTE-bZUeMT21DVWBlah5mWPl_GzvP1e0jLJ0Rp-_pFdEg_PS26_k8JpoKK_MkyyZ2__lzdPwrIi9kRjaEbOGZFDZpKHo6aUnHvq06fxLS4-w5gF2QgiIS8hhHvHqOOSqvBiHM2JbrcdbYSZbHHFdgMm5AR2_8k"
+          />
+        </div>
+        <div class="flex flex-col">
+          <h1 class="font-display-game text-lg leading-tight text-primary dark:text-primary-fixed">
+            Jarrel &amp; Mei
+          </h1>
+          <span class="text-[10px] text-primary/70 font-bold tracking-wider">ジェレル ❤️ めい</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <div
+          class="flex items-center gap-1 bg-primary-container text-on-primary-container px-3 py-1 rounded-full shadow-sm"
+        >
+          <span class="material-symbols-outlined text-sm text-primary">favorite</span>
+          <span class="font-label-caps font-bold">143</span>
+        </div>
+        <button
+          class="w-10 h-10 flex items-center justify-center rounded-full text-primary hover:bg-primary-container/20 transition-colors"
+        >
+          <span class="material-symbols-outlined" data-icon="help">help</span>
+        </button>
+      </div>
+    </header>
+    <!-- Timer Countdown Bar -->
+    <div class="fixed top-16 left-0 w-full h-2 bg-surface-container-high z-40">
+      <div class="h-full timer-bar bg-primary" id="timer-fill" style="width: 100%"></div>
+    </div>
+    <!-- Main Game Canvas -->
+    <main
+      class="flex-1 mt-20 mb-24 px-container-margin max-w-2xl mx-auto w-full flex flex-col items-center"
+    >
+      <!-- Active Turn Section -->
+      <section class="flex flex-col items-center py-unit w-full">
+        <div class="relative mb-6">
+          <div
+            class="w-24 h-24 rounded-full border-4 border-primary bg-primary-fixed pulse-avatar overflow-hidden"
+          >
+            <img
+              alt="Mei Turn"
+              class="w-full h-full object-cover"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUnDvc5Ngx-eQ4RbPoOOIuVDkzzqukPK4XUL_Hmotwz80cSnaC8UVMK1nfkR9yOz1QI435mG4s3NqpRAleoxX0wzAcORQUMfQXaIRdhRjphN3hCPhDG541jKMlL1FX4zvzoq_ki4jJyf3BmQBprBFCFFNcLlevKureB4e8A2H4eov6XCfrGmrd2ctR_Eu4hIsGrngj6SZF-Xe8ZNjGnTyO6hwb0zP3AuE7vTOwoc1gSk8-Yho2JffgNyix-33b82k6kWddUMk6NQ_w"
+            />
+          </div>
+          <div
+            class="absolute -bottom-2 bg-primary text-on-primary px-4 py-1 rounded-full font-label-caps text-label-caps shadow-sm whitespace-nowrap border border-primary-container"
+          >
+            Ganbare, Mei-chan! ❤️
+          </div>
+        </div>
+        <!-- Current Word Display -->
+        <div
+          class="bg-surface-container-highest p-6 rounded-lg w-full flex flex-col items-center gap-2 mb-8 border-2 border-primary/20 shadow-sm relative overflow-hidden"
+        >
+          <div class="absolute top-0 right-0 p-2 text-primary/10">
+            <span class="material-symbols-outlined text-4xl">favorite</span>
+          </div>
+          <p class="font-label-caps text-label-caps text-primary text-center">
+            WORD TO MATCH <br /><span class="text-[10px] opacity-80">(お題)</span>
+          </p>
+          <div class="flex items-center gap-4 z-10">
+            <span class="font-display-game text-headline-lg text-on-surface">さく</span>
+            <div
+              class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-on-primary font-display-game text-headline-lg shadow-lg border-2 border-primary-container"
+            >
+              ら
+            </div>
+          </div>
+          <p class="font-body-md text-primary font-bold mt-2 z-10">Starts with: ら (ra)</p>
+        </div>
+      </section>
+      <!-- Feedback Area (Initially Hidden/Interactive) -->
+      <div
+        class="transition-all duration-300 transform flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-error-container text-on-error-container opacity-0 -translate-y-4"
+        id="feedback-toast"
+      >
+        <span class="material-symbols-outlined" id="feedback-icon">cancel</span>
+        <span class="font-label-caps text-label-caps" id="feedback-text">TIME UP!</span>
+      </div>
+      <!-- Input Section -->
+      <section class="w-full mb-8">
+        <div class="relative group">
+          <input
+            class="w-full bg-surface-container-lowest border-2 border-primary rounded-full px-8 py-5 text-body-lg font-body-lg focus:outline-none focus:ring-4 focus:ring-primary/20 placeholder:text-on-surface-variant/40 transition-all shadow-sm"
+            placeholder="Type a word..."
+            type="text"
+          />
+          <button
+            class="absolute right-2 top-2 bottom-2 bg-primary text-on-primary px-6 rounded-full font-label-caps text-label-caps pressable-button flex items-center gap-1"
+          >
+            SUBMIT
+            <span class="text-[10px] opacity-80 ml-1">(送信)</span>
+            <span class="material-symbols-outlined text-sm ml-1" data-icon="send">send</span>
+          </button>
+        </div>
+        <p class="text-center mt-3 text-primary/70 text-label-caps font-label-caps">
+          HINT: USE HIRAGANA ONLY! (ひらがなで入力してね)
+        </p>
+      </section>
+      <!-- History Feed / Word Chain -->
+      <section class="w-full">
+        <div class="flex items-center justify-between mb-4 px-2 border-b border-primary/10 pb-2">
+          <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">link</span> WORD CHAIN
+            <span class="text-[10px] opacity-80">(しりとり)</span>
+          </h3>
+          <span
+            class="font-label-caps text-label-caps text-primary bg-primary-container/30 px-3 py-1 rounded-full"
+            >CHAIN <span class="text-[10px] opacity-80">(連鎖)</span>: 12</span
+          >
+        </div>
+        <div class="space-y-4 relative">
+          <!-- Visual connecting line -->
+          <div
+            class="absolute left-6 top-8 bottom-8 w-0.5 border-l-2 border-dashed border-primary/30"
+          ></div>
+          <!-- History Items -->
+          <div class="flex items-start gap-4">
+            <div
+              class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center border-2 border-primary/30 shrink-0 z-10 overflow-hidden relative"
+            >
+              <img
+                alt="Mei"
+                class="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOq8fFtugN46SFnws-jGSulZVp-OKP7VY64m0YOFXeucN91j53T0zcgs1i1eYkutnauqywI0CD9G737FQS0BC8GfSzAEQjnLb4ws5UqmktUVABU8XJHyrmk4ZGpv0KvyTYiwFS_j-ww2cGGFsGYtSfuEJ3DHRvQ70HnED1mnrqcpCH9xwOx43GcTT3-aL0mQScI_klgxPfWAwuJlYDk-jBOuZT2gaAaaHrQnFrxLbAhkZwMegHh1d4PKZaDilaAGLjj9LU7tUKdgt2"
+              />
+            </div>
+            <div
+              class="kawaii-bubble-alt bg-surface-container-high px-bubble-padding py-3 shadow-sm border border-primary/10 flex-1 relative"
+            >
+              <span
+                class="absolute -top-2 -left-2 text-primary/50 material-symbols-outlined text-xs"
+                >favorite</span
+              >
+              <div class="flex items-center gap-2">
+                <span class="font-body-lg text-on-surface">ね</span>
+                <span class="font-body-lg font-bold text-primary">こ</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 flex-row-reverse">
+            <div
+              class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center border-2 border-primary shrink-0 z-10 overflow-hidden"
+            >
+              <img
+                alt="Jarrel"
+                class="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdMeD6B9lg52l5xQkCV_5QvalT05LeFFNjXs_BeZWcnmPBLDkN2KSrPGogTI3eQyuTrZe13sA9pdS_AGn3oD8wEt_y_i3ZqnVD6w3QcKa51bGYBCFqp2y8dRU6D7bJX0qjS1Wf5P9jynZ5r-MiNpPySe4tzz789i5GWDAASXR0B6SeL6nh8RzvzjRTjz6pNcJPZwuClFzl2SWTvWZUIlisRDBxmHuaMQ8KlkVzRR0CUAWAAl2q2TbYs9rDO2Sd3bpX0yhJg5jumh_k"
+              />
+            </div>
+            <div
+              class="kawaii-bubble bg-primary-container/30 px-bubble-padding py-3 shadow-sm border border-primary/20 flex-1 text-right"
+            >
+              <div class="flex items-center gap-2 justify-end">
+                <span class="font-body-lg text-on-surface">こい</span>
+                <span class="font-body-lg font-bold text-primary">ぬ</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div
+              class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center border-2 border-primary/30 shrink-0 z-10 overflow-hidden relative"
+            >
+              <img
+                alt="Mei"
+                class="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUexSVMtMCU9FK7iD7RrsA2En4jXGPqr_C7sQhz_K2s0opPS23NNfvgLx2NmlxkO0uR0IJPRS9jCKMUKS_k-4vNsBOJ8hrjF8MlGpPG58bAa0mY5nGcxGU8X5FVMLSl74IADdLrc_WAVUX6azyffF5kbetH1y1HEbLwLEq0oz4V6qYMFGKEAtQIAdJSpIUxFSfCdCzZ-jfCcE-8cJsHlY4ZO_WtOKP9UAwOwaxwI3C6JGER4GPwVengg6JaU6HZwenxBDauU6z1fOf"
+              />
+            </div>
+            <div
+              class="kawaii-bubble-alt bg-surface-container-high px-bubble-padding py-3 shadow-sm border border-primary/10 flex-1"
+            >
+              <div class="flex items-center gap-2">
+                <span class="font-body-lg text-on-surface">ぬ</span>
+                <span class="font-body-lg font-bold text-primary">ま</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Bottom Navigation Shell -->
+    <nav
+      class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container/90 backdrop-blur-sm dark:bg-surface-container-highest/90 border-t-2 border-primary/10"
+    >
+      <a
+        class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-6 py-2 shadow-[0_2px_0_0_#7a2846] transition-transform hover:scale-105 active:scale-95 active:translate-y-0.5"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="videogame_asset">videogame_asset</span>
+        <span class="font-label-caps text-label-caps">Play</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-primary/70 dark:text-outline p-2 transition-transform hover:scale-105 hover:text-primary"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="history">history</span>
+        <span class="font-label-caps text-label-caps">History</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-primary/70 dark:text-outline p-2 transition-transform hover:scale-105 hover:text-primary"
+        href="#"
+        ><span class="material-symbols-outlined" data-icon="library_books">library_books</span
+        ><span class="font-label-caps text-label-caps">Library</span></a
+      ><a
+        class="flex flex-col items-center justify-center text-primary/70 dark:text-outline p-2 transition-transform hover:scale-105 hover:text-primary"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+        <span class="font-label-caps text-label-caps">Rules</span>
+      </a>
+    </nav>
+    <script>
+      // Micro-interactions and Timer logic
+      document.addEventListener("DOMContentLoaded", () => {
+        const timerFill = document.getElementById("timer-fill");
+        const input = document.querySelector("input");
+        const submitBtn = document.querySelector("button.pressable-button");
+        const feedbackToast = document.getElementById("feedback-toast");
+        const feedbackIcon = document.getElementById("feedback-icon");
+        const feedbackText = document.getElementById("feedback-text");
 
-            let timeLeft = 100;
-            const timerInterval = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft -= 1;
-                    timerFill.style.width = timeLeft + '%';
-                    
-                    // Change color as it gets low
-                    if (timeLeft < 30) {
-                        timerFill.classList.remove('bg-primary');
-                        timerFill.classList.add('bg-error');
-                    }
-                } else {
-                    clearInterval(timerInterval);
-                    showFeedback('TIME UP!', 'error');
-                }
-            }, 100);
+        let timeLeft = 100;
+        const timerInterval = setInterval(() => {
+          if (timeLeft > 0) {
+            timeLeft -= 1;
+            timerFill.style.width = timeLeft + "%";
 
-            function showFeedback(message, type) {
-                feedbackText.innerText = message;
-                feedbackToast.classList.remove('opacity-0', '-translate-y-4');
-                
-                if (type === 'success') {
-                    feedbackToast.classList.add('bg-secondary-container', 'text-on-secondary-container');
-                    feedbackToast.classList.remove('bg-error-container', 'text-on-error-container');
-                    feedbackIcon.innerText = 'check_circle';
-                } else {
-                    feedbackToast.classList.add('bg-error-container', 'text-on-error-container');
-                    feedbackToast.classList.remove('bg-secondary-container', 'text-on-secondary-container');
-                    feedbackIcon.innerText = 'cancel';
-                }
-
-                setTimeout(() => {
-                    feedbackToast.classList.add('opacity-0', '-translate-y-4');
-                }, 2000);
+            // Change color as it gets low
+            if (timeLeft < 30) {
+              timerFill.classList.remove("bg-primary");
+              timerFill.classList.add("bg-error");
             }
+          } else {
+            clearInterval(timerInterval);
+            showFeedback("TIME UP!", "error");
+          }
+        }, 100);
 
-            submitBtn.addEventListener('click', () => {
-                const val = input.value.trim();
-                if (!val) return;
+        function showFeedback(message, type) {
+          feedbackText.innerText = message;
+          feedbackToast.classList.remove("opacity-0", "-translate-y-4");
 
-                if (val.endsWith('ん')) {
-                    showFeedback('ENDS IN N!', 'error');
-                } else if (val.startsWith('ら')) {
-                    showFeedback('VALID WORD!', 'success');
-                    input.value = '';
-                    timeLeft = 100; // Reset timer for next player logic (demo)
-                } else {
-                    showFeedback('MUST START WITH ら!', 'error');
-                }
-            });
+          if (type === "success") {
+            feedbackToast.classList.add("bg-secondary-container", "text-on-secondary-container");
+            feedbackToast.classList.remove("bg-error-container", "text-on-error-container");
+            feedbackIcon.innerText = "check_circle";
+          } else {
+            feedbackToast.classList.add("bg-error-container", "text-on-error-container");
+            feedbackToast.classList.remove("bg-secondary-container", "text-on-secondary-container");
+            feedbackIcon.innerText = "cancel";
+          }
 
-            // Enter key support
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') submitBtn.click();
-            });
+          setTimeout(() => {
+            feedbackToast.classList.add("opacity-0", "-translate-y-4");
+          }, 2000);
+        }
+
+        submitBtn.addEventListener("click", () => {
+          const val = input.value.trim();
+          if (!val) return;
+
+          if (val.endsWith("ん")) {
+            showFeedback("ENDS IN N!", "error");
+          } else if (val.startsWith("ら")) {
+            showFeedback("VALID WORD!", "success");
+            input.value = "";
+            timeLeft = 100; // Reset timer for next player logic (demo)
+          } else {
+            showFeedback("MUST START WITH ら!", "error");
+          }
         });
+
+        // Enter key support
+        input.addEventListener("keypress", e => {
+          if (e.key === "Enter") submitBtn.click();
+        });
+      });
     </script>
-</body></html>
+  </body>
+</html>

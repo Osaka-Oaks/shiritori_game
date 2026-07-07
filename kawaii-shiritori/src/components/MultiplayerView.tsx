@@ -38,7 +38,7 @@ export default function MultiplayerView({ profile, onBack }: MultiplayerViewProp
   const handleCreateRoom = () => {
     const code = generateRoomCode();
     setRoomCode(code);
-    
+
     const newRoom: GameRoom = {
       id: code,
       hostName: profile.name,
@@ -46,9 +46,9 @@ export default function MultiplayerView({ profile, onBack }: MultiplayerViewProp
       players: 1,
       maxPlayers,
       status: "waiting",
-      difficulty
+      difficulty,
     };
-    
+
     setRooms(prev => [...prev, newRoom]);
     setView("room");
   };
@@ -185,7 +185,7 @@ export default function MultiplayerView({ profile, onBack }: MultiplayerViewProp
               <Users className="w-5 h-5 text-primary" />
               Players in Room (1/{maxPlayers})
             </h3>
-            
+
             <div className="bg-surface rounded-2xl p-4 border border-outline-variant/20">
               <div className="flex items-center gap-3">
                 <img
@@ -299,7 +299,7 @@ export default function MultiplayerView({ profile, onBack }: MultiplayerViewProp
                       </div>
                     </div>
                   </div>
-                  
+
                   <button
                     onClick={() => handleJoinRoom(room)}
                     disabled={room.players >= room.maxPlayers}

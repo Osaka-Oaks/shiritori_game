@@ -5,6 +5,23 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true, // expose on LAN so you can test from your phone during dev
+    host: true,
+  },
+  build: {
+    target: "es2020",
+    sourcemap: false,
+    reportCompressedSize: false,
+    cssMinify: "esbuild",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          firebase: ["firebase/app", "firebase/auth", "firebase/database"],
+          react: ["react", "react-dom"],
+        },
+      },
+    },
+  },
+  esbuild: {
+    drop: ["console", "debugger"],
   },
 });

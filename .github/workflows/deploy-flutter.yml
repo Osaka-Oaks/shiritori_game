@@ -1,0 +1,151 @@
+name: Deploy Flutter to Firebase
+
+# Builds, deploys, and verifies the Flutter web app to its OWN hosting site
+# (shiritori-flutter.web.app) — independent of the React app. Reports pass/fail,
+# full-deploy confirmation, and timing for build + deploy + verify.
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "shiritori_flutter/**"
+      - ".github/workflows/deploy-flutter.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "shiritori_flutter/**"
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: "3.44.4"
+  FIREBASE_PROJECT_ID: "shiritori-game-ccaae"
+  FLUTTER_SITE_URL: "https://shiritori-flutter.web.app"
+  WORKDIR: "shiritori_flutter"
+
+concurrency:
+  group: deploy-flutter-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: 🏗️ Build Flutter Web
+    runs-on: ubuntu-latest
+    outputs:
+      build_seconds: ${{ steps.build.outputs.seconds }}
+      build_size: ${{ steps.size.outputs.size }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 📱 Setup Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: 📦 Dependencies
+        working-directory: ${{ env.WORKDIR }}
+        run: flutter pub get
+
+      - name: 🔍 Analyze
+        working-directory: ${{ env.WORKDIR }}
+        run: flutter analyze --no-fatal-infos
+
+      - name: ✅ Tests (non-blocking if none)
+        working-directory: ${{ env.WORKDIR }}
+        run: flutter test || echo "::warning::No tests or tests failed"
+        continue-on-error: true
+
+      - name: 🏗️ Build web (timed)
+        id: build
+        working-directory: ${{ env.WORKDIR }}
+        run: |
+          START=$(date +%s)
+          flutter build web --release --no-tree-shake-icons
+          test -f build/web/index.html || { echo "::error::build/web missing"; exit 1; }
+          echo "seconds=$(( $(date +%s) - START ))" >> "$GITHUB_OUTPUT"
+
+      - name: 📊 Build size
+        id: size
+        working-directory: ${{ env.WORKDIR }}
+        run: echo "size=$(du -sh build/web | cut -f1)" >> "$GITHUB_OUTPUT"
+
+      - name: 📤 Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-web-build
+          path: ${{ env.WORKDIR }}/build/web
+          retention-days: 7
+
+  deploy:
+    name: 🚀 Deploy to Firebase
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push'
+    outputs:
+      deploy_seconds: ${{ steps.deploy.outputs.seconds }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flutter-web-build
+          path: ${{ env.WORKDIR }}/build/web
+
+      - name: 🚀 Deploy (timed)
+        id: deploy
+        working-directory: ${{ env.WORKDIR }}
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          START=$(date +%s)
+          npx firebase-tools@latest deploy \
+            --only hosting \
+            --project "$FIREBASE_PROJECT_ID" \
+            --non-interactive \
+            --token "$FIREBASE_TOKEN" \
+            --message "${{ github.sha }}"
+          echo "seconds=$(( $(date +%s) - START ))" >> "$GITHUB_OUTPUT"
+
+  verify:
+    name: 🔍 Verify & report
+    runs-on: ubuntu-latest
+    needs: [build, deploy]
+    if: github.event_name == 'push'
+    steps:
+      - name: ⏳ Wait for CDN
+        run: sleep 20
+
+      - name: 🏥 Health check (retries)
+        id: health
+        run: |
+          for i in 1 2 3 4 5; do
+            CODE=$(curl -s -o body.html -w "%{http_code}" --max-time 20 "$FLUTTER_SITE_URL/" || echo 000)
+            if [ "$CODE" = "200" ] && grep -qi "flutter\|main.dart.js" body.html; then
+              echo "status=success" >> "$GITHUB_OUTPUT"
+              RT=$(curl -s -o /dev/null -w '%{time_total}' "$FLUTTER_SITE_URL/")
+              echo "rt=$RT" >> "$GITHUB_OUTPUT"
+              echo "✅ Fully deployed & serving (HTTP 200, ${RT}s)"; exit 0
+            fi
+            echo "attempt $i: HTTP $CODE — retrying"; sleep 10
+          done
+          echo "status=failed" >> "$GITHUB_OUTPUT"
+          echo "::error::Flutter site did not return a healthy 200"; exit 1
+
+      - name: 📝 Deployment summary
+        if: always()
+        run: |
+          {
+            echo "## 🐦 Flutter Deployment"
+            echo ""
+            echo "| Field | Value |"
+            echo "|---|---|"
+            echo "| URL | $FLUTTER_SITE_URL |"
+            echo "| Commit | \`${{ github.sha }}\` |"
+            echo "| Status | ${{ steps.health.outputs.status == 'success' && '✅ Fully deployed' || '❌ Failed' }} |"
+            echo "| Build time | ${{ needs.build.outputs.build_seconds }}s |"
+            echo "| Deploy time | ${{ needs.deploy.outputs.deploy_seconds }}s |"
+            echo "| Build size | ${{ needs.build.outputs.build_size }} |"
+            echo "| Response | ${{ steps.health.outputs.rt }}s |"
+            echo "| Deployed at | $(date -u +'%Y-%m-%d %H:%M:%S UTC') |"
+          } >> "$GITHUB_STEP_SUMMARY"

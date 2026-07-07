@@ -6,8 +6,13 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import {
-  doc, collection, onSnapshot, query, orderBy,
-  writeBatch, serverTimestamp,
+  doc,
+  collection,
+  onSnapshot,
+  query,
+  orderBy,
+  writeBatch,
+  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import { validateWord, getChainKana } from "../../../lib/shiritori";
@@ -25,7 +30,7 @@ export default function Room() {
   // Live listener on the room document.
   useEffect(() => {
     if (!roomId) return;
-    return onSnapshot(doc(db, "rooms", roomId), (snap) => {
+    return onSnapshot(doc(db, "rooms", roomId), snap => {
       if (!snap.exists()) return setMissing(true);
       setRoom(snap.data());
     });
@@ -34,24 +39,31 @@ export default function Room() {
   // Live listener on the word history, oldest first.
   useEffect(() => {
     if (!roomId) return;
-    const q = query(
-      collection(db, "rooms", roomId, "words"),
-      orderBy("createdAt", "asc")
-    );
-    return onSnapshot(q, (snap) => {
-      setWords(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+    const q = query(collection(db, "rooms", roomId, "words"), orderBy("createdAt", "asc"));
+    return onSnapshot(q, snap => {
+      setWords(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
   }, [roomId]);
 
-  if (missing) return <main className="room"><p className="error">Room {roomId} doesn’t exist.</p></main>;
-  if (!room) return <main className="room"><p className="muted">Connecting…</p></main>;
+  if (missing)
+    return (
+      <main className="room">
+        <p className="error">Room {roomId} doesn’t exist.</p>
+      </main>
+    );
+  if (!room)
+    return (
+      <main className="room">
+        <p className="muted">Connecting…</p>
+      </main>
+    );
 
   const myTurn = room.currentTurn === myName;
-  const opponent = room.players.find((p) => p !== myName) || null;
+  const opponent = room.players.find(p => p !== myName) || null;
 
   async function submitWord() {
     setError("");
-    const usedWords = words.map((w) => w.word);
+    const usedWords = words.map(w => w.word);
     const result = validateWord(input, room.lastKana, usedWords);
     if (!result.ok) return setError(result.reason);
 
@@ -80,9 +92,7 @@ export default function Room() {
     <main className="room">
       <header className="room-header">
         <span className="room-code">Room {roomId}</span>
-        <span className="players">
-          {room.players.join(" × ")}
-        </span>
+        <span className="players">{room.players.join(" × ")}</span>
       </header>
 
       {room.status === "waiting" && (
@@ -98,7 +108,7 @@ export default function Room() {
           {/* The chain. Each entry highlights its chain kana — the link
               to the next word. This list IS the game. */}
           <ol className="chain">
-            {words.map((w) => (
+            {words.map(w => (
               <li key={w.id} className={w.player === myName ? "mine" : "theirs"}>
                 <span className="chain-player">{w.player}</span>
                 <span className="chain-word">
@@ -122,8 +132,8 @@ export default function Room() {
               <div className="input-row">
                 <input
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && submitWord()}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && submitWord()}
                   placeholder={room.lastKana ? `${room.lastKana}…` : "ことば"}
                   lang="ja"
                   autoFocus
@@ -133,9 +143,7 @@ export default function Room() {
                 </button>
               </div>
             ) : (
-              <p className="muted waiting-turn">
-                Waiting for {room.currentTurn}…
-              </p>
+              <p className="muted waiting-turn">Waiting for {room.currentTurn}…</p>
             )}
             {error && <p className="error">{error}</p>}
           </section>

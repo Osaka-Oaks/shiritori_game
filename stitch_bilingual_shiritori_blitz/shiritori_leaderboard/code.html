@@ -1,224 +1,416 @@
-<!DOCTYPE html><html class="light" lang="en"><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>Kawaii Shiritori - Leaderboard</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "surface-bright": "#fdf7ff",
-                        "surface": "#fdf7ff",
-                        "error-container": "#ffdad6",
-                        "primary": "#98415e",
-                        "surface-container-high": "#eee4ff",
-                        "on-tertiary-container": "#564400",
-                        "secondary": "#006b5a",
-                        "primary-fixed-dim": "#ffb1c6",
-                        "on-primary-fixed": "#3f001b",
-                        "on-primary-fixed-variant": "#7b2947",
-                        "on-tertiary-fixed-variant": "#574500",
-                        "tertiary-fixed": "#ffe088",
-                        "surface-dim": "#e0d5f6",
-                        "surface-container-highest": "#e9ddff",
-                        "secondary-fixed-dim": "#76d8c0",
-                        "on-tertiary": "#ffffff",
-                        "on-secondary": "#ffffff",
-                        "on-secondary-fixed": "#00201a",
-                        "inverse-surface": "#332c46",
-                        "surface-container-lowest": "#ffffff",
-                        "primary-container": "#ff94b4",
-                        "outline-variant": "#d9c0c5",
-                        "on-secondary-fixed-variant": "#005143",
-                        "tertiary-fixed-dim": "#e7c353",
-                        "secondary-fixed": "#92f5dc",
-                        "on-error": "#ffffff",
-                        "surface-container-low": "#f8f1ff",
-                        "tertiary-container": "#d4b142",
-                        "on-primary": "#ffffff",
-                        "on-background": "#1e1830",
-                        "on-primary-container": "#7a2846",
-                        "primary-fixed": "#ffd9e1",
-                        "on-surface-variant": "#544246",
-                        "inverse-primary": "#ffb1c6",
-                        "inverse-on-surface": "#f6eeff",
-                        "outline": "#867276",
-                        "surface-tint": "#98415e",
-                        "surface-container": "#f3eaff",
-                        "secondary-container": "#92f5dc",
-                        "error": "#ba1a1a",
-                        "on-error-container": "#93000a",
-                        "tertiary": "#735c00",
-                        "background": "#fdf7ff",
-                        "on-tertiary-fixed": "#241a00",
-                        "on-secondary-container": "#007260",
-                        "on-surface": "#1e1830",
-                        "surface-variant": "#e9ddff"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "unit": "8px",
-                        "container-margin": "24px",
-                        "gutter": "16px",
-                        "bubble-padding": "16px"
-                    },
-                    "fontFamily": {
-                        "headline-lg-mobile": ["Plus Jakarta Sans"],
-                        "body-lg": ["Quicksand"],
-                        "display-game": ["Plus Jakarta Sans"],
-                        "headline-lg": ["Plus Jakarta Sans"],
-                        "body-md": ["Quicksand"],
-                        "label-caps": ["Quicksand"]
-                    },
-                    "fontSize": {
-                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
-                        "body-lg": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
-                        "display-game": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
-                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
-                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
-                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }]
-                    }
-                }
-            }
-        }
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Kawaii Shiritori - Leaderboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#fdf7ff",
+              surface: "#fdf7ff",
+              "error-container": "#ffdad6",
+              primary: "#98415e",
+              "surface-container-high": "#eee4ff",
+              "on-tertiary-container": "#564400",
+              secondary: "#006b5a",
+              "primary-fixed-dim": "#ffb1c6",
+              "on-primary-fixed": "#3f001b",
+              "on-primary-fixed-variant": "#7b2947",
+              "on-tertiary-fixed-variant": "#574500",
+              "tertiary-fixed": "#ffe088",
+              "surface-dim": "#e0d5f6",
+              "surface-container-highest": "#e9ddff",
+              "secondary-fixed-dim": "#76d8c0",
+              "on-tertiary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "on-secondary-fixed": "#00201a",
+              "inverse-surface": "#332c46",
+              "surface-container-lowest": "#ffffff",
+              "primary-container": "#ff94b4",
+              "outline-variant": "#d9c0c5",
+              "on-secondary-fixed-variant": "#005143",
+              "tertiary-fixed-dim": "#e7c353",
+              "secondary-fixed": "#92f5dc",
+              "on-error": "#ffffff",
+              "surface-container-low": "#f8f1ff",
+              "tertiary-container": "#d4b142",
+              "on-primary": "#ffffff",
+              "on-background": "#1e1830",
+              "on-primary-container": "#7a2846",
+              "primary-fixed": "#ffd9e1",
+              "on-surface-variant": "#544246",
+              "inverse-primary": "#ffb1c6",
+              "inverse-on-surface": "#f6eeff",
+              outline: "#867276",
+              "surface-tint": "#98415e",
+              "surface-container": "#f3eaff",
+              "secondary-container": "#92f5dc",
+              error: "#ba1a1a",
+              "on-error-container": "#93000a",
+              tertiary: "#735c00",
+              background: "#fdf7ff",
+              "on-tertiary-fixed": "#241a00",
+              "on-secondary-container": "#007260",
+              "on-surface": "#1e1830",
+              "surface-variant": "#e9ddff",
+            },
+            borderRadius: {
+              DEFAULT: "1rem",
+              lg: "2rem",
+              xl: "3rem",
+              full: "9999px",
+            },
+            spacing: {
+              unit: "8px",
+              "container-margin": "24px",
+              gutter: "16px",
+              "bubble-padding": "16px",
+            },
+            fontFamily: {
+              "headline-lg-mobile": ["Plus Jakarta Sans"],
+              "body-lg": ["Quicksand"],
+              "display-game": ["Plus Jakarta Sans"],
+              "headline-lg": ["Plus Jakarta Sans"],
+              "body-md": ["Quicksand"],
+              "label-caps": ["Quicksand"],
+            },
+            fontSize: {
+              "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "700" }],
+              "body-lg": ["20px", { lineHeight: "28px", fontWeight: "500" }],
+              "display-game": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "800" },
+              ],
+              "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "700" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "500" }],
+              "label-caps": [
+                "12px",
+                { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" },
+              ],
+            },
+          },
+        },
+      };
     </script>
-<style>
-        .squish-hover:hover {
-            transform: translateY(2px);
-            box-shadow: 0 0px 0 0 rgba(0,0,0,0);
-        }
-        .squish-active:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 0 rgba(0,0,0,0);
-        }
-        .podium-shadow {
-            box-shadow: 0 8px 16px -4px rgba(152, 65, 94, 0.15);
-        }
+    <style>
+      .squish-hover:hover {
+        transform: translateY(2px);
+        box-shadow: 0 0px 0 0 rgba(0, 0, 0, 0);
+      }
+      .squish-active:active {
+        transform: translateY(4px);
+        box-shadow: 0 0px 0 0 rgba(0, 0, 0, 0);
+      }
+      .podium-shadow {
+        box-shadow: 0 8px 16px -4px rgba(152, 65, 94, 0.15);
+      }
     </style>
-</head>
-<body class="bg-background text-on-background min-h-screen pb-[100px] font-body-md">
-<!-- TopAppBar -->
-<header class="bg-surface dark:bg-surface-dim shadow-[0_4px_0_0_rgba(152,65,94,0.1)] docked full-width top-0 z-40 fixed">
-<div class="flex justify-between items-center w-full px-container-margin py-unit h-16">
-<div class="flex items-center gap-2">
-<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border-2 border-primary">
-<img alt="Cute Neko Avatar" class="w-full h-full object-cover" data-alt="A small circular avatar image of a cute cartoon-style white cat with big eyes and pink blushing cheeks, set against a soft pastel pink background. The style is modern kawaii with clean lines and bright, cheerful lighting, typical of a casual mobile game UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkgJuHfGN2VMs-F7TvnfGR5WRzxctD8K6YPG9yxNghj4xtfz26IxPx-_tyilE_sKaFsSUuhzP33HeA1ZwVX4hh0VyChaEogpTKY-r4gRV5RIfwH0Ay58TRPLfilbL5S4nFy2wcWSM0gXkG2QrTdh6sEm82pbX5JcvMVRjC84MU5hm7R6mgTyhIWGd1sNqiN1PMfWvzhC5wSIasag1tWeAJAXpO49UxdHXSuo-TCYSquBvcmsKVdYiKiV67qBfF7UnU4Z6ms71X97ly">
-</div>
-</div>
-<h1 class="font-display-game text-headline-lg-mobile text-primary dark:text-primary-fixed m-0 leading-none">Shiritori!</h1>
-<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-primary-container/20 transition-colors text-primary dark:text-primary-fixed">
-<span class="material-symbols-outlined" data-icon="help">help</span>
-</button>
-</div>
-</header>
-<!-- Main Content Canvas -->
-<main class="pt-24 px-container-margin max-w-md mx-auto w-full flex flex-col gap-8 pb-32">
-<!-- Podium Section -->
-<section class="flex justify-center items-end h-56 gap-4 mt-4">
-<!-- 2nd Place -->
-<div class="flex flex-col items-center justify-end h-4/5 w-1/3 group">
-<div class="relative w-16 h-16 mb-2 rounded-full border-4 border-surface-dim bg-white podium-shadow z-10 transition-transform group-hover:scale-105">
-<img alt="2nd Place Dog Avatar" class="w-full h-full object-cover rounded-full" data-alt="A highly stylized, cute cartoon avatar of a Shiba Inu dog with a happy expression and sparkling eyes. The dog is centered within a circle, featuring soft pastel colors, primarily warm creams and gentle pinks, embodying a friendly, kawaii aesthetic suitable for a casual mobile game." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTUQMT9ajn7HK4TapP1CbqAcRUW5vUf6msaTmFxyRxhLyGNm2A8XwOGq8pI71IMMVB5OGbg5hym4KCSum_iZqVOR3oOAQ8_1R5x3sKYVjCLrYdiiOlyXXQPJxmNfy74iLGVnWDoluEg0oYnk43Wiw_zU7ryZYCJsXcQDjy2_M6HpHHNhReSmKmDPXXsNnQIgRbSGZuH3PM5bh3xD43erPhkFrxm--w7Q5OZjGf2cczyJ_bR6sJLzg976Z0AUeh-vu59LBjAkQSOPhX">
-<div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[#E0E0E0] border-2 border-white flex items-center justify-center shadow-sm font-headline-lg-mobile text-[14px] text-gray-700">2</div>
-</div>
-<div class="bg-surface-variant w-full h-full rounded-t-xl flex flex-col items-center pt-4 border-t-4 border-[#E0E0E0]">
-<span class="font-headline-lg-mobile text-[14px] truncate w-full text-center px-1">InuBoy</span>
-<span class="font-body-md text-primary font-bold text-sm">18,200</span>
-</div>
-</div>
-<!-- 1st Place -->
-<div class="flex flex-col items-center justify-end h-full w-1/3 group">
-<div class="relative w-20 h-20 mb-2 rounded-full border-4 border-tertiary-fixed bg-white podium-shadow z-20 transition-transform group-hover:scale-110">
-<img alt="1st Place Cat Avatar" class="w-full h-full object-cover rounded-full" data-alt="A very cute, illustrative avatar of a fluffy white cat with large, expressive eyes and tiny pink paws. The cat is styled in a kawaii manner with a soft, glowing pastel background. It looks victorious and cheerful, fitting for a first-place leaderboard portrait in a bright, modern UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiugVVR7xjkPLEZEuSXdFRf9OZ98iAvPotyWO18CRZ3R--ugyeHZ56swX4TN_VwN61ctvX_8uASExwMp92MFQ5aFcB9PIZRoFGkcWIHG6Nfta7ZNEP8lCdQDBOUFvXdw4xoKm2PP49XfPZ08VlA-FRLMV8Vcg6L7qyUCojZ_TJ_MqSBMtxd5H3Ch367HmAqQQ-Z-tTJNPcJWbcjV-U6kba8L_K_YLa3FSHkazs-8TtSL0QtmDutJt-JC5jwgR-nL09-XxVWMAVArR-">
-<div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-tertiary-fixed border-2 border-white flex items-center justify-center shadow-sm font-headline-lg-mobile text-[14px] text-on-tertiary-container">1</div>
-<span class="material-symbols-outlined absolute -top-8 left-1/2 -translate-x-1/2 text-tertiary-fixed text-3xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">crown</span>
-</div>
-<div class="bg-tertiary-fixed-dim w-full h-full rounded-t-xl flex flex-col items-center pt-6 border-t-4 border-tertiary-fixed shadow-lg relative overflow-hidden">
-<div class="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent"></div>
-<span class="font-headline-lg-mobile text-[16px] truncate w-full text-center px-1 z-10 text-on-tertiary-container">NekoMaster</span>
-<span class="font-body-md text-primary font-bold z-10">24,500</span>
-</div>
-</div>
-<!-- 3rd Place -->
-<div class="flex flex-col items-center justify-end h-3/4 w-1/3 group">
-<div class="relative w-14 h-14 mb-2 rounded-full border-4 border-surface-container-high bg-white podium-shadow z-10 transition-transform group-hover:scale-105">
-<img alt="3rd Place Rabbit Avatar" class="w-full h-full object-cover rounded-full" data-alt="A sweet, kawaii-style illustration of a little bunny rabbit with floppy ears, eating a tiny carrot. The color palette features soft whites, gentle pinks, and warm earthy tones. The avatar is circular and designed to look like a friendly character in a casual, highly polished mobile game environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYx8lczN6V-Maxme28Hr0WOHANhMOEvnx73sswXk3NKFBTXsVdQJ4Q_oLybcv9m1ongQbm6uWOkJdZW1sxsF3-1-DobDunTX158x7YHUKV7U81_arTouYvWoq-BS83udkDee4NHgqkZ3qPd-ifuJ7PqQpiJfBepBK59Pr8fyBPQF2NCb2QZghA3WWZ1XvmZTvPAOzgX9OvjT6M3GmKee-xevFjuEbwLURuukqpSbyiS24UF9Hj5t0TWmS4oGakWOfZel0ch-ZGZVUU">
-<div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[#CD7F32] border-2 border-white flex items-center justify-center shadow-sm font-headline-lg-mobile text-[14px] text-white">3</div>
-</div>
-<div class="bg-surface-container w-full h-full rounded-t-xl flex flex-col items-center pt-3 border-t-4 border-[#CD7F32]/50">
-<span class="font-headline-lg-mobile text-[14px] truncate w-full text-center px-1">UsagiChan</span>
-<span class="font-body-md text-primary font-bold text-sm">15,900</span>
-</div>
-</div>
-</section>
-<!-- Global Rankings List -->
-<section class="flex flex-col gap-3 bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_12px_rgba(152,65,94,0.05)]">
-<h2 class="font-headline-lg-mobile text-[18px] text-primary mb-2">Global Rankings</h2>
-<!-- Rank Item -->
-<div class="flex items-center gap-4 bg-surface-container-low p-3 rounded-lg shadow-[0_2px_0_0_rgba(152,65,94,0.1)] transition-transform hover:translate-x-1">
-<span class="font-headline-lg-mobile text-on-surface-variant w-6 text-center">4</span>
-<div class="w-10 h-10 rounded-full overflow-hidden bg-primary-container border-2 border-white shadow-sm flex-shrink-0">
-<img alt="Cat Avatar" class="w-full h-full object-cover" data-alt="A round avatar showing a cute cartoon cat's face with big sparkly eyes. The background is a soft pastel lavender. The art style is flat, vector-based kawaii illustration." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2NeV1ylKbb0ApmERuIqwHuTACiGrzNKjFU5Tttx8fYI03JBJ56VoVuGX9iCcjsYERVXmwKgW9B-4nQsuJ-KL0rqeOf7oqQ8sWXtfd9ZWvjVYBWaQGr6OurvvhzHW7V46PMME0KAptRV7SFFYP6eMmCn5tok1NnKkWMs0fl8f22KUXWjQ2nISSaNlpFDh-2U2zrC_ZlneguaOP53tRUKQuoZnYc3my4oIEjsL85YEzCNJPBoVd1y6C_EftALyT4xd0zUp6hrbPcEd8">
-</div>
-<span class="font-body-lg text-[16px] flex-grow text-on-surface">Haru-chan</span>
-<span class="font-headline-lg-mobile text-[14px] text-primary">12,450 <span class="font-body-md text-xs text-on-surface-variant font-normal">pts</span></span>
-</div>
-<!-- Rank Item -->
-<div class="flex items-center gap-4 bg-surface-container-low p-3 rounded-lg shadow-[0_2px_0_0_rgba(152,65,94,0.1)] transition-transform hover:translate-x-1">
-<span class="font-headline-lg-mobile text-on-surface-variant w-6 text-center">5</span>
-<div class="w-10 h-10 rounded-full overflow-hidden bg-secondary-container border-2 border-white shadow-sm flex-shrink-0">
-<img alt="Dog Avatar" class="w-full h-full object-cover" data-alt="A circular profile picture featuring a stylized, friendly bulldog puppy. The color scheme involves mint greens and soft greys. The design is clean, bubbly, and playful." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD2e2tVbjBnl_oSevngFfFwzWcBwQV3dkUP7Qv7u9NxmjpKR-pVdmXArtdY9lIgA64lNOb-xvyhZaruXVQ4fdd7QCDXmY_ViqQ7uQF0MA7rCK_DnkktE-I3QyWsYe4iICtzdbU06qa4wtCC9eESjOTbI4MYnKnDVL9f-XXSfPmpTNUXGm9_bnG4Bzx_DyUK6t0HS9YLHp5EEhksm6Etqi6Sf5S1yEx3RWGeVEdhZKZMoe5Is9AZi9tCvgPXpQiU_r2LGsEEwgr4sT-">
-</div>
-<span class="font-body-lg text-[16px] flex-grow text-on-surface">KiraKira</span>
-<span class="font-headline-lg-mobile text-[14px] text-primary">11,800 <span class="font-body-md text-xs text-on-surface-variant font-normal">pts</span></span>
-</div>
-<!-- Rank Item -->
-<div class="flex items-center gap-4 bg-surface-container-low p-3 rounded-lg shadow-[0_2px_0_0_rgba(152,65,94,0.1)] transition-transform hover:translate-x-1">
-<span class="font-headline-lg-mobile text-on-surface-variant w-6 text-center">6</span>
-<div class="w-10 h-10 rounded-full overflow-hidden bg-tertiary-container border-2 border-white shadow-sm flex-shrink-0">
-<img alt="Hamster Avatar" class="w-full h-full object-cover" data-alt="A cute hamster eating a seed, styled as a modern kawaii vector illustration in a circular frame. The background is a warm pastel yellow." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBum0yEY8G8Zub4e2wRKiNf6ZckkzwgEP3-9hP7aY5oUBpZ66-FwsJTSO4qPgC7uGeKPzIKsRgilH-HddrEcwh7syBAkuQDzWUjyYT-L5NYWJOr5CwG78IPd0tkVQQ9docaUe4AleoOI9D5AJDHOvVk9BnHHWIwFOSf8aX9cVkVoAR1JJClQ17ubad6LkaZxmqVaL-TOykalaCYwrHhbfm-6tFIi-4bAKS-98-q6JnQp0wsoijkg3sIhtCboOtECAxoYRRpz7mu9qbO">
-</div>
-<span class="font-body-lg text-[16px] flex-grow text-on-surface">MochiMochi</span>
-<span class="font-headline-lg-mobile text-[14px] text-primary">10,200 <span class="font-body-md text-xs text-on-surface-variant font-normal">pts</span></span>
-</div>
-<div class="text-center py-2 text-on-surface-variant font-body-md text-sm">
-<span class="material-symbols-outlined align-middle" style="font-size: 20px;">more_horiz</span>
-</div>
-</section>
-</main>
-<!-- Bottom Sticky Rank Card (Above Nav) -->
-<div class="fixed bottom-[80px] left-0 w-full px-container-margin z-40 pointer-events-none pb-4">
-<div class="max-w-md mx-auto bg-primary text-on-primary rounded-xl p-4 flex items-center gap-4 shadow-[0_8px_16px_rgba(152,65,94,0.3)] pointer-events-auto border-b-4 border-on-primary-fixed-variant">
-<div class="flex flex-col items-center justify-center w-12 h-12 bg-white rounded-lg border-2 border-primary-fixed text-primary shadow-inner">
-<span class="font-label-caps text-[10px] uppercase text-on-surface-variant leading-none mt-1">Rank</span>
-<span class="font-headline-lg-mobile text-[18px] leading-none mb-1">42</span>
-</div>
-<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-bright border-2 border-white flex-shrink-0">
-<img alt="Your Avatar" class="w-full h-full object-cover" data-alt="A small circular avatar image of a cute cartoon-style white cat with big eyes and pink blushing cheeks, set against a soft pastel pink background. The style is modern kawaii with clean lines and bright, cheerful lighting, typical of a casual mobile game UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjfVQ2DzlrPMTOe56VPrnRYQ5ovj7lM3riLvW3cynMgdHSsN8HmFzG7F51nhs-DOA-zj1m2la5jJIGCnV_NTq4lFVkGWW-YtKMzvxyDneT2zmR3MdpWOLLPX_bxuGbmu93NLfeWbinK_vFCh0oUV9gENvgtCng0irPjvPOWP5V3I-TB_AB5k3Nw658Bik5tw2bNLhw9bPoQblu2Zs0spcv8Ocr4MbKBy8t4ZUQLtxEc_Qotf1KqGZl7Zsy1SjgR2h5IRcU9HdXR-3Y">
-</div>
-<div class="flex flex-col flex-grow">
-<span class="font-headline-lg-mobile text-[16px]">You (NekoFan)</span>
-<span class="font-body-md text-sm text-primary-fixed">3,450 pts to Rank 41</span>
-</div>
-<button class="bg-white text-primary rounded-full p-2 squish-hover shadow-[0_2px_0_0_rgba(152,65,94,0.5)]">
-<span class="material-symbols-outlined" data-icon="arrow_upward">arrow_upward</span>
-</button>
-</div>
-</div>
-<!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container dark:bg-surface-container-highest border-t-2 border-primary/10 bg-surface-container-low dark:bg-surface-container-highest shadow-[0_-4px_12px_0_rgba(152,65,94,0.05)] rounded-t-xl md:hidden"><button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform w-20"><span class="material-symbols-outlined mb-1">videogame_asset</span><span class="font-label-caps text-label-caps">Play</span></button><button class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-6 py-2 shadow-[0_2px_0_0_#7a2846] scale-95 translate-y-0.5 duration-100 w-24"><span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">history</span><span class="font-label-caps text-label-caps">History</span></button><button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform w-20"><span class="material-symbols-outlined mb-1">library_books</span><span class="font-label-caps text-label-caps">Library</span></button><button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform w-20"><span class="material-symbols-outlined mb-1">menu_book</span><span class="font-label-caps text-label-caps">Rules</span></button></nav>
-<!-- Desktop Sidebar Navigation (Hidden on mobile) -->
-<aside class="hidden md:flex fixed left-0 top-0 h-full w-64 bg-surface-container border-r border-outline-variant/20 pt-24 flex-col gap-4 px-4 z-30"><button class="flex items-center gap-3 text-on-surface-variant p-3 rounded-lg hover:bg-surface-container-high transition-colors text-left w-full"><span class="material-symbols-outlined">videogame_asset</span><span class="font-headline-lg-mobile text-[16px]">Play</span></button><button class="flex items-center gap-3 bg-primary-container text-on-primary-container font-bold p-3 rounded-lg shadow-[0_2px_0_0_#7a2846] text-left w-full transition-transform squish-active"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span><span class="font-headline-lg-mobile text-[16px]">History</span></button><button class="flex items-center gap-3 text-on-surface-variant p-3 rounded-lg hover:bg-surface-container-high transition-colors text-left w-full"><span class="material-symbols-outlined">library_books</span><span class="font-headline-lg-mobile text-[16px]">Library</span></button><button class="flex items-center gap-3 text-on-surface-variant p-3 rounded-lg hover:bg-surface-container-high transition-colors text-left w-full"><span class="material-symbols-outlined">menu_book</span><span class="font-headline-lg-mobile text-[16px]">Rules</span></button></aside>
-
-
-</body></html>
+  </head>
+  <body class="bg-background text-on-background min-h-screen pb-[100px] font-body-md">
+    <!-- TopAppBar -->
+    <header
+      class="bg-surface dark:bg-surface-dim shadow-[0_4px_0_0_rgba(152,65,94,0.1)] docked full-width top-0 z-40 fixed"
+    >
+      <div class="flex justify-between items-center w-full px-container-margin py-unit h-16">
+        <div class="flex items-center gap-2">
+          <div
+            class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border-2 border-primary"
+          >
+            <img
+              alt="Cute Neko Avatar"
+              class="w-full h-full object-cover"
+              data-alt="A small circular avatar image of a cute cartoon-style white cat with big eyes and pink blushing cheeks, set against a soft pastel pink background. The style is modern kawaii with clean lines and bright, cheerful lighting, typical of a casual mobile game UI."
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkgJuHfGN2VMs-F7TvnfGR5WRzxctD8K6YPG9yxNghj4xtfz26IxPx-_tyilE_sKaFsSUuhzP33HeA1ZwVX4hh0VyChaEogpTKY-r4gRV5RIfwH0Ay58TRPLfilbL5S4nFy2wcWSM0gXkG2QrTdh6sEm82pbX5JcvMVRjC84MU5hm7R6mgTyhIWGd1sNqiN1PMfWvzhC5wSIasag1tWeAJAXpO49UxdHXSuo-TCYSquBvcmsKVdYiKiV67qBfF7UnU4Z6ms71X97ly"
+            />
+          </div>
+        </div>
+        <h1
+          class="font-display-game text-headline-lg-mobile text-primary dark:text-primary-fixed m-0 leading-none"
+        >
+          Shiritori!
+        </h1>
+        <button
+          class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-primary-container/20 transition-colors text-primary dark:text-primary-fixed"
+        >
+          <span class="material-symbols-outlined" data-icon="help">help</span>
+        </button>
+      </div>
+    </header>
+    <!-- Main Content Canvas -->
+    <main class="pt-24 px-container-margin max-w-md mx-auto w-full flex flex-col gap-8 pb-32">
+      <!-- Podium Section -->
+      <section class="flex justify-center items-end h-56 gap-4 mt-4">
+        <!-- 2nd Place -->
+        <div class="flex flex-col items-center justify-end h-4/5 w-1/3 group">
+          <div
+            class="relative w-16 h-16 mb-2 rounded-full border-4 border-surface-dim bg-white podium-shadow z-10 transition-transform group-hover:scale-105"
+          >
+            <img
+              alt="2nd Place Dog Avatar"
+              class="w-full h-full object-cover rounded-full"
+              data-alt="A highly stylized, cute cartoon avatar of a Shiba Inu dog with a happy expression and sparkling eyes. The dog is centered within a circle, featuring soft pastel colors, primarily warm creams and gentle pinks, embodying a friendly, kawaii aesthetic suitable for a casual mobile game."
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTUQMT9ajn7HK4TapP1CbqAcRUW5vUf6msaTmFxyRxhLyGNm2A8XwOGq8pI71IMMVB5OGbg5hym4KCSum_iZqVOR3oOAQ8_1R5x3sKYVjCLrYdiiOlyXXQPJxmNfy74iLGVnWDoluEg0oYnk43Wiw_zU7ryZYCJsXcQDjy2_M6HpHHNhReSmKmDPXXsNnQIgRbSGZuH3PM5bh3xD43erPhkFrxm--w7Q5OZjGf2cczyJ_bR6sJLzg976Z0AUeh-vu59LBjAkQSOPhX"
+            />
+            <div
+              class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[#E0E0E0] border-2 border-white flex items-center justify-center shadow-sm font-headline-lg-mobile text-[14px] text-gray-700"
+            >
+              2
+            </div>
+          </div>
+          <div
+            class="bg-surface-variant w-full h-full rounded-t-xl flex flex-col items-center pt-4 border-t-4 border-[#E0E0E0]"
+          >
+            <span class="font-headline-lg-mobile text-[14px] truncate w-full text-center px-1"
+              >InuBoy</span
+            >
+            <span class="font-body-md text-primary font-bold text-sm">18,200</span>
+          </div>
+        </div>
+        <!-- 1st Place -->
+        <div class="flex flex-col items-center justify-end h-full w-1/3 group">
+          <div
+            class="relative w-20 h-20 mb-2 rounded-full border-4 border-tertiary-fixed bg-white podium-shadow z-20 transition-transform group-hover:scale-110"
+          >
+            <img
+              alt="1st Place Cat Avatar"
+              class="w-full h-full object-cover rounded-full"
+              data-alt="A very cute, illustrative avatar of a fluffy white cat with large, expressive eyes and tiny pink paws. The cat is styled in a kawaii manner with a soft, glowing pastel background. It looks victorious and cheerful, fitting for a first-place leaderboard portrait in a bright, modern UI."
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiugVVR7xjkPLEZEuSXdFRf9OZ98iAvPotyWO18CRZ3R--ugyeHZ56swX4TN_VwN61ctvX_8uASExwMp92MFQ5aFcB9PIZRoFGkcWIHG6Nfta7ZNEP8lCdQDBOUFvXdw4xoKm2PP49XfPZ08VlA-FRLMV8Vcg6L7qyUCojZ_TJ_MqSBMtxd5H3Ch367HmAqQQ-Z-tTJNPcJWbcjV-U6kba8L_K_YLa3FSHkazs-8TtSL0QtmDutJt-JC5jwgR-nL09-XxVWMAVArR-"
+            />
+            <div
+              class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-tertiary-fixed border-2 border-white flex items-center justify-center shadow-sm font-headline-lg-mobile text-[14px] text-on-tertiary-container"
+            >
+              1
+            </div>
+            <span
+              class="material-symbols-outlined absolute -top-8 left-1/2 -translate-x-1/2 text-tertiary-fixed text-3xl"
+              data-weight="fill"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >crown</span
+            >
+          </div>
+          <div
+            class="bg-tertiary-fixed-dim w-full h-full rounded-t-xl flex flex-col items-center pt-6 border-t-4 border-tertiary-fixed shadow-lg relative overflow-hidden"
+          >
+            <div class="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent"></div>
+            <span
+              class="font-headline-lg-mobile text-[16px] truncate w-full text-center px-1 z-10 text-on-tertiary-container"
+              >NekoMaster</span
+            >
+            <span class="font-body-md text-primary font-bold z-10">24,500</span>
+          </div>
+        </div>
+        <!-- 3rd Place -->
+        <div class="flex flex-col items-center justify-end h-3/4 w-1/3 group">
+          <div
+            class="relative w-14 h-14 mb-2 rounded-full border-4 border-surface-container-high bg-white podium-shadow z-10 transition-transform group-hover:scale-105"
+          >
+            <img
+              alt="3rd Place Rabbit Avatar"
+              class="w-full h-full object-cover rounded-full"
+              data-alt="A sweet, kawaii-style illustration of a little bunny rabbit with floppy ears, eating a tiny carrot. The color palette features soft whites, gentle pinks, and warm earthy tones. The avatar is circular and designed to look like a friendly character in a casual, highly polished mobile game environment."
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYx8lczN6V-Maxme28Hr0WOHANhMOEvnx73sswXk3NKFBTXsVdQJ4Q_oLybcv9m1ongQbm6uWOkJdZW1sxsF3-1-DobDunTX158x7YHUKV7U81_arTouYvWoq-BS83udkDee4NHgqkZ3qPd-ifuJ7PqQpiJfBepBK59Pr8fyBPQF2NCb2QZghA3WWZ1XvmZTvPAOzgX9OvjT6M3GmKee-xevFjuEbwLURuukqpSbyiS24UF9Hj5t0TWmS4oGakWOfZel0ch-ZGZVUU"
+            />
+            <div
+              class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[#CD7F32] border-2 border-white flex items-center justify-center shadow-sm font-headline-lg-mobile text-[14px] text-white"
+            >
+              3
+            </div>
+          </div>
+          <div
+            class="bg-surface-container w-full h-full rounded-t-xl flex flex-col items-center pt-3 border-t-4 border-[#CD7F32]/50"
+          >
+            <span class="font-headline-lg-mobile text-[14px] truncate w-full text-center px-1"
+              >UsagiChan</span
+            >
+            <span class="font-body-md text-primary font-bold text-sm">15,900</span>
+          </div>
+        </div>
+      </section>
+      <!-- Global Rankings List -->
+      <section
+        class="flex flex-col gap-3 bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_12px_rgba(152,65,94,0.05)]"
+      >
+        <h2 class="font-headline-lg-mobile text-[18px] text-primary mb-2">Global Rankings</h2>
+        <!-- Rank Item -->
+        <div
+          class="flex items-center gap-4 bg-surface-container-low p-3 rounded-lg shadow-[0_2px_0_0_rgba(152,65,94,0.1)] transition-transform hover:translate-x-1"
+        >
+          <span class="font-headline-lg-mobile text-on-surface-variant w-6 text-center">4</span>
+          <div
+            class="w-10 h-10 rounded-full overflow-hidden bg-primary-container border-2 border-white shadow-sm flex-shrink-0"
+          >
+            <img
+              alt="Cat Avatar"
+              class="w-full h-full object-cover"
+              data-alt="A round avatar showing a cute cartoon cat's face with big sparkly eyes. The background is a soft pastel lavender. The art style is flat, vector-based kawaii illustration."
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2NeV1ylKbb0ApmERuIqwHuTACiGrzNKjFU5Tttx8fYI03JBJ56VoVuGX9iCcjsYERVXmwKgW9B-4nQsuJ-KL0rqeOf7oqQ8sWXtfd9ZWvjVYBWaQGr6OurvvhzHW7V46PMME0KAptRV7SFFYP6eMmCn5tok1NnKkWMs0fl8f22KUXWjQ2nISSaNlpFDh-2U2zrC_ZlneguaOP53tRUKQuoZnYc3my4oIEjsL85YEzCNJPBoVd1y6C_EftALyT4xd0zUp6hrbPcEd8"
+            />
+          </div>
+          <span class="font-body-lg text-[16px] flex-grow text-on-surface">Haru-chan</span>
+          <span class="font-headline-lg-mobile text-[14px] text-primary"
+            >12,450
+            <span class="font-body-md text-xs text-on-surface-variant font-normal">pts</span></span
+          >
+        </div>
+        <!-- Rank Item -->
+        <div
+          class="flex items-center gap-4 bg-surface-container-low p-3 rounded-lg shadow-[0_2px_0_0_rgba(152,65,94,0.1)] transition-transform hover:translate-x-1"
+        >
+          <span class="font-headline-lg-mobile text-on-surface-variant w-6 text-center">5</span>
+          <div
+            class="w-10 h-10 rounded-full overflow-hidden bg-secondary-container border-2 border-white shadow-sm flex-shrink-0"
+          >
+            <img
+              alt="Dog Avatar"
+              class="w-full h-full object-cover"
+              data-alt="A circular profile picture featuring a stylized, friendly bulldog puppy. The color scheme involves mint greens and soft greys. The design is clean, bubbly, and playful."
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD2e2tVbjBnl_oSevngFfFwzWcBwQV3dkUP7Qv7u9NxmjpKR-pVdmXArtdY9lIgA64lNOb-xvyhZaruXVQ4fdd7QCDXmY_ViqQ7uQF0MA7rCK_DnkktE-I3QyWsYe4iICtzdbU06qa4wtCC9eESjOTbI4MYnKnDVL9f-XXSfPmpTNUXGm9_bnG4Bzx_DyUK6t0HS9YLHp5EEhksm6Etqi6Sf5S1yEx3RWGeVEdhZKZMoe5Is9AZi9tCvgPXpQiU_r2LGsEEwgr4sT-"
+            />
+          </div>
+          <span class="font-body-lg text-[16px] flex-grow text-on-surface">KiraKira</span>
+          <span class="font-headline-lg-mobile text-[14px] text-primary"
+            >11,800
+            <span class="font-body-md text-xs text-on-surface-variant font-normal">pts</span></span
+          >
+        </div>
+        <!-- Rank Item -->
+        <div
+          class="flex items-center gap-4 bg-surface-container-low p-3 rounded-lg shadow-[0_2px_0_0_rgba(152,65,94,0.1)] transition-transform hover:translate-x-1"
+        >
+          <span class="font-headline-lg-mobile text-on-surface-variant w-6 text-center">6</span>
+          <div
+            class="w-10 h-10 rounded-full overflow-hidden bg-tertiary-container border-2 border-white shadow-sm flex-shrink-0"
+          >
+            <img
+              alt="Hamster Avatar"
+              class="w-full h-full object-cover"
+              data-alt="A cute hamster eating a seed, styled as a modern kawaii vector illustration in a circular frame. The background is a warm pastel yellow."
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBum0yEY8G8Zub4e2wRKiNf6ZckkzwgEP3-9hP7aY5oUBpZ66-FwsJTSO4qPgC7uGeKPzIKsRgilH-HddrEcwh7syBAkuQDzWUjyYT-L5NYWJOr5CwG78IPd0tkVQQ9docaUe4AleoOI9D5AJDHOvVk9BnHHWIwFOSf8aX9cVkVoAR1JJClQ17ubad6LkaZxmqVaL-TOykalaCYwrHhbfm-6tFIi-4bAKS-98-q6JnQp0wsoijkg3sIhtCboOtECAxoYRRpz7mu9qbO"
+            />
+          </div>
+          <span class="font-body-lg text-[16px] flex-grow text-on-surface">MochiMochi</span>
+          <span class="font-headline-lg-mobile text-[14px] text-primary"
+            >10,200
+            <span class="font-body-md text-xs text-on-surface-variant font-normal">pts</span></span
+          >
+        </div>
+        <div class="text-center py-2 text-on-surface-variant font-body-md text-sm">
+          <span class="material-symbols-outlined align-middle" style="font-size: 20px"
+            >more_horiz</span
+          >
+        </div>
+      </section>
+    </main>
+    <!-- Bottom Sticky Rank Card (Above Nav) -->
+    <div
+      class="fixed bottom-[80px] left-0 w-full px-container-margin z-40 pointer-events-none pb-4"
+    >
+      <div
+        class="max-w-md mx-auto bg-primary text-on-primary rounded-xl p-4 flex items-center gap-4 shadow-[0_8px_16px_rgba(152,65,94,0.3)] pointer-events-auto border-b-4 border-on-primary-fixed-variant"
+      >
+        <div
+          class="flex flex-col items-center justify-center w-12 h-12 bg-white rounded-lg border-2 border-primary-fixed text-primary shadow-inner"
+        >
+          <span
+            class="font-label-caps text-[10px] uppercase text-on-surface-variant leading-none mt-1"
+            >Rank</span
+          >
+          <span class="font-headline-lg-mobile text-[18px] leading-none mb-1">42</span>
+        </div>
+        <div
+          class="w-12 h-12 rounded-full overflow-hidden bg-surface-bright border-2 border-white flex-shrink-0"
+        >
+          <img
+            alt="Your Avatar"
+            class="w-full h-full object-cover"
+            data-alt="A small circular avatar image of a cute cartoon-style white cat with big eyes and pink blushing cheeks, set against a soft pastel pink background. The style is modern kawaii with clean lines and bright, cheerful lighting, typical of a casual mobile game UI."
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjfVQ2DzlrPMTOe56VPrnRYQ5ovj7lM3riLvW3cynMgdHSsN8HmFzG7F51nhs-DOA-zj1m2la5jJIGCnV_NTq4lFVkGWW-YtKMzvxyDneT2zmR3MdpWOLLPX_bxuGbmu93NLfeWbinK_vFCh0oUV9gENvgtCng0irPjvPOWP5V3I-TB_AB5k3Nw658Bik5tw2bNLhw9bPoQblu2Zs0spcv8Ocr4MbKBy8t4ZUQLtxEc_Qotf1KqGZl7Zsy1SjgR2h5IRcU9HdXR-3Y"
+          />
+        </div>
+        <div class="flex flex-col flex-grow">
+          <span class="font-headline-lg-mobile text-[16px]">You (NekoFan)</span>
+          <span class="font-body-md text-sm text-primary-fixed">3,450 pts to Rank 41</span>
+        </div>
+        <button
+          class="bg-white text-primary rounded-full p-2 squish-hover shadow-[0_2px_0_0_rgba(152,65,94,0.5)]"
+        >
+          <span class="material-symbols-outlined" data-icon="arrow_upward">arrow_upward</span>
+        </button>
+      </div>
+    </div>
+    <!-- BottomNavBar -->
+    <nav
+      class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container dark:bg-surface-container-highest border-t-2 border-primary/10 bg-surface-container-low dark:bg-surface-container-highest shadow-[0_-4px_12px_0_rgba(152,65,94,0.05)] rounded-t-xl md:hidden"
+    >
+      <button
+        class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform w-20"
+      >
+        <span class="material-symbols-outlined mb-1">videogame_asset</span
+        ><span class="font-label-caps text-label-caps">Play</span></button
+      ><button
+        class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-6 py-2 shadow-[0_2px_0_0_#7a2846] scale-95 translate-y-0.5 duration-100 w-24"
+      >
+        <span
+          class="material-symbols-outlined mb-1"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+          >history</span
+        ><span class="font-label-caps text-label-caps">History</span></button
+      ><button
+        class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform w-20"
+      >
+        <span class="material-symbols-outlined mb-1">library_books</span
+        ><span class="font-label-caps text-label-caps">Library</span></button
+      ><button
+        class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform w-20"
+      >
+        <span class="material-symbols-outlined mb-1">menu_book</span
+        ><span class="font-label-caps text-label-caps">Rules</span>
+      </button>
+    </nav>
+    <!-- Desktop Sidebar Navigation (Hidden on mobile) -->
+    <aside
+      class="hidden md:flex fixed left-0 top-0 h-full w-64 bg-surface-container border-r border-outline-variant/20 pt-24 flex-col gap-4 px-4 z-30"
+    >
+      <button
+        class="flex items-center gap-3 text-on-surface-variant p-3 rounded-lg hover:bg-surface-container-high transition-colors text-left w-full"
+      >
+        <span class="material-symbols-outlined">videogame_asset</span
+        ><span class="font-headline-lg-mobile text-[16px]">Play</span></button
+      ><button
+        class="flex items-center gap-3 bg-primary-container text-on-primary-container font-bold p-3 rounded-lg shadow-[0_2px_0_0_#7a2846] text-left w-full transition-transform squish-active"
+      >
+        <span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1"
+          >history</span
+        ><span class="font-headline-lg-mobile text-[16px]">History</span></button
+      ><button
+        class="flex items-center gap-3 text-on-surface-variant p-3 rounded-lg hover:bg-surface-container-high transition-colors text-left w-full"
+      >
+        <span class="material-symbols-outlined">library_books</span
+        ><span class="font-headline-lg-mobile text-[16px]">Library</span></button
+      ><button
+        class="flex items-center gap-3 text-on-surface-variant p-3 rounded-lg hover:bg-surface-container-high transition-colors text-left w-full"
+      >
+        <span class="material-symbols-outlined">menu_book</span
+        ><span class="font-headline-lg-mobile text-[16px]">Rules</span>
+      </button>
+    </aside>
+  </body>
+</html>

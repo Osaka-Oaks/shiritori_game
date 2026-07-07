@@ -44,6 +44,7 @@ An immersive Japanese word-chain game with dictionary validation, practice mode,
 ## 📋 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 - (Optional) Firebase account for multiplayer
@@ -76,31 +77,40 @@ Server runs on `http://localhost:3000`
 ## 🎮 Game Modes
 
 ### 1. **Bot Match** (Single Player)
+
 Play against AI opponents with three difficulty levels:
+
 - **Usagi Chan** (Easy): Simple 2-3 syllable words
 - **Inu Sensei** (Medium): Balanced, strategic vocabulary
 - **Neko Master** (Hard): Advanced, challenging words
 
 ### 2. **Practice Mode** (Solo Training)
+
 Three drill types to improve your skills:
+
 - **Flashcard Mode**: Learn words for each hiragana
 - **Chain Practice**: Build continuous word chains
 - **Speed Challenge**: 30-second timed rounds
 
 Track your progress with:
+
 - ✅ Correct/incorrect counts
 - 🔥 Current streak
 - 🏆 Best streak record
 
 ### 3. **Multiplayer** (Online)
+
 Play with friends in real-time:
+
 - Create rooms with 6-digit codes
 - 2-4 players per game
 - Casual or competitive modes
 - Turn-based word submissions
 
 ### 4. **Dictionary** (Reference)
+
 Browse and search the full word database:
+
 - 500+ curated Japanese nouns
 - Multiple search methods
 - Word details with translations
@@ -111,6 +121,7 @@ Browse and search the full word database:
 ## 📚 Dictionary System
 
 ### Features
+
 - **500+ words** from JLPT N5-N3 levels
 - **Indexed by sound** for O(1) lookups
 - **Multi-format support**: hiragana, romaji, kanji
@@ -119,23 +130,23 @@ Browse and search the full word database:
 ### Usage
 
 ```typescript
-import { dictionary } from './lib/dictionaryHelper';
+import { dictionary } from "./lib/dictionaryHelper";
 
 // Find a word
-const word = dictionary.findWord('ねこ');
+const word = dictionary.findWord("ねこ");
 // { word: 'ねこ', romaji: 'neko', kanji: '猫', translation: 'cat', ... }
 
 // Get words by starting sound
-const words = dictionary.getWordsByStartSound('ね');
+const words = dictionary.getWordsByStartSound("ね");
 // [{ word: 'ねこ', ... }, { word: 'ねずみ', ... }, ...]
 
 // Get random safe word (no ん ending)
-const random = dictionary.getRandomWordStartingWith('り', ['りんご']);
+const random = dictionary.getRandomWordStartingWith("り", ["りんご"]);
 // { word: 'りす', romaji: 'risu', kanji: '栗鼠', translation: 'squirrel', ... }
 
 // Check if word ends in ん
-dictionary.endsInN('みかん'); // true (fatal!)
-dictionary.endsInN('ねこ');   // false (safe)
+dictionary.endsInN("みかん"); // true (fatal!)
+dictionary.endsInN("ねこ"); // false (safe)
 ```
 
 ---
@@ -145,27 +156,34 @@ dictionary.endsInN('ねこ');   // false (safe)
 ### Beginner Strategy
 
 #### 1. **Learn Safe Starter Words**
+
 Memorize 5 words for each common hiragana:
 
-| Sound | Safe Words |
-|-------|------------|
-| あ | あさ (morning), あめ (rain), あき (autumn) |
-| い | いぬ (dog), いえ (house), いし (stone) |
-| う | うみ (sea), うた (song), うま (horse) |
-| か | かさ (umbrella), かめ (turtle), かぜ (wind) |
-| さ | さかな (fish), さくら (cherry blossom), さる (monkey) |
+| Sound | Safe Words                                            |
+| ----- | ----------------------------------------------------- |
+| あ    | あさ (morning), あめ (rain), あき (autumn)            |
+| い    | いぬ (dog), いえ (house), いし (stone)                |
+| う    | うみ (sea), うた (song), うま (horse)                 |
+| か    | かさ (umbrella), かめ (turtle), かぜ (wind)           |
+| さ    | さかな (fish), さくら (cherry blossom), さる (monkey) |
 
 #### 2. **Force Easy Sounds**
+
 End your words with these sounds for easy follow-ups:
+
 - か, さ, た, な, は, ま, や, ら, わ
 
 #### 3. **Avoid Dangerous Endings**
+
 These sounds have few follow-up options:
+
 - ゆ, ぢ, ぴ, ぎ (very limited vocabulary)
 - **ん (N)** - INSTANT LOSS!
 
 #### 4. **Category Practice**
+
 Focus on these word groups:
+
 - **Animals**: いぬ, ねこ, とり, うま, さる
 - **Food**: すし, りんご, たまご, ぱん
 - **Places**: えき, がっこう, こうえん, うみ, やま
@@ -182,11 +200,13 @@ Focus on these word groups:
    - Enable Realtime Database
 
 2. **Get Configuration**
+
    ```
    Firebase Console → Project Settings → General → Your apps
    ```
 
 3. **Add to .env**
+
    ```env
    VITE_FIREBASE_API_KEY=AIza...
    VITE_FIREBASE_AUTH_DOMAIN=yourapp.firebaseapp.com
@@ -233,6 +253,7 @@ Focus on these word groups:
 ### Setup Instructions
 
 #### 1. **Build Unity Project**
+
 ```
 Unity Editor:
 File → Build Settings
@@ -241,7 +262,9 @@ Build
 ```
 
 #### 2. **Copy Build Files**
+
 Place these files in `public/unity/Build/`:
+
 ```
 shiritori.loader.js
 shiritori.data
@@ -250,6 +273,7 @@ shiritori.wasm
 ```
 
 #### 3. **File Structure**
+
 ```
 public/
   unity/
@@ -261,22 +285,26 @@ public/
 ```
 
 #### 4. **Test**
+
 Refresh the app - Unity view will auto-load when accessed
 
 ### React ↔ Unity Communication
 
 **Send to Unity:**
+
 ```typescript
-unityInstance.SendMessage('GameManager', 'OnWordPlayed', 'ねこ');
+unityInstance.SendMessage("GameManager", "OnWordPlayed", "ねこ");
 ```
 
 **Receive from Unity:**
+
 ```typescript
 // In Unity C#:
 Application.ExternalEval("window.ReactApp.handleUnityEvent('" + jsonData + "')");
 ```
 
 ### Architecture Benefits
+
 - **React**: Game logic, validation, Firebase sync
 - **Unity**: Visuals, animations, effects
 - **Separation**: Independent updates, easier maintenance
@@ -303,6 +331,7 @@ Application.ExternalEval("window.ReactApp.handleUnityEvent('" + jsonData + "')")
 せんせい, おとこ, おんな, こども, ともだち, ちち, はは, あに, あね, そふ
 
 ### Survival Tips
+
 1. **Goal**: Stay alive longer, not necessarily win
 2. **Build vocabulary systematically** (5 words per kana)
 3. **Practice chain building** for 15 min daily
@@ -310,6 +339,7 @@ Application.ExternalEval("window.ReactApp.handleUnityEvent('" + jsonData + "')")
 5. **Know fatal words** to avoid (ending in ん)
 
 ### Practice Regimen
+
 - **Week 1-2**: あ-row and い-row (50 words)
 - **Week 3-4**: か-row and さ-row (50 words)
 - **Week 5-6**: た-row and な-row (50 words)
@@ -321,6 +351,7 @@ Application.ExternalEval("window.ReactApp.handleUnityEvent('" + jsonData + "')")
 ## 🛠️ Development
 
 ### Project Structure
+
 ```
 src/
   components/
@@ -338,6 +369,7 @@ src/
 ```
 
 ### Tech Stack
+
 - **Frontend**: React 19 + TypeScript
 - **Styling**: Tailwind CSS 4.1
 - **Build**: Vite 6.2
@@ -347,6 +379,7 @@ src/
 - **Icons**: Lucide React
 
 ### Scripts
+
 ```bash
 npm run dev          # Start dev server
 npm run build        # Production build
@@ -359,12 +392,14 @@ npm run lint         # Type check
 ## 📱 Mobile Support
 
 The app is fully responsive:
+
 - Touch-optimized controls
 - Mobile-first design
 - PWA support
 - Offline dictionary caching
 
 Install as PWA:
+
 1. Open in Chrome/Safari
 2. "Add to Home Screen"
 3. Launch as standalone app
@@ -374,19 +409,20 @@ Install as PWA:
 ## 🎨 Customization
 
 ### Color Scheme
+
 ```css
---primary: #f27d26        /* Orange */
---secondary: Emerald      /* Green */
---tertiary: Pink          /* Accent */
---error: Red              /* Warnings */
+--primary: #f27d26 /* Orange */ --secondary: Emerald /* Green */ --tertiary: Pink /* Accent */
+  --error: Red /* Warnings */;
 ```
 
 ### Fonts
+
 - **Display**: Custom game font
 - **Body**: Space Grotesk
 - **Labels**: System font
 
 ### Theme
+
 - Kawaii aesthetic
 - Soft shadows
 - Rounded corners
@@ -400,21 +436,25 @@ Install as PWA:
 ### Common Issues
 
 **Dictionary not loading**
+
 - Ensure `src/data/dictionary.json` exists
 - Check file is valid JSON
 - Restart dev server
 
 **Practice mode validation fails**
+
 - Dictionary must be loaded first
 - Check browser console for errors
 - Verify word format (hiragana or romaji)
 
 **Multiplayer not connecting**
+
 - Add Firebase config to `.env`
 - Check Firebase database rules
 - Verify network connection
 
 **Unity view shows error**
+
 - Build Unity project for WebGL
 - Copy files to `public/unity/Build/`
 - Rename files correctly
@@ -425,6 +465,7 @@ Install as PWA:
 ## 📊 Performance
 
 ### Optimizations
+
 - Dictionary indexed by sound (O(1) lookups)
 - Memoized React components
 - Lazy loading for heavy views
@@ -432,6 +473,7 @@ Install as PWA:
 - Firebase connection pooling
 
 ### Metrics
+
 - **Dictionary lookup**: <1ms
 - **Word validation**: ~50ms
 - **Firebase sync**: ~100-200ms
@@ -471,18 +513,21 @@ Made with ❤️ for Japanese learners
 ## 🚀 Deployment
 
 ### Vercel
+
 ```bash
 npm run build
 vercel --prod
 ```
 
 ### Netlify
+
 ```bash
 npm run build
 netlify deploy --prod --dir=dist
 ```
 
 ### Firebase Hosting
+
 ```bash
 npm run build
 firebase deploy
@@ -503,6 +548,7 @@ firebase deploy
 ## 💬 Feedback
 
 Found a bug or have a suggestion? The game is ready for:
+
 - ✅ Single player bot matches
 - ✅ Practice mode training
 - ✅ Dictionary validation

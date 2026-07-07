@@ -1,7 +1,17 @@
 import React from "react";
 import { motion } from "motion/react";
 import { PlayerProfile, AppCustomizations, DEFAULT_CUSTOMIZATIONS } from "../types";
-import { User, Mail, Lock, LogIn, UserPlus, LogOut, Check, Sparkles, AlertCircle } from "lucide-react";
+import {
+  User,
+  Mail,
+  Lock,
+  LogIn,
+  UserPlus,
+  LogOut,
+  Check,
+  Sparkles,
+  AlertCircle,
+} from "lucide-react";
 
 interface AuthViewProps {
   currentUser: AuthUser | null;
@@ -23,15 +33,10 @@ const AVATARS = [
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDv2_dSmuLzNIvq77bleM6yYK1w2nskbF-805BwE30p1TCTfPqHucQDAhM51009utAwsM6gOV0Pf4wEKJ7SxEX9Zv2R7bHUD9Y48kWy2ryoViyezxrLRkfiMgWMXsgiswNZmqFEyeSZFvAUfS-BjXK2NuUE1tD4HE6ks_DU_weW0RR9jrg9ESv15u3kPcSXDOMX7jQdFtaqgPe82uxThMpWFrN0mLCMa8PEBZTMiDunmvltqaE4mghXOTvBoEhYqMx7RPt3lUshKVvY",
   "https://lh3.googleusercontent.com/aida-public/AB6AXuC5Lg5SU1xKaPIp0mM--d-Cep1T93IrZoLObvX2XNsHO8P-sgdUN8q_D1v5DWfBUXEkKW59oJtJcM0q8o4_1jT5XFM9M3Mu3amwXXKFMPfo_S6MscBlMqBrO4sDHxvHNL1KlKIXI91sYZkaYd-X8aH6yzGf6ABkJUT1E2QAQnPRZLZ0C9c67gWNbWx6hmp-2oMyST2EHB4FLVV-XvbRz-RXEZegVx39CKMnsJnPtoetEXNsOdQjg-KTjAmi2s2j1M3NOXlLjHtcDQo7",
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDFRYI5dsRRAnSJV4BppuP-eap7bMIE9mKy65rz08TBAULgei4Nofz3ln4LLTJfnHXvxtI-k4mEBCtsri257VesEzQ_eAxT9XBju7KMfc8NepRD17o5rkW1rgB16wNNM83jLvs7I1Xt238IFjgIhxUJFFqePYlA3i9H0cDZwrLONCXS_lJlAFQyEWosSLb5-jZUzarDzM2vKfIA6q8FTDBOM41TYWjdxEtc1nFCSjBYamaJZItiEsKZreGwqaOW1KWuVddOmpiTur0p",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuCiUGinuf2_gEvw9lg5ziXpJoQjS-EeUXJC9gLJzBVu-t_8T8IzvBA59uUGDh2nOF1RVA69aXXq4cV93HG3vK63mPS5tLLq8UOiG1SRTrOG8BLiJsmY-uR4C6rSRFy3o5bNmAyaRF40RFn70d0YeGD62DLDNWyXfODBbQMQvJVcs4VF39YgKjYfQhTxjMt2QcD5GkKlzMc82brS_TiSv3euPOO9TQX8hPd7Gj5KMPY9ai1Cd98Kmn92TA--FlZqnuwS3kAVtI023Bs4"
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCiUGinuf2_gEvw9lg5ziXpJoQjS-EeUXJC9gLJzBVu-t_8T8IzvBA59uUGDh2nOF1RVA69aXXq4cV93HG3vK63mPS5tLLq8UOiG1SRTrOG8BLiJsmY-uR4C6rSRFy3o5bNmAyaRF40RFn70d0YeGD62DLDNWyXfODBbQMQvJVcs4VF39YgKjYfQhTxjMt2QcD5GkKlzMc82brS_TiSv3euPOO9TQX8hPd7Gj5KMPY9ai1Cd98Kmn92TA--FlZqnuwS3kAVtI023Bs4",
 ];
 
-export default function AuthView({
-  currentUser,
-  onLogin,
-  onLogout,
-  onRegister,
-}: AuthViewProps) {
+export default function AuthView({ currentUser, onLogin, onLogout, onRegister }: AuthViewProps) {
   const [isSignUp, setIsSignUp] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -59,7 +64,11 @@ export default function AuthView({
     const savedAccounts = localStorage.getItem("shiritori_accounts");
     let accounts: Record<string, any> = {};
     if (savedAccounts) {
-      try { accounts = JSON.parse(savedAccounts); } catch (err) { /* ignore */ }
+      try {
+        accounts = JSON.parse(savedAccounts);
+      } catch (err) {
+        /* ignore */
+      }
     }
 
     const emailKey = email.toLowerCase().trim();
@@ -76,12 +85,12 @@ export default function AuthView({
         email: emailKey,
         name: nickname,
         avatarUrl: selectedAvatar,
-        customizations: { ...DEFAULT_CUSTOMIZATIONS }
+        customizations: { ...DEFAULT_CUSTOMIZATIONS },
       };
 
       accounts[emailKey] = {
         password: password,
-        user: newUser
+        user: newUser,
       };
 
       localStorage.setItem("shiritori_accounts", JSON.stringify(accounts));
@@ -146,10 +155,22 @@ export default function AuthView({
               <p className="text-white/40 uppercase text-[9px] tracking-widest border-b border-white/5 pb-1 mb-1.5">
                 Saved Preferences System
               </p>
-              <p><span className="text-primary font-bold">Accent:</span> {currentUser.customizations?.accentColor || "#f27d26"}</p>
-              <p><span className="text-primary font-bold">Grid:</span> {currentUser.customizations?.gridStyle || "sparse"}</p>
-              <p><span className="text-primary font-bold">Typography:</span> {currentUser.customizations?.font || "Space Grotesk"}</p>
-              <p><span className="text-primary font-bold">Casing:</span> {currentUser.customizations?.headingStyle || "uppercase"}</p>
+              <p>
+                <span className="text-primary font-bold">Accent:</span>{" "}
+                {currentUser.customizations?.accentColor || "#f27d26"}
+              </p>
+              <p>
+                <span className="text-primary font-bold">Grid:</span>{" "}
+                {currentUser.customizations?.gridStyle || "sparse"}
+              </p>
+              <p>
+                <span className="text-primary font-bold">Typography:</span>{" "}
+                {currentUser.customizations?.font || "Space Grotesk"}
+              </p>
+              <p>
+                <span className="text-primary font-bold">Casing:</span>{" "}
+                {currentUser.customizations?.headingStyle || "uppercase"}
+              </p>
             </div>
 
             <button
@@ -168,10 +189,9 @@ export default function AuthView({
                 {isSignUp ? "Create Workspace Account" : "Access your workspace"}
               </h3>
               <p className="text-xs text-on-surface-variant max-w-xs mx-auto">
-                {isSignUp 
+                {isSignUp
                   ? "Register a profile to custom design your word boards and save stats online"
-                  : "Connect to dynamically load your customizations and continue duels"
-                }
+                  : "Connect to dynamically load your customizations and continue duels"}
               </p>
             </div>
 
@@ -179,7 +199,10 @@ export default function AuthView({
             <div className="flex border-2 border-white/20 p-1 bg-surface">
               <button
                 type="button"
-                onClick={() => { setIsSignUp(false); setErrorMsg(""); }}
+                onClick={() => {
+                  setIsSignUp(false);
+                  setErrorMsg("");
+                }}
                 className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider ${
                   !isSignUp ? "bg-primary text-white" : "text-on-surface-variant hover:text-white"
                 }`}
@@ -188,7 +211,10 @@ export default function AuthView({
               </button>
               <button
                 type="button"
-                onClick={() => { setIsSignUp(true); setErrorMsg(""); }}
+                onClick={() => {
+                  setIsSignUp(true);
+                  setErrorMsg("");
+                }}
                 className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider ${
                   isSignUp ? "bg-primary text-white" : "text-on-surface-variant hover:text-white"
                 }`}
@@ -225,9 +251,9 @@ export default function AuthView({
                     <input
                       type="text"
                       className="w-full bg-surface border-2 border-white/20 py-2.5 pl-10 pr-4 text-sm font-bold focus:outline-none focus:border-primary transition-all text-white placeholder:text-white/20"
-                      placeholder="e.g. Melvin"
+                      placeholder="e.g. Player1"
                       value={nickname}
-                      onChange={(e) => setNickname(e.target.value.substring(0, 15))}
+                      onChange={e => setNickname(e.target.value.substring(0, 15))}
                     />
                   </div>
                 </div>
@@ -244,7 +270,7 @@ export default function AuthView({
                     className="w-full bg-surface border-2 border-white/20 py-2.5 pl-10 pr-4 text-sm font-bold focus:outline-none focus:border-primary transition-all text-white placeholder:text-white/20"
                     placeholder="name@domain.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                   />
                 </div>
               </div>
@@ -260,7 +286,7 @@ export default function AuthView({
                     className="w-full bg-surface border-2 border-white/20 py-2.5 pl-10 pr-4 text-sm font-bold focus:outline-none focus:border-primary transition-all text-white placeholder:text-white/20"
                     placeholder="••••••••"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                   />
                 </div>
               </div>
@@ -277,10 +303,16 @@ export default function AuthView({
                         type="button"
                         onClick={() => setSelectedAvatar(url)}
                         className={`w-10 h-10 rounded-full overflow-hidden border-2 transition-all shrink-0 select-none relative ${
-                          selectedAvatar === url ? "scale-105 border-primary" : "border-white/10 filter grayscale opacity-70"
+                          selectedAvatar === url
+                            ? "scale-105 border-primary"
+                            : "border-white/10 filter grayscale opacity-70"
                         }`}
                       >
-                        <img src={url} alt={`Avatar option ${idx}`} className="w-full h-full object-cover" />
+                        <img
+                          src={url}
+                          alt={`Avatar option ${idx}`}
+                          className="w-full h-full object-cover"
+                        />
                         {selectedAvatar === url && (
                           <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
                             <Check className="w-4 h-4 text-white stroke-[3px]" />

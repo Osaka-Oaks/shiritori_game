@@ -1,5 +1,16 @@
 import React, { useState } from "react";
-import { Search, Volume2, Info, XCircle, ChevronRight, CornerDownRight, CheckCircle2, Loader2, Sparkles, Languages } from "lucide-react";
+import {
+  Search,
+  Volume2,
+  Info,
+  XCircle,
+  ChevronRight,
+  CornerDownRight,
+  CheckCircle2,
+  Loader2,
+  Sparkles,
+  Languages,
+} from "lucide-react";
 import { LibraryWordInfo } from "../types";
 
 export default function WordLibrary() {
@@ -19,8 +30,8 @@ export default function WordLibrary() {
       reason: "Valid word! Starts with Ri (り) and ends with Go (ご). Does not end in 'N' (ん).",
       startsWith: "り",
       endsWith: "ご",
-      endsInN: false
-    }
+      endsInN: false,
+    },
   });
 
   // Word Evaluator Tool state
@@ -33,7 +44,7 @@ export default function WordLibrary() {
     { word: "Neko", meaning: "Cat", hiragana: "ねこ", valid: true },
     { word: "Inu", meaning: "Dog", hiragana: "いぬ", valid: true },
     { word: "Mikan", meaning: "Mandarin", hiragana: "みかん", valid: false },
-    { word: "Sakura", meaning: "Cherry Blossom", hiragana: "さくら", valid: true }
+    { word: "Sakura", meaning: "Cherry Blossom", hiragana: "さくら", valid: true },
   ]);
 
   // Pronounce Japanese word using SpeechSynthesis
@@ -60,19 +71,22 @@ export default function WordLibrary() {
       const res = await fetch("/api/library/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: term, language: searchLang })
+        body: JSON.stringify({ query: term, language: searchLang }),
       });
       const data = await res.json();
       if (res.ok && data.word) {
         setResult(data);
         setRecentLookups(prev => {
           const filtered = prev.filter(item => item.word.toLowerCase() !== data.word.toLowerCase());
-          return [{
-            word: data.word,
-            meaning: data.meaning,
-            hiragana: data.hiragana,
-            valid: data.shiritoriRuleCheck.valid
-          }, ...filtered].slice(0, 4);
+          return [
+            {
+              word: data.word,
+              meaning: data.meaning,
+              hiragana: data.hiragana,
+              valid: data.shiritoriRuleCheck.valid,
+            },
+            ...filtered,
+          ].slice(0, 4);
         });
       } else {
         alert(data.error || "Word not found. Try spelling in Romaji or JPN.");
@@ -93,7 +107,7 @@ export default function WordLibrary() {
       const res = await fetch("/api/game/evaluate-word", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ word: evalInput, lastChar: "", usedWords: [] })
+        body: JSON.stringify({ word: evalInput, lastChar: "", usedWords: [] }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -110,7 +124,6 @@ export default function WordLibrary() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-10 animate-fadeIn pt-4 pb-20 text-[#D1D1D1]">
-      
       {/* Header */}
       <div className="text-center space-y-1">
         <h2 className="serif-italic text-3xl md:text-4xl text-white font-light tracking-wide">
@@ -122,7 +135,10 @@ export default function WordLibrary() {
       </div>
 
       {/* Search Section */}
-      <form onSubmit={handleSearch} className="bg-white/[0.02] border border-white/10 rounded-sm p-3.5 flex flex-col sm:flex-row gap-3 shadow-lg">
+      <form
+        onSubmit={handleSearch}
+        className="bg-white/[0.02] border border-white/10 rounded-sm p-3.5 flex flex-col sm:flex-row gap-3 shadow-lg"
+      >
         <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C5A059] w-4 h-4 pointer-events-none opacity-80" />
           <input
@@ -130,7 +146,7 @@ export default function WordLibrary() {
             placeholder="Type a word in English or Romaji/Japanese..."
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
           />
         </div>
         <div className="flex items-center bg-white/5 border border-white/10 rounded-sm p-1 shrink-0 self-stretch sm:self-auto justify-center">
@@ -169,13 +185,11 @@ export default function WordLibrary() {
       {result && (
         <section className="glass-card rounded-sm p-6 md:p-8 relative overflow-hidden">
           <div className="absolute -right-8 -top-8 w-32 h-32 bg-[#C5A059]/5 rounded-full filter blur-xl opacity-30 pointer-events-none"></div>
-          
+
           <div className="flex justify-between items-start mb-6">
             <div>
               <div className="flex items-center gap-3 flex-wrap">
-                <h3 className="serif-italic text-3xl text-white font-light">
-                  {result.word}
-                </h3>
+                <h3 className="serif-italic text-3xl text-white font-light">{result.word}</h3>
                 <span className="px-3 py-1 border border-[#C5A059]/30 text-[#C5A059] text-[9px] uppercase tracking-widest rounded-full font-bold">
                   {result.category}
                 </span>
@@ -195,25 +209,35 @@ export default function WordLibrary() {
 
           <div className="grid grid-cols-3 gap-4 mb-8">
             <div className="bg-white/[0.01] p-4 rounded-sm border border-white/5 flex flex-col justify-center text-center">
-              <div className="text-[9px] uppercase tracking-widest text-[#C5A059]/70 mb-1.5 font-bold">Kanji</div>
-              <div className="serif-italic text-lg text-white font-medium">{result.kanji || "ー"}</div>
+              <div className="text-[9px] uppercase tracking-widest text-[#C5A059]/70 mb-1.5 font-bold">
+                Kanji
+              </div>
+              <div className="serif-italic text-lg text-white font-medium">
+                {result.kanji || "ー"}
+              </div>
             </div>
             <div className="bg-white/[0.01] p-4 rounded-sm border border-white/5 flex flex-col justify-center text-center">
-              <div className="text-[9px] uppercase tracking-widest text-[#C5A059]/70 mb-1.5 font-bold">Hiragana</div>
-              <div className="serif-italic text-lg text-[#C5A059] font-medium">{result.hiragana}</div>
+              <div className="text-[9px] uppercase tracking-widest text-[#C5A059]/70 mb-1.5 font-bold">
+                Hiragana
+              </div>
+              <div className="serif-italic text-lg text-[#C5A059] font-medium">
+                {result.hiragana}
+              </div>
             </div>
             <div className="bg-white/[0.01] p-4 rounded-sm border border-white/5 flex flex-col justify-center text-center">
-              <div className="text-[9px] uppercase tracking-widest text-[#C5A059]/70 mb-1.5 font-bold">Katakana</div>
-              <div className="serif-italic text-lg text-white font-medium">{result.katakana || "ー"}</div>
+              <div className="text-[9px] uppercase tracking-widest text-[#C5A059]/70 mb-1.5 font-bold">
+                Katakana
+              </div>
+              <div className="serif-italic text-lg text-white font-medium">
+                {result.katakana || "ー"}
+              </div>
             </div>
           </div>
 
           <div className="border border-white/15 bg-white/[0.01] rounded-sm p-4 flex gap-4 items-start">
             <Info className="w-4 h-4 shrink-0 mt-1 text-[#C5A059]" />
             <div>
-              <p className="serif-italic text-sm text-white font-light">
-                Shiritori Rule Check
-              </p>
+              <p className="serif-italic text-sm text-white font-light">Shiritori Rule Check</p>
               <p className="text-white/60 font-light text-xs mt-1 leading-relaxed">
                 {result.shiritoriRuleCheck.reason}
               </p>
@@ -233,7 +257,8 @@ export default function WordLibrary() {
           </h3>
         </div>
         <p className="text-white/60 mb-6 text-xs font-light leading-relaxed">
-          Not sure if a word works? Type it here in Japanese or English to test if it ends in the forbidden &ldquo;ん&rdquo; syllable or is a valid game word!
+          Not sure if a word works? Type it here in Japanese or English to test if it ends in the
+          forbidden &ldquo;ん&rdquo; syllable or is a valid game word!
         </p>
         <div className="flex gap-3">
           <input
@@ -241,8 +266,8 @@ export default function WordLibrary() {
             placeholder="e.g. Mikan, Inu, Ringo..."
             type="text"
             value={evalInput}
-            onChange={(e) => setEvalInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleEvaluate()}
+            onChange={e => setEvalInput(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && handleEvaluate()}
           />
           <button
             onClick={handleEvaluate}
@@ -262,11 +287,13 @@ export default function WordLibrary() {
                     {evalResult.word} ({evalResult.hiragana})
                   </span>
                 </div>
-                <span className={`px-2.5 py-0.5 rounded-sm text-[9px] uppercase tracking-wider font-bold border ${
-                  evalResult.valid 
-                    ? "border-[#C5A059]/40 text-[#C5A059] bg-[#C5A059]/5" 
-                    : "border-red-500/30 text-red-400 bg-red-500/5"
-                }`}>
+                <span
+                  className={`px-2.5 py-0.5 rounded-sm text-[9px] uppercase tracking-wider font-bold border ${
+                    evalResult.valid
+                      ? "border-[#C5A059]/40 text-[#C5A059] bg-[#C5A059]/5"
+                      : "border-red-500/30 text-red-400 bg-red-500/5"
+                  }`}
+                >
                   {evalResult.valid ? "VALID" : "INVALID"}
                 </span>
               </div>
@@ -277,7 +304,10 @@ export default function WordLibrary() {
                 </div>
                 <div className="flex items-center gap-2">
                   <XCircle className="w-3.5 h-3.5 text-red-400 shrink-0" />
-                  Ends with 'n'? <span className="font-semibold text-white">{evalResult.endsInN ? "Yes! (ん/ン)" : "No"}</span>
+                  Ends with 'n'?{" "}
+                  <span className="font-semibold text-white">
+                    {evalResult.endsInN ? "Yes! (ん/ン)" : "No"}
+                  </span>
                 </div>
               </div>
               <div className="text-xs text-white/50 border-t border-white/5 pt-2 flex items-center gap-1.5">
@@ -287,7 +317,9 @@ export default function WordLibrary() {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-6 border border-dashed border-white/10 rounded-sm text-white/30">
-              <span className="text-[10px] tracking-widest uppercase font-semibold">Awaiting word input...</span>
+              <span className="text-[10px] tracking-widest uppercase font-semibold">
+                Awaiting word input...
+              </span>
             </div>
           )}
         </div>
@@ -306,7 +338,7 @@ export default function WordLibrary() {
             Clear
           </button>
         </div>
-        
+
         {recentLookups.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {recentLookups.map((item, idx) => (
@@ -319,9 +351,11 @@ export default function WordLibrary() {
                 className="glass-card-interactive rounded-sm p-4 cursor-pointer group flex flex-col justify-between"
               >
                 <div>
-                  <div className={`serif-italic text-lg group-hover:text-[#C5A059] transition-colors flex items-center justify-between font-medium ${
-                    item.valid ? "text-white" : "text-red-400"
-                  }`}>
+                  <div
+                    className={`serif-italic text-lg group-hover:text-[#C5A059] transition-colors flex items-center justify-between font-medium ${
+                      item.valid ? "text-white" : "text-red-400"
+                    }`}
+                  >
                     <span>{item.word}</span>
                     {!item.valid && <XCircle className="w-3.5 h-3.5 text-red-400 shrink-0" />}
                   </div>
@@ -342,7 +376,6 @@ export default function WordLibrary() {
           </div>
         )}
       </section>
-
     </div>
   );
 }

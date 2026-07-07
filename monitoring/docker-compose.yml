@@ -1,0 +1,51 @@
+# Self-hosted health/pulse stack for the live Shiritori app.
+# Probes https://shiritori-game-ccaae.web.app for uptime + latency and graphs it.
+#
+#   cd monitoring && docker compose up -d
+#   Grafana:    http://localhost:3001  (admin / admin)
+#   Prometheus: http://localhost:9090
+#
+# This fits a STATIC site: Blackbox exporter does synthetic HTTP probes.
+# (Datadog = paid SaaS + API key; ELK = for server logs a static SPA doesn't
+#  produce. See README.md for when those make sense.)
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    container_name: shiritori-prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+  blackbox:
+    image: prom/blackbox-exporter:v0.25.0
+    container_name: shiritori-blackbox
+    volumes:
+      - ./blackbox/blackbox.yml:/config/blackbox.yml:ro
+    command: ["--config.file=/config/blackbox.yml"]
+    ports:
+      - "9115:9115"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.3.1
+    container_name: shiritori-grafana
+    depends_on: [prometheus]
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3001:3000"
+    restart: unless-stopped
+
+volumes:
+  prometheus-data:
+  grafana-data:

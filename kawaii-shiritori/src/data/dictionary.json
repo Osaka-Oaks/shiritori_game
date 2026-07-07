@@ -1,183 +1,3630 @@
 {
   "metadata": {
-    "version": "1.0.0",
-    "description": "Curated Japanese-English dictionary for Shiritori gameplay",
-    "totalWords": 500,
-    "source": "Beginner-friendly JLPT N5-N3 vocabulary"
+    "version": "2.0.0",
+    "description": "Expanded Japanese-English dictionary for Shiritori gameplay",
+    "totalWords": 550,
+    "source": "JLPT N5-N3 vocabulary + Pokemon + Modern terms"
   },
   "words": [
-    {"word": "あさ", "romaji": "asa", "kanji": "朝", "translation": "morning", "startSound": "あ", "endSound": "さ"},
-    {"word": "あめ", "romaji": "ame", "kanji": "雨", "translation": "rain", "startSound": "あ", "endSound": "め"},
-    {"word": "あき", "romaji": "aki", "kanji": "秋", "translation": "autumn", "startSound": "あ", "endSound": "き"},
-    {"word": "あし", "romaji": "ashi", "kanji": "足", "translation": "foot/leg", "startSound": "あ", "endSound": "し"},
-    {"word": "あたま", "romaji": "atama", "kanji": "頭", "translation": "head", "startSound": "あ", "endSound": "ま"},
-    {"word": "いぬ", "romaji": "inu", "kanji": "犬", "translation": "dog", "startSound": "い", "endSound": "ぬ"},
-    {"word": "いえ", "romaji": "ie", "kanji": "家", "translation": "house", "startSound": "い", "endSound": "え"},
-    {"word": "いし", "romaji": "ishi", "kanji": "石", "translation": "stone", "startSound": "い", "endSound": "し"},
-    {"word": "いす", "romaji": "isu", "kanji": "椅子", "translation": "chair", "startSound": "い", "endSound": "す"},
-    {"word": "いろ", "romaji": "iro", "kanji": "色", "translation": "color", "startSound": "い", "endSound": "ろ"},
-    {"word": "いるか", "romaji": "iruka", "kanji": "", "translation": "dolphin", "startSound": "い", "endSound": "か"},
-    {"word": "うみ", "romaji": "umi", "kanji": "海", "translation": "sea", "startSound": "う", "endSound": "み"},
-    {"word": "うた", "romaji": "uta", "kanji": "歌", "translation": "song", "startSound": "う", "endSound": "た"},
-    {"word": "うで", "romaji": "ude", "kanji": "腕", "translation": "arm", "startSound": "う", "endSound": "で"},
-    {"word": "うし", "romaji": "ushi", "kanji": "牛", "translation": "cow", "startSound": "う", "endSound": "し"},
-    {"word": "うま", "romaji": "uma", "kanji": "馬", "translation": "horse", "startSound": "う", "endSound": "ま"},
-    {"word": "えき", "romaji": "eki", "kanji": "駅", "translation": "station", "startSound": "え", "endSound": "き"},
-    {"word": "えほん", "romaji": "ehon", "kanji": "絵本", "translation": "picture book", "startSound": "え", "endSound": "ん"},
-    {"word": "えび", "romaji": "ebi", "kanji": "海老", "translation": "shrimp", "startSound": "え", "endSound": "び"},
-    {"word": "えいが", "romaji": "eiga", "kanji": "映画", "translation": "movie", "startSound": "え", "endSound": "が"},
-    {"word": "おちゃ", "romaji": "ocha", "kanji": "お茶", "translation": "tea", "startSound": "お", "endSound": "ちゃ"},
-    {"word": "おとこ", "romaji": "otoko", "kanji": "男", "translation": "man", "startSound": "お", "endSound": "こ"},
-    {"word": "おんな", "romaji": "onna", "kanji": "女", "translation": "woman", "startSound": "お", "endSound": "な"},
-    {"word": "おかね", "romaji": "okane", "kanji": "お金", "translation": "money", "startSound": "お", "endSound": "ね"},
-    {"word": "おてら", "romaji": "otera", "kanji": "お寺", "translation": "temple", "startSound": "お", "endSound": "ら"},
-    {"word": "かさ", "romaji": "kasa", "kanji": "傘", "translation": "umbrella", "startSound": "か", "endSound": "さ"},
-    {"word": "かばん", "romaji": "kaban", "kanji": "鞄", "translation": "bag", "startSound": "か", "endSound": "ん"},
-    {"word": "かめ", "romaji": "kame", "kanji": "亀", "translation": "turtle", "startSound": "か", "endSound": "め"},
-    {"word": "かお", "romaji": "kao", "kanji": "顔", "translation": "face", "startSound": "か", "endSound": "お"},
-    {"word": "かぜ", "romaji": "kaze", "kanji": "風", "translation": "wind", "startSound": "か", "endSound": "ぜ"},
-    {"word": "かみ", "romaji": "kami", "kanji": "紙", "translation": "paper", "startSound": "か", "endSound": "み"},
-    {"word": "きつね", "romaji": "kitsune", "kanji": "狐", "translation": "fox", "startSound": "き", "endSound": "ね"},
-    {"word": "きっぷ", "romaji": "kippu", "kanji": "切符", "translation": "ticket", "startSound": "き", "endSound": "ぷ"},
-    {"word": "きのこ", "romaji": "kinoko", "kanji": "茸", "translation": "mushroom", "startSound": "き", "endSound": "こ"},
-    {"word": "きんぎょ", "romaji": "kingyo", "kanji": "金魚", "translation": "goldfish", "startSound": "き", "endSound": "ぎょ"},
-    {"word": "くるま", "romaji": "kuruma", "kanji": "車", "translation": "car", "startSound": "く", "endSound": "ま"},
-    {"word": "くすり", "romaji": "kusuri", "kanji": "薬", "translation": "medicine", "startSound": "く", "endSound": "り"},
-    {"word": "くま", "romaji": "kuma", "kanji": "熊", "translation": "bear", "startSound": "く", "endSound": "ま"},
-    {"word": "くつ", "romaji": "kutsu", "kanji": "靴", "translation": "shoes", "startSound": "く", "endSound": "つ"},
-    {"word": "くも", "romaji": "kumo", "kanji": "雲", "translation": "cloud", "startSound": "く", "endSound": "も"},
-    {"word": "けしごむ", "romaji": "keshigomu", "kanji": "消しゴム", "translation": "eraser", "startSound": "け", "endSound": "む"},
-    {"word": "けいと", "romaji": "keito", "kanji": "毛糸", "translation": "yarn", "startSound": "け", "endSound": "と"},
-    {"word": "けん", "romaji": "ken", "kanji": "県", "translation": "prefecture", "startSound": "け", "endSound": "ん"},
-    {"word": "こども", "romaji": "kodomo", "kanji": "子供", "translation": "child", "startSound": "こ", "endSound": "も"},
-    {"word": "こうえん", "romaji": "kouen", "kanji": "公園", "translation": "park", "startSound": "こ", "endSound": "ん"},
-    {"word": "こえ", "romaji": "koe", "kanji": "声", "translation": "voice", "startSound": "こ", "endSound": "え"},
-    {"word": "こおり", "romaji": "koori", "kanji": "氷", "translation": "ice", "startSound": "こ", "endSound": "り"},
-    {"word": "こころ", "romaji": "kokoro", "kanji": "心", "translation": "heart", "startSound": "こ", "endSound": "ろ"},
-    {"word": "さかな", "romaji": "sakana", "kanji": "魚", "translation": "fish", "startSound": "さ", "endSound": "な"},
-    {"word": "さくら", "romaji": "sakura", "kanji": "桜", "translation": "cherry blossom", "startSound": "さ", "endSound": "ら"},
-    {"word": "さる", "romaji": "saru", "kanji": "猿", "translation": "monkey", "startSound": "さ", "endSound": "る"},
-    {"word": "さとう", "romaji": "satou", "kanji": "砂糖", "translation": "sugar", "startSound": "さ", "endSound": "う"},
-    {"word": "しお", "romaji": "shio", "kanji": "塩", "translation": "salt", "startSound": "し", "endSound": "お"},
-    {"word": "しか", "romaji": "shika", "kanji": "鹿", "translation": "deer", "startSound": "し", "endSound": "か"},
-    {"word": "しま", "romaji": "shima", "kanji": "島", "translation": "island", "startSound": "し", "endSound": "ま"},
-    {"word": "しんぶん", "romaji": "shinbun", "kanji": "新聞", "translation": "newspaper", "startSound": "し", "endSound": "ん"},
-    {"word": "すし", "romaji": "sushi", "kanji": "寿司", "translation": "sushi", "startSound": "す", "endSound": "し"},
-    {"word": "すいか", "romaji": "suika", "kanji": "西瓜", "translation": "watermelon", "startSound": "す", "endSound": "か"},
-    {"word": "すず", "romaji": "suzu", "kanji": "鈴", "translation": "bell", "startSound": "す", "endSound": "ず"},
-    {"word": "すな", "romaji": "suna", "kanji": "砂", "translation": "sand", "startSound": "す", "endSound": "な"},
-    {"word": "せんせい", "romaji": "sensei", "kanji": "先生", "translation": "teacher", "startSound": "せ", "endSound": "い"},
-    {"word": "せっけん", "romaji": "sekken", "kanji": "石鹸", "translation": "soap", "startSound": "せ", "endSound": "ん"},
-    {"word": "そら", "romaji": "sora", "kanji": "空", "translation": "sky", "startSound": "そ", "endSound": "ら"},
-    {"word": "そふ", "romaji": "sofu", "kanji": "祖父", "translation": "grandfather", "startSound": "そ", "endSound": "ふ"},
-    {"word": "たまご", "romaji": "tamago", "kanji": "卵", "translation": "egg", "startSound": "た", "endSound": "ご"},
-    {"word": "たいよう", "romaji": "taiyou", "kanji": "太陽", "translation": "sun", "startSound": "た", "endSound": "う"},
-    {"word": "たけ", "romaji": "take", "kanji": "竹", "translation": "bamboo", "startSound": "た", "endSound": "け"},
-    {"word": "たぬき", "romaji": "tanuki", "kanji": "狸", "translation": "raccoon dog", "startSound": "た", "endSound": "き"},
-    {"word": "ちず", "romaji": "chizu", "kanji": "地図", "translation": "map", "startSound": "ち", "endSound": "ず"},
-    {"word": "ちち", "romaji": "chichi", "kanji": "父", "translation": "father", "startSound": "ち", "endSound": "ち"},
-    {"word": "ちゃわん", "romaji": "chawan", "kanji": "茶碗", "translation": "rice bowl", "startSound": "ち", "endSound": "ん"},
-    {"word": "つき", "romaji": "tsuki", "kanji": "月", "translation": "moon", "startSound": "つ", "endSound": "き"},
-    {"word": "つくえ", "romaji": "tsukue", "kanji": "机", "translation": "desk", "startSound": "つ", "endSound": "え"},
-    {"word": "つる", "romaji": "tsuru", "kanji": "鶴", "translation": "crane", "startSound": "つ", "endSound": "る"},
-    {"word": "て", "romaji": "te", "kanji": "手", "translation": "hand", "startSound": "て", "endSound": "て"},
-    {"word": "てがみ", "romaji": "tegami", "kanji": "手紙", "translation": "letter", "startSound": "て", "endSound": "み"},
-    {"word": "てんき", "romaji": "tenki", "kanji": "天気", "translation": "weather", "startSound": "て", "endSound": "き"},
-    {"word": "とり", "romaji": "tori", "kanji": "鳥", "translation": "bird", "startSound": "と", "endSound": "り"},
-    {"word": "ときれい", "romaji": "tokei", "kanji": "時計", "translation": "clock", "startSound": "と", "endSound": "い"},
-    {"word": "とけい", "romaji": "tokei", "kanji": "時計", "translation": "watch/clock", "startSound": "と", "endSound": "い"},
-    {"word": "ともだち", "romaji": "tomodachi", "kanji": "友達", "translation": "friend", "startSound": "と", "endSound": "ち"},
-    {"word": "とら", "romaji": "tora", "kanji": "虎", "translation": "tiger", "startSound": "と", "endSound": "ら"},
-    {"word": "なつ", "romaji": "natsu", "kanji": "夏", "translation": "summer", "startSound": "な", "endSound": "つ"},
-    {"word": "なまえ", "romaji": "namae", "kanji": "名前", "translation": "name", "startSound": "な", "endSound": "え"},
-    {"word": "なす", "romaji": "nasu", "kanji": "茄子", "translation": "eggplant", "startSound": "な", "endSound": "す"},
-    {"word": "にわ", "romaji": "niwa", "kanji": "庭", "translation": "garden", "startSound": "に", "endSound": "わ"},
-    {"word": "にく", "romaji": "niku", "kanji": "肉", "translation": "meat", "startSound": "に", "endSound": "く"},
-    {"word": "にんぎょう", "romaji": "ningyou", "kanji": "人形", "translation": "doll", "startSound": "に", "endSound": "う"},
-    {"word": "ぬの", "romaji": "nuno", "kanji": "布", "translation": "cloth", "startSound": "ぬ", "endSound": "の"},
-    {"word": "ぬいぐるみ", "romaji": "nuigurumi", "kanji": "縫い包み", "translation": "stuffed animal", "startSound": "ぬ", "endSound": "み"},
-    {"word": "ねこ", "romaji": "neko", "kanji": "猫", "translation": "cat", "startSound": "ね", "endSound": "こ"},
-    {"word": "ねずみ", "romaji": "nezumi", "kanji": "鼠", "translation": "mouse/rat", "startSound": "ね", "endSound": "み"},
-    {"word": "ねんど", "romaji": "nendo", "kanji": "粘土", "translation": "clay", "startSound": "ね", "endSound": "ど"},
-    {"word": "のり", "romaji": "nori", "kanji": "海苔", "translation": "seaweed", "startSound": "の", "endSound": "り"},
-    {"word": "のみもの", "romaji": "nomimono", "kanji": "飲み物", "translation": "beverage", "startSound": "の", "endSound": "の"},
-    {"word": "はな", "romaji": "hana", "kanji": "花", "translation": "flower", "startSound": "は", "endSound": "な"},
-    {"word": "はし", "romaji": "hashi", "kanji": "橋", "translation": "bridge", "startSound": "は", "endSound": "し"},
-    {"word": "はこ", "romaji": "hako", "kanji": "箱", "translation": "box", "startSound": "は", "endSound": "こ"},
-    {"word": "はる", "romaji": "haru", "kanji": "春", "translation": "spring", "startSound": "は", "endSound": "る"},
-    {"word": "ひ", "romaji": "hi", "kanji": "火", "translation": "fire", "startSound": "ひ", "endSound": "ひ"},
-    {"word": "ひこうき", "romaji": "hikouki", "kanji": "飛行機", "translation": "airplane", "startSound": "ひ", "endSound": "き"},
-    {"word": "ひと", "romaji": "hito", "kanji": "人", "translation": "person", "startSound": "ひ", "endSound": "と"},
-    {"word": "ひつじ", "romaji": "hitsuji", "kanji": "羊", "translation": "sheep", "startSound": "ひ", "endSound": "じ"},
-    {"word": "ふうせん", "romaji": "fuusen", "kanji": "風船", "translation": "balloon", "startSound": "ふ", "endSound": "ん"},
-    {"word": "ふくろ", "romaji": "fukuro", "kanji": "袋", "translation": "bag/sack", "startSound": "ふ", "endSound": "ろ"},
-    {"word": "ふね", "romaji": "fune", "kanji": "船", "translation": "ship", "startSound": "ふ", "endSound": "ね"},
-    {"word": "ふゆ", "romaji": "fuyu", "kanji": "冬", "translation": "winter", "startSound": "ふ", "endSound": "ゆ"},
-    {"word": "へや", "romaji": "heya", "kanji": "部屋", "translation": "room", "startSound": "へ", "endSound": "や"},
-    {"word": "へび", "romaji": "hebi", "kanji": "蛇", "translation": "snake", "startSound": "へ", "endSound": "び"},
-    {"word": "ほん", "romaji": "hon", "kanji": "本", "translation": "book", "startSound": "ほ", "endSound": "ん"},
-    {"word": "ほし", "romaji": "hoshi", "kanji": "星", "translation": "star", "startSound": "ほ", "endSound": "し"},
-    {"word": "ほそく", "romaji": "hosoku", "kanji": "補足", "translation": "supplement", "startSound": "ほ", "endSound": "く"},
-    {"word": "まど", "romaji": "mado", "kanji": "窓", "translation": "window", "startSound": "ま", "endSound": "ど"},
-    {"word": "まち", "romaji": "machi", "kanji": "町", "translation": "town", "startSound": "ま", "endSound": "ち"},
-    {"word": "まつり", "romaji": "matsuri", "kanji": "祭り", "translation": "festival", "startSound": "ま", "endSound": "り"},
-    {"word": "まくら", "romaji": "makura", "kanji": "枕", "translation": "pillow", "startSound": "ま", "endSound": "ら"},
-    {"word": "みかん", "romaji": "mikan", "kanji": "蜜柑", "translation": "mandarin orange", "startSound": "み", "endSound": "ん"},
-    {"word": "みず", "romaji": "mizu", "kanji": "水", "translation": "water", "startSound": "み", "endSound": "ず"},
-    {"word": "みせ", "romaji": "mise", "kanji": "店", "translation": "shop", "startSound": "み", "endSound": "せ"},
-    {"word": "みみ", "romaji": "mimi", "kanji": "耳", "translation": "ear", "startSound": "み", "endSound": "み"},
-    {"word": "むし", "romaji": "mushi", "kanji": "虫", "translation": "insect", "startSound": "む", "endSound": "し"},
-    {"word": "むら", "romaji": "mura", "kanji": "村", "translation": "village", "startSound": "む", "endSound": "ら"},
-    {"word": "め", "romaji": "me", "kanji": "目", "translation": "eye", "startSound": "め", "endSound": "め"},
-    {"word": "めがね", "romaji": "megane", "kanji": "眼鏡", "translation": "glasses", "startSound": "め", "endSound": "ね"},
-    {"word": "もも", "romaji": "momo", "kanji": "桃", "translation": "peach", "startSound": "も", "endSound": "も"},
-    {"word": "もり", "romaji": "mori", "kanji": "森", "translation": "forest", "startSound": "も", "endSound": "り"},
-    {"word": "やま", "romaji": "yama", "kanji": "山", "translation": "mountain", "startSound": "や", "endSound": "ま"},
-    {"word": "やね", "romaji": "yane", "kanji": "屋根", "translation": "roof", "startSound": "や", "endSound": "ね"},
-    {"word": "ゆき", "romaji": "yuki", "kanji": "雪", "translation": "snow", "startSound": "ゆ", "endSound": "き"},
-    {"word": "ゆび", "romaji": "yubi", "kanji": "指", "translation": "finger", "startSound": "ゆ", "endSound": "び"},
-    {"word": "ゆめ", "romaji": "yume", "kanji": "夢", "translation": "dream", "startSound": "ゆ", "endSound": "め"},
-    {"word": "よる", "romaji": "yoru", "kanji": "夜", "translation": "night", "startSound": "よ", "endSound": "る"},
-    {"word": "よこ", "romaji": "yoko", "kanji": "横", "translation": "side", "startSound": "よ", "endSound": "こ"},
-    {"word": "らいおん", "romaji": "raion", "kanji": "", "translation": "lion", "startSound": "ら", "endSound": "ん"},
-    {"word": "らっぱ", "romaji": "rappa", "kanji": "喇叭", "translation": "trumpet", "startSound": "ら", "endSound": "ぱ"},
-    {"word": "りんご", "romaji": "ringo", "kanji": "林檎", "translation": "apple", "startSound": "り", "endSound": "ご"},
-    {"word": "りす", "romaji": "risu", "kanji": "栗鼠", "translation": "squirrel", "startSound": "り", "endSound": "す"},
-    {"word": "るす", "romaji": "rusu", "kanji": "留守", "translation": "absence", "startSound": "る", "endSound": "す"},
-    {"word": "れいぞうこ", "romaji": "reizouko", "kanji": "冷蔵庫", "translation": "refrigerator", "startSound": "れ", "endSound": "こ"},
-    {"word": "れんが", "romaji": "renga", "kanji": "煉瓦", "translation": "brick", "startSound": "れ", "endSound": "が"},
-    {"word": "ろうそく", "romaji": "rousoku", "kanji": "蝋燭", "translation": "candle", "startSound": "ろ", "endSound": "く"},
-    {"word": "ろばた", "romaji": "robata", "kanji": "炉端", "translation": "fireside", "startSound": "ろ", "endSound": "た"},
-    {"word": "わに", "romaji": "wani", "kanji": "鰐", "translation": "crocodile", "startSound": "わ", "endSound": "に"},
-    {"word": "わし", "romaji": "washi", "kanji": "鷲", "translation": "eagle", "startSound": "わ", "endSound": "し"},
-    {"word": "わた", "romaji": "wata", "kanji": "綿", "translation": "cotton", "startSound": "わ", "endSound": "た"},
-    {"word": "ごりら", "romaji": "gorira", "kanji": "", "translation": "gorilla", "startSound": "ご", "endSound": "ら"},
-    {"word": "ごはん", "romaji": "gohan", "kanji": "ご飯", "translation": "rice/meal", "startSound": "ご", "endSound": "ん"},
-    {"word": "ざる", "romaji": "zaru", "kanji": "笊", "translation": "colander", "startSound": "ざ", "endSound": "る"},
-    {"word": "ぞう", "romaji": "zou", "kanji": "象", "translation": "elephant", "startSound": "ぞ", "endSound": "う"},
-    {"word": "だいどころ", "romaji": "daidokoro", "kanji": "台所", "translation": "kitchen", "startSound": "だ", "endSound": "ろ"},
-    {"word": "でんわ", "romaji": "denwa", "kanji": "電話", "translation": "telephone", "startSound": "で", "endSound": "わ"},
-    {"word": "でんき", "romaji": "denki", "kanji": "電気", "translation": "electricity", "startSound": "で", "endSound": "き"},
-    {"word": "どあ", "romaji": "doa", "kanji": "ドア", "translation": "door", "startSound": "ど", "endSound": "あ"},
-    {"word": "どうぶつ", "romaji": "doubutsu", "kanji": "動物", "translation": "animal", "startSound": "ど", "endSound": "つ"},
-    {"word": "ばら", "romaji": "bara", "kanji": "薔薇", "translation": "rose", "startSound": "ば", "endSound": "ら"},
-    {"word": "ばなな", "romaji": "banana", "kanji": "", "translation": "banana", "startSound": "ば", "endSound": "な"},
-    {"word": "びじん", "romaji": "bijin", "kanji": "美人", "translation": "beautiful person", "startSound": "び", "endSound": "ん"},
-    {"word": "ぶた", "romaji": "buta", "kanji": "豚", "translation": "pig", "startSound": "ぶ", "endSound": "た"},
-    {"word": "べんとう", "romaji": "bentou", "kanji": "弁当", "translation": "lunch box", "startSound": "べ", "endSound": "う"},
-    {"word": "ぼうし", "romaji": "boushi", "kanji": "帽子", "translation": "hat", "startSound": "ぼ", "endSound": "し"},
-    {"word": "ぱん", "romaji": "pan", "kanji": "", "translation": "bread", "startSound": "ぱ", "endSound": "ん"},
-    {"word": "ぴあの", "romaji": "piano", "kanji": "", "translation": "piano", "startSound": "ぴ", "endSound": "の"},
-    {"word": "ぷーる", "romaji": "puuru", "kanji": "", "translation": "pool", "startSound": "ぷ", "endSound": "る"},
-    {"word": "ぺん", "romaji": "pen", "kanji": "", "translation": "pen", "startSound": "ぺ", "endSound": "ん"},
-    {"word": "ぽすと", "romaji": "posuto", "kanji": "", "translation": "mailbox", "startSound": "ぽ", "endSound": "と"},
-    {"word": "がっこう", "romaji": "gakkou", "kanji": "学校", "translation": "school", "startSound": "が", "endSound": "う"},
-    {"word": "ぎんこう", "romaji": "ginkou", "kanji": "銀行", "translation": "bank", "startSound": "ぎ", "endSound": "う"},
-    {"word": "ぐんて", "romaji": "gunte", "kanji": "軍手", "translation": "work gloves", "startSound": "ぐ", "endSound": "て"},
-    {"word": "げた", "romaji": "geta", "kanji": "下駄", "translation": "wooden clogs", "startSound": "げ", "endSound": "た"},
-    {"word": "じてんしゃ", "romaji": "jitensha", "kanji": "自転車", "translation": "bicycle", "startSound": "じ", "endSound": "しゃ"},
-    {"word": "じしょ", "romaji": "jisho", "kanji": "辞書", "translation": "dictionary", "startSound": "じ", "endSound": "しょ"},
-    {"word": "ずぼん", "romaji": "zubon", "kanji": "ズボン", "translation": "trousers", "startSound": "ず", "endSound": "ん"},
-    {"word": "ぜんぶ", "romaji": "zenbu", "kanji": "全部", "translation": "all", "startSound": "ぜ", "endSound": "ぶ"}
+    {
+      "word": "あさ",
+      "romaji": "asa",
+      "kanji": "朝",
+      "onyomi": "チョウ",
+      "translation": "morning",
+      "startSound": "あ",
+      "endSound": "さ"
+    },
+    {
+      "word": "あめ",
+      "romaji": "ame",
+      "kanji": "雨",
+      "onyomi": "ウ",
+      "translation": "rain",
+      "startSound": "あ",
+      "endSound": "め"
+    },
+    {
+      "word": "あき",
+      "romaji": "aki",
+      "kanji": "秋",
+      "onyomi": "シュウ",
+      "translation": "autumn",
+      "startSound": "あ",
+      "endSound": "き"
+    },
+    {
+      "word": "あし",
+      "romaji": "ashi",
+      "kanji": "足",
+      "onyomi": "ソク",
+      "translation": "foot/leg",
+      "startSound": "あ",
+      "endSound": "し"
+    },
+    {
+      "word": "あたま",
+      "romaji": "atama",
+      "kanji": "頭",
+      "onyomi": "トウ/ズ",
+      "translation": "head",
+      "startSound": "あ",
+      "endSound": "ま"
+    },
+    {
+      "word": "いぬ",
+      "romaji": "inu",
+      "kanji": "犬",
+      "onyomi": "ケン",
+      "translation": "dog",
+      "startSound": "い",
+      "endSound": "ぬ"
+    },
+    {
+      "word": "いえ",
+      "romaji": "ie",
+      "kanji": "家",
+      "onyomi": "カ/ケ",
+      "translation": "house",
+      "startSound": "い",
+      "endSound": "え"
+    },
+    {
+      "word": "いし",
+      "romaji": "ishi",
+      "kanji": "石",
+      "onyomi": "セキ/シャク",
+      "translation": "stone",
+      "startSound": "い",
+      "endSound": "し"
+    },
+    {
+      "word": "いす",
+      "romaji": "isu",
+      "kanji": "椅子",
+      "onyomi": "イ/シ",
+      "translation": "chair",
+      "startSound": "い",
+      "endSound": "す"
+    },
+    {
+      "word": "いろ",
+      "romaji": "iro",
+      "kanji": "色",
+      "onyomi": "ショク/シキ",
+      "translation": "color",
+      "startSound": "い",
+      "endSound": "ろ"
+    },
+    {
+      "word": "いるか",
+      "romaji": "iruka",
+      "kanji": "",
+      "translation": "dolphin",
+      "startSound": "い",
+      "endSound": "か"
+    },
+    {
+      "word": "うみ",
+      "romaji": "umi",
+      "kanji": "海",
+      "onyomi": "カイ",
+      "translation": "sea",
+      "startSound": "う",
+      "endSound": "み"
+    },
+    {
+      "word": "うた",
+      "romaji": "uta",
+      "kanji": "歌",
+      "onyomi": "カ",
+      "translation": "song",
+      "startSound": "う",
+      "endSound": "た"
+    },
+    {
+      "word": "うで",
+      "romaji": "ude",
+      "kanji": "腕",
+      "onyomi": "ワン",
+      "translation": "arm",
+      "startSound": "う",
+      "endSound": "で"
+    },
+    {
+      "word": "うし",
+      "romaji": "ushi",
+      "kanji": "牛",
+      "onyomi": "ギュウ",
+      "translation": "cow",
+      "startSound": "う",
+      "endSound": "し"
+    },
+    {
+      "word": "うま",
+      "romaji": "uma",
+      "kanji": "馬",
+      "onyomi": "バ",
+      "translation": "horse",
+      "startSound": "う",
+      "endSound": "ま"
+    },
+    {
+      "word": "えき",
+      "romaji": "eki",
+      "kanji": "駅",
+      "onyomi": "エキ",
+      "translation": "station",
+      "startSound": "え",
+      "endSound": "き"
+    },
+    {
+      "word": "えほん",
+      "romaji": "ehon",
+      "kanji": "絵本",
+      "translation": "picture book",
+      "startSound": "え",
+      "endSound": "ん"
+    },
+    {
+      "word": "えび",
+      "romaji": "ebi",
+      "kanji": "海老",
+      "translation": "shrimp",
+      "startSound": "え",
+      "endSound": "び"
+    },
+    {
+      "word": "えいが",
+      "romaji": "eiga",
+      "kanji": "映画",
+      "translation": "movie",
+      "startSound": "え",
+      "endSound": "が"
+    },
+    {
+      "word": "おちゃ",
+      "romaji": "ocha",
+      "kanji": "お茶",
+      "translation": "tea",
+      "startSound": "お",
+      "endSound": "ちゃ"
+    },
+    {
+      "word": "おとこ",
+      "romaji": "otoko",
+      "kanji": "男",
+      "onyomi": "ダン/ナン",
+      "translation": "man",
+      "startSound": "お",
+      "endSound": "こ"
+    },
+    {
+      "word": "おんな",
+      "romaji": "onna",
+      "kanji": "女",
+      "onyomi": "ジョ/ニョ",
+      "translation": "woman",
+      "startSound": "お",
+      "endSound": "な"
+    },
+    {
+      "word": "おかね",
+      "romaji": "okane",
+      "kanji": "お金",
+      "translation": "money",
+      "startSound": "お",
+      "endSound": "ね"
+    },
+    {
+      "word": "おてら",
+      "romaji": "otera",
+      "kanji": "お寺",
+      "translation": "temple",
+      "startSound": "お",
+      "endSound": "ら"
+    },
+    {
+      "word": "かさ",
+      "romaji": "kasa",
+      "kanji": "傘",
+      "translation": "umbrella",
+      "startSound": "か",
+      "endSound": "さ"
+    },
+    {
+      "word": "かばん",
+      "romaji": "kaban",
+      "kanji": "鞄",
+      "translation": "bag",
+      "startSound": "か",
+      "endSound": "ん"
+    },
+    {
+      "word": "かめ",
+      "romaji": "kame",
+      "kanji": "亀",
+      "translation": "turtle",
+      "startSound": "か",
+      "endSound": "め"
+    },
+    {
+      "word": "かお",
+      "romaji": "kao",
+      "kanji": "顔",
+      "onyomi": "ガン",
+      "translation": "face",
+      "startSound": "か",
+      "endSound": "お"
+    },
+    {
+      "word": "かぜ",
+      "romaji": "kaze",
+      "kanji": "風",
+      "onyomi": "フウ",
+      "translation": "wind",
+      "startSound": "か",
+      "endSound": "ぜ"
+    },
+    {
+      "word": "かみ",
+      "romaji": "kami",
+      "kanji": "紙",
+      "onyomi": "シ",
+      "translation": "paper",
+      "startSound": "か",
+      "endSound": "み"
+    },
+    {
+      "word": "きつね",
+      "romaji": "kitsune",
+      "kanji": "狐",
+      "translation": "fox",
+      "startSound": "き",
+      "endSound": "ね"
+    },
+    {
+      "word": "きっぷ",
+      "romaji": "kippu",
+      "kanji": "切符",
+      "translation": "ticket",
+      "startSound": "き",
+      "endSound": "ぷ"
+    },
+    {
+      "word": "きのこ",
+      "romaji": "kinoko",
+      "kanji": "茸",
+      "translation": "mushroom",
+      "startSound": "き",
+      "endSound": "こ"
+    },
+    {
+      "word": "きんぎょ",
+      "romaji": "kingyo",
+      "kanji": "金魚",
+      "translation": "goldfish",
+      "startSound": "き",
+      "endSound": "ぎょ"
+    },
+    {
+      "word": "くるま",
+      "romaji": "kuruma",
+      "kanji": "車",
+      "onyomi": "シャ",
+      "translation": "car",
+      "startSound": "く",
+      "endSound": "ま"
+    },
+    {
+      "word": "くすり",
+      "romaji": "kusuri",
+      "kanji": "薬",
+      "onyomi": "ヤク",
+      "translation": "medicine",
+      "startSound": "く",
+      "endSound": "り"
+    },
+    {
+      "word": "くま",
+      "romaji": "kuma",
+      "kanji": "熊",
+      "onyomi": "ユウ",
+      "translation": "bear",
+      "startSound": "く",
+      "endSound": "ま"
+    },
+    {
+      "word": "くつ",
+      "romaji": "kutsu",
+      "kanji": "靴",
+      "translation": "shoes",
+      "startSound": "く",
+      "endSound": "つ"
+    },
+    {
+      "word": "くも",
+      "romaji": "kumo",
+      "kanji": "雲",
+      "translation": "cloud",
+      "startSound": "く",
+      "endSound": "も"
+    },
+    {
+      "word": "けしごむ",
+      "romaji": "keshigomu",
+      "kanji": "消しゴム",
+      "translation": "eraser",
+      "startSound": "け",
+      "endSound": "む"
+    },
+    {
+      "word": "けいと",
+      "romaji": "keito",
+      "kanji": "毛糸",
+      "translation": "yarn",
+      "startSound": "け",
+      "endSound": "と"
+    },
+    {
+      "word": "けん",
+      "romaji": "ken",
+      "kanji": "県",
+      "translation": "prefecture",
+      "startSound": "け",
+      "endSound": "ん"
+    },
+    {
+      "word": "こども",
+      "romaji": "kodomo",
+      "kanji": "子供",
+      "translation": "child",
+      "startSound": "こ",
+      "endSound": "も"
+    },
+    {
+      "word": "こうえん",
+      "romaji": "kouen",
+      "kanji": "公園",
+      "translation": "park",
+      "startSound": "こ",
+      "endSound": "ん"
+    },
+    {
+      "word": "こえ",
+      "romaji": "koe",
+      "kanji": "声",
+      "translation": "voice",
+      "startSound": "こ",
+      "endSound": "え"
+    },
+    {
+      "word": "こおり",
+      "romaji": "koori",
+      "kanji": "氷",
+      "translation": "ice",
+      "startSound": "こ",
+      "endSound": "り"
+    },
+    {
+      "word": "こころ",
+      "romaji": "kokoro",
+      "kanji": "心",
+      "translation": "heart",
+      "startSound": "こ",
+      "endSound": "ろ"
+    },
+    {
+      "word": "さかな",
+      "romaji": "sakana",
+      "kanji": "魚",
+      "translation": "fish",
+      "startSound": "さ",
+      "endSound": "な"
+    },
+    {
+      "word": "さくら",
+      "romaji": "sakura",
+      "kanji": "桜",
+      "translation": "cherry blossom",
+      "startSound": "さ",
+      "endSound": "ら"
+    },
+    {
+      "word": "さる",
+      "romaji": "saru",
+      "kanji": "猿",
+      "translation": "monkey",
+      "startSound": "さ",
+      "endSound": "る"
+    },
+    {
+      "word": "さとう",
+      "romaji": "satou",
+      "kanji": "砂糖",
+      "translation": "sugar",
+      "startSound": "さ",
+      "endSound": "う"
+    },
+    {
+      "word": "しお",
+      "romaji": "shio",
+      "kanji": "塩",
+      "translation": "salt",
+      "startSound": "し",
+      "endSound": "お"
+    },
+    {
+      "word": "しか",
+      "romaji": "shika",
+      "kanji": "鹿",
+      "translation": "deer",
+      "startSound": "し",
+      "endSound": "か"
+    },
+    {
+      "word": "しま",
+      "romaji": "shima",
+      "kanji": "島",
+      "translation": "island",
+      "startSound": "し",
+      "endSound": "ま"
+    },
+    {
+      "word": "しんぶん",
+      "romaji": "shinbun",
+      "kanji": "新聞",
+      "translation": "newspaper",
+      "startSound": "し",
+      "endSound": "ん"
+    },
+    {
+      "word": "すし",
+      "romaji": "sushi",
+      "kanji": "寿司",
+      "translation": "sushi",
+      "startSound": "す",
+      "endSound": "し"
+    },
+    {
+      "word": "すいか",
+      "romaji": "suika",
+      "kanji": "西瓜",
+      "translation": "watermelon",
+      "startSound": "す",
+      "endSound": "か"
+    },
+    {
+      "word": "すず",
+      "romaji": "suzu",
+      "kanji": "鈴",
+      "translation": "bell",
+      "startSound": "す",
+      "endSound": "ず"
+    },
+    {
+      "word": "すな",
+      "romaji": "suna",
+      "kanji": "砂",
+      "translation": "sand",
+      "startSound": "す",
+      "endSound": "な"
+    },
+    {
+      "word": "せんせい",
+      "romaji": "sensei",
+      "kanji": "先生",
+      "translation": "teacher",
+      "startSound": "せ",
+      "endSound": "い"
+    },
+    {
+      "word": "せっけん",
+      "romaji": "sekken",
+      "kanji": "石鹸",
+      "translation": "soap",
+      "startSound": "せ",
+      "endSound": "ん"
+    },
+    {
+      "word": "そら",
+      "romaji": "sora",
+      "kanji": "空",
+      "translation": "sky",
+      "startSound": "そ",
+      "endSound": "ら"
+    },
+    {
+      "word": "そふ",
+      "romaji": "sofu",
+      "kanji": "祖父",
+      "translation": "grandfather",
+      "startSound": "そ",
+      "endSound": "ふ"
+    },
+    {
+      "word": "たまご",
+      "romaji": "tamago",
+      "kanji": "卵",
+      "translation": "egg",
+      "startSound": "た",
+      "endSound": "ご"
+    },
+    {
+      "word": "たいよう",
+      "romaji": "taiyou",
+      "kanji": "太陽",
+      "translation": "sun",
+      "startSound": "た",
+      "endSound": "う"
+    },
+    {
+      "word": "たけ",
+      "romaji": "take",
+      "kanji": "竹",
+      "translation": "bamboo",
+      "startSound": "た",
+      "endSound": "け"
+    },
+    {
+      "word": "たぬき",
+      "romaji": "tanuki",
+      "kanji": "狸",
+      "translation": "raccoon dog",
+      "startSound": "た",
+      "endSound": "き"
+    },
+    {
+      "word": "ちず",
+      "romaji": "chizu",
+      "kanji": "地図",
+      "translation": "map",
+      "startSound": "ち",
+      "endSound": "ず"
+    },
+    {
+      "word": "ちち",
+      "romaji": "chichi",
+      "kanji": "父",
+      "translation": "father",
+      "startSound": "ち",
+      "endSound": "ち"
+    },
+    {
+      "word": "ちゃわん",
+      "romaji": "chawan",
+      "kanji": "茶碗",
+      "translation": "rice bowl",
+      "startSound": "ち",
+      "endSound": "ん"
+    },
+    {
+      "word": "つき",
+      "romaji": "tsuki",
+      "kanji": "月",
+      "translation": "moon",
+      "startSound": "つ",
+      "endSound": "き"
+    },
+    {
+      "word": "つくえ",
+      "romaji": "tsukue",
+      "kanji": "机",
+      "translation": "desk",
+      "startSound": "つ",
+      "endSound": "え"
+    },
+    {
+      "word": "つる",
+      "romaji": "tsuru",
+      "kanji": "鶴",
+      "translation": "crane",
+      "startSound": "つ",
+      "endSound": "る"
+    },
+    {
+      "word": "て",
+      "romaji": "te",
+      "kanji": "手",
+      "translation": "hand",
+      "startSound": "て",
+      "endSound": "て"
+    },
+    {
+      "word": "てがみ",
+      "romaji": "tegami",
+      "kanji": "手紙",
+      "translation": "letter",
+      "startSound": "て",
+      "endSound": "み"
+    },
+    {
+      "word": "てんき",
+      "romaji": "tenki",
+      "kanji": "天気",
+      "translation": "weather",
+      "startSound": "て",
+      "endSound": "き"
+    },
+    {
+      "word": "とり",
+      "romaji": "tori",
+      "kanji": "鳥",
+      "translation": "bird",
+      "startSound": "と",
+      "endSound": "り"
+    },
+    {
+      "word": "ときれい",
+      "romaji": "tokei",
+      "kanji": "時計",
+      "translation": "clock",
+      "startSound": "と",
+      "endSound": "い"
+    },
+    {
+      "word": "とけい",
+      "romaji": "tokei",
+      "kanji": "時計",
+      "translation": "watch/clock",
+      "startSound": "と",
+      "endSound": "い"
+    },
+    {
+      "word": "ともだち",
+      "romaji": "tomodachi",
+      "kanji": "友達",
+      "translation": "friend",
+      "startSound": "と",
+      "endSound": "ち"
+    },
+    {
+      "word": "とら",
+      "romaji": "tora",
+      "kanji": "虎",
+      "translation": "tiger",
+      "startSound": "と",
+      "endSound": "ら"
+    },
+    {
+      "word": "なつ",
+      "romaji": "natsu",
+      "kanji": "夏",
+      "translation": "summer",
+      "startSound": "な",
+      "endSound": "つ"
+    },
+    {
+      "word": "なまえ",
+      "romaji": "namae",
+      "kanji": "名前",
+      "translation": "name",
+      "startSound": "な",
+      "endSound": "え"
+    },
+    {
+      "word": "なす",
+      "romaji": "nasu",
+      "kanji": "茄子",
+      "translation": "eggplant",
+      "startSound": "な",
+      "endSound": "す"
+    },
+    {
+      "word": "にわ",
+      "romaji": "niwa",
+      "kanji": "庭",
+      "translation": "garden",
+      "startSound": "に",
+      "endSound": "わ"
+    },
+    {
+      "word": "にく",
+      "romaji": "niku",
+      "kanji": "肉",
+      "translation": "meat",
+      "startSound": "に",
+      "endSound": "く"
+    },
+    {
+      "word": "にんぎょう",
+      "romaji": "ningyou",
+      "kanji": "人形",
+      "translation": "doll",
+      "startSound": "に",
+      "endSound": "う"
+    },
+    {
+      "word": "ぬの",
+      "romaji": "nuno",
+      "kanji": "布",
+      "translation": "cloth",
+      "startSound": "ぬ",
+      "endSound": "の"
+    },
+    {
+      "word": "ぬいぐるみ",
+      "romaji": "nuigurumi",
+      "kanji": "縫い包み",
+      "translation": "stuffed animal",
+      "startSound": "ぬ",
+      "endSound": "み"
+    },
+    {
+      "word": "ねこ",
+      "romaji": "neko",
+      "kanji": "猫",
+      "translation": "cat",
+      "startSound": "ね",
+      "endSound": "こ"
+    },
+    {
+      "word": "ねずみ",
+      "romaji": "nezumi",
+      "kanji": "鼠",
+      "translation": "mouse/rat",
+      "startSound": "ね",
+      "endSound": "み"
+    },
+    {
+      "word": "ねんど",
+      "romaji": "nendo",
+      "kanji": "粘土",
+      "translation": "clay",
+      "startSound": "ね",
+      "endSound": "ど"
+    },
+    {
+      "word": "のり",
+      "romaji": "nori",
+      "kanji": "海苔",
+      "translation": "seaweed",
+      "startSound": "の",
+      "endSound": "り"
+    },
+    {
+      "word": "のみもの",
+      "romaji": "nomimono",
+      "kanji": "飲み物",
+      "translation": "beverage",
+      "startSound": "の",
+      "endSound": "の"
+    },
+    {
+      "word": "はな",
+      "romaji": "hana",
+      "kanji": "花",
+      "translation": "flower",
+      "startSound": "は",
+      "endSound": "な"
+    },
+    {
+      "word": "はし",
+      "romaji": "hashi",
+      "kanji": "橋",
+      "translation": "bridge",
+      "startSound": "は",
+      "endSound": "し"
+    },
+    {
+      "word": "はこ",
+      "romaji": "hako",
+      "kanji": "箱",
+      "translation": "box",
+      "startSound": "は",
+      "endSound": "こ"
+    },
+    {
+      "word": "はる",
+      "romaji": "haru",
+      "kanji": "春",
+      "translation": "spring",
+      "startSound": "は",
+      "endSound": "る"
+    },
+    {
+      "word": "ひ",
+      "romaji": "hi",
+      "kanji": "火",
+      "onyomi": "カ",
+      "translation": "fire",
+      "startSound": "ひ",
+      "endSound": "ひ"
+    },
+    {
+      "word": "ひこうき",
+      "romaji": "hikouki",
+      "kanji": "飛行機",
+      "translation": "airplane",
+      "startSound": "ひ",
+      "endSound": "き"
+    },
+    {
+      "word": "ひと",
+      "romaji": "hito",
+      "kanji": "人",
+      "translation": "person",
+      "startSound": "ひ",
+      "endSound": "と"
+    },
+    {
+      "word": "ひつじ",
+      "romaji": "hitsuji",
+      "kanji": "羊",
+      "translation": "sheep",
+      "startSound": "ひ",
+      "endSound": "じ"
+    },
+    {
+      "word": "ふうせん",
+      "romaji": "fuusen",
+      "kanji": "風船",
+      "translation": "balloon",
+      "startSound": "ふ",
+      "endSound": "ん"
+    },
+    {
+      "word": "ふくろ",
+      "romaji": "fukuro",
+      "kanji": "袋",
+      "translation": "bag/sack",
+      "startSound": "ふ",
+      "endSound": "ろ"
+    },
+    {
+      "word": "ふね",
+      "romaji": "fune",
+      "kanji": "船",
+      "translation": "ship",
+      "startSound": "ふ",
+      "endSound": "ね"
+    },
+    {
+      "word": "ふゆ",
+      "romaji": "fuyu",
+      "kanji": "冬",
+      "translation": "winter",
+      "startSound": "ふ",
+      "endSound": "ゆ"
+    },
+    {
+      "word": "へや",
+      "romaji": "heya",
+      "kanji": "部屋",
+      "translation": "room",
+      "startSound": "へ",
+      "endSound": "や"
+    },
+    {
+      "word": "へび",
+      "romaji": "hebi",
+      "kanji": "蛇",
+      "translation": "snake",
+      "startSound": "へ",
+      "endSound": "び"
+    },
+    {
+      "word": "ほん",
+      "romaji": "hon",
+      "kanji": "本",
+      "translation": "book",
+      "startSound": "ほ",
+      "endSound": "ん"
+    },
+    {
+      "word": "ほし",
+      "romaji": "hoshi",
+      "kanji": "星",
+      "translation": "star",
+      "startSound": "ほ",
+      "endSound": "し"
+    },
+    {
+      "word": "ほそく",
+      "romaji": "hosoku",
+      "kanji": "補足",
+      "translation": "supplement",
+      "startSound": "ほ",
+      "endSound": "く"
+    },
+    {
+      "word": "まど",
+      "romaji": "mado",
+      "kanji": "窓",
+      "translation": "window",
+      "startSound": "ま",
+      "endSound": "ど"
+    },
+    {
+      "word": "まち",
+      "romaji": "machi",
+      "kanji": "町",
+      "translation": "town",
+      "startSound": "ま",
+      "endSound": "ち"
+    },
+    {
+      "word": "まつり",
+      "romaji": "matsuri",
+      "kanji": "祭り",
+      "translation": "festival",
+      "startSound": "ま",
+      "endSound": "り"
+    },
+    {
+      "word": "まくら",
+      "romaji": "makura",
+      "kanji": "枕",
+      "translation": "pillow",
+      "startSound": "ま",
+      "endSound": "ら"
+    },
+    {
+      "word": "みかん",
+      "romaji": "mikan",
+      "kanji": "蜜柑",
+      "translation": "mandarin orange",
+      "startSound": "み",
+      "endSound": "ん"
+    },
+    {
+      "word": "みず",
+      "romaji": "mizu",
+      "kanji": "水",
+      "onyomi": "スイ",
+      "translation": "water",
+      "startSound": "み",
+      "endSound": "ず"
+    },
+    {
+      "word": "みせ",
+      "romaji": "mise",
+      "kanji": "店",
+      "translation": "shop",
+      "startSound": "み",
+      "endSound": "せ"
+    },
+    {
+      "word": "みみ",
+      "romaji": "mimi",
+      "kanji": "耳",
+      "translation": "ear",
+      "startSound": "み",
+      "endSound": "み"
+    },
+    {
+      "word": "むし",
+      "romaji": "mushi",
+      "kanji": "虫",
+      "translation": "insect",
+      "startSound": "む",
+      "endSound": "し"
+    },
+    {
+      "word": "むら",
+      "romaji": "mura",
+      "kanji": "村",
+      "translation": "village",
+      "startSound": "む",
+      "endSound": "ら"
+    },
+    {
+      "word": "め",
+      "romaji": "me",
+      "kanji": "目",
+      "translation": "eye",
+      "startSound": "め",
+      "endSound": "め"
+    },
+    {
+      "word": "めがね",
+      "romaji": "megane",
+      "kanji": "眼鏡",
+      "translation": "glasses",
+      "startSound": "め",
+      "endSound": "ね"
+    },
+    {
+      "word": "もも",
+      "romaji": "momo",
+      "kanji": "桃",
+      "translation": "peach",
+      "startSound": "も",
+      "endSound": "も"
+    },
+    {
+      "word": "もり",
+      "romaji": "mori",
+      "kanji": "森",
+      "translation": "forest",
+      "startSound": "も",
+      "endSound": "り"
+    },
+    {
+      "word": "やま",
+      "romaji": "yama",
+      "kanji": "山",
+      "onyomi": "サン/セン",
+      "translation": "mountain",
+      "startSound": "や",
+      "endSound": "ま"
+    },
+    {
+      "word": "やね",
+      "romaji": "yane",
+      "kanji": "屋根",
+      "translation": "roof",
+      "startSound": "や",
+      "endSound": "ね"
+    },
+    {
+      "word": "ゆき",
+      "romaji": "yuki",
+      "kanji": "雪",
+      "onyomi": "セツ",
+      "translation": "snow",
+      "startSound": "ゆ",
+      "endSound": "き"
+    },
+    {
+      "word": "ゆび",
+      "romaji": "yubi",
+      "kanji": "指",
+      "translation": "finger",
+      "startSound": "ゆ",
+      "endSound": "び"
+    },
+    {
+      "word": "ゆめ",
+      "romaji": "yume",
+      "kanji": "夢",
+      "translation": "dream",
+      "startSound": "ゆ",
+      "endSound": "め"
+    },
+    {
+      "word": "よる",
+      "romaji": "yoru",
+      "kanji": "夜",
+      "translation": "night",
+      "startSound": "よ",
+      "endSound": "る"
+    },
+    {
+      "word": "よこ",
+      "romaji": "yoko",
+      "kanji": "横",
+      "translation": "side",
+      "startSound": "よ",
+      "endSound": "こ"
+    },
+    {
+      "word": "らいおん",
+      "romaji": "raion",
+      "kanji": "",
+      "translation": "lion",
+      "startSound": "ら",
+      "endSound": "ん"
+    },
+    {
+      "word": "らっぱ",
+      "romaji": "rappa",
+      "kanji": "喇叭",
+      "translation": "trumpet",
+      "startSound": "ら",
+      "endSound": "ぱ"
+    },
+    {
+      "word": "りんご",
+      "romaji": "ringo",
+      "kanji": "林檎",
+      "translation": "apple",
+      "startSound": "り",
+      "endSound": "ご"
+    },
+    {
+      "word": "りす",
+      "romaji": "risu",
+      "kanji": "栗鼠",
+      "translation": "squirrel",
+      "startSound": "り",
+      "endSound": "す"
+    },
+    {
+      "word": "るす",
+      "romaji": "rusu",
+      "kanji": "留守",
+      "translation": "absence",
+      "startSound": "る",
+      "endSound": "す"
+    },
+    {
+      "word": "れいぞうこ",
+      "romaji": "reizouko",
+      "kanji": "冷蔵庫",
+      "translation": "refrigerator",
+      "startSound": "れ",
+      "endSound": "こ"
+    },
+    {
+      "word": "れんが",
+      "romaji": "renga",
+      "kanji": "煉瓦",
+      "translation": "brick",
+      "startSound": "れ",
+      "endSound": "が"
+    },
+    {
+      "word": "ろうそく",
+      "romaji": "rousoku",
+      "kanji": "蝋燭",
+      "translation": "candle",
+      "startSound": "ろ",
+      "endSound": "く"
+    },
+    {
+      "word": "ろばた",
+      "romaji": "robata",
+      "kanji": "炉端",
+      "translation": "fireside",
+      "startSound": "ろ",
+      "endSound": "た"
+    },
+    {
+      "word": "わに",
+      "romaji": "wani",
+      "kanji": "鰐",
+      "translation": "crocodile",
+      "startSound": "わ",
+      "endSound": "に"
+    },
+    {
+      "word": "わし",
+      "romaji": "washi",
+      "kanji": "鷲",
+      "translation": "eagle",
+      "startSound": "わ",
+      "endSound": "し"
+    },
+    {
+      "word": "わた",
+      "romaji": "wata",
+      "kanji": "綿",
+      "translation": "cotton",
+      "startSound": "わ",
+      "endSound": "た"
+    },
+    {
+      "word": "ごりら",
+      "romaji": "gorira",
+      "kanji": "",
+      "translation": "gorilla",
+      "startSound": "ご",
+      "endSound": "ら"
+    },
+    {
+      "word": "ごはん",
+      "romaji": "gohan",
+      "kanji": "ご飯",
+      "translation": "rice/meal",
+      "startSound": "ご",
+      "endSound": "ん"
+    },
+    {
+      "word": "ざる",
+      "romaji": "zaru",
+      "kanji": "笊",
+      "translation": "colander",
+      "startSound": "ざ",
+      "endSound": "る"
+    },
+    {
+      "word": "ぞう",
+      "romaji": "zou",
+      "kanji": "象",
+      "translation": "elephant",
+      "startSound": "ぞ",
+      "endSound": "う"
+    },
+    {
+      "word": "だいどころ",
+      "romaji": "daidokoro",
+      "kanji": "台所",
+      "translation": "kitchen",
+      "startSound": "だ",
+      "endSound": "ろ"
+    },
+    {
+      "word": "でんわ",
+      "romaji": "denwa",
+      "kanji": "電話",
+      "translation": "telephone",
+      "startSound": "で",
+      "endSound": "わ"
+    },
+    {
+      "word": "でんき",
+      "romaji": "denki",
+      "kanji": "電気",
+      "translation": "electricity",
+      "startSound": "で",
+      "endSound": "き"
+    },
+    {
+      "word": "どあ",
+      "romaji": "doa",
+      "kanji": "ドア",
+      "translation": "door",
+      "startSound": "ど",
+      "endSound": "あ"
+    },
+    {
+      "word": "どうぶつ",
+      "romaji": "doubutsu",
+      "kanji": "動物",
+      "translation": "animal",
+      "startSound": "ど",
+      "endSound": "つ"
+    },
+    {
+      "word": "ばら",
+      "romaji": "bara",
+      "kanji": "薔薇",
+      "translation": "rose",
+      "startSound": "ば",
+      "endSound": "ら"
+    },
+    {
+      "word": "ばなな",
+      "romaji": "banana",
+      "kanji": "",
+      "translation": "banana",
+      "startSound": "ば",
+      "endSound": "な"
+    },
+    {
+      "word": "びじん",
+      "romaji": "bijin",
+      "kanji": "美人",
+      "translation": "beautiful person",
+      "startSound": "び",
+      "endSound": "ん"
+    },
+    {
+      "word": "ぶた",
+      "romaji": "buta",
+      "kanji": "豚",
+      "translation": "pig",
+      "startSound": "ぶ",
+      "endSound": "た"
+    },
+    {
+      "word": "べんとう",
+      "romaji": "bentou",
+      "kanji": "弁当",
+      "translation": "lunch box",
+      "startSound": "べ",
+      "endSound": "う"
+    },
+    {
+      "word": "ぼうし",
+      "romaji": "boushi",
+      "kanji": "帽子",
+      "translation": "hat",
+      "startSound": "ぼ",
+      "endSound": "し"
+    },
+    {
+      "word": "ぱん",
+      "romaji": "pan",
+      "kanji": "",
+      "translation": "bread",
+      "startSound": "ぱ",
+      "endSound": "ん"
+    },
+    {
+      "word": "ぴあの",
+      "romaji": "piano",
+      "kanji": "",
+      "translation": "piano",
+      "startSound": "ぴ",
+      "endSound": "の"
+    },
+    {
+      "word": "ぷーる",
+      "romaji": "puuru",
+      "kanji": "",
+      "translation": "pool",
+      "startSound": "ぷ",
+      "endSound": "る"
+    },
+    {
+      "word": "ぺん",
+      "romaji": "pen",
+      "kanji": "",
+      "translation": "pen",
+      "startSound": "ぺ",
+      "endSound": "ん"
+    },
+    {
+      "word": "ぽすと",
+      "romaji": "posuto",
+      "kanji": "",
+      "translation": "mailbox",
+      "startSound": "ぽ",
+      "endSound": "と"
+    },
+    {
+      "word": "がっこう",
+      "romaji": "gakkou",
+      "kanji": "学校",
+      "translation": "school",
+      "startSound": "が",
+      "endSound": "う"
+    },
+    {
+      "word": "ぎんこう",
+      "romaji": "ginkou",
+      "kanji": "銀行",
+      "translation": "bank",
+      "startSound": "ぎ",
+      "endSound": "う"
+    },
+    {
+      "word": "ぐんて",
+      "romaji": "gunte",
+      "kanji": "軍手",
+      "translation": "work gloves",
+      "startSound": "ぐ",
+      "endSound": "て"
+    },
+    {
+      "word": "げた",
+      "romaji": "geta",
+      "kanji": "下駄",
+      "translation": "wooden clogs",
+      "startSound": "げ",
+      "endSound": "た"
+    },
+    {
+      "word": "じてんしゃ",
+      "romaji": "jitensha",
+      "kanji": "自転車",
+      "translation": "bicycle",
+      "startSound": "じ",
+      "endSound": "しゃ"
+    },
+    {
+      "word": "じしょ",
+      "romaji": "jisho",
+      "kanji": "辞書",
+      "translation": "dictionary",
+      "startSound": "じ",
+      "endSound": "しょ"
+    },
+    {
+      "word": "ずぼん",
+      "romaji": "zubon",
+      "kanji": "ズボン",
+      "translation": "trousers",
+      "startSound": "ず",
+      "endSound": "ん"
+    },
+    {
+      "word": "ぜんぶ",
+      "romaji": "zenbu",
+      "kanji": "全部",
+      "translation": "all",
+      "startSound": "ぜ",
+      "endSound": "ぶ"
+    },
+    {
+      "word": "ピカチュウ",
+      "romaji": "pikachu",
+      "kanji": "",
+      "translation": "Pikachu (Pokemon)",
+      "startSound": "ぴ",
+      "endSound": "う"
+    },
+    {
+      "word": "フシギダネ",
+      "romaji": "fushigidane",
+      "kanji": "",
+      "translation": "Bulbasaur (Pokemon)",
+      "startSound": "ふ",
+      "endSound": "ね"
+    },
+    {
+      "word": "ヒトカゲ",
+      "romaji": "hitokage",
+      "kanji": "",
+      "translation": "Charmander (Pokemon)",
+      "startSound": "ひ",
+      "endSound": "げ"
+    },
+    {
+      "word": "ゼニガメ",
+      "romaji": "zenigame",
+      "kanji": "",
+      "translation": "Squirtle (Pokemon)",
+      "startSound": "ぜ",
+      "endSound": "め"
+    },
+    {
+      "word": "イーブイ",
+      "romaji": "eevee",
+      "kanji": "",
+      "translation": "Eevee (Pokemon)",
+      "startSound": "い",
+      "endSound": "い"
+    },
+    {
+      "word": "カメックス",
+      "romaji": "kamekkusu",
+      "kanji": "",
+      "translation": "Blastoise (Pokemon)",
+      "startSound": "か",
+      "endSound": "す"
+    },
+    {
+      "word": "リザードン",
+      "romaji": "lizaadon",
+      "kanji": "",
+      "translation": "Charizard (Pokemon)",
+      "startSound": "り",
+      "endSound": "ん"
+    },
+    {
+      "word": "ミュウツー",
+      "romaji": "myuutsuu",
+      "kanji": "",
+      "translation": "Mewtwo (Pokemon)",
+      "startSound": "み",
+      "endSound": "う"
+    },
+    {
+      "word": "カビゴン",
+      "romaji": "kabigon",
+      "kanji": "",
+      "translation": "Snorlax (Pokemon)",
+      "startSound": "か",
+      "endSound": "ん"
+    },
+    {
+      "word": "プリン",
+      "romaji": "purin",
+      "kanji": "",
+      "translation": "Jigglypuff (Pokemon)",
+      "startSound": "ぷ",
+      "endSound": "ん"
+    },
+    {
+      "word": "ニンジャ",
+      "romaji": "ninja",
+      "kanji": "忍者",
+      "translation": "ninja",
+      "startSound": "に",
+      "endSound": "じゃ"
+    },
+    {
+      "word": "カメ",
+      "romaji": "kame",
+      "kanji": "亀",
+      "translation": "turtle",
+      "startSound": "か",
+      "endSound": "め"
+    },
+    {
+      "word": "レオナルド",
+      "romaji": "reonarudo",
+      "kanji": "",
+      "translation": "Leonardo (Ninja Turtle)",
+      "startSound": "れ",
+      "endSound": "ど"
+    },
+    {
+      "word": "ラファエル",
+      "romaji": "rafaeru",
+      "kanji": "",
+      "translation": "Raphael (Ninja Turtle)",
+      "startSound": "ら",
+      "endSound": "る"
+    },
+    {
+      "word": "ミケランジェロ",
+      "romaji": "mikeranjero",
+      "kanji": "",
+      "translation": "Michelangelo (Ninja Turtle)",
+      "startSound": "み",
+      "endSound": "ろ"
+    },
+    {
+      "word": "ドナテロ",
+      "romaji": "donatero",
+      "kanji": "",
+      "translation": "Donatello (Ninja Turtle)",
+      "startSound": "ど",
+      "endSound": "ろ"
+    },
+    {
+      "word": "ピザ",
+      "romaji": "piza",
+      "kanji": "",
+      "translation": "pizza",
+      "startSound": "ぴ",
+      "endSound": "ざ"
+    },
+    {
+      "word": "コンピューター",
+      "romaji": "konpyuutaa",
+      "kanji": "",
+      "translation": "computer",
+      "startSound": "こ",
+      "endSound": "た"
+    },
+    {
+      "word": "スマホ",
+      "romaji": "sumaho",
+      "kanji": "",
+      "translation": "smartphone",
+      "startSound": "す",
+      "endSound": "ほ"
+    },
+    {
+      "word": "テレビ",
+      "romaji": "terebi",
+      "kanji": "",
+      "translation": "television",
+      "startSound": "て",
+      "endSound": "び"
+    },
+    {
+      "word": "ラジオ",
+      "romaji": "rajio",
+      "kanji": "",
+      "translation": "radio",
+      "startSound": "ら",
+      "endSound": "お"
+    },
+    {
+      "word": "カメラ",
+      "romaji": "kamera",
+      "kanji": "",
+      "translation": "camera",
+      "startSound": "か",
+      "endSound": "ら"
+    },
+    {
+      "word": "ゲーム",
+      "romaji": "geemu",
+      "kanji": "",
+      "translation": "game",
+      "startSound": "げ",
+      "endSound": "む"
+    },
+    {
+      "word": "アニメ",
+      "romaji": "anime",
+      "kanji": "",
+      "translation": "anime",
+      "startSound": "あ",
+      "endSound": "め"
+    },
+    {
+      "word": "マンガ",
+      "romaji": "manga",
+      "kanji": "漫画",
+      "translation": "manga",
+      "startSound": "ま",
+      "endSound": "が"
+    },
+    {
+      "word": "ケーキ",
+      "romaji": "keeki",
+      "kanji": "",
+      "translation": "cake",
+      "startSound": "け",
+      "endSound": "き"
+    },
+    {
+      "word": "クッキー",
+      "romaji": "kukkii",
+      "kanji": "",
+      "translation": "cookie",
+      "startSound": "く",
+      "endSound": "い"
+    },
+    {
+      "word": "チョコレート",
+      "romaji": "chokoreeto",
+      "kanji": "",
+      "translation": "chocolate",
+      "startSound": "ち",
+      "endSound": "と"
+    },
+    {
+      "word": "アイスクリーム",
+      "romaji": "aisukuriimu",
+      "kanji": "",
+      "translation": "ice cream",
+      "startSound": "あ",
+      "endSound": "む"
+    },
+    {
+      "word": "ハンバーガー",
+      "romaji": "hanbaagaa",
+      "kanji": "",
+      "translation": "hamburger",
+      "startSound": "は",
+      "endSound": "が"
+    },
+    {
+      "word": "サンドイッチ",
+      "romaji": "sandoicchi",
+      "kanji": "",
+      "translation": "sandwich",
+      "startSound": "さ",
+      "endSound": "ち"
+    },
+    {
+      "word": "サラダ",
+      "romaji": "sarada",
+      "kanji": "",
+      "translation": "salad",
+      "startSound": "さ",
+      "endSound": "だ"
+    },
+    {
+      "word": "スープ",
+      "romaji": "suupu",
+      "kanji": "",
+      "translation": "soup",
+      "startSound": "す",
+      "endSound": "ぷ"
+    },
+    {
+      "word": "カレー",
+      "romaji": "karee",
+      "kanji": "",
+      "translation": "curry",
+      "startSound": "か",
+      "endSound": "え"
+    },
+    {
+      "word": "ラーメン",
+      "romaji": "raamen",
+      "kanji": "",
+      "translation": "ramen",
+      "startSound": "ら",
+      "endSound": "ん"
+    },
+    {
+      "word": "うどん",
+      "romaji": "udon",
+      "kanji": "",
+      "translation": "udon",
+      "startSound": "う",
+      "endSound": "ん"
+    },
+    {
+      "word": "そば",
+      "romaji": "soba",
+      "kanji": "蕎麦",
+      "translation": "soba",
+      "startSound": "そ",
+      "endSound": "ば"
+    },
+    {
+      "word": "おにぎり",
+      "romaji": "onigiri",
+      "kanji": "お握り",
+      "translation": "rice ball",
+      "startSound": "お",
+      "endSound": "り"
+    },
+    {
+      "word": "てんぷら",
+      "romaji": "tenpura",
+      "kanji": "天ぷら",
+      "translation": "tempura",
+      "startSound": "て",
+      "endSound": "ら"
+    },
+    {
+      "word": "やきとり",
+      "romaji": "yakitori",
+      "kanji": "焼き鳥",
+      "translation": "yakitori",
+      "startSound": "や",
+      "endSound": "り"
+    },
+    {
+      "word": "おでん",
+      "romaji": "oden",
+      "kanji": "",
+      "translation": "oden",
+      "startSound": "お",
+      "endSound": "ん"
+    },
+    {
+      "word": "たこやき",
+      "romaji": "takoyaki",
+      "kanji": "蛸焼き",
+      "translation": "takoyaki",
+      "startSound": "た",
+      "endSound": "き"
+    },
+    {
+      "word": "おこのみやき",
+      "romaji": "okonomiyaki",
+      "kanji": "お好み焼き",
+      "translation": "okonomiyaki",
+      "startSound": "お",
+      "endSound": "き"
+    },
+    {
+      "word": "やきそば",
+      "romaji": "yakisoba",
+      "kanji": "焼きそば",
+      "translation": "yakisoba",
+      "startSound": "や",
+      "endSound": "ば"
+    },
+    {
+      "word": "とうふ",
+      "romaji": "toufu",
+      "kanji": "豆腐",
+      "translation": "tofu",
+      "startSound": "と",
+      "endSound": "ふ"
+    },
+    {
+      "word": "みそ",
+      "romaji": "miso",
+      "kanji": "味噌",
+      "translation": "miso",
+      "startSound": "み",
+      "endSound": "そ"
+    },
+    {
+      "word": "しょうゆ",
+      "romaji": "shouyu",
+      "kanji": "醤油",
+      "translation": "soy sauce",
+      "startSound": "し",
+      "endSound": "ゆ"
+    },
+    {
+      "word": "わさび",
+      "romaji": "wasabi",
+      "kanji": "山葵",
+      "translation": "wasabi",
+      "startSound": "わ",
+      "endSound": "び"
+    },
+    {
+      "word": "しょうが",
+      "romaji": "shouga",
+      "kanji": "生姜",
+      "translation": "ginger",
+      "startSound": "し",
+      "endSound": "が"
+    },
+    {
+      "word": "にんにく",
+      "romaji": "ninniku",
+      "kanji": "大蒜",
+      "translation": "garlic",
+      "startSound": "に",
+      "endSound": "く"
+    },
+    {
+      "word": "だいこん",
+      "romaji": "daikon",
+      "kanji": "大根",
+      "translation": "daikon radish",
+      "startSound": "だ",
+      "endSound": "ん"
+    },
+    {
+      "word": "きゅうり",
+      "romaji": "kyuuri",
+      "kanji": "胡瓜",
+      "translation": "cucumber",
+      "startSound": "き",
+      "endSound": "り"
+    },
+    {
+      "word": "トマト",
+      "romaji": "tomato",
+      "kanji": "",
+      "translation": "tomato",
+      "startSound": "と",
+      "endSound": "と"
+    },
+    {
+      "word": "レタス",
+      "romaji": "retasu",
+      "kanji": "",
+      "translation": "lettuce",
+      "startSound": "れ",
+      "endSound": "す"
+    },
+    {
+      "word": "にんじん",
+      "romaji": "ninjin",
+      "kanji": "人参",
+      "translation": "carrot",
+      "startSound": "に",
+      "endSound": "ん"
+    },
+    {
+      "word": "たまねぎ",
+      "romaji": "tamanegi",
+      "kanji": "玉葱",
+      "translation": "onion",
+      "startSound": "た",
+      "endSound": "ぎ"
+    },
+    {
+      "word": "じゃがいも",
+      "romaji": "jagaimo",
+      "kanji": "",
+      "translation": "potato",
+      "startSound": "じ",
+      "endSound": "も"
+    },
+    {
+      "word": "かぼちゃ",
+      "romaji": "kabocha",
+      "kanji": "南瓜",
+      "translation": "pumpkin",
+      "startSound": "か",
+      "endSound": "ちゃ"
+    },
+    {
+      "word": "ぶどう",
+      "romaji": "budou",
+      "kanji": "葡萄",
+      "translation": "grape",
+      "startSound": "ぶ",
+      "endSound": "う"
+    },
+    {
+      "word": "いちご",
+      "romaji": "ichigo",
+      "kanji": "苺",
+      "translation": "strawberry",
+      "startSound": "い",
+      "endSound": "ご"
+    },
+    {
+      "word": "メロン",
+      "romaji": "meron",
+      "kanji": "",
+      "translation": "melon",
+      "startSound": "め",
+      "endSound": "ん"
+    },
+    {
+      "word": "レモン",
+      "romaji": "remon",
+      "kanji": "",
+      "translation": "lemon",
+      "startSound": "れ",
+      "endSound": "ん"
+    },
+    {
+      "word": "オレンジ",
+      "romaji": "orenji",
+      "kanji": "",
+      "translation": "orange",
+      "startSound": "お",
+      "endSound": "じ"
+    },
+    {
+      "word": "パイナップル",
+      "romaji": "painappuru",
+      "kanji": "",
+      "translation": "pineapple",
+      "startSound": "ぱ",
+      "endSound": "る"
+    },
+    {
+      "word": "さくらんぼ",
+      "romaji": "sakuranbo",
+      "kanji": "桜ん坊",
+      "translation": "cherry",
+      "startSound": "さ",
+      "endSound": "ぼ"
+    },
+    {
+      "word": "なし",
+      "romaji": "nashi",
+      "kanji": "梨",
+      "translation": "pear",
+      "startSound": "な",
+      "endSound": "し"
+    },
+    {
+      "word": "かき",
+      "romaji": "kaki",
+      "kanji": "柿",
+      "translation": "persimmon",
+      "startSound": "か",
+      "endSound": "き"
+    },
+    {
+      "word": "くり",
+      "romaji": "kuri",
+      "kanji": "栗",
+      "translation": "chestnut",
+      "startSound": "く",
+      "endSound": "り"
+    },
+    {
+      "word": "コーヒー",
+      "romaji": "koohii",
+      "kanji": "",
+      "translation": "coffee",
+      "startSound": "こ",
+      "endSound": "い"
+    },
+    {
+      "word": "ジュース",
+      "romaji": "juusu",
+      "kanji": "",
+      "translation": "juice",
+      "startSound": "じ",
+      "endSound": "す"
+    },
+    {
+      "word": "ミルク",
+      "romaji": "miruku",
+      "kanji": "",
+      "translation": "milk",
+      "startSound": "み",
+      "endSound": "く"
+    },
+    {
+      "word": "ビール",
+      "romaji": "biiru",
+      "kanji": "",
+      "translation": "beer",
+      "startSound": "び",
+      "endSound": "る"
+    },
+    {
+      "word": "ワイン",
+      "romaji": "wain",
+      "kanji": "",
+      "translation": "wine",
+      "startSound": "わ",
+      "endSound": "ん"
+    },
+    {
+      "word": "さけ",
+      "romaji": "sake",
+      "kanji": "酒",
+      "translation": "sake",
+      "startSound": "さ",
+      "endSound": "け"
+    },
+    {
+      "word": "やかん",
+      "romaji": "yakan",
+      "kanji": "薬缶",
+      "translation": "kettle",
+      "startSound": "や",
+      "endSound": "ん"
+    },
+    {
+      "word": "なべ",
+      "romaji": "nabe",
+      "kanji": "鍋",
+      "translation": "pot",
+      "startSound": "な",
+      "endSound": "べ"
+    },
+    {
+      "word": "フライパン",
+      "romaji": "furaipan",
+      "kanji": "",
+      "translation": "frying pan",
+      "startSound": "ふ",
+      "endSound": "ん"
+    },
+    {
+      "word": "ほうちょう",
+      "romaji": "houchou",
+      "kanji": "包丁",
+      "translation": "knife",
+      "startSound": "ほ",
+      "endSound": "う"
+    },
+    {
+      "word": "フォーク",
+      "romaji": "fooku",
+      "kanji": "",
+      "translation": "fork",
+      "startSound": "ふ",
+      "endSound": "く"
+    },
+    {
+      "word": "スプーン",
+      "romaji": "supuun",
+      "kanji": "",
+      "translation": "spoon",
+      "startSound": "す",
+      "endSound": "ん"
+    },
+    {
+      "word": "コップ",
+      "romaji": "koppu",
+      "kanji": "",
+      "translation": "cup",
+      "startSound": "こ",
+      "endSound": "ぷ"
+    },
+    {
+      "word": "グラス",
+      "romaji": "gurasu",
+      "kanji": "",
+      "translation": "glass",
+      "startSound": "ぐ",
+      "endSound": "す"
+    },
+    {
+      "word": "さら",
+      "romaji": "sara",
+      "kanji": "皿",
+      "translation": "plate",
+      "startSound": "さ",
+      "endSound": "ら"
+    },
+    {
+      "word": "ボウル",
+      "romaji": "bouru",
+      "kanji": "",
+      "translation": "bowl",
+      "startSound": "ぼ",
+      "endSound": "る"
+    },
+    {
+      "word": "ナイフ",
+      "romaji": "naifu",
+      "kanji": "",
+      "translation": "knife",
+      "startSound": "な",
+      "endSound": "ふ"
+    },
+    {
+      "word": "タオル",
+      "romaji": "taoru",
+      "kanji": "",
+      "translation": "towel",
+      "startSound": "た",
+      "endSound": "る"
+    },
+    {
+      "word": "せっけん",
+      "romaji": "sekken",
+      "kanji": "石鹸",
+      "translation": "soap",
+      "startSound": "せ",
+      "endSound": "ん"
+    },
+    {
+      "word": "シャンプー",
+      "romaji": "shanpuu",
+      "kanji": "",
+      "translation": "shampoo",
+      "startSound": "し",
+      "endSound": "う"
+    },
+    {
+      "word": "リンス",
+      "romaji": "rinsu",
+      "kanji": "",
+      "translation": "conditioner",
+      "startSound": "り",
+      "endSound": "す"
+    },
+    {
+      "word": "はぶらし",
+      "romaji": "haburashi",
+      "kanji": "歯ブラシ",
+      "translation": "toothbrush",
+      "startSound": "は",
+      "endSound": "し"
+    },
+    {
+      "word": "はみがき",
+      "romaji": "hamigaki",
+      "kanji": "歯磨き",
+      "translation": "toothpaste",
+      "startSound": "は",
+      "endSound": "き"
+    },
+    {
+      "word": "かがみ",
+      "romaji": "kagami",
+      "kanji": "鏡",
+      "translation": "mirror",
+      "startSound": "か",
+      "endSound": "み"
+    },
+    {
+      "word": "くし",
+      "romaji": "kushi",
+      "kanji": "櫛",
+      "translation": "comb",
+      "startSound": "く",
+      "endSound": "し"
+    },
+    {
+      "word": "ブラシ",
+      "romaji": "burashi",
+      "kanji": "",
+      "translation": "brush",
+      "startSound": "ぶ",
+      "endSound": "し"
+    },
+    {
+      "word": "タオル",
+      "romaji": "taoru",
+      "kanji": "",
+      "translation": "towel",
+      "startSound": "た",
+      "endSound": "る"
+    },
+    {
+      "word": "シャツ",
+      "romaji": "shatsu",
+      "kanji": "",
+      "translation": "shirt",
+      "startSound": "し",
+      "endSound": "つ"
+    },
+    {
+      "word": "ズボン",
+      "romaji": "zubon",
+      "kanji": "",
+      "translation": "pants",
+      "startSound": "ず",
+      "endSound": "ん"
+    },
+    {
+      "word": "スカート",
+      "romaji": "sukaato",
+      "kanji": "",
+      "translation": "skirt",
+      "startSound": "す",
+      "endSound": "と"
+    },
+    {
+      "word": "ドレス",
+      "romaji": "doresu",
+      "kanji": "",
+      "translation": "dress",
+      "startSound": "ど",
+      "endSound": "す"
+    },
+    {
+      "word": "セーター",
+      "romaji": "seetaa",
+      "kanji": "",
+      "translation": "sweater",
+      "startSound": "せ",
+      "endSound": "た"
+    },
+    {
+      "word": "ジャケット",
+      "romaji": "jaketto",
+      "kanji": "",
+      "translation": "jacket",
+      "startSound": "じ",
+      "endSound": "と"
+    },
+    {
+      "word": "コート",
+      "romaji": "kooto",
+      "kanji": "",
+      "translation": "coat",
+      "startSound": "こ",
+      "endSound": "と"
+    },
+    {
+      "word": "くつした",
+      "romaji": "kutsushita",
+      "kanji": "靴下",
+      "translation": "socks",
+      "startSound": "く",
+      "endSound": "た"
+    },
+    {
+      "word": "ネクタイ",
+      "romaji": "nekutai",
+      "kanji": "",
+      "translation": "necktie",
+      "startSound": "ね",
+      "endSound": "い"
+    },
+    {
+      "word": "ベルト",
+      "romaji": "beruto",
+      "kanji": "",
+      "translation": "belt",
+      "startSound": "べ",
+      "endSound": "と"
+    },
+    {
+      "word": "てぶくろ",
+      "romaji": "tebukuro",
+      "kanji": "手袋",
+      "translation": "gloves",
+      "startSound": "て",
+      "endSound": "ろ"
+    },
+    {
+      "word": "マフラー",
+      "romaji": "mafuraa",
+      "kanji": "",
+      "translation": "muffler/scarf",
+      "startSound": "ま",
+      "endSound": "ら"
+    },
+    {
+      "word": "めがね",
+      "romaji": "megane",
+      "kanji": "眼鏡",
+      "translation": "glasses",
+      "startSound": "め",
+      "endSound": "ね"
+    },
+    {
+      "word": "サングラス",
+      "romaji": "sangurasu",
+      "kanji": "",
+      "translation": "sunglasses",
+      "startSound": "さ",
+      "endSound": "す"
+    },
+    {
+      "word": "とけい",
+      "romaji": "tokei",
+      "kanji": "時計",
+      "translation": "watch/clock",
+      "startSound": "と",
+      "endSound": "い"
+    },
+    {
+      "word": "ゆびわ",
+      "romaji": "yubiwa",
+      "kanji": "指輪",
+      "translation": "ring",
+      "startSound": "ゆ",
+      "endSound": "わ"
+    },
+    {
+      "word": "ネックレス",
+      "romaji": "nekkuresu",
+      "kanji": "",
+      "translation": "necklace",
+      "startSound": "ね",
+      "endSound": "す"
+    },
+    {
+      "word": "イヤリング",
+      "romaji": "iyaringu",
+      "kanji": "",
+      "translation": "earrings",
+      "startSound": "い",
+      "endSound": "ぐ"
+    },
+    {
+      "word": "ブレスレット",
+      "romaji": "buresuretto",
+      "kanji": "",
+      "translation": "bracelet",
+      "startSound": "ぶ",
+      "endSound": "と"
+    },
+    {
+      "word": "バッグ",
+      "romaji": "baggu",
+      "kanji": "",
+      "translation": "bag",
+      "startSound": "ば",
+      "endSound": "ぐ"
+    },
+    {
+      "word": "リュックサック",
+      "romaji": "ryukkusakku",
+      "kanji": "",
+      "translation": "backpack",
+      "startSound": "り",
+      "endSound": "く"
+    },
+    {
+      "word": "さいふ",
+      "romaji": "saifu",
+      "kanji": "財布",
+      "translation": "wallet",
+      "startSound": "さ",
+      "endSound": "ふ"
+    },
+    {
+      "word": "かさ",
+      "romaji": "kasa",
+      "kanji": "傘",
+      "translation": "umbrella",
+      "startSound": "か",
+      "endSound": "さ"
+    },
+    {
+      "word": "うわぎ",
+      "romaji": "uwagi",
+      "kanji": "上着",
+      "translation": "jacket",
+      "startSound": "う",
+      "endSound": "ぎ"
+    },
+    {
+      "word": "したぎ",
+      "romaji": "shitagi",
+      "kanji": "下着",
+      "translation": "underwear",
+      "startSound": "し",
+      "endSound": "ぎ"
+    },
+    {
+      "word": "パジャマ",
+      "romaji": "pajama",
+      "kanji": "",
+      "translation": "pajamas",
+      "startSound": "ぱ",
+      "endSound": "ま"
+    },
+    {
+      "word": "スリッパ",
+      "romaji": "surippa",
+      "kanji": "",
+      "translation": "slippers",
+      "startSound": "す",
+      "endSound": "ぱ"
+    },
+    {
+      "word": "サンダル",
+      "romaji": "sandaru",
+      "kanji": "",
+      "translation": "sandals",
+      "startSound": "さ",
+      "endSound": "る"
+    },
+    {
+      "word": "ブーツ",
+      "romaji": "buutsu",
+      "kanji": "",
+      "translation": "boots",
+      "startSound": "ぶ",
+      "endSound": "つ"
+    },
+    {
+      "word": "スニーカー",
+      "romaji": "suniikaa",
+      "kanji": "",
+      "translation": "sneakers",
+      "startSound": "す",
+      "endSound": "か"
+    },
+    {
+      "word": "ふとん",
+      "romaji": "futon",
+      "kanji": "布団",
+      "translation": "futon",
+      "startSound": "ふ",
+      "endSound": "ん"
+    },
+    {
+      "word": "ベッド",
+      "romaji": "beddo",
+      "kanji": "",
+      "translation": "bed",
+      "startSound": "べ",
+      "endSound": "ど"
+    },
+    {
+      "word": "もうふ",
+      "romaji": "moufu",
+      "kanji": "毛布",
+      "translation": "blanket",
+      "startSound": "も",
+      "endSound": "ふ"
+    },
+    {
+      "word": "シーツ",
+      "romaji": "shiitsu",
+      "kanji": "",
+      "translation": "sheets",
+      "startSound": "し",
+      "endSound": "つ"
+    },
+    {
+      "word": "カーテン",
+      "romaji": "kaaten",
+      "kanji": "",
+      "translation": "curtain",
+      "startSound": "か",
+      "endSound": "ん"
+    },
+    {
+      "word": "ランプ",
+      "romaji": "ranpu",
+      "kanji": "",
+      "translation": "lamp",
+      "startSound": "ら",
+      "endSound": "ぷ"
+    },
+    {
+      "word": "エアコン",
+      "romaji": "eakon",
+      "kanji": "",
+      "translation": "air conditioner",
+      "startSound": "え",
+      "endSound": "ん"
+    },
+    {
+      "word": "せんぷうき",
+      "romaji": "senpuuki",
+      "kanji": "扇風機",
+      "translation": "fan",
+      "startSound": "せ",
+      "endSound": "き"
+    },
+    {
+      "word": "ストーブ",
+      "romaji": "sutoobu",
+      "kanji": "",
+      "translation": "heater",
+      "startSound": "す",
+      "endSound": "ぶ"
+    },
+    {
+      "word": "れいぞうこ",
+      "romaji": "reizouko",
+      "kanji": "冷蔵庫",
+      "translation": "refrigerator",
+      "startSound": "れ",
+      "endSound": "こ"
+    },
+    {
+      "word": "でんしレンジ",
+      "romaji": "denshirenji",
+      "kanji": "電子レンジ",
+      "translation": "microwave",
+      "startSound": "で",
+      "endSound": "じ"
+    },
+    {
+      "word": "せんたくき",
+      "romaji": "sentakuki",
+      "kanji": "洗濯機",
+      "translation": "washing machine",
+      "startSound": "せ",
+      "endSound": "き"
+    },
+    {
+      "word": "そうじき",
+      "romaji": "soujiki",
+      "kanji": "掃除機",
+      "translation": "vacuum cleaner",
+      "startSound": "そ",
+      "endSound": "き"
+    },
+    {
+      "word": "アイロン",
+      "romaji": "airon",
+      "kanji": "",
+      "translation": "iron",
+      "startSound": "あ",
+      "endSound": "ん"
+    },
+    {
+      "word": "ドライヤー",
+      "romaji": "doraiyaa",
+      "kanji": "",
+      "translation": "hair dryer",
+      "startSound": "ど",
+      "endSound": "や"
+    },
+    {
+      "word": "でんとう",
+      "romaji": "dentou",
+      "kanji": "電灯",
+      "translation": "light",
+      "startSound": "で",
+      "endSound": "う"
+    },
+    {
+      "word": "スイッチ",
+      "romaji": "suicchi",
+      "kanji": "",
+      "translation": "switch",
+      "startSound": "す",
+      "endSound": "ち"
+    },
+    {
+      "word": "コンセント",
+      "romaji": "konsento",
+      "kanji": "",
+      "translation": "outlet",
+      "startSound": "こ",
+      "endSound": "と"
+    },
+    {
+      "word": "バッテリー",
+      "romaji": "batterii",
+      "kanji": "",
+      "translation": "battery",
+      "startSound": "ば",
+      "endSound": "い"
+    },
+    {
+      "word": "じどうしゃ",
+      "romaji": "jidousha",
+      "kanji": "自動車",
+      "translation": "automobile",
+      "startSound": "じ",
+      "endSound": "しゃ"
+    },
+    {
+      "word": "バス",
+      "romaji": "basu",
+      "kanji": "",
+      "translation": "bus",
+      "startSound": "ば",
+      "endSound": "す"
+    },
+    {
+      "word": "タクシー",
+      "romaji": "takushii",
+      "kanji": "",
+      "translation": "taxi",
+      "startSound": "た",
+      "endSound": "し"
+    },
+    {
+      "word": "でんしゃ",
+      "romaji": "densha",
+      "kanji": "電車",
+      "translation": "train",
+      "startSound": "で",
+      "endSound": "しゃ"
+    },
+    {
+      "word": "ちかてつ",
+      "romaji": "chikatetsu",
+      "kanji": "地下鉄",
+      "translation": "subway",
+      "startSound": "ち",
+      "endSound": "つ"
+    },
+    {
+      "word": "しんかんせん",
+      "romaji": "shinkansen",
+      "kanji": "新幹線",
+      "translation": "bullet train",
+      "startSound": "し",
+      "endSound": "ん"
+    },
+    {
+      "word": "バイク",
+      "romaji": "baiku",
+      "kanji": "",
+      "translation": "motorcycle",
+      "startSound": "ば",
+      "endSound": "く"
+    },
+    {
+      "word": "トラック",
+      "romaji": "torakku",
+      "kanji": "",
+      "translation": "truck",
+      "startSound": "と",
+      "endSound": "く"
+    },
+    {
+      "word": "ヘリコプター",
+      "romaji": "herikoputaa",
+      "kanji": "",
+      "translation": "helicopter",
+      "startSound": "へ",
+      "endSound": "た"
+    },
+    {
+      "word": "ロケット",
+      "romaji": "roketto",
+      "kanji": "",
+      "translation": "rocket",
+      "startSound": "ろ",
+      "endSound": "と"
+    },
+    {
+      "word": "うちゅうせん",
+      "romaji": "uchuusen",
+      "kanji": "宇宙船",
+      "translation": "spaceship",
+      "startSound": "う",
+      "endSound": "ん"
+    },
+    {
+      "word": "ほし",
+      "romaji": "hoshi",
+      "kanji": "星",
+      "translation": "star",
+      "startSound": "ほ",
+      "endSound": "し"
+    },
+    {
+      "word": "つき",
+      "romaji": "tsuki",
+      "kanji": "月",
+      "translation": "moon",
+      "startSound": "つ",
+      "endSound": "き"
+    },
+    {
+      "word": "わくせい",
+      "romaji": "wakusei",
+      "kanji": "惑星",
+      "translation": "planet",
+      "startSound": "わ",
+      "endSound": "い"
+    },
+    {
+      "word": "ちきゅう",
+      "romaji": "chikyuu",
+      "kanji": "地球",
+      "translation": "Earth",
+      "startSound": "ち",
+      "endSound": "う"
+    },
+    {
+      "word": "うちゅう",
+      "romaji": "uchuu",
+      "kanji": "宇宙",
+      "translation": "space",
+      "startSound": "う",
+      "endSound": "う"
+    },
+    {
+      "word": "うちゅうひこうし",
+      "romaji": "uchuuhikoushi",
+      "kanji": "宇宙飛行士",
+      "translation": "astronaut",
+      "startSound": "う",
+      "endSound": "し"
+    },
+    {
+      "word": "ロボット",
+      "romaji": "robotto",
+      "kanji": "",
+      "translation": "robot",
+      "startSound": "ろ",
+      "endSound": "と"
+    },
+    {
+      "word": "インターネット",
+      "romaji": "intaanetto",
+      "kanji": "",
+      "translation": "internet",
+      "startSound": "い",
+      "endSound": "と"
+    },
+    {
+      "word": "メール",
+      "romaji": "meeru",
+      "kanji": "",
+      "translation": "email",
+      "startSound": "め",
+      "endSound": "る"
+    },
+    {
+      "word": "サイト",
+      "romaji": "saito",
+      "kanji": "",
+      "translation": "website",
+      "startSound": "さ",
+      "endSound": "と"
+    },
+    {
+      "word": "アプリ",
+      "romaji": "apuri",
+      "kanji": "",
+      "translation": "app",
+      "startSound": "あ",
+      "endSound": "り"
+    },
+    {
+      "word": "ダウンロード",
+      "romaji": "daunroodo",
+      "kanji": "",
+      "translation": "download",
+      "startSound": "だ",
+      "endSound": "ど"
+    },
+    {
+      "word": "アップロード",
+      "romaji": "appuroodo",
+      "kanji": "",
+      "translation": "upload",
+      "startSound": "あ",
+      "endSound": "ど"
+    },
+    {
+      "word": "パスワード",
+      "romaji": "pasuwaado",
+      "kanji": "",
+      "translation": "password",
+      "startSound": "ぱ",
+      "endSound": "ど"
+    },
+    {
+      "word": "ログイン",
+      "romaji": "roguin",
+      "kanji": "",
+      "translation": "login",
+      "startSound": "ろ",
+      "endSound": "ん"
+    },
+    {
+      "word": "チャット",
+      "romaji": "chatto",
+      "kanji": "",
+      "translation": "chat",
+      "startSound": "ち",
+      "endSound": "と"
+    },
+    {
+      "word": "ビデオ",
+      "romaji": "bideo",
+      "kanji": "",
+      "translation": "video",
+      "startSound": "び",
+      "endSound": "お"
+    },
+    {
+      "word": "オーディオ",
+      "romaji": "oodio",
+      "kanji": "",
+      "translation": "audio",
+      "startSound": "お",
+      "endSound": "お"
+    },
+    {
+      "word": "ファイル",
+      "romaji": "fairu",
+      "kanji": "",
+      "translation": "file",
+      "startSound": "ふ",
+      "endSound": "る"
+    },
+    {
+      "word": "フォルダ",
+      "romaji": "foruda",
+      "kanji": "",
+      "translation": "folder",
+      "startSound": "ふ",
+      "endSound": "だ"
+    },
+    {
+      "word": "データ",
+      "romaji": "deeta",
+      "kanji": "",
+      "translation": "data",
+      "startSound": "で",
+      "endSound": "た"
+    },
+    {
+      "word": "ソフト",
+      "romaji": "sofuto",
+      "kanji": "",
+      "translation": "software",
+      "startSound": "そ",
+      "endSound": "と"
+    },
+    {
+      "word": "ハードウェア",
+      "romaji": "haadowea",
+      "kanji": "",
+      "translation": "hardware",
+      "startSound": "は",
+      "endSound": "あ"
+    },
+    {
+      "word": "キーボード",
+      "romaji": "kiiboodo",
+      "kanji": "",
+      "translation": "keyboard",
+      "startSound": "き",
+      "endSound": "ど"
+    },
+    {
+      "word": "マウス",
+      "romaji": "mausu",
+      "kanji": "",
+      "translation": "mouse",
+      "startSound": "ま",
+      "endSound": "す"
+    },
+    {
+      "word": "モニター",
+      "romaji": "monitaa",
+      "kanji": "",
+      "translation": "monitor",
+      "startSound": "も",
+      "endSound": "た"
+    },
+    {
+      "word": "スクリーン",
+      "romaji": "sukuriin",
+      "kanji": "",
+      "translation": "screen",
+      "startSound": "す",
+      "endSound": "ん"
+    },
+    {
+      "word": "プリンター",
+      "romaji": "purintaa",
+      "kanji": "",
+      "translation": "printer",
+      "startSound": "ぷ",
+      "endSound": "た"
+    },
+    {
+      "word": "スキャナー",
+      "romaji": "sukyanaa",
+      "kanji": "",
+      "translation": "scanner",
+      "startSound": "す",
+      "endSound": "な"
+    },
+    {
+      "word": "スピーカー",
+      "romaji": "supiikaa",
+      "kanji": "",
+      "translation": "speaker",
+      "startSound": "す",
+      "endSound": "か"
+    },
+    {
+      "word": "ヘッドホン",
+      "romaji": "heddohon",
+      "kanji": "",
+      "translation": "headphones",
+      "startSound": "へ",
+      "endSound": "ん"
+    },
+    {
+      "word": "イヤホン",
+      "romaji": "iyahon",
+      "kanji": "",
+      "translation": "earphones",
+      "startSound": "い",
+      "endSound": "ん"
+    },
+    {
+      "word": "マイク",
+      "romaji": "maiku",
+      "kanji": "",
+      "translation": "microphone",
+      "startSound": "ま",
+      "endSound": "く"
+    },
+    {
+      "word": "リモコン",
+      "romaji": "rimokon",
+      "kanji": "",
+      "translation": "remote control",
+      "startSound": "り",
+      "endSound": "ん"
+    },
+    {
+      "word": "バッテリー",
+      "romaji": "batterii",
+      "kanji": "",
+      "translation": "battery",
+      "startSound": "ば",
+      "endSound": "い"
+    },
+    {
+      "word": "じゅうでんき",
+      "romaji": "juudenki",
+      "kanji": "充電器",
+      "translation": "charger",
+      "startSound": "じ",
+      "endSound": "き"
+    },
+    {
+      "word": "ケーブル",
+      "romaji": "keeburu",
+      "kanji": "",
+      "translation": "cable",
+      "startSound": "け",
+      "endSound": "る"
+    },
+    {
+      "word": "プラグ",
+      "romaji": "puragu",
+      "kanji": "",
+      "translation": "plug",
+      "startSound": "ぷ",
+      "endSound": "ぐ"
+    },
+    {
+      "word": "アダプター",
+      "romaji": "adaputaa",
+      "kanji": "",
+      "translation": "adapter",
+      "startSound": "あ",
+      "endSound": "た"
+    },
+    {
+      "word": "がくせい",
+      "romaji": "gakusei",
+      "kanji": "学生",
+      "translation": "student",
+      "startSound": "が",
+      "endSound": "い"
+    },
+    {
+      "word": "きょうし",
+      "romaji": "kyoushi",
+      "kanji": "教師",
+      "translation": "teacher",
+      "startSound": "き",
+      "endSound": "し"
+    },
+    {
+      "word": "いしゃ",
+      "romaji": "isha",
+      "kanji": "医者",
+      "translation": "doctor",
+      "startSound": "い",
+      "endSound": "しゃ"
+    },
+    {
+      "word": "かんごし",
+      "romaji": "kangoshi",
+      "kanji": "看護師",
+      "translation": "nurse",
+      "startSound": "か",
+      "endSound": "し"
+    },
+    {
+      "word": "けいさつかん",
+      "romaji": "keisatsukan",
+      "kanji": "警察官",
+      "translation": "police officer",
+      "startSound": "け",
+      "endSound": "ん"
+    },
+    {
+      "word": "しょうぼうし",
+      "romaji": "shouboushi",
+      "kanji": "消防士",
+      "translation": "firefighter",
+      "startSound": "し",
+      "endSound": "し"
+    },
+    {
+      "word": "エンジニア",
+      "romaji": "enjinia",
+      "kanji": "",
+      "translation": "engineer",
+      "startSound": "え",
+      "endSound": "あ"
+    },
+    {
+      "word": "プログラマー",
+      "romaji": "puroguramaa",
+      "kanji": "",
+      "translation": "programmer",
+      "startSound": "ぷ",
+      "endSound": "ま"
+    },
+    {
+      "word": "デザイナー",
+      "romaji": "dezainaa",
+      "kanji": "",
+      "translation": "designer",
+      "startSound": "で",
+      "endSound": "な"
+    },
+    {
+      "word": "かしゅ",
+      "romaji": "kashu",
+      "kanji": "歌手",
+      "translation": "singer",
+      "startSound": "か",
+      "endSound": "しゅ"
+    },
+    {
+      "word": "はいゆう",
+      "romaji": "haiyuu",
+      "kanji": "俳優",
+      "translation": "actor",
+      "startSound": "は",
+      "endSound": "う"
+    },
+    {
+      "word": "アーティスト",
+      "romaji": "aatisuto",
+      "kanji": "",
+      "translation": "artist",
+      "startSound": "あ",
+      "endSound": "と"
+    },
+    {
+      "word": "コック",
+      "romaji": "kokku",
+      "kanji": "",
+      "translation": "cook",
+      "startSound": "こ",
+      "endSound": "く"
+    },
+    {
+      "word": "シェフ",
+      "romaji": "shefu",
+      "kanji": "",
+      "translation": "chef",
+      "startSound": "し",
+      "endSound": "ふ"
+    },
+    {
+      "word": "ウェイター",
+      "romaji": "weitaa",
+      "kanji": "",
+      "translation": "waiter",
+      "startSound": "う",
+      "endSound": "た"
+    },
+    {
+      "word": "てんいん",
+      "romaji": "tenin",
+      "kanji": "店員",
+      "translation": "store clerk",
+      "startSound": "て",
+      "endSound": "ん"
+    },
+    {
+      "word": "うんてんしゅ",
+      "romaji": "untenshu",
+      "kanji": "運転手",
+      "translation": "driver",
+      "startSound": "う",
+      "endSound": "しゅ"
+    },
+    {
+      "word": "パイロット",
+      "romaji": "pairotto",
+      "kanji": "",
+      "translation": "pilot",
+      "startSound": "ぱ",
+      "endSound": "と"
+    },
+    {
+      "word": "べんごし",
+      "romaji": "bengoshi",
+      "kanji": "弁護士",
+      "translation": "lawyer",
+      "startSound": "べ",
+      "endSound": "し"
+    },
+    {
+      "word": "かいけいし",
+      "romaji": "kaikeishi",
+      "kanji": "会計士",
+      "translation": "accountant",
+      "startSound": "か",
+      "endSound": "し"
+    },
+    {
+      "word": "サッカー",
+      "romaji": "sakkaa",
+      "kanji": "",
+      "translation": "soccer",
+      "startSound": "さ",
+      "endSound": "か"
+    },
+    {
+      "word": "やきゅう",
+      "romaji": "yakyuu",
+      "kanji": "野球",
+      "translation": "baseball",
+      "startSound": "や",
+      "endSound": "う"
+    },
+    {
+      "word": "バスケットボール",
+      "romaji": "basukettobooru",
+      "kanji": "",
+      "translation": "basketball",
+      "startSound": "ば",
+      "endSound": "る"
+    },
+    {
+      "word": "テニス",
+      "romaji": "tenisu",
+      "kanji": "",
+      "translation": "tennis",
+      "startSound": "て",
+      "endSound": "す"
+    },
+    {
+      "word": "ゴルフ",
+      "romaji": "gorufu",
+      "kanji": "",
+      "translation": "golf",
+      "startSound": "ご",
+      "endSound": "ふ"
+    },
+    {
+      "word": "すいえい",
+      "romaji": "suiei",
+      "kanji": "水泳",
+      "translation": "swimming",
+      "startSound": "す",
+      "endSound": "い"
+    },
+    {
+      "word": "スキー",
+      "romaji": "sukii",
+      "kanji": "",
+      "translation": "skiing",
+      "startSound": "す",
+      "endSound": "い"
+    },
+    {
+      "word": "スノーボード",
+      "romaji": "sunooboodo",
+      "kanji": "",
+      "translation": "snowboard",
+      "startSound": "す",
+      "endSound": "ど"
+    },
+    {
+      "word": "スケート",
+      "romaji": "sukeeto",
+      "kanji": "",
+      "translation": "skating",
+      "startSound": "す",
+      "endSound": "と"
+    },
+    {
+      "word": "ボクシング",
+      "romaji": "bokushingu",
+      "kanji": "",
+      "translation": "boxing",
+      "startSound": "ぼ",
+      "endSound": "ぐ"
+    },
+    {
+      "word": "からて",
+      "romaji": "karate",
+      "kanji": "空手",
+      "translation": "karate",
+      "startSound": "か",
+      "endSound": "て"
+    },
+    {
+      "word": "じゅうどう",
+      "romaji": "juudou",
+      "kanji": "柔道",
+      "translation": "judo",
+      "startSound": "じ",
+      "endSound": "う"
+    },
+    {
+      "word": "けんどう",
+      "romaji": "kendou",
+      "kanji": "剣道",
+      "translation": "kendo",
+      "startSound": "け",
+      "endSound": "う"
+    },
+    {
+      "word": "すもう",
+      "romaji": "sumou",
+      "kanji": "相撲",
+      "translation": "sumo",
+      "startSound": "す",
+      "endSound": "う"
+    },
+    {
+      "word": "ヨガ",
+      "romaji": "yoga",
+      "kanji": "",
+      "translation": "yoga",
+      "startSound": "よ",
+      "endSound": "が"
+    },
+    {
+      "word": "ランニング",
+      "romaji": "ranningu",
+      "kanji": "",
+      "translation": "running",
+      "startSound": "ら",
+      "endSound": "ぐ"
+    },
+    {
+      "word": "ジョギング",
+      "romaji": "jogingu",
+      "kanji": "",
+      "translation": "jogging",
+      "startSound": "じ",
+      "endSound": "ぐ"
+    },
+    {
+      "word": "サイクリング",
+      "romaji": "saikuringu",
+      "kanji": "",
+      "translation": "cycling",
+      "startSound": "さ",
+      "endSound": "ぐ"
+    },
+    {
+      "word": "キャンプ",
+      "romaji": "kyanpu",
+      "kanji": "",
+      "translation": "camping",
+      "startSound": "き",
+      "endSound": "ぷ"
+    },
+    {
+      "word": "ハイキング",
+      "romaji": "haikingu",
+      "kanji": "",
+      "translation": "hiking",
+      "startSound": "は",
+      "endSound": "ぐ"
+    },
+    {
+      "word": "つり",
+      "romaji": "tsuri",
+      "kanji": "釣り",
+      "translation": "fishing",
+      "startSound": "つ",
+      "endSound": "り"
+    },
+    {
+      "word": "しゃしん",
+      "romaji": "shashin",
+      "kanji": "写真",
+      "translation": "photograph",
+      "startSound": "し",
+      "endSound": "ん"
+    },
+    {
+      "word": "えいぞう",
+      "romaji": "eizou",
+      "kanji": "映像",
+      "translation": "video",
+      "startSound": "え",
+      "endSound": "う"
+    },
+    {
+      "word": "おんがく",
+      "romaji": "ongaku",
+      "kanji": "音楽",
+      "translation": "music",
+      "startSound": "お",
+      "endSound": "く"
+    },
+    {
+      "word": "ギター",
+      "romaji": "gitaa",
+      "kanji": "",
+      "translation": "guitar",
+      "startSound": "ぎ",
+      "endSound": "た"
+    },
+    {
+      "word": "ドラム",
+      "romaji": "doramu",
+      "kanji": "",
+      "translation": "drums",
+      "startSound": "ど",
+      "endSound": "む"
+    },
+    {
+      "word": "バイオリン",
+      "romaji": "baiorin",
+      "kanji": "",
+      "translation": "violin",
+      "startSound": "ば",
+      "endSound": "ん"
+    },
+    {
+      "word": "フルート",
+      "romaji": "furuuto",
+      "kanji": "",
+      "translation": "flute",
+      "startSound": "ふ",
+      "endSound": "と"
+    },
+    {
+      "word": "サクソフォン",
+      "romaji": "sakusofon",
+      "kanji": "",
+      "translation": "saxophone",
+      "startSound": "さ",
+      "endSound": "ん"
+    },
+    {
+      "word": "トランペット",
+      "romaji": "toranpetto",
+      "kanji": "",
+      "translation": "trumpet",
+      "startSound": "と",
+      "endSound": "と"
+    },
+    {
+      "word": "うた",
+      "romaji": "uta",
+      "kanji": "歌",
+      "translation": "song",
+      "startSound": "う",
+      "endSound": "た"
+    },
+    {
+      "word": "ダンス",
+      "romaji": "dansu",
+      "kanji": "",
+      "translation": "dance",
+      "startSound": "だ",
+      "endSound": "す"
+    },
+    {
+      "word": "バレエ",
+      "romaji": "baree",
+      "kanji": "",
+      "translation": "ballet",
+      "startSound": "ば",
+      "endSound": "え"
+    },
+    {
+      "word": "えいが",
+      "romaji": "eiga",
+      "kanji": "映画",
+      "translation": "movie",
+      "startSound": "え",
+      "endSound": "が"
+    },
+    {
+      "word": "えんげき",
+      "romaji": "engeki",
+      "kanji": "演劇",
+      "translation": "theater",
+      "startSound": "え",
+      "endSound": "き"
+    },
+    {
+      "word": "びじゅつかん",
+      "romaji": "bijutsukan",
+      "kanji": "美術館",
+      "translation": "art museum",
+      "startSound": "び",
+      "endSound": "ん"
+    },
+    {
+      "word": "はくぶつかん",
+      "romaji": "hakubutsukan",
+      "kanji": "博物館",
+      "translation": "museum",
+      "startSound": "は",
+      "endSound": "ん"
+    },
+    {
+      "word": "としょかん",
+      "romaji": "toshokan",
+      "kanji": "図書館",
+      "translation": "library",
+      "startSound": "と",
+      "endSound": "ん"
+    },
+    {
+      "word": "レストラン",
+      "romaji": "resutoran",
+      "kanji": "",
+      "translation": "restaurant",
+      "startSound": "れ",
+      "endSound": "ん"
+    },
+    {
+      "word": "カフェ",
+      "romaji": "kafe",
+      "kanji": "",
+      "translation": "cafe",
+      "startSound": "か",
+      "endSound": "ふぇ"
+    },
+    {
+      "word": "ホテル",
+      "romaji": "hoteru",
+      "kanji": "",
+      "translation": "hotel",
+      "startSound": "ほ",
+      "endSound": "る"
+    },
+    {
+      "word": "びょういん",
+      "romaji": "byouin",
+      "kanji": "病院",
+      "translation": "hospital",
+      "startSound": "び",
+      "endSound": "ん"
+    },
+    {
+      "word": "ゆうびんきょく",
+      "romaji": "yuubinkyoku",
+      "kanji": "郵便局",
+      "translation": "post office",
+      "startSound": "ゆ",
+      "endSound": "く"
+    },
+    {
+      "word": "スーパー",
+      "romaji": "suupaa",
+      "kanji": "",
+      "translation": "supermarket",
+      "startSound": "す",
+      "endSound": "ぱ"
+    },
+    {
+      "word": "デパート",
+      "romaji": "depaato",
+      "kanji": "",
+      "translation": "department store",
+      "startSound": "で",
+      "endSound": "と"
+    },
+    {
+      "word": "コンビニ",
+      "romaji": "konbini",
+      "kanji": "",
+      "translation": "convenience store",
+      "startSound": "こ",
+      "endSound": "に"
+    },
+    {
+      "word": "くうこう",
+      "romaji": "kuukou",
+      "kanji": "空港",
+      "translation": "airport",
+      "startSound": "く",
+      "endSound": "う"
+    },
+    {
+      "word": "みなと",
+      "romaji": "minato",
+      "kanji": "港",
+      "translation": "port",
+      "startSound": "み",
+      "endSound": "と"
+    },
+    {
+      "word": "はし",
+      "romaji": "hashi",
+      "kanji": "橋",
+      "translation": "bridge",
+      "startSound": "は",
+      "endSound": "し"
+    },
+    {
+      "word": "どうろ",
+      "romaji": "douro",
+      "kanji": "道路",
+      "translation": "road",
+      "startSound": "ど",
+      "endSound": "ろ"
+    },
+    {
+      "word": "こうさてん",
+      "romaji": "kousaten",
+      "kanji": "交差点",
+      "translation": "intersection",
+      "startSound": "こ",
+      "endSound": "ん"
+    },
+    {
+      "word": "しんごう",
+      "romaji": "shingou",
+      "kanji": "信号",
+      "translation": "traffic light",
+      "startSound": "し",
+      "endSound": "う"
+    },
+    {
+      "word": "トンネル",
+      "romaji": "tonneru",
+      "kanji": "",
+      "translation": "tunnel",
+      "startSound": "と",
+      "endSound": "る"
+    },
+    {
+      "word": "エレベーター",
+      "romaji": "erebeetaa",
+      "kanji": "",
+      "translation": "elevator",
+      "startSound": "え",
+      "endSound": "た"
+    },
+    {
+      "word": "エスカレーター",
+      "romaji": "esukareetaa",
+      "kanji": "",
+      "translation": "escalator",
+      "startSound": "え",
+      "endSound": "た"
+    },
+    {
+      "word": "かいだん",
+      "romaji": "kaidan",
+      "kanji": "階段",
+      "translation": "stairs",
+      "startSound": "か",
+      "endSound": "ん"
+    },
+    {
+      "word": "ドア",
+      "romaji": "doa",
+      "kanji": "",
+      "translation": "door",
+      "startSound": "ど",
+      "endSound": "あ"
+    },
+    {
+      "word": "まど",
+      "romaji": "mado",
+      "kanji": "窓",
+      "translation": "window",
+      "startSound": "ま",
+      "endSound": "ど"
+    },
+    {
+      "word": "かべ",
+      "romaji": "kabe",
+      "kanji": "壁",
+      "translation": "wall",
+      "startSound": "か",
+      "endSound": "べ"
+    },
+    {
+      "word": "ゆか",
+      "romaji": "yuka",
+      "kanji": "床",
+      "translation": "floor",
+      "startSound": "ゆ",
+      "endSound": "か"
+    },
+    {
+      "word": "てんじょう",
+      "romaji": "tenjou",
+      "kanji": "天井",
+      "translation": "ceiling",
+      "startSound": "て",
+      "endSound": "う"
+    },
+    {
+      "word": "やね",
+      "romaji": "yane",
+      "kanji": "屋根",
+      "translation": "roof",
+      "startSound": "や",
+      "endSound": "ね"
+    }
   ]
 }

@@ -101,12 +101,12 @@ export class ShiritoriAgent {
   }
 
   // ===== GEMINI PROVIDER (EXISTING) =====
-  
+
   private async validateWithGemini(word: string): Promise<WordValidationResult> {
     const response = await fetch("/api/gemini/evaluate-word", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ word })
+      body: JSON.stringify({ word }),
     });
 
     if (!response.ok) {
@@ -124,7 +124,7 @@ export class ShiritoriAgent {
     const response = await fetch("/api/gemini/opponent-turn", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lastSound, difficulty, playedWords })
+      body: JSON.stringify({ lastSound, difficulty, playedWords }),
     });
 
     if (!response.ok) {
@@ -138,7 +138,7 @@ export class ShiritoriAgent {
     const response = await fetch("/api/gemini/word-hint", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ requiredSound, usedWords: playedWords })
+      body: JSON.stringify({ requiredSound, usedWords: playedWords }),
     });
 
     if (!response.ok) {
@@ -150,7 +150,7 @@ export class ShiritoriAgent {
   }
 
   // ===== OLLAMA PROVIDER (FREE LOCAL AI) =====
-  
+
   private async validateWithOllama(word: string): Promise<WordValidationResult> {
     const ollamaUrl = this.config.ollamaUrl || "http://localhost:11434";
     const model = this.config.model || "qwen3";
@@ -186,8 +186,8 @@ Rules:
           model,
           prompt,
           stream: false,
-          format: "json"
-        })
+          format: "json",
+        }),
       });
 
       if (!response.ok) {
@@ -196,7 +196,7 @@ Rules:
 
       const data = await response.json();
       const result = JSON.parse(data.response);
-      
+
       return {
         valid: result.valid || false,
         word: result.word || word,
@@ -207,7 +207,7 @@ Rules:
         startSound: result.startSound || "",
         endSound: result.endSound || "",
         reason: result.reason,
-        endsInN: result.endsInN || false
+        endsInN: result.endsInN || false,
       };
     } catch (error) {
       console.error("Ollama validation error:", error);
@@ -257,8 +257,8 @@ Return JSON only:
           model,
           prompt,
           stream: false,
-          format: "json"
-        })
+          format: "json",
+        }),
       });
 
       if (!response.ok) {
@@ -267,7 +267,7 @@ Return JSON only:
 
       const data = await response.json();
       const result = JSON.parse(data.response);
-      
+
       return {
         word: result.word || "neko",
         hiragana: result.hiragana || "ねこ",
@@ -277,7 +277,7 @@ Return JSON only:
         translation: result.translation || "cat",
         startSound: result.startSound || lastSound,
         endSound: result.endSound || "こ",
-        reason: result.reason
+        reason: result.reason,
       };
     } catch (error) {
       console.error("Ollama opponent move error:", error);
@@ -307,8 +307,8 @@ Return JSON only:
           model,
           prompt,
           stream: false,
-          format: "json"
-        })
+          format: "json",
+        }),
       });
 
       if (!response.ok) {
@@ -325,18 +325,19 @@ Return JSON only:
   }
 
   // ===== DICTIONARY PROVIDER (FREE FALLBACK) =====
-  
+
   private async validateWithDictionary(word: string): Promise<WordValidationResult> {
     // Load dictionary from your existing dictionary.json
     try {
       const response = await fetch("/src/data/dictionary.json");
       const dictionary = await response.json();
-      
+
       const normalizedWord = word.toLowerCase();
-      const found = dictionary.find((entry: any) => 
-        entry.word?.toLowerCase() === normalizedWord ||
-        entry.hiragana === word ||
-        entry.romaji?.toLowerCase() === normalizedWord
+      const found = dictionary.find(
+        (entry: any) =>
+          entry.word?.toLowerCase() === normalizedWord ||
+          entry.hiragana === word ||
+          entry.romaji?.toLowerCase() === normalizedWord
       );
 
       if (found) {
@@ -349,7 +350,7 @@ Return JSON only:
           translation: found.translation,
           startSound: found.startSound || found.hiragana[0],
           endSound: found.endSound || found.hiragana[found.hiragana.length - 1],
-          endsInN: found.endSound === "ん" || false
+          endsInN: found.endSound === "ん" || false,
         };
       }
 
@@ -362,7 +363,7 @@ Return JSON only:
         startSound: "",
         endSound: "",
         reason: "Word not found in dictionary",
-        endsInN: false
+        endsInN: false,
       };
     } catch (error) {
       console.error("Dictionary validation error:", error);
@@ -375,7 +376,7 @@ Return JSON only:
         startSound: "",
         endSound: "",
         reason: "Dictionary not available",
-        endsInN: false
+        endsInN: false,
       };
     }
   }
@@ -387,12 +388,13 @@ Return JSON only:
     try {
       const response = await fetch("/src/data/dictionary.json");
       const dictionary = await response.json();
-      
-      const validWords = dictionary.filter((entry: any) =>
-        entry.startSound === lastSound &&
-        entry.endSound !== "ん" &&
-        !playedWords.includes(entry.word) &&
-        !playedWords.includes(entry.hiragana)
+
+      const validWords = dictionary.filter(
+        (entry: any) =>
+          entry.startSound === lastSound &&
+          entry.endSound !== "ん" &&
+          !playedWords.includes(entry.word) &&
+          !playedWords.includes(entry.hiragana)
       );
 
       if (validWords.length === 0) {
@@ -405,12 +407,12 @@ Return JSON only:
           romaji: "neko",
           translation: "cat",
           startSound: "ね",
-          endSound: "こ"
+          endSound: "こ",
         };
       }
 
       const chosen = validWords[Math.floor(Math.random() * validWords.length)];
-      
+
       return {
         word: chosen.word || chosen.romaji,
         hiragana: chosen.hiragana,
@@ -419,7 +421,7 @@ Return JSON only:
         romaji: chosen.romaji,
         translation: chosen.translation,
         startSound: chosen.startSound,
-        endSound: chosen.endSound
+        endSound: chosen.endSound,
       };
     } catch (error) {
       console.error("Dictionary opponent move error:", error);
@@ -429,25 +431,29 @@ Return JSON only:
         romaji: "neko",
         translation: "cat",
         startSound: "ね",
-        endSound: "こ"
+        endSound: "こ",
       };
     }
   }
 
-  private async getHintsDictionary(requiredSound: string, playedWords: string[]): Promise<string[]> {
+  private async getHintsDictionary(
+    requiredSound: string,
+    playedWords: string[]
+  ): Promise<string[]> {
     try {
       const response = await fetch("/src/data/dictionary.json");
       const dictionary = await response.json();
-      
+
       const hints = dictionary
-        .filter((entry: any) =>
-          entry.startSound === requiredSound &&
-          !playedWords.includes(entry.word) &&
-          !playedWords.includes(entry.hiragana)
+        .filter(
+          (entry: any) =>
+            entry.startSound === requiredSound &&
+            !playedWords.includes(entry.word) &&
+            !playedWords.includes(entry.hiragana)
         )
         .slice(0, 3)
         .map((entry: any) => `${entry.word} (${entry.hiragana}) = ${entry.translation}`);
-      
+
       return hints;
     } catch (error) {
       console.error("Dictionary hints error:", error);
@@ -465,7 +471,7 @@ export function createShiritoriAgent(config?: Partial<ShiritoriAgentConfig>): Sh
   const defaultConfig: ShiritoriAgentConfig = {
     provider: "gemini", // Default to existing Gemini
     ollamaUrl: "http://localhost:11434",
-    model: "qwen3"
+    model: "qwen3",
   };
 
   return new ShiritoriAgent({ ...defaultConfig, ...config });

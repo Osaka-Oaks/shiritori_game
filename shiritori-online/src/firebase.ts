@@ -10,8 +10,7 @@ const firebaseConfig = {
   apiKey: env.VITE_FIREBASE_API_KEY || "AIzaSyAOr3y32r7OG1EfX6728LRK4hR7rHV7x_k",
   authDomain: env.VITE_FIREBASE_AUTH_DOMAIN || "shiritori-game-ccaae.firebaseapp.com",
   databaseURL:
-    env.VITE_FIREBASE_DATABASE_URL ||
-    "https://shiritori-game-ccaae-default-rtdb.firebaseio.com",
+    env.VITE_FIREBASE_DATABASE_URL || "https://shiritori-game-ccaae-default-rtdb.firebaseio.com",
   projectId: env.VITE_FIREBASE_PROJECT_ID || "shiritori-game-ccaae",
   storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET || "shiritori-game-ccaae.firebasestorage.app",
   messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID || "324507601155",
@@ -25,14 +24,14 @@ export const db = getDatabase(app);
 /** Resolves with the current user's uid, signing in anonymously if needed. */
 export function ensureSignedIn(): Promise<string> {
   return new Promise((resolve, reject) => {
-    const unsub = onAuthStateChanged(auth, (user) => {
+    const unsub = onAuthStateChanged(auth, user => {
       if (user) {
         unsub();
         resolve(user.uid);
       }
     });
     if (!auth.currentUser) {
-      signInAnonymously(auth).catch((err) => {
+      signInAnonymously(auth).catch(err => {
         unsub();
         reject(err);
       });
