@@ -1,0 +1,135 @@
+name: Kanban board
+
+# Label-based kanban: moves issues/PRs through status columns automatically.
+# Columns: triage → backlog → in progress → review → done
+on:
+  issues:
+    types: [opened, reopened, labeled, unlabeled]
+  pull_request:
+    types: [opened, reopened, ready_for_review, converted_to_draft, closed, synchronize]
+  pull_request_target:
+    types: [opened, reopened, ready_for_review, closed]
+
+permissions:
+  contents: read
+
+jobs:
+  issue-triage:
+    name: Issue → triage
+    if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const labels = issue.labels.map(l => l.name);
+            const statusLabels = labels.filter(l => l.startsWith('status:'));
+            if (statusLabels.length === 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ['status: triage'],
+              });
+            }
+
+  pr-in-progress:
+    name: PR → in progress
+    if: |
+      (github.event_name == 'pull_request' || github.event_name == 'pull_request_target') &&
+      (github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'synchronize')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: ['status: in progress'],
+            });
+            const toRemove = ['status: triage', 'status: backlog', 'status: ready', 'status: done'];
+            for (const label of toRemove) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  name: label,
+                });
+              } catch { /* label not present */ }
+            }
+
+  pr-review:
+    name: PR → review
+    if: |
+      (github.event_name == 'pull_request' || github.event_name == 'pull_request_target') &&
+      github.event.action == 'ready_for_review'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: ['status: review'],
+            });
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                name: 'status: in progress',
+              });
+            } catch { /* ok */ }
+
+  pr-merged-done:
+    name: PR merged → done
+    if: |
+      (github.event_name == 'pull_request' || github.event_name == 'pull_request_target') &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: ['status: done'],
+            });
+            const body = pr.body || '';
+            const refs = [...body.matchAll(/(?:close[sd]?|fixe[sd]?|resolve[sd]?)\s+#(\d+)/gi)]
+              .map(m => parseInt(m[1], 10));
+            for (const num of refs) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: num,
+                labels: ['status: done'],
+              });
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: num,
+                body: `✅ Shipped in PR #${pr.number} (${pr.merge_commit_sha?.slice(0, 7) ?? 'merged'})`,
+              });
+            }
