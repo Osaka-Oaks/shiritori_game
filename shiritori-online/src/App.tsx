@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { ensureSignedIn } from "./firebase";
-import Home from "./components/Home";
-import GameRoom from "./components/GameRoom";
-import Rules from "./components/Rules";
-import Welcome from "./components/Welcome";
-import LoveNote from "./components/LoveNote";
-import FloatingDictionary from "./components/FloatingDictionary";
-import SinglePlayer from "./components/SinglePlayer";
-import { parseLevelId as parseLevel } from "./lib/levels";
-import type { LevelId } from "./lib/levels";
-import { enableDevMode } from "./lib/devMode";
+import Home from "./components/game/Home";
+import GameRoom from "./components/game/GameRoom";
+import Rules from "./components/shell/Rules";
+import Welcome from "./components/shell/Welcome";
+import LoveNote from "./components/shell/LoveNote";
+import FloatingDictionary from "./components/dictionary/FloatingDictionary";
+import SinglePlayer from "./components/game/SinglePlayer";
+import { parseLevelId as parseLevel } from "./lib/game/levels";
+import type { LevelId } from "./lib/game/levels";
+import { enableDevMode } from "./lib/dev/dev-mode";
 import { useSettings } from "./settings";
 
 type View = { name: "home" } | { name: "room"; code: string } | { name: "solo"; level?: LevelId };
@@ -129,11 +129,7 @@ export default function App() {
         />
       )}
       {view.name === "solo" && (
-        <SinglePlayer
-          name={playerName}
-          initialLevel={view.level}
-          onLeave={leaveRoom}
-        />
+        <SinglePlayer name={playerName} initialLevel={view.level} onLeave={leaveRoom} />
       )}
       {view.name === "room" && (
         <GameRoom
@@ -144,7 +140,7 @@ export default function App() {
         />
       )}
       {showRules && <Rules onClose={() => setShowRules(false)} />}
-      <FloatingDictionary />
+      <FloatingDictionary isPlaying={view.name === "room" || view.name === "solo"} />
       {welcome}
       {loveNote}
     </>

@@ -1,4 +1,4 @@
-import type { RuleSettings } from "./lib/shiritori";
+import type { RuleSettings } from "./lib/game/shiritori";
 
 export type GameStatus = "waiting" | "playing" | "finished";
 

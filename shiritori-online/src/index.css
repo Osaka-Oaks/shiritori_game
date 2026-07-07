@@ -971,7 +971,7 @@ input {
   }
 }
 
-/* ── Floating dictionary ─────────────────────────────────── */
+/* ── Floating dictionary (PiP) ───────────────────────────── */
 .dict-fab {
   position: fixed;
   right: 16px;
@@ -989,7 +989,8 @@ input {
   box-shadow: var(--shadow);
   transition:
     transform 0.15s ease,
-    box-shadow 0.15s ease;
+    box-shadow 0.15s ease,
+    opacity 0.2s ease;
 }
 .dict-fab:hover {
   transform: translateY(-2px) scale(1.05);
@@ -997,40 +998,83 @@ input {
 .dict-fab:active {
   transform: scale(0.96);
 }
+.dict-fab.playing {
+  opacity: 0.75;
+}
 
-.dict-sheet {
+.dict-pip {
   position: fixed;
-  inset: 0;
-  z-index: 45;
-  background: rgba(30, 20, 10, 0.35);
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-}
-@media (min-width: 640px) {
-  .dict-sheet {
-    align-items: center;
-  }
-}
-.dict-inner {
-  background: var(--card);
-  width: 100%;
-  max-width: 560px;
-  max-height: 85vh;
-  border-radius: var(--radius) var(--radius) 0 0;
-  padding: 16px 18px calc(18px + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  width: 300px;
+  max-height: 420px;
   display: flex;
   flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
   box-shadow: var(--shadow);
+  overflow: hidden;
+  touch-action: none;
+  transition: opacity 0.2s ease;
 }
-@media (min-width: 640px) {
-  .dict-inner {
-    border-radius: var(--radius);
-  }
+.dict-pip.ghost {
+  opacity: 0.42;
 }
-.dict-title {
-  font-size: 18px;
-  margin: 0;
+.dict-pip.ghost .dict-pip-body {
+  pointer-events: none;
+}
+.dict-pip.playing.ghost {
+  opacity: 0.35;
+}
+.dict-pip.min {
+  max-height: none;
+}
+.dict-pip-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 10px;
+  background: var(--accent-soft);
+  cursor: grab;
+  user-select: none;
+  flex-shrink: 0;
+  touch-action: none;
+}
+.dict-pip-bar:active {
+  cursor: grabbing;
+}
+.dict-pip-title {
+  flex: 1;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dict-pip-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.dict-pip-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+.dict-pip-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+  max-height: 360px;
 }
 .dict-search {
   width: 100%;
@@ -1214,7 +1258,9 @@ input {
   cursor: pointer;
   text-align: left;
   width: 100%;
-  transition: border-color 0.15s, transform 0.1s;
+  transition:
+    border-color 0.15s,
+    transform 0.1s;
 }
 .sp-level-card:hover {
   border-color: var(--accent);
@@ -1311,4 +1357,72 @@ input {
   background: var(--bg);
   padding: 2px 6px;
   border-radius: 4px;
+}
+
+/* ── Dictionary: picture-in-picture panel ────────────────── */
+.dict-pip {
+  position: fixed;
+  z-index: 45;
+  width: 300px;
+  max-width: calc(100vw - 16px);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: blur(3px);
+  transition: opacity 0.18s ease;
+}
+.dict-pip.ghost {
+  opacity: 0.45;
+}
+.dict-pip.ghost:hover,
+.dict-pip.ghost:focus-within {
+  opacity: 1;
+}
+.dict-pip.min {
+  width: 200px;
+}
+.dict-pip-bar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 8px 7px 12px;
+  background: var(--accent-soft);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.dict-pip-bar:active {
+  cursor: grabbing;
+}
+.dict-pip-title {
+  flex: 1;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--accent-ink);
+}
+.dict-pip-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  line-height: 1;
+  color: var(--ink);
+}
+.dict-pip-btn:hover {
+  background: rgba(120, 90, 60, 0.14);
+}
+.dict-pip-body {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.dict-pip .dict-results {
+  max-height: 300px;
 }
