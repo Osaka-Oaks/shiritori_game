@@ -3,11 +3,13 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
+import { createRateLimiter } from "./src/lib/express-rate-limit";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use("/api", createRateLimiter(100, 60_000));
 
 const PORT = 3000;
 

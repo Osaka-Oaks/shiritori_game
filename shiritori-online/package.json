@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Bilingual Shiritori — real-time two-player Japanese word-chain game (PWA, Firebase).",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0"
   },
   "scripts": {
     "dev": "vite",

@@ -7,10 +7,11 @@ const CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no easily-confused cha
 const TIMEOUT_GRACE_MS = 2000; // small buffer before either client finalizes a timeout
 
 function randomCode(len = 4): string {
+  const bytes = new Uint8Array(len);
+  crypto.getRandomValues(bytes);
   let c = "";
   for (let i = 0; i < len; i++) {
-    // Math.random is fine here — just a room code, not security-sensitive.
-    c += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)];
+    c += CODE_CHARS[bytes[i] % CODE_CHARS.length];
   }
   return c;
 }

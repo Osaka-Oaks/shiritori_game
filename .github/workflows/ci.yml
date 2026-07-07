@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
-  NODE_VERSION: "20"
+  NODE_VERSION: "24"
   FIREBASE_PROJECT: shiritori-game-ccaae
   FIREBASE_TOOLS_VERSION: "13.29.1"
   LIVE_URL: https://shiritori-game-ccaae.web.app
