@@ -12,6 +12,7 @@ import {
   Sparkles,
   AlertCircle,
 } from "lucide-react";
+import { hashPassword, isSha256Hex } from "../lib/password-hash";
 
 interface AuthViewProps {
   currentUser: AuthUser | null;
@@ -45,7 +46,7 @@ export default function AuthView({ currentUser, onLogin, onLogout, onRegister }:
   const [errorMsg, setErrorMsg] = React.useState("");
   const [successMsg, setSuccessMsg] = React.useState("");
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
     setSuccessMsg("");
@@ -62,16 +63,17 @@ export default function AuthView({ currentUser, onLogin, onLogout, onRegister }:
 
     // Retrieve accounts
     const savedAccounts = localStorage.getItem("shiritori_accounts");
-    let accounts: Record<string, any> = {};
+    let accounts: Record<string, { password: string; user: AuthUser }> = {};
     if (savedAccounts) {
       try {
         accounts = JSON.parse(savedAccounts);
-      } catch (err) {
+      } catch {
         /* ignore */
       }
     }
 
     const emailKey = email.toLowerCase().trim();
+    const passwordHash = await hashPassword(password);
 
     if (isSignUp) {
       if (accounts[emailKey]) {
@@ -79,7 +81,7 @@ export default function AuthView({ currentUser, onLogin, onLogout, onRegister }:
         return;
       }
 
-      const newUid = "uid_" + Math.random().toString(36).substring(2, 9);
+      const newUid = `uid_${crypto.randomUUID()}`;
       const newUser: AuthUser = {
         uid: newUid,
         email: emailKey,
@@ -89,22 +91,37 @@ export default function AuthView({ currentUser, onLogin, onLogout, onRegister }:
       };
 
       accounts[emailKey] = {
-        password: password,
+        password: passwordHash,
         user: newUser,
       };
 
       localStorage.setItem("shiritori_accounts", JSON.stringify(accounts));
       onRegister(newUser);
       setSuccessMsg(`Welcome, ${nickname}! Account created successfully.`);
-      // Reset
       setEmail("");
       setPassword("");
       setNickname("");
     } else {
       const match = accounts[emailKey];
-      if (!match || match.password !== password) {
+      if (!match) {
         setErrorMsg("Incorrect email or password combination.");
         return;
+      }
+
+      const stored = match.password;
+      const valid = isSha256Hex(stored)
+        ? stored === passwordHash
+        : stored === password;
+
+      if (!valid) {
+        setErrorMsg("Incorrect email or password combination.");
+        return;
+      }
+
+      // Migrate legacy plaintext passwords to hashed storage on successful login.
+      if (!isSha256Hex(stored)) {
+        accounts[emailKey] = { ...match, password: passwordHash };
+        localStorage.setItem("shiritori_accounts", JSON.stringify(accounts));
       }
 
       onLogin(match.user);
