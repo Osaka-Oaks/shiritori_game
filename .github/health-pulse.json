@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-07-07T03:56:39Z",
+  "epoch": 1783396599,
+  "url": "https://shiritori-game-ccaae.web.app",
+  "status": "up",
+  "healthy": true,
+  "failures": [],
+  "metrics": {
+    "homepage_response_ms": 53,
+    "health_json_response_ms": 57,
+    "js_asset_response_ms": 72,
+    "rtdb_http_code": 401,
+    "uptime_gauge": 1
+  },
+  "tags": {
+    "service": "shiritori-online",
+    "env": "production",
+    "project": "shiritori-game-ccaae"
+  }
+}

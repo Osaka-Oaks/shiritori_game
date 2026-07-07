@@ -80,7 +80,16 @@
     "tofu:init": "cd infra/terraform && tofu init",
     "tofu:plan": "cd infra/terraform && tofu plan",
     "tofu:apply": "cd infra/terraform && tofu apply",
-    "tofu:dev": "cd infra/terraform/environments/dev && tofu init && tofu validate"
+    "tofu:dev": "cd infra/terraform/environments/dev && tofu init && tofu validate",
+    "monitor:elk:start": "cd monitoring/elk && docker-compose up -d",
+    "monitor:elk:stop": "cd monitoring/elk && docker-compose down",
+    "monitor:elk:logs": "cd monitoring/elk && docker-compose logs -f",
+    "monitor:elk:status": "cd monitoring/elk && docker-compose ps",
+    "monitor:grafana:start": "docker run -d --name grafana -p 3000:3000 grafana/grafana",
+    "monitor:grafana:stop": "docker stop grafana && docker rm grafana",
+    "monitor:datadog:install": "brew install datadog/agent/datadog-agent",
+    "monitor:all:start": "npm run monitor:elk:start && npm run monitor:grafana:start",
+    "monitor:all:stop": "npm run monitor:elk:stop && npm run monitor:grafana:stop"
   },
   "devDependencies": {
     "prettier": "^3.2.0",

@@ -1,0 +1,55 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "graphTooltip": 0,
+  "title": "Shiritori — App Health & Pulse",
+  "tags": ["shiritori", "uptime"],
+  "timezone": "browser",
+  "time": { "from": "now-6h", "to": "now" },
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Current status",
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 0 },
+      "targets": [{ "expr": "probe_success", "legendFormat": "{{app}}" }],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "options": { "0": { "text": "DOWN", "color": "red" }, "1": { "text": "UP", "color": "green" } } }
+          ],
+          "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] }
+        }
+      }
+    },
+    {
+      "type": "gauge",
+      "title": "Uptime % (last 24h)",
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 0 },
+      "targets": [{ "expr": "avg_over_time(probe_success[24h]) * 100", "legendFormat": "{{app}}" }],
+      "fieldConfig": { "defaults": { "unit": "percent", "min": 0, "max": 100, "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 95 }, { "color": "green", "value": 99 }] } } }
+    },
+    {
+      "type": "stat",
+      "title": "SSL cert expires in",
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 0 },
+      "targets": [{ "expr": "(probe_ssl_earliest_cert_expiry - time()) / 86400", "legendFormat": "days" }],
+      "fieldConfig": { "defaults": { "unit": "d", "decimals": 0, "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 14 }, { "color": "green", "value": 30 }] } } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Response time (probe duration)",
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 6 },
+      "targets": [{ "expr": "probe_duration_seconds", "legendFormat": "{{app}}" }],
+      "fieldConfig": { "defaults": { "unit": "s", "custom": { "drawStyle": "line", "fillOpacity": 10 } } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Up/Down history",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 15 },
+      "targets": [{ "expr": "probe_success", "legendFormat": "{{app}}" }],
+      "fieldConfig": { "defaults": { "min": 0, "max": 1, "custom": { "drawStyle": "line", "lineInterpolation": "stepAfter", "fillOpacity": 20 } } }
+    }
+  ]
+}

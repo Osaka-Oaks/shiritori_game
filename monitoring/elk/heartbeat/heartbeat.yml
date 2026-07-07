@@ -1,0 +1,82 @@
+# Heartbeat Configuration - Uptime Monitoring
+
+heartbeat.monitors:
+  # Main web application
+  - type: http
+    id: shiritori-web-app
+    name: "Shiritori Web App"
+    schedule: '@every 60s'
+    urls: ["https://shiritori-game-ccaae.web.app"]
+    check.request:
+      method: GET
+    check.response:
+      status: [200]
+      body:
+        - "Shiritori"
+    tags: ["production", "web-app", "critical"]
+  
+  # API health endpoint
+  - type: http
+    id: api-health
+    name: "API Health Check"
+    schedule: '@every 30s'
+    urls: ["https://shiritori-game-ccaae.web.app/health"]
+    check.request:
+      method: GET
+      headers:
+        'User-Agent': 'Heartbeat/8.11.0'
+    check.response:
+      status: [200]
+      json:
+        - description: "Status is healthy"
+          condition:
+            equals:
+              status: "healthy"
+    tags: ["production", "api", "critical"]
+  
+  # Firebase Realtime Database
+  - type: http
+    id: firebase-database
+    name: "Firebase Database"
+    schedule: '@every 120s'
+    urls: ["https://shiritori-game-ccaae-default-rtdb.firebaseio.com/.json"]
+    check.response:
+      status: [200, 401]  # 401 expected without auth
+    tags: ["production", "firebase", "database"]
+  
+  # Ping check
+  - type: icmp
+    id: ping-check
+    name: "Ping Check"
+    schedule: '@every 30s'
+    hosts: ["shiritori-game-ccaae.web.app"]
+    tags: ["production", "ping"]
+
+# Output to Elasticsearch
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  index: "heartbeat-shiritori-%{+yyyy.MM.dd}"
+
+# Kibana dashboard
+setup.kibana:
+  host: "kibana:5601"
+
+# Logging
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/heartbeat
+  name: heartbeat
+  keepfiles: 7
+  permissions: 0644
+
+# Processors
+processors:
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_host_metadata: ~
+  - add_fields:
+      target: ''
+      fields:
+        app: shiritori-game
+        environment: production

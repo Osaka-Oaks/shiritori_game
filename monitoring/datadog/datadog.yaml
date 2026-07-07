@@ -1,0 +1,311 @@
+# Datadog Agent Configuration for Shiritori Game
+
+## API and Application Keys
+api_key: ${DD_API_KEY}
+app_key: ${DD_APP_KEY}
+site: datadoghq.com
+
+## Hostname and Tags
+hostname: shiritori-game-prod
+tags:
+  - app:shiritori
+  - env:production
+  - team:engineering
+  - service:web-app
+
+## Log Collection
+logs_enabled: true
+logs_config:
+  container_collect_all: true
+  processing_rules:
+    - type: exclude_at_match
+      name: exclude_healthcheck
+      pattern: /health
+
+## APM (Application Performance Monitoring)
+apm_config:
+  enabled: true
+  env: production
+  
+  # Trace collection
+  apm_non_local_traffic: true
+  
+  # Service mapping
+  receiver_port: 8126
+  
+  # Sampling
+  max_traces_per_second: 100
+  
+  # Resource names
+  filter_tags:
+    require:
+      - app:shiritori
+
+## Process Monitoring
+process_config:
+  enabled: true
+  process_discovery:
+    enabled: true
+
+## Network Performance Monitoring
+network_config:
+  enabled: true
+
+## Live Process Monitoring
+process_agent_enabled: true
+
+## System Checks
+system_probe_config:
+  enabled: true
+
+## Custom Checks
+custom_checks:
+  # Application health check
+  - name: shiritori_health
+    init_config: {}
+    instances:
+      - url: https://shiritori-game-ccaae.web.app/health
+        timeout: 5
+        tags:
+          - check:health
+          - critical:true
+
+  # Firebase status check
+  - name: firebase_status
+    init_config: {}
+    instances:
+      - url: https://status.firebase.google.com/
+        timeout: 10
+        tags:
+          - check:firebase
+
+  # Build status check
+  - name: build_status
+    init_config: {}
+    instances:
+      - url: https://api.github.com/repos/YOUR_USERNAME/shiritori_game/actions/runs
+        timeout: 10
+        tags:
+          - check:ci
+
+## Integrations
+
+# Firebase Integration
+firebase:
+  project_id: shiritori-game-ccaae
+  metrics:
+    - hosting_bandwidth
+    - hosting_requests
+    - firestore_reads
+    - firestore_writes
+    - auth_users
+
+# Google Cloud Platform
+gcp:
+  project_id: shiritori-game-ccaae
+  services:
+    - cloud_run
+    - firestore
+    - cloud_storage
+    - cloud_scheduler
+
+# GitHub Actions
+github:
+  repositories:
+    - shiritori_game
+  events:
+    - workflow_run
+    - deployment
+
+## Custom Metrics
+dogstatsd_mapper_profiles:
+  - name: shiritori
+    prefix: "shiritori."
+    mappings:
+      - match: "shiritori.game.*"
+        name: "shiritori.game.metric"
+        tags:
+          game_type: "$1"
+      
+      - match: "shiritori.player.*"
+        name: "shiritori.player.metric"
+        tags:
+          action: "$1"
+
+## Alerts Configuration
+monitors:
+  # High error rate
+  - name: "High Error Rate"
+    type: metric alert
+    query: "avg(last_5m):sum:trace.web.request.errors{env:production} > 10"
+    message: "Error rate is above threshold @pagerduty"
+    tags:
+      - severity:high
+      - team:engineering
+  
+  # Low uptime
+  - name: "Application Down"
+    type: service check
+    query: '"http.can_connect".over("url:https://shiritori-game-ccaae.web.app").by("*").last(2).count_by_status()'
+    message: "Application is unreachable @pagerduty @slack"
+    tags:
+      - severity:critical
+      - team:engineering
+  
+  # Slow response time
+  - name: "Slow Response Time"
+    type: metric alert
+    query: "avg(last_10m):avg:trace.web.request.duration{env:production} > 2"
+    message: "Response time is above 2 seconds"
+    tags:
+      - severity:medium
+      - team:engineering
+  
+  # Build time increase
+  - name: "Build Time Increased"
+    type: metric alert
+    query: "avg(last_1h):avg:ci.build.duration{*} > 600"
+    message: "Build time exceeds 10 minutes"
+    tags:
+      - severity:low
+      - team:devops
+
+## Dashboard Configuration
+dashboards:
+  - name: "Shiritori Game - Overview"
+    widgets:
+      - type: timeseries
+        title: "Request Rate"
+        requests:
+          - q: "sum:trace.web.request.hits{env:production}.as_rate()"
+      
+      - type: query_value
+        title: "Uptime"
+        requests:
+          - q: "avg:system.uptime{*}"
+      
+      - type: timeseries
+        title: "Error Rate"
+        requests:
+          - q: "sum:trace.web.request.errors{env:production}.as_rate()"
+      
+      - type: heatmap
+        title: "Response Time Distribution"
+        requests:
+          - q: "avg:trace.web.request.duration{env:production}"
+
+## Log Pipelines
+logs_config:
+  pipelines:
+    # Application logs
+    - name: application
+      filter:
+        query: "source:webapp"
+      processors:
+        - type: grok-parser
+          name: parse_logs
+          grok:
+            match_rules: '%{date:timestamp} %{word:level} %{data:message}'
+        
+        - type: status-remapper
+          name: remap_status
+          sources:
+            - level
+    
+    # Build logs
+    - name: ci_logs
+      filter:
+        query: "source:github-actions"
+      processors:
+        - type: category-processor
+          name: categorize_builds
+          categories:
+            - name: success
+              filter:
+                query: "status:success"
+            - name: failure
+              filter:
+                query: "status:failure"
+
+## Real User Monitoring (RUM)
+rum:
+  enabled: true
+  application_id: ${DD_RUM_APP_ID}
+  client_token: ${DD_RUM_CLIENT_TOKEN}
+  
+  # Session tracking
+  session_sample_rate: 100
+  session_replay_sample_rate: 20
+  
+  # Performance tracking
+  track_interactions: true
+  track_resources: true
+  track_long_tasks: true
+  
+  # Error tracking
+  track_errors: true
+  
+  # Custom actions
+  actions:
+    - name: "game_start"
+    - name: "word_submit"
+    - name: "game_end"
+
+## Synthetic Monitoring
+synthetics:
+  # Uptime check
+  - name: "Shiritori Web App"
+    type: browser
+    url: https://shiritori-game-ccaae.web.app
+    locations:
+      - aws:us-east-1
+      - aws:us-west-1
+      - aws:eu-west-1
+      - aws:ap-southeast-1
+    frequency: 60  # seconds
+    assertions:
+      - type: statusCode
+        operator: is
+        target: 200
+      - type: responseTime
+        operator: lessThan
+        target: 2000
+    tags:
+      - env:production
+      - critical:true
+  
+  # API health check
+  - name: "API Health Check"
+    type: api
+    request:
+      method: GET
+      url: https://shiritori-game-ccaae.web.app/api/health
+    locations:
+      - aws:us-east-1
+    frequency: 30
+    assertions:
+      - type: statusCode
+        operator: is
+        target: 200
+      - type: body
+        operator: contains
+        target: "healthy"
+
+## SLOs (Service Level Objectives)
+slos:
+  - name: "Application Availability"
+    type: metric
+    metric:
+      type: availability
+      numerator: 'sum:trace.web.request.hits{!http.status_code:5*}'
+      denominator: 'sum:trace.web.request.hits{*}'
+    target: 99.9
+    timeframe: 30d
+  
+  - name: "Response Time"
+    type: metric
+    metric:
+      type: latency
+      numerator: 'sum:trace.web.request.duration{p95}'
+    target: 2.0  # seconds
+    timeframe: 7d
