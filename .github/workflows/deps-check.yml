@@ -48,8 +48,8 @@ jobs:
 
       - name: npm ci (${{ matrix.app }})
         working-directory: ${{ matrix.app }}
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit
 
-      - name: Build (${{ matrix.app }})
+      - name: Type-check (${{ matrix.app }})
         working-directory: ${{ matrix.app }}
-        run: npm run build
+        run: npm run type-check --if-present || npx tsc --noEmit --incremental

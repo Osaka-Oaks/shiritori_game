@@ -6,7 +6,7 @@ GitHub Issues use **status labels** as columns. See also [COMMITS.md](COMMITS.md
 
 | Schedule | Workflow | Job |
 |----------|----------|-----|
-| `*/15 * * * *` | `uptime.yml` | Ping live site |
+| `*/5 * * * *` | `uptime.yml` | 5-endpoint health + auto-resolve |
 | `0 5 * * *` | `stale.yml` | Mark stale issues/PRs |
 | `0 6 * * 1` | `security.yml` | CodeQL weekly |
 | `0 8 * * 1` | `cron-jobs.yml` | Weekly work digest |

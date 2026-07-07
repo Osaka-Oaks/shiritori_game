@@ -46,9 +46,10 @@
     "check:modules": "bash kawaii-shiritori/tools/scripts/check-all-modules.sh",
     "pre-deploy": "bash scripts/pre-deploy-check.sh",
     "test:deployment": "bash scripts/test-deployment.sh",
-    "ci:validate": "npm run format:check && npm run lint && npm run test",
+    "ci:validate": "npm run format:check && npm run validate:json && npm run lint",
     "ci:build": "npm run build && npm run build:kawaii",
-    "ci:full": "npm run ci:validate && npm run ci:build",
+    "ci:fast": "npm run ci:validate && npm run build",
+    "ci:full": "npm run ci:validate && npm run test && npm run ci:build",
     "security:check": "bash scripts/security-check.sh",
     "security:audit": "npm --prefix shiritori-online audit --audit-level=high && npm --prefix kawaii-shiritori audit --audit-level=high || true"
   },
