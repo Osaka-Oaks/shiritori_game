@@ -10,6 +10,7 @@ body:
       options:
         - shiritori-online (2-player realtime)
         - kawaii-shiritori (full-featured)
+        - shiritori_flutter (Flutter web/mobile)
         - Both / not sure
     validations:
       required: true

@@ -12,6 +12,7 @@ body:
         - Dev mode (?dev=1)
         - Multiplayer room
         - Dictionary / word validation
+        - Flutter web / mobile
         - Deploy / smoke test
         - Other
     validations:

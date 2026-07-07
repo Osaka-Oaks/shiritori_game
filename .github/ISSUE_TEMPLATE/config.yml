@@ -1,5 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 📖 How to play / project docs
+  - name: 📖 Live app & docs
     url: https://shiritori-game-ccaae.web.app
-    about: Try the live game before filing an issue.
+    about: Try the game before filing an issue.
+  - name: 📋 Markdown templates (copy-paste)
+    url: https://github.com/JorelFuji/shiritori_game/tree/main/.github/templates
+    about: Bug, work item, feature, dev test, infra, and PR templates.
+  - name: 🏗️ Terraform / OpenTofu docs
+    url: https://github.com/JorelFuji/shiritori_game/tree/main/infra
+    about: IaC layout under infra/terraform and infra/opentofu.

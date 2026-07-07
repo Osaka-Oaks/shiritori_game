@@ -58,6 +58,12 @@
   color: "0052cc"
 - name: "area: dictionary"
   color: "006b75"
+- name: "area: flutter"
+  color: "e99695"
+  description: shiritori_flutter (Dart / Flutter)
+- name: "area: infra"
+  color: "5319e7"
+  description: Terraform / OpenTofu / cloud IaC
 - name: "dependencies"
   color: "0366d6"
   description: Dependency updates

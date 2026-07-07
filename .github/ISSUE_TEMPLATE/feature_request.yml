@@ -24,5 +24,7 @@ body:
         - Dictionary / learning
         - Multiplayer / realtime
         - UI / UX
+        - shiritori_flutter
         - CI/CD / tooling
+        - Infrastructure (Terraform / OpenTofu)
         - Other

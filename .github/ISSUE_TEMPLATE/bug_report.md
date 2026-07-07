@@ -1,8 +1,8 @@
 ---
 name: 🐛 Bug Report
 about: Report a bug or issue with the application
-title: '[BUG] '
-labels: ['bug', 'needs-triage']
+title: '[Bug]: '
+labels: ['type: bug', 'status: triage']
 assignees: ''
 ---
 
@@ -34,7 +34,7 @@ If applicable, add screenshots to help explain your problem.
 **Application:**
 - [ ] shiritori-online (React)
 - [ ] kawaii-shiritori (React)
-- [ ] shiritori-flutter (Flutter)
+- [ ] shiritori_flutter (Flutter / Dart)
 
 **Platform:**
 - [ ] Web (Desktop)
@@ -113,4 +113,4 @@ If you have ideas on how to fix this, please describe them here.
 ---
 
 **Hashtags:** #bug #needs-fix
-**Labels:** `bug`, `needs-triage`
+**Labels:** `type: bug`, `status: triage`

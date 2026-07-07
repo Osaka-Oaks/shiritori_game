@@ -34,9 +34,11 @@ body:
       options:
         - shiritori-online
         - kawaii-shiritori
+        - shiritori_flutter
         - CI/CD
         - Dictionary
         - Solo / levels
+        - Infra (Terraform / OpenTofu)
         - Other
     validations:
       required: true

@@ -1,0 +1,8 @@
+# Uncomment for remote state (GCS example)
+#
+# terraform {
+#   backend "gcs" {
+#     bucket = "shiritori-game-tfstate"
+#     prefix = "opentofu/dev"
+#   }
+# }

@@ -18,7 +18,7 @@ Closes #
 - [ ] 🧪 Solo / levels / dev test
 - [ ] ♻️ Refactor / chore
 - [ ] 📝 Docs
-- [ ] ⚙️ CI/CD
+- [ ] 🏗️ Infrastructure (Terraform / OpenTofu)
 
 ## Checklist
 
@@ -26,6 +26,7 @@ Closes #
 - [ ] Tested solo mode if gameplay changed (`?solo=3&dev=1`)
 - [ ] No secrets / keys committed
 - [ ] Commit messages reference issues (`Refs #123`)
+- [ ] `terraform validate` / `tofu validate` if `infra/` changed
 
 See [.github/COMMITS.md](.github/COMMITS.md) and [.github/KANBAN.md](.github/KANBAN.md).
 

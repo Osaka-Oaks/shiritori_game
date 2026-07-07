@@ -7,6 +7,14 @@
   - changed-files:
       - any-glob-to-any-file: ["kawaii-shiritori/**"]
 
+"area: flutter":
+  - changed-files:
+      - any-glob-to-any-file: ["shiritori_flutter/**"]
+
+"area: infra":
+  - changed-files:
+      - any-glob-to-any-file: ["infra/**"]
+
 "area: ci/cd":
   - changed-files:
       - any-glob-to-any-file: [".github/**"]
