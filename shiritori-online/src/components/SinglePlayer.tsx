@@ -1,236 +1,187 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  validateMove,
-  getFirstKana,
-  getChainKana,
-  DEFAULT_RULES,
-  type RuleSettings,
-} from "../lib/shiritori";
+import { useEffect, useRef, useState } from "react";
+import { DEFAULT_RULES, type RuleSettings } from "../lib/shiritori";
 import { romajiToHiragana, speak } from "../lib/romaji";
-import { DICTIONARY } from "../lib/dictionaryData";
-import { WORD_BANK } from "../lib/words";
-
-export type Level = "easy" | "medium" | "hard";
-
-interface LevelConfig {
-  label: string;
-  blurb: string;
-  timer: number; // seconds per player turn
-  thinkMs: number; // how long the CPU "thinks"
-  giveUpChance: number; // chance the CPU passes even when it could move (kid-friendly)
-  trap: boolean; // hard mode: prefer words that are hard to follow
-}
-
-const LEVELS: Record<Level, LevelConfig> = {
-  easy: {
-    label: "🌱 Easy",
-    blurb: "Slow CPU, gentle words",
-    timer: 60,
-    thinkMs: 1600,
-    giveUpChance: 0.25,
-    trap: false,
-  },
-  medium: {
-    label: "🔥 Medium",
-    blurb: "Balanced match",
-    timer: 30,
-    thinkMs: 1000,
-    giveUpChance: 0,
-    trap: false,
-  },
-  hard: {
-    label: "💀 Hard",
-    blurb: "Fast CPU, sets traps",
-    timer: 20,
-    thinkMs: 550,
-    giveUpChance: 0,
-    trap: true,
-  },
-};
-
-interface BotWord {
-  kana: string;
-  romaji: string;
-  meaning: string;
-}
-
-// Merge both word sources into the CPU's vocabulary (deduped by kana).
-const VOCAB: BotWord[] = (() => {
-  const map = new Map<string, BotWord>();
-  for (const w of WORD_BANK)
-    map.set(w.kana, { kana: w.kana, romaji: w.romaji, meaning: w.meaning });
-  for (const d of DICTIONARY) {
-    if (!map.has(d.kana)) map.set(d.kana, { kana: d.kana, romaji: d.romaji, meaning: d.en });
-  }
-  // Only keep legal shiritori words (2+ kana, not ending in ん).
-  return [...map.values()].filter(w => w.kana.length >= 2 && getChainKana(w.kana) !== "ん");
-})();
-
-interface Turn {
-  word: string;
-  romaji?: string;
-  meaning?: string;
-  by: "you" | "cpu";
-}
-
-type Status = "playing" | "won" | "lost";
+import { lookupWord } from "../lib/dictionary";
+import { needsReadingLookup } from "../lib/japanese";
+import { LEVEL_LIST, type LevelId, parseLevelId } from "../lib/levels";
+import {
+  createSoloGame,
+  cpuMove,
+  applyPlayerWord,
+  attachWordMeta,
+  type SoloState,
+} from "../lib/soloEngine";
+import { loadDevSettings, saveDevSettings, type DevSettings } from "../lib/devMode";
+import { useSettings } from "../settings";
 
 interface Props {
   name: string;
   rules?: RuleSettings;
+  initialLevel?: LevelId | null;
   onLeave: () => void;
 }
 
-export default function SinglePlayer({ name, rules = DEFAULT_RULES, onLeave }: Props) {
-  const [level, setLevel] = useState<Level | null>(null);
-  const [chain, setChain] = useState<Turn[]>([]);
-  const [currentKana, setCurrentKana] = useState<string | null>(null);
-  const [turn, setTurn] = useState<"you" | "cpu">("you");
-  const [status, setStatus] = useState<Status>("playing");
+export default function SinglePlayer({
+  name,
+  rules = DEFAULT_RULES,
+  initialLevel = null,
+  onLeave,
+}: Props) {
+  const { t } = useSettings();
+  const [levelId, setLevelId] = useState<LevelId | null>(initialLevel);
+  const [game, setGame] = useState<SoloState | null>(null);
   const [raw, setRaw] = useState("");
   const [message, setMessage] = useState("");
+  const [checking, setChecking] = useState(false);
+  const [liveMeaning, setLiveMeaning] = useState<string | undefined>();
   const [secondsLeft, setSecondsLeft] = useState(0);
-  const [endReason, setEndReason] = useState("");
+  const [dev, setDev] = useState<DevSettings>(() => loadDevSettings());
+  const [showDev, setShowDev] = useState(false);
   const cpuTimer = useRef<number | undefined>(undefined);
 
-  const cfg = level ? LEVELS[level] : null;
+  const cfg = game?.level ?? null;
   const converted = romajiToHiragana(raw);
-  const used = useMemo(() => chain.map(c => c.word), [chain]);
+  const status = game?.status ?? "playing";
+  const turn = game?.turn ?? "you";
 
-  // ── Player turn countdown ──────────────────────────────
+  function patchDev(patch: Partial<DevSettings>) {
+    setDev(saveDevSettings(patch));
+  }
+
+  function startGame(id: LevelId) {
+    const level = LEVEL_LIST.find(l => l.id === id)!;
+    setLevelId(id);
+    setGame(createSoloGame(level));
+    setRaw("");
+    setMessage("");
+    setLiveMeaning(undefined);
+  }
+
+  // Live dictionary preview while typing.
   useEffect(() => {
-    if (status !== "playing" || turn !== "you" || !cfg) return;
+    setLiveMeaning(undefined);
+    if (converted.length < 2) return;
+    const timer = setTimeout(async () => {
+      const { valid, meaning } = await lookupWord(converted);
+      if (valid) setLiveMeaning(meaning);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [converted]);
+
+  // Player turn timer.
+  useEffect(() => {
+    if (!game || status !== "playing" || turn !== "you" || !cfg) return;
+    if (dev.skipTimer) {
+      setSecondsLeft(cfg.timer);
+      return;
+    }
     setSecondsLeft(cfg.timer);
     const id = window.setInterval(() => {
       setSecondsLeft(s => {
         if (s <= 1) {
           window.clearInterval(id);
-          endGame("lost", "⏰ Time's up!");
+          setGame(g =>
+            g ? { ...g, status: "lost", endReason: "⏰ Time's up!", lastFeedback: "⏰ Time's up!" } : g
+          );
           return 0;
         }
         return s - 1;
       });
     }, 1000);
     return () => window.clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [turn, status, chain.length, level]);
+  }, [turn, status, game?.chain.length, levelId, dev.skipTimer, cfg, game]);
 
-  // ── CPU turn ───────────────────────────────────────────
+  // CPU turn.
   useEffect(() => {
-    if (status !== "playing" || turn !== "cpu" || !cfg) return;
-    cpuTimer.current = window.setTimeout(() => cpuMove(), cfg.thinkMs);
+    if (!game || status !== "playing" || turn !== "cpu" || !cfg) return;
+    const delay = dev.instantCpu ? 80 : cfg.thinkMs;
+    cpuTimer.current = window.setTimeout(() => {
+      const { state, message: cpuMsg } = cpuMove(game, rules, dev);
+      setGame(state);
+      speak(state.chain[state.chain.length - 1]?.word ?? "");
+      if (dev.showDebug) setMessage(cpuMsg);
+    }, delay);
     return () => window.clearTimeout(cpuTimer.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [turn, status]);
+  }, [turn, status, game?.chain.length, dev.instantCpu, cfg, game, rules, dev]);
 
-  function startGame(lvl: Level) {
-    setLevel(lvl);
-    setChain([]);
-    setCurrentKana(null);
-    setTurn("you");
-    setStatus("playing");
-    setRaw("");
-    setMessage("");
-    setEndReason("");
-  }
+  async function submit() {
+    if (!game || status !== "playing" || turn !== "you") return;
+    const word = converted.trim();
+    if (!word) return;
 
-  function endGame(result: Status, reason: string) {
-    setStatus(result);
-    setEndReason(reason);
-  }
-
-  function countFollowUps(kana: string, usedSet: Set<string>): number {
-    return VOCAB.filter(w => getFirstKana(w.kana) === kana && !usedSet.has(w.kana)).length;
-  }
-
-  function cpuMove() {
-    if (!cfg) return;
-    const usedSet = new Set(used);
-    const need = currentKana;
-    let candidates = VOCAB.filter(
-      w => !usedSet.has(w.kana) && (need ? getFirstKana(w.kana) === need : true)
-    );
-
-    if (candidates.length === 0) {
-      endGame("won", "🎉 The CPU is stuck — you win!");
-      return;
-    }
-
-    // Easy mode: sometimes the CPU "gives up" so kids can win.
-    if (cfg.giveUpChance > 0 && Math.random() < cfg.giveUpChance) {
-      endGame("won", "🎉 The CPU gave up — you win!");
-      return;
-    }
-
-    // Hard mode: pick a word that's hardest to follow (traps the player).
-    if (cfg.trap) {
-      candidates = [...candidates].sort(
-        (a, b) =>
-          countFollowUps(getChainKana(a.kana, rules), new Set([...usedSet, a.kana])) -
-          countFollowUps(getChainKana(b.kana, rules), new Set([...usedSet, b.kana]))
-      );
-    } else {
-      candidates = shuffle(candidates);
-    }
-
-    const pick = candidates[0];
-    const nextKana = getChainKana(pick.kana, rules);
-    setChain(c => [
-      ...c,
-      { word: pick.kana, romaji: pick.romaji, meaning: pick.meaning, by: "cpu" },
-    ]);
-    speak(pick.kana);
-
-    if (nextKana === "ん") {
-      // CPU played a word ending in ん — CPU loses (shouldn't happen, VOCAB filters these).
-      endGame("won", "🎉 The CPU ended on ん — you win!");
-      return;
-    }
-    setCurrentKana(nextKana);
-    setTurn("you");
-  }
-
-  function submit() {
-    if (status !== "playing" || turn !== "you") return;
-    const check = validateMove(converted, currentKana, used, rules);
-    if (!check.ok) {
-      setMessage(check.reason);
-      return;
-    }
-    setChain(c => [...c, { word: converted, by: "you" }]);
-    speak(converted);
-    setRaw("");
+    setChecking(true);
     setMessage("");
 
-    if (check.losesByN) {
-      endGame("lost", "💥 Your word ends in ん — you lose!");
+    let readingKana: string | undefined;
+    let meaning: string | undefined;
+
+    if (game.level.requireDictionary && !dev.skipDictionary) {
+      const lookup = await lookupWord(word);
+      if (!lookup.valid) {
+        setMessage(t("notRealWord"));
+        setChecking(false);
+        return;
+      }
+      meaning = lookup.meaning;
+      if (needsReadingLookup(word)) readingKana = lookup.reading;
+    } else if (!dev.skipDictionary) {
+      const lookup = await lookupWord(word);
+      meaning = lookup.meaning;
+      if (needsReadingLookup(word)) readingKana = lookup.reading;
+    }
+
+    const result = applyPlayerWord(game, word, rules, dev, readingKana);
+    setChecking(false);
+
+    if (!result.ok) {
+      setMessage(result.reason ?? "Invalid word");
+      setGame(result.state);
       return;
     }
-    setCurrentKana(check.chainKana);
-    setTurn("cpu");
+
+    let next = result.state;
+    if (meaning) next = attachWordMeta(next, word, { meaning });
+    setGame(next);
+    setRaw("");
+    setMessage("");
+    speak(word);
+
+    if (next.status !== "playing") return;
+  }
+
+  function forceCpuTurn() {
+    if (!game || game.turn !== "cpu") return;
+    const { state } = cpuMove(game, rules, dev);
+    setGame(state);
+    speak(state.chain[state.chain.length - 1]?.word ?? "");
   }
 
   // ── Level picker ───────────────────────────────────────
-  if (!level) {
+  if (!levelId || !game) {
     return (
       <div className="app fade-in">
         <div className="brand">
-          <h1>🤖 vs CPU</h1>
-          <p>Practice solo — pick a level</p>
+          <h1>🤖 {t("soloTitle")}</h1>
+          <p>{t("soloSubtitle")}</p>
         </div>
         <div className="card">
-          {(Object.keys(LEVELS) as Level[]).map(lvl => (
-            <button
-              key={lvl}
-              className="btn"
-              style={{ marginBottom: 10 }}
-              onClick={() => startGame(lvl)}
-            >
-              <b>{LEVELS[lvl].label}</b> — {LEVELS[lvl].blurb}
-            </button>
-          ))}
-          <button className="btn ghost" style={{ marginTop: 8 }} onClick={onLeave}>
-            ← Back
+          <div className="sp-level-grid">
+            {LEVEL_LIST.map(lvl => (
+              <button key={lvl.id} className="sp-level-card" onClick={() => startGame(lvl.id)}>
+                <span className="sp-level-emoji">{lvl.emoji}</span>
+                <span className="sp-level-name">{lvl.label}</span>
+                <span className="sp-level-blurb">{lvl.blurb}</span>
+                <span className="sp-level-meta">
+                  ⏱ {lvl.timer}s · {lvl.requireDictionary ? "📖 dict" : "📝 casual"}
+                </span>
+              </button>
+            ))}
+          </div>
+          {dev.enabled && (
+            <p className="sp-dev-badge">🛠 Dev mode on — open solo with ?dev=1</p>
+          )}
+          <button className="btn ghost" style={{ marginTop: 12 }} onClick={onLeave}>
+            ← {t("backHome")}
           </button>
         </div>
       </div>
@@ -242,62 +193,121 @@ export default function SinglePlayer({ name, rules = DEFAULT_RULES, onLeave }: P
     <div className="app fade-in">
       <div className="sp-top">
         <button className="btn ghost small" onClick={onLeave}>
-          ← Leave
+          ← {t("backHome")}
         </button>
-        <span className="sp-level">{cfg!.label}</span>
-        {status === "playing" && turn === "you" && (
+        <span className="sp-level">
+          {cfg!.emoji} L{cfg!.id}
+        </span>
+        {dev.enabled && (
+          <button className="btn ghost small" onClick={() => setShowDev(s => !s)}>
+            🛠
+          </button>
+        )}
+        {status === "playing" && turn === "you" && !dev.skipTimer && (
           <span className={`sp-timer ${secondsLeft <= 5 ? "low" : ""}`}>⏱ {secondsLeft}s</span>
         )}
       </div>
+
+      {game.lastFeedback && <div className="sp-feedback">{game.lastFeedback}</div>}
+
+      {showDev && dev.enabled && (
+        <div className="sp-dev card">
+          <b>Dev tools</b>
+          <label className="sp-dev-row">
+            <input
+              type="checkbox"
+              checked={dev.skipTimer}
+              onChange={e => patchDev({ skipTimer: e.target.checked })}
+            />
+            Skip timer
+          </label>
+          <label className="sp-dev-row">
+            <input
+              type="checkbox"
+              checked={dev.instantCpu}
+              onChange={e => patchDev({ instantCpu: e.target.checked })}
+            />
+            Instant CPU
+          </label>
+          <label className="sp-dev-row">
+            <input
+              type="checkbox"
+              checked={dev.skipDictionary}
+              onChange={e => patchDev({ skipDictionary: e.target.checked })}
+            />
+            Skip dictionary check
+          </label>
+          <label className="sp-dev-row">
+            <input
+              type="checkbox"
+              checked={dev.showDebug}
+              onChange={e => patchDev({ showDebug: e.target.checked })}
+            />
+            Debug log
+          </label>
+          <button className="btn secondary small" onClick={forceCpuTurn} disabled={turn !== "cpu"}>
+            Force CPU now
+          </button>
+          {dev.showDebug && game.debugLog.length > 0 && (
+            <pre className="sp-debug">{game.debugLog.join("\n")}</pre>
+          )}
+        </div>
+      )}
 
       <div className="card">
         {status === "playing" && (
           <p className="sp-turn">
             {turn === "you" ? (
               <>
-                Your turn
-                {currentKana ? (
+                {t("soloYourTurn")}
+                {game.currentKana ? (
                   <>
                     {" "}
-                    — start with 「<b>{currentKana}</b>」
+                    — 「<b>{game.currentKana}</b>」
                   </>
                 ) : (
-                  <> — say any word!</>
+                  <> — {t("anyFirst")}</>
                 )}
               </>
             ) : (
-              <>🤖 CPU is thinking…</>
+              <>🤖 {t("soloCpuThinking")}</>
             )}
           </p>
         )}
 
         {status !== "playing" && (
           <div className="sp-result">
-            <h2>{status === "won" ? "🏆 You win!" : "😿 You lose"}</h2>
-            <p>{endReason}</p>
-            <button className="btn" style={{ marginTop: 12 }} onClick={() => startGame(level)}>
-              🔁 Play again
+            <h2>{status === "won" ? `🏆 ${t("youWin")}` : `😿 ${t("youLose")}`}</h2>
+            <p>{game.endReason}</p>
+            <button className="btn" style={{ marginTop: 12 }} onClick={() => startGame(levelId)}>
+              🔁 {t("soloPlayAgain")}
             </button>
             <button
               className="btn secondary"
               style={{ marginTop: 8 }}
-              onClick={() => setLevel(null)}
+              onClick={() => {
+                setLevelId(null);
+                setGame(null);
+              }}
             >
-              Change level
+              {t("soloChangeLevel")}
             </button>
           </div>
         )}
 
         <div className="sp-chain">
-          {chain.length === 0 && <p className="dict-hint">The chain will appear here…</p>}
-          {chain.map((t, i) => (
-            <div key={i} className={`sp-word ${t.by}`}>
-              <button className="speak" onClick={() => speak(t.word)} aria-label="Speak">
+          {game.chain.length === 0 && <p className="dict-hint">{t("chainEmpty")}</p>}
+          {game.chain.map((turn, i) => (
+            <div key={i} className={`sp-word ${turn.by}`}>
+              <button className="speak" onClick={() => speak(turn.word)} aria-label="Speak">
                 🔊
               </button>
-              <span className="sp-kana">{t.word}</span>
-              {t.meaning && <span className="sp-meaning">{t.meaning}</span>}
-              <span className="sp-who">{t.by === "you" ? name || "You" : "CPU"}</span>
+              <div className="sp-word-body">
+                <span className="sp-kana">{turn.word}</span>
+                {turn.meaning && <span className="sp-meaning">{turn.meaning}</span>}
+                {turn.feedback && <span className="sp-word-feedback">{turn.feedback}</span>}
+              </div>
+              <span className="sp-who">{turn.by === "you" ? name || t("you") : "CPU"}</span>
             </div>
           ))}
         </div>
@@ -309,16 +319,18 @@ export default function SinglePlayer({ name, rules = DEFAULT_RULES, onLeave }: P
                 className="field"
                 value={raw}
                 onChange={e => setRaw(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && submit()}
-                placeholder="Type romaji or kana…"
+                onKeyDown={e => e.key === "Enter" && !checking && submit()}
+                placeholder={t("inputPlaceholder")}
                 autoFocus
                 autoComplete="off"
+                disabled={checking}
               />
-              <button className="btn" onClick={submit} disabled={!converted.trim()}>
-                Play
+              <button className="btn" onClick={submit} disabled={!converted.trim() || checking}>
+                {checking ? t("checking") : t("soloPlay")}
               </button>
             </div>
             {converted && <p className="sp-preview">→ {converted}</p>}
+            {liveMeaning && <p className="sp-meaning-live">📖 {liveMeaning}</p>}
             {message && <p className="error">{message}</p>}
           </>
         )}
@@ -327,11 +339,4 @@ export default function SinglePlayer({ name, rules = DEFAULT_RULES, onLeave }: P
   );
 }
 
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
+export { parseLevelId };

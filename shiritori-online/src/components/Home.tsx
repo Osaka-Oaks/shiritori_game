@@ -147,7 +147,7 @@ export default function Home({
           onClick={onSinglePlayer}
           disabled={busy !== null}
         >
-          🤖 Play vs CPU (solo practice)
+          🤖 {t("soloPracticeBtn")}
         </button>
 
         <div className="divider">{t("orJoin")}</div>

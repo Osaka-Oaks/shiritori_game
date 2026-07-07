@@ -1186,3 +1186,101 @@ input {
   font-weight: 600;
   margin: 6px 0 0;
 }
+.sp-feedback {
+  width: 100%;
+  max-width: 480px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  border: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.sp-level-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sp-level-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: border-color 0.15s, transform 0.1s;
+}
+.sp-level-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.sp-level-emoji {
+  font-size: 22px;
+}
+.sp-level-name {
+  font-weight: 700;
+  font-size: 16px;
+}
+.sp-level-blurb {
+  font-size: 13px;
+  color: var(--muted);
+}
+.sp-level-meta {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.sp-dev-badge {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+  text-align: center;
+}
+.sp-dev {
+  width: 100%;
+  max-width: 480px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+.sp-dev-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  cursor: pointer;
+}
+.sp-debug {
+  font-size: 11px;
+  max-height: 120px;
+  overflow: auto;
+  background: var(--bg);
+  padding: 8px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+.sp-word-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.sp-word-feedback {
+  font-size: 12px;
+  color: var(--muted);
+}
+.sp-meaning-live {
+  font-size: 13px;
+  color: var(--accent-ink);
+  margin: 4px 0 0;
+}
+.btn.small {
+  padding: 6px 10px;
+  font-size: 13px;
+}

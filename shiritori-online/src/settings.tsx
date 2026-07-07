@@ -115,6 +115,17 @@ const STRINGS = {
     ja: "「{word}」は「ん」でおわり — そっこうまけ！",
   },
   endTimeout: { en: "Ran out of time!", ja: "時間切れ！" },
+
+  // Solo / vs CPU
+  soloTitle: { en: "Practice vs CPU", ja: "CPUとれんしゅう" },
+  soloSubtitle: { en: "Pick a level — get instant feedback", ja: "レベルをえらんで — すぐへんしんがくれる" },
+  soloYourTurn: { en: "Your turn", ja: "あなたの番" },
+  soloCpuThinking: { en: "CPU is thinking…", ja: "CPUがかんがえちゅう…" },
+  soloPlay: { en: "Play", ja: "プレイ" },
+  soloPlayAgain: { en: "Play again", ja: "もういちど" },
+  soloChangeLevel: { en: "Change level", ja: "レベルへんこう" },
+  soloPracticeBtn: { en: "Practice vs CPU (solo)", ja: "CPUとれんしゅう（ひとり）" },
+  soloDevHint: { en: "Dev: add ?dev=1 to URL for test tools", ja: "開発：?dev=1 でテストツール" },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;
