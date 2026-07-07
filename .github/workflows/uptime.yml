@@ -1,52 +1,123 @@
 name: Uptime monitor
 
-# Cron job: pings the live site every 15 minutes and opens/updates an issue
-# if it's down or serving a broken page — an early warning for uptime.
+# Every 5 minutes: multi-endpoint health + auto-resolve incidents when recovered.
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 permissions:
   contents: read
 
+env:
+  LIVE_URL: https://shiritori-game-ccaae.web.app
+  FIREBASE_PROJECT: shiritori-game-ccaae
+  INCIDENT_TITLE: "🚨 Uptime: site is down"
+
 jobs:
-  ping:
+  health:
+    name: Health check
     runs-on: ubuntu-latest
     permissions:
       issues: write
     steps:
-      - name: Check homepage responds and renders
-        id: check
+      - name: Multi-endpoint probe
+        id: probe
         run: |
-          URL="https://shiritori-game-ccaae.web.app/"
-          code=$(curl -s -o body.html -w "%{http_code}" --max-time 20 "$URL" || echo "000")
-          echo "HTTP $code"
-          if [ "$code" != "200" ]; then
-            echo "status=down" >> "$GITHUB_OUTPUT"
-            echo "detail=HTTP $code" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          URL="${{ env.LIVE_URL }}"
+          FAILURES=""
+
+          # 1. Homepage
+          CODE=$(curl -fsSL -o body.html -w "%{http_code}" --max-time 15 "$URL/" 2>/dev/null || echo "000")
+          if [ "$CODE" != "200" ]; then
+            FAILURES="${FAILURES}homepage HTTP $CODE\n"
           elif ! grep -q "しりとり" body.html; then
-            echo "status=broken" >> "$GITHUB_OUTPUT"
-            echo "detail=Page loaded but content missing" >> "$GITHUB_OUTPUT"
+            FAILURES="${FAILURES}homepage missing content\n"
+          fi
+
+          # 2. Hashed JS bundle (cache + routing)
+          JS=$(grep -oE 'assets/[^"]+\.js' body.html | head -1 || true)
+          if [ -n "$JS" ]; then
+            JS_CODE=$(curl -fsSL -o /dev/null -w "%{http_code}" --max-time 15 "$URL/$JS" 2>/dev/null || echo "000")
+            [ "$JS_CODE" = "200" ] || FAILURES="${FAILURES}JS asset HTTP $JS_CODE\n"
+          else
+            FAILURES="${FAILURES}no JS asset in HTML\n"
+          fi
+
+          # 3. PWA manifest
+          MAN_CODE=$(curl -fsSL -o /dev/null -w "%{http_code}" --max-time 10 "$URL/manifest.webmanifest" 2>/dev/null || echo "000")
+          [ "$MAN_CODE" = "200" ] || FAILURES="${FAILURES}manifest HTTP $MAN_CODE\n"
+
+          # 4. RTDB reachable (401/200 = up)
+          DB_CODE=$(curl -fsSL -o /dev/null -w "%{http_code}" --max-time 10 \
+            "https://${{ env.FIREBASE_PROJECT }}-default-rtdb.firebaseio.com/.json" 2>/dev/null || echo "000")
+          if [ "$DB_CODE" != "401" ] && [ "$DB_CODE" != "200" ]; then
+            FAILURES="${FAILURES}RTDB HTTP $DB_CODE\n"
+          fi
+
+          # 5. Response time budget
+          RT=$(curl -fsSL -o /dev/null -w "%{time_total}" --max-time 15 "$URL/" 2>/dev/null || echo "99")
+          echo "response_time=${RT}s" >> "$GITHUB_OUTPUT"
+          if awk "BEGIN {exit !($RT > 5.0)}"; then
+            FAILURES="${FAILURES}slow response ${RT}s (>5s)\n"
+          fi
+
+          if [ -n "$FAILURES" ]; then
+            echo "status=down" >> "$GITHUB_OUTPUT"
+            echo "detail<<EOF" >> "$GITHUB_OUTPUT"
+            printf "%b" "$FAILURES" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
           else
             echo "status=up" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Open incident issue if down
-        if: steps.check.outputs.status != 'up'
+      - name: Open or update incident
+        if: steps.probe.outputs.status == 'down'
         uses: actions/github-script@v7
         with:
           script: |
-            const detail = "${{ steps.check.outputs.detail }}";
-            const title = "🚨 Uptime: site is down";
+            const title = "${{ env.INCIDENT_TITLE }}";
+            const detail = `${{ steps.probe.outputs.detail }}`;
+            const { owner, repo } = context.repo;
             const { data: issues } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner, repo: context.repo.repo,
-              state: "open", labels: "type: bug,priority: high",
+              owner, repo, state: "open", labels: "action: uptime",
             });
             const existing = issues.find(i => i.title === title);
-            const body = `Automated uptime check failed at ${new Date().toISOString()}\n\n${detail}\n\nURL: https://shiritori-game-ccaae.web.app/`;
+            const body = `**Uptime check failed** — ${new Date().toISOString()}\n\n\`\`\`\n${detail}\`\`\`\n\nURL: ${{ env.LIVE_URL }}`;
             if (existing) {
-              await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: existing.number, body });
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: existing.number, body: `Still failing:\n\n${body}`,
+              });
             } else {
-              await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title, body, labels: ["type: bug", "priority: high"] });
+              await github.rest.issues.create({
+                owner, repo, title, body,
+                labels: ["type: bug", "priority: high", "action: uptime"],
+              });
             }
+
+      - name: Resolve incident when recovered
+        if: steps.probe.outputs.status == 'up'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "${{ env.INCIDENT_TITLE }}";
+            const { owner, repo } = context.repo;
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner, repo, state: "open", labels: "action: uptime",
+            });
+            const incident = issues.find(i => i.title === title);
+            if (!incident) return;
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: incident.number,
+              body: `✅ **Recovered** at ${new Date().toISOString()}\n\nResponse time: ${{ steps.probe.outputs.response_time }}\nAll endpoints healthy.`,
+            });
+            await github.rest.issues.update({
+              owner, repo, issue_number: incident.number, state: "closed",
+            });
+
+      - name: Summary
+        run: |
+          echo "## Uptime — ${{ steps.probe.outputs.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "Response: ${{ steps.probe.outputs.response_time }}" >> $GITHUB_STEP_SUMMARY
+          [ "${{ steps.probe.outputs.status }}" = "down" ] && echo "${{ steps.probe.outputs.detail }}" >> $GITHUB_STEP_SUMMARY

@@ -5,11 +5,13 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true, // expose on LAN so you can test from your phone during dev
+    host: true,
   },
   build: {
-    // Split heavy vendors into separate, long-cached chunks so repeat visits
-    // only re-download app code — faster loads and smaller rebuild diffs.
+    target: "es2020",
+    sourcemap: false,
+    reportCompressedSize: false,
+    cssMinify: "esbuild",
     rollupOptions: {
       output: {
         manualChunks: {
@@ -18,5 +20,8 @@ export default defineConfig({
         },
       },
     },
+  },
+  esbuild: {
+    drop: ["console", "debugger"],
   },
 });

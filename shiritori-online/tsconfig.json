@@ -18,6 +18,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
+
     "resolveJsonModule": true
   },
   "include": ["src", "vite.config.ts"]
