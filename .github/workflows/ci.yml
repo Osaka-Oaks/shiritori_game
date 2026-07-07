@@ -731,6 +731,13 @@ jobs:
           merge-multiple: true
           path: .github
 
+      - name: Download deployment records
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: deployment-records
+          path: .github
+
       - name: Push build metrics to Datadog
         env:
           DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
@@ -771,6 +778,13 @@ jobs:
             echo "### Live URLs"
             echo "- React: ${{ env.LIVE_URL }}"
             echo "- Flutter: ${{ env.FLUTTER_LIVE_URL }}"
+            echo ""
+            if [ -f .github/deployments.jsonl ]; then
+              echo "### Latest deployments"
+              echo '```json'
+              tail -3 .github/deployments.jsonl
+              echo '```'
+            fi
             echo ""
             bash scripts/build-metrics-report.sh .github/build-history.jsonl
           } >> "$GITHUB_STEP_SUMMARY"

@@ -42,7 +42,7 @@ jobs:
           echo "SHA: ${{ github.event.workflow_run.head_sha }}"
 
       - name: Probe React app
-        if: github.event_name == 'workflow_dispatch' && inputs.check_online == true || github.event_name == 'workflow_run'
+        if: github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && inputs.check_online == true)
         id: online
         run: |
           chmod +x scripts/deployment-verify.sh
@@ -58,7 +58,7 @@ jobs:
         continue-on-error: true
 
       - name: Probe Flutter app
-        if: github.event_name == 'workflow_dispatch' && inputs.check_flutter == true || github.event_name == 'workflow_run'
+        if: github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && inputs.check_flutter == true)
         id: flutter
         run: |
           chmod +x scripts/deployment-verify.sh scripts/test-flutter-url.sh
