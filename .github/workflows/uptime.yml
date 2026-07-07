@@ -1,6 +1,6 @@
 name: Uptime monitor
 
-# Every 5 minutes: multi-endpoint health + auto-resolve incidents when recovered.
+# Every 5 minutes: health pulse + Datadog/Grafana/ELK metrics + incident auto-resolve.
 on:
   schedule:
     - cron: "*/5 * * * *"
@@ -13,72 +13,54 @@ env:
   LIVE_URL: https://shiritori-game-ccaae.web.app
   FIREBASE_PROJECT: shiritori-game-ccaae
   INCIDENT_TITLE: "🚨 Uptime: site is down"
+  DEPLOY_ENV: production
 
 jobs:
   health:
-    name: Health check
+    name: Health pulse
     runs-on: ubuntu-latest
     permissions:
       issues: write
     steps:
-      - name: Multi-endpoint probe
-        id: probe
+      - uses: actions/checkout@v4
+
+      - name: Run health pulse
+        id: pulse
         run: |
-          set -euo pipefail
-          URL="${{ env.LIVE_URL }}"
-          FAILURES=""
+          chmod +x scripts/health-pulse.sh scripts/push-observability-metrics.sh
+          bash scripts/health-pulse.sh "$LIVE_URL" && echo "status=up" >> "$GITHUB_OUTPUT" || echo "status=down" >> "$GITHUB_OUTPUT"
+        continue-on-error: true
 
-          # 1. Homepage
-          CODE=$(curl -fsSL -o body.html -w "%{http_code}" --max-time 15 "$URL/" 2>/dev/null || echo "000")
-          if [ "$CODE" != "200" ]; then
-            FAILURES="${FAILURES}homepage HTTP $CODE\n"
-          elif ! grep -q "しりとり" body.html; then
-            FAILURES="${FAILURES}homepage missing content\n"
-          fi
+      - name: Push metrics (Datadog / Grafana / ELK)
+        if: always()
+        env:
+          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+          DATADOG_SITE: ${{ secrets.DATADOG_SITE }}
+          GRAFANA_CLOUD_API_KEY: ${{ secrets.GRAFANA_CLOUD_API_KEY }}
+          GRAFANA_CLOUD_STACK_URL: ${{ secrets.GRAFANA_CLOUD_STACK_URL }}
+          ELASTICSEARCH_URL: ${{ secrets.ELASTICSEARCH_URL }}
+        run: bash scripts/push-observability-metrics.sh .github/health-pulse.json || true
 
-          # 2. Hashed JS bundle (cache + routing)
-          JS=$(grep -oE 'assets/[^"]+\.js' body.html | head -1 || true)
-          if [ -n "$JS" ]; then
-            JS_CODE=$(curl -fsSL -o /dev/null -w "%{http_code}" --max-time 15 "$URL/$JS" 2>/dev/null || echo "000")
-            [ "$JS_CODE" = "200" ] || FAILURES="${FAILURES}JS asset HTTP $JS_CODE\n"
-          else
-            FAILURES="${FAILURES}no JS asset in HTML\n"
-          fi
-
-          # 3. PWA manifest
-          MAN_CODE=$(curl -fsSL -o /dev/null -w "%{http_code}" --max-time 10 "$URL/manifest.webmanifest" 2>/dev/null || echo "000")
-          [ "$MAN_CODE" = "200" ] || FAILURES="${FAILURES}manifest HTTP $MAN_CODE\n"
-
-          # 4. RTDB reachable (401/200 = up)
-          DB_CODE=$(curl -fsSL -o /dev/null -w "%{http_code}" --max-time 10 \
-            "https://${{ env.FIREBASE_PROJECT }}-default-rtdb.firebaseio.com/.json" 2>/dev/null || echo "000")
-          if [ "$DB_CODE" != "401" ] && [ "$DB_CODE" != "200" ]; then
-            FAILURES="${FAILURES}RTDB HTTP $DB_CODE\n"
-          fi
-
-          # 5. Response time budget
-          RT=$(curl -fsSL -o /dev/null -w "%{time_total}" --max-time 15 "$URL/" 2>/dev/null || echo "99")
-          echo "response_time=${RT}s" >> "$GITHUB_OUTPUT"
-          if awk "BEGIN {exit !($RT > 5.0)}"; then
-            FAILURES="${FAILURES}slow response ${RT}s (>5s)\n"
-          fi
-
-          if [ -n "$FAILURES" ]; then
-            echo "status=down" >> "$GITHUB_OUTPUT"
-            echo "detail<<EOF" >> "$GITHUB_OUTPUT"
-            printf "%b" "$FAILURES" >> "$GITHUB_OUTPUT"
-            echo "EOF" >> "$GITHUB_OUTPUT"
-          else
-            echo "status=up" >> "$GITHUB_OUTPUT"
-          fi
+      - name: Upload pulse artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-pulse-${{ github.run_id }}
+          path: .github/health-pulse.json
+          retention-days: 7
 
       - name: Open or update incident
-        if: steps.probe.outputs.status == 'down'
+        if: steps.pulse.outputs.status == 'down'
         uses: actions/github-script@v7
         with:
           script: |
+            const fs = require('fs');
+            let detail = 'Health pulse failed';
+            try {
+              const j = JSON.parse(fs.readFileSync('.github/health-pulse.json', 'utf8'));
+              detail = (j.failures || []).join('\n') || detail;
+            } catch (_) {}
             const title = "${{ env.INCIDENT_TITLE }}";
-            const detail = `${{ steps.probe.outputs.detail }}`;
             const { owner, repo } = context.repo;
             const { data: issues } = await github.rest.issues.listForRepo({
               owner, repo, state: "open", labels: "action: uptime",
@@ -97,10 +79,16 @@ jobs:
             }
 
       - name: Resolve incident when recovered
-        if: steps.probe.outputs.status == 'up'
+        if: steps.pulse.outputs.status == 'up'
         uses: actions/github-script@v7
         with:
           script: |
+            const fs = require('fs');
+            let rt = 'n/a';
+            try {
+              const j = JSON.parse(fs.readFileSync('.github/health-pulse.json', 'utf8'));
+              rt = j.metrics?.homepage_response_ms + 'ms';
+            } catch (_) {}
             const title = "${{ env.INCIDENT_TITLE }}";
             const { owner, repo } = context.repo;
             const { data: issues } = await github.rest.issues.listForRepo({
@@ -110,14 +98,18 @@ jobs:
             if (!incident) return;
             await github.rest.issues.createComment({
               owner, repo, issue_number: incident.number,
-              body: `✅ **Recovered** at ${new Date().toISOString()}\n\nResponse time: ${{ steps.probe.outputs.response_time }}\nAll endpoints healthy.`,
+              body: `✅ **Recovered** at ${new Date().toISOString()}\n\nResponse: ${rt}\nAll endpoints healthy.`,
             });
             await github.rest.issues.update({
               owner, repo, issue_number: incident.number, state: "closed",
             });
 
       - name: Summary
+        if: always()
         run: |
-          echo "## Uptime — ${{ steps.probe.outputs.status }}" >> $GITHUB_STEP_SUMMARY
-          echo "Response: ${{ steps.probe.outputs.response_time }}" >> $GITHUB_STEP_SUMMARY
-          [ "${{ steps.probe.outputs.status }}" = "down" ] && echo "${{ steps.probe.outputs.detail }}" >> $GITHUB_STEP_SUMMARY
+          echo "## Health pulse — ${{ steps.pulse.outputs.status }}" >> $GITHUB_STEP_SUMMARY
+          [ -f .github/health-pulse.json ] && cat .github/health-pulse.json >> $GITHUB_STEP_SUMMARY
+
+      - name: Fail workflow if down
+        if: steps.pulse.outputs.status == 'down'
+        run: exit 1

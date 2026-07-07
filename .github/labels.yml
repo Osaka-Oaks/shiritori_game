@@ -64,6 +64,9 @@
 - name: "area: infra"
   color: "5319e7"
   description: Terraform / OpenTofu / cloud IaC
+- name: "area: observability"
+  color: "f9d0c4"
+  description: Grafana / Datadog / ELK monitoring
 - name: "dependencies"
   color: "0366d6"
   description: Dependency updates

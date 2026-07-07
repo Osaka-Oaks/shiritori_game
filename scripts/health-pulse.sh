@@ -19,7 +19,7 @@ health_ms=0
 rtdb_code=0
 
 probe() {
-  local name=$1 code time_total
+  local code time_total
   code=$(curl -fsSL -o /dev/null -w "%{http_code}" --max-time 15 "$URL/" 2>/dev/null || echo "000")
   time_total=$(curl -fsSL -o /tmp/shiritori-body.html -w "%{time_total}" --max-time 15 "$URL/" 2>/dev/null || echo "99")
   homepage_ms=$(awk "BEGIN {printf \"%.0f\", $time_total * 1000}")
@@ -39,7 +39,8 @@ probe() {
   health_ms=$(awk "BEGIN {printf \"%.0f\", $htime * 1000}")
   if [ "$hcode" != "200" ]; then
     failures+=("health_json:http_$hcode")
-    status="down"
+    # Soft until /health.json is deployed — set STRICT_HEALTH=1 to fail on missing health.json
+    [ "${STRICT_HEALTH:-0}" = "1" ] && status="down"
   fi
 
   # JS bundle
@@ -61,9 +62,10 @@ probe() {
   mcode=$(curl -fsSL -o /dev/null -w "%{http_code}" --max-time 10 "$URL/manifest.webmanifest" 2>/dev/null || echo "000")
   [ "$mcode" = "200" ] || failures+=("manifest:http_$mcode")
 
-  # RTDB
-  rtdb_code=$(curl -fsSL -o /dev/null -w "%{http_code}" --max-time 10 \
+  # RTDB (401 = rules blocking unauth read = service is up)
+  rtdb_code=$(curl -sS -o /dev/null -w "%{http_code}" --max-time 10 \
     "https://${PROJECT}-default-rtdb.firebaseio.com/.json" 2>/dev/null || echo "000")
+  rtdb_code="${rtdb_code//[^0-9]/}" # sanitize
   if [ "$rtdb_code" != "401" ] && [ "$rtdb_code" != "200" ]; then
     failures+=("rtdb:http_$rtdb_code")
     status="down"
