@@ -398,8 +398,7 @@ jobs:
   summary:
     name: Pipeline summary
     runs-on: ubuntu-latest
-    needs:
-      [changes, security, build-online, build-kawaii, deploy-production, deploy-staging]
+    needs: [changes, security, build-online, build-kawaii, deploy-production, deploy-staging]
     if: always()
     steps:
       - run: |
