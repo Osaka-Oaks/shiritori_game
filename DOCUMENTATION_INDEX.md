@@ -217,6 +217,8 @@ npm run monitor:elk:logs
 
 | Guide | Description | For Who |
 |-------|-------------|---------|
+| **[Flutter Firebase Quick Start](FLUTTER_FIREBASE_QUICKSTART.md)** ⭐ | Setup Flutter + Firebase in 3 commands | Everyone |
+| **[Flutter Firebase Setup](FLUTTER_FIREBASE_SETUP.md)** | Complete Firebase integration guide | Developers |
 | **[Flutter Deploy Quick Start](FLUTTER_DEPLOY_QUICKSTART.md)** ⭐ | Deploy Flutter in 3 commands | Everyone |
 | **[Flutter Deployment Guide](FLUTTER_DEPLOYMENT_GUIDE.md)** | Complete deployment documentation | Developers |
 | **[CI/CD Summary](DEPLOYMENT_CI_CD_SUMMARY.md)** | All workflows explained | DevOps |
@@ -545,6 +547,8 @@ npm run deploy:flutter      # Flutter
 
 ### 🚀 Deployment & CI/CD
 
+- **[FLUTTER_FIREBASE_QUICKSTART.md](FLUTTER_FIREBASE_QUICKSTART.md)** - Flutter + Firebase setup guide
+- **[FLUTTER_FIREBASE_SETUP.md](FLUTTER_FIREBASE_SETUP.md)** - Complete Firebase integration
 - **[FLUTTER_DEPLOYMENT_GUIDE.md](FLUTTER_DEPLOYMENT_GUIDE.md)** - Complete Flutter deploy guide
 - **[FLUTTER_DEPLOY_QUICKSTART.md](FLUTTER_DEPLOY_QUICKSTART.md)** - Quick deploy guide
 - **[DEPLOYMENT_CI_CD_SUMMARY.md](DEPLOYMENT_CI_CD_SUMMARY.md)** - CI/CD workflows explained

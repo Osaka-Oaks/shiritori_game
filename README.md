@@ -115,13 +115,23 @@ npm run dev:kawaii
 </details>
 
 <details>
-<summary><b>📱 Flutter App</b></summary>
+<summary><b>📱 Flutter App (with Firebase)</b></summary>
 
+**First time setup:**
 ```bash
-cd shiritori-flutter
-flutter pub get
-flutter run -d chrome
+# 1. Setup Flutter + Firebase (one time)
+npm run flutter:setup
+
+# 2. Run the app
+npm run dev:flutter
 ```
+
+**Already set up:**
+```bash
+npm run dev:flutter
+```
+
+**📚 [Flutter Firebase Setup Guide](FLUTTER_FIREBASE_SETUP.md)** | **🚀 [Quick Start](FLUTTER_FIREBASE_QUICKSTART.md)**
 
 </details>
 

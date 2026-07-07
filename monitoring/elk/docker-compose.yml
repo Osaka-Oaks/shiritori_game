@@ -1,7 +1,6 @@
 # ELK Stack for Shiritori Game Monitoring
 # Elasticsearch, Logstash, Kibana
-
-version: '3.8'
+# Note: version attribute is obsolete in Docker Compose v2+
 
 services:
   # Elasticsearch - Data storage and search

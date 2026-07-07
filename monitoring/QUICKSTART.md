@@ -22,8 +22,27 @@ npm run monitor:all:start
 
 ### ELK Stack (Elasticsearch, Logstash, Kibana)
 
+#### Option 1: Lite Version (Recommended)
+
+**No Docker Desktop authentication required!**
+
 ```bash
-# Start ELK stack
+# Start ELK stack (Lite)
+npm run monitor:elk:lite
+
+# View logs
+npm run monitor:elk:lite:logs
+
+# Stop ELK stack
+npm run monitor:elk:lite:stop
+```
+
+#### Option 2: Full Stack
+
+**Requires Docker Desktop authentication**
+
+```bash
+# Start ELK stack (Full)
 npm run monitor:elk:start
 
 # Check status
@@ -40,6 +59,10 @@ npm run monitor:elk:stop
 - Kibana: http://localhost:5601
 - Elasticsearch: http://localhost:9200
 - Logstash: http://localhost:9600
+
+**⚠️ Getting Docker authentication errors?**
+- Use `npm run monitor:elk:lite` instead
+- See [DOCKER_TROUBLESHOOTING.md](../DOCKER_TROUBLESHOOTING.md)
 
 ### Grafana
 
