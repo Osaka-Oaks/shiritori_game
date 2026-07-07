@@ -5,12 +5,14 @@ import { getAnalytics, logEvent, setUserProperties, Analytics } from "firebase/a
 import { getPerformance, trace, Performance } from "firebase/performance";
 import { getRemoteConfig, fetchAndActivate, getValue, RemoteConfig } from "firebase/remote-config";
 import { getMessaging, getToken, onMessage, Messaging } from "firebase/messaging";
-import firebaseConfig from "./firebase-applet-config.json";
+import { getFirebaseWebConfig, isFirebaseConfigured } from "./firebase-env";
+
+const firebaseConfig = getFirebaseWebConfig();
 
 // Initialize Firebase Core services
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || "(default)");
 
 // Initialize Analytics (free on Spark)
 let analytics: Analytics | null = null;
@@ -131,8 +133,8 @@ export async function saveCustomizationsToFirestore(
 ) {
   const path = `users/${userId}`;
 
-  // Guard clause for safety when using placeholder keys
-  if (firebaseConfig.apiKey === "placeholder-api-key") {
+  // Skip Firestore writes when Firebase env is not configured (local UI-only mode)
+  if (!isFirebaseConfigured()) {
     console.log("Using transient guest customizations storage (Firebase is in standby mode)");
     return;
   }

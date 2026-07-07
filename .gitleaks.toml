@@ -9,6 +9,7 @@ paths = [
   '''package-lock\.json$''',
   '''\.github/workflows/.*''',
   '''src/data/dictionary\.json$''',
-  '''firebase\.ts$''',
-  '''firebase-config\.ts$''',
+  '''shiritori_flutter/lib/firebase_options\.dart$''',
+  '''shiritori_flutter/android/app/google-services\.json$''',
+  '''shiritori_flutter/ios/Runner/GoogleService-Info\.plist$''',
 ]

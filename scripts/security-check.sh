@@ -69,14 +69,22 @@ cd "$ROOT"
 audit_app shiritori-online
 audit_app kawaii-shiritori
 
-# Quick pattern scan for hardcoded API keys (exclude Firebase config — keys are public client-side)
-SCAN_DIRS=$(find shiritori-online/src kawaii-shiritori/src -name '*.ts' -o -name '*.tsx' 2>/dev/null \
-  | grep -vE 'firebase(-config)?\.ts$' || true)
+# Quick pattern scan for hardcoded API keys in app source
+SCAN_DIRS=$(find shiritori-online/src kawaii-shiritori/src shiritori-word-chain/src -name '*.ts' -o -name '*.tsx' 2>/dev/null || true)
 if [ -n "$SCAN_DIRS" ] && echo "$SCAN_DIRS" | xargs grep -lE 'AIza[0-9A-Za-z_-]{20,}' 2>/dev/null; then
   fail "Possible hardcoded Firebase API key in source"
 else
   pass "No hardcoded API key patterns in src"
 fi
+
+# Service worker must not embed keys
+for sw in kawaii-shiritori/public/firebase-messaging-sw.js; do
+  if [ -f "$sw" ] && grep -qE 'AIza[0-9A-Za-z_-]{20,}' "$sw" 2>/dev/null; then
+    fail "Hardcoded API key in $sw"
+  else
+    pass "No hardcoded keys in $sw"
+  fi
+done
 
 if [ "$FAILED" -eq 1 ]; then
   echo ""

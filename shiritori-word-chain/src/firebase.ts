@@ -1,10 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import firebaseConfig from "../firebase-applet-config.json";
+import { getFirebaseWebConfig } from "./lib/firebase-env";
 
+const firebaseConfig = getFirebaseWebConfig();
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || "(default)");
 export const auth = getAuth(app);
 
 // Strict diagnostic error reporting structure as mandated by security specification
