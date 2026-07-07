@@ -77,6 +77,50 @@ else
   pass "No hardcoded API key patterns in src"
 fi
 
+# Check for hardcoded tokens, passwords, secrets in source files
+echo "--- Scanning for hardcoded secrets ---"
+PATTERNS=(
+  'password\s*=\s*["\047][^"\047]{3,}'
+  'token\s*=\s*["\047][A-Za-z0-9_-]{20,}'
+  'secret\s*=\s*["\047][A-Za-z0-9_-]{10,}'
+  'api[_-]?key\s*=\s*["\047][A-Za-z0-9_-]{20,}'
+  'bearer\s+[A-Za-z0-9_-]{20,}'
+  'sk-[A-Za-z0-9]{20,}'
+)
+
+SECRET_FOUND=0
+for pattern in "${PATTERNS[@]}"; do
+  if grep -rE -i "$pattern" \
+    shiritori-online/src \
+    kawaii-shiritori/src \
+    shiritori-word-chain/src \
+    kawaii-shiritori/server.ts \
+    shiritori-word-chain/server.ts \
+    --include="*.ts" --include="*.tsx" --include="*.js" \
+    --exclude-dir=node_modules \
+    --exclude-dir=dist 2>/dev/null | grep -v -E '(password-hash\.ts|AuthView\.tsx|test|spec|mock|example)'; then
+    SECRET_FOUND=1
+  fi
+done
+
+if [ "$SECRET_FOUND" -eq 1 ]; then
+  warn "Potential secrets found in source (review above - may be false positives)"
+else
+  pass "No obvious hardcoded secrets in source files"
+fi
+
+# Flutter firebase_options.dart check (intentional client keys)
+if grep -qE 'AIza[0-9A-Za-z_-]{35}' shiritori_flutter/lib/firebase_options.dart 2>/dev/null; then
+  pass "Flutter firebase_options.dart has client keys (intentional, FlutterFire generated)"
+else
+  warn "Flutter firebase_options.dart may be missing or incomplete"
+fi
+
+# Check monitoring configs for dev-only passwords
+if grep -q 'GF_SECURITY_ADMIN_PASSWORD.*admin' monitoring/docker-compose.yml 2>/dev/null; then
+  pass "Grafana dev password detected (local dev only - acceptable)"
+fi
+
 # Service worker must not embed keys
 for sw in kawaii-shiritori/public/firebase-messaging-sw.js; do
   if [ -f "$sw" ] && grep -qE 'AIza[0-9A-Za-z_-]{20,}' "$sw" 2>/dev/null; then
