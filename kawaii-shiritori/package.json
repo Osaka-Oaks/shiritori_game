@@ -88,7 +88,7 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "husky": "^9.0.0",
     "jsdom": "^24.0.0",
-    "lint-staged": "^15.2.0",
+    "lint-staged": "^17.0.8",
     "phaser": "^3.70.0",
     "prettier": "^3.2.0",
     "tailwindcss": "^4.1.14",
