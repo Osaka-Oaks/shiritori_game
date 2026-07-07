@@ -24,6 +24,7 @@ env:
   FIREBASE_PROJECT: shiritori-game-ccaae
   FIREBASE_TOOLS_VERSION: "13.29.1"
   LIVE_URL: https://shiritori-game-ccaae.web.app
+  FLUTTER_LIVE_URL: https://shiritori-flutter.web.app
   CACHE_VERSION: v2
 
 jobs:
@@ -209,6 +210,86 @@ jobs:
           cache: true
       - working-directory: shiritori_flutter
         run: flutter pub get && flutter analyze lib test
+
+  test-flutter:
+    name: Test — shiritori_flutter
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: changes
+    if: |
+      needs.changes.outputs.docs-only != 'true' &&
+      (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.deps == 'true')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - working-directory: shiritori_flutter
+        run: flutter pub get && flutter test
+
+  build-flutter:
+    name: Build — shiritori_flutter (web)
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    needs: [changes, security, lint-flutter, test-flutter]
+    if: |
+      always() &&
+      needs.changes.outputs.docs-only != 'true' &&
+      needs.security.result == 'success' &&
+      (needs.lint-flutter.result == 'success' || needs.lint-flutter.result == 'skipped') &&
+      (needs.test-flutter.result == 'success' || needs.test-flutter.result == 'skipped') &&
+      (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.deps == 'true' || needs.changes.outputs.ci-config == 'true')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - working-directory: shiritori_flutter
+        run: flutter pub get
+      - name: Build web (timed)
+        id: build_timer
+        working-directory: shiritori_flutter
+        run: |
+          START=$SECONDS
+          flutter build web --release
+          echo "duration_sec=$((SECONDS - START))" >> "$GITHUB_OUTPUT"
+      - name: Stamp health.json with deploy time
+        working-directory: shiritori_flutter
+        run: |
+          DEPLOYED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          jq -n \
+            --arg deployed_at "$DEPLOYED_AT" \
+            --arg sha "${{ github.sha }}" \
+            '{status:"ok",app:"shiritori_flutter",version:"1.0.0",deployed_at:$deployed_at,sha:$sha}' \
+            > build/web/health.json
+      - name: Record build metrics
+        if: always()
+        run: |
+          mkdir -p .github
+          jq -nc \
+            --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --arg app "shiritori_flutter" \
+            --argjson duration_s "${{ steps.build_timer.outputs.duration_sec != '' && steps.build_timer.outputs.duration_sec || '0' }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg run_id "${{ github.run_id }}" \
+            '{timestamp:$ts,app:$app,step:"build",status:"success",duration_s:$duration_s,sha:$sha,branch:$branch,run_id:$run_id}' \
+            >> .github/build-history.jsonl
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-shiritori-flutter
+          path: shiritori_flutter/build/web/
+          retention-days: 14
+          compression-level: 6
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-metrics-flutter
+          path: .github/build-history.jsonl
+          retention-days: 30
+          if-no-files-found: ignore
 
   build-online:
     name: Build — shiritori-online

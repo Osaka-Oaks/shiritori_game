@@ -1,1 +1,59 @@
-{"flutter":{"platforms":{"dart":{"lib/firebase_options.dart":{"projectId":"shiritori-game-ccaae","configurations":{"web":"1:324507601155:web:d69804f7cf3dba96ec4136"}}}}}}
+{
+  "hosting": {
+    "site": "shiritori-flutter",
+    "public": "build/web",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|wasm)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "/health.json",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0"
+          }
+        ]
+      },
+      {
+        "source": "/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0"
+          }
+        ]
+      },
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "X-Frame-Options",
+            "value": "DENY"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "strict-origin-when-cross-origin"
+          }
+        ]
+      }
+    ]
+  }
+}
