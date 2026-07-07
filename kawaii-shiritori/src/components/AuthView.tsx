@@ -3,6 +3,16 @@ import { motion } from "motion/react";
 import { PlayerProfile, AppCustomizations, DEFAULT_CUSTOMIZATIONS } from "../types";
 import { User, Mail, Lock, LogIn, UserPlus, LogOut, Check, Sparkles, AlertCircle } from "lucide-react";
 
+// Hash a password with SHA-256 before it is ever persisted to storage.
+// This avoids keeping plaintext credentials in localStorage (see CodeQL js/clear-text-storage-of-sensitive-data).
+async function hashPassword(password: string): Promise<string> {
+    const encoded = new TextEncoder().encode(password);
+    const digest = await crypto.subtle.digest("SHA-256", encoded);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+}
+
 interface AuthViewProps {
   currentUser: AuthUser | null;
   onLogin: (user: AuthUser) => void;
@@ -40,7 +50,7 @@ export default function AuthView({
   const [errorMsg, setErrorMsg] = React.useState("");
   const [successMsg, setSuccessMsg] = React.useState("");
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
     setSuccessMsg("");
@@ -69,8 +79,7 @@ export default function AuthView({
         setErrorMsg("An account with this email already exists.");
         return;
       }
-
-      const newUid = "uid_" + Math.random().toString(36).substring(2, 9);
+    const newUid = "uid_" + crypto.randomUUID();
       const newUser: AuthUser = {
         uid: newUid,
         email: emailKey,
@@ -80,7 +89,7 @@ export default function AuthView({
       };
 
       accounts[emailKey] = {
-        password: password,
+        password: await hashPassword(password),
         user: newUser
       };
 
@@ -93,7 +102,8 @@ export default function AuthView({
       setNickname("");
     } else {
       const match = accounts[emailKey];
-      if (!match || match.password !== password) {
+      const hashedInput = await hashPassword(password);
+      if (!match || match.password !== hashedInput) {
         setErrorMsg("Incorrect email or password combination.");
         return;
       }
