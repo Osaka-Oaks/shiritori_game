@@ -6,20 +6,28 @@
 
 Closes #
 
+## Work item
+
+- [ ] Linked to an issue (`Closes #` or `Refs #`)
+- [ ] Correct `type:` / `area:` labels will be auto-applied
+
 ## Type of change
 
-- [ ] 🐛 Bug fix
-- [ ] ✨ Feature
+- [ ] 🐛 Bug fix (`fix`)
+- [ ] ✨ Feature (`feat`)
+- [ ] 🧪 Solo / levels / dev test
 - [ ] ♻️ Refactor / chore
 - [ ] 📝 Docs
 - [ ] ⚙️ CI/CD
 
 ## Checklist
 
-- [ ] `npm run validate` passes locally (format + lint + type-check + build)
-- [ ] Tested the affected flow (or added tests)
+- [ ] `npm run validate` passes locally (format + lint + security + test + build)
+- [ ] Tested solo mode if gameplay changed (`?solo=3&dev=1`)
 - [ ] No secrets / keys committed
-- [ ] Updated docs if behavior changed
+- [ ] Commit messages reference issues (`Refs #123`)
+
+See [.github/COMMITS.md](.github/COMMITS.md) and [.github/KANBAN.md](.github/KANBAN.md).
 
 ## Screenshots / notes
 

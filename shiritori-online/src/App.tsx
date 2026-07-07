@@ -123,6 +123,7 @@ export default function App() {
           deepLinkCode={deepLinkCode}
           onEnterRoom={enterRoom}
           onSinglePlayer={() => setView({ name: "solo" })}
+          onSoloLevel={level => setView({ name: "solo", level: level as LevelId })}
           onShowRules={() => setShowRules(true)}
           onShowLove={() => setShowLove(true)}
         />

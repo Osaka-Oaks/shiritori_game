@@ -15,13 +15,13 @@ Closes #456
 
 ### Types
 
-| Type | Use for |
-|------|---------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `test` | Tests / QA |
-| `chore` | Tooling, deps, CI |
-| `docs` | Documentation only |
+| Type       | Use for                         |
+| ---------- | ------------------------------- |
+| `feat`     | New feature                     |
+| `fix`      | Bug fix                         |
+| `test`     | Tests / QA                      |
+| `chore`    | Tooling, deps, CI               |
+| `docs`     | Documentation only              |
 | `refactor` | Code change, no behavior change |
 
 ### Scopes (optional)

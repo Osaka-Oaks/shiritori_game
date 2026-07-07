@@ -12,6 +12,7 @@ interface Props {
   deepLinkCode: string;
   onEnterRoom: (code: string) => void;
   onSinglePlayer: () => void;
+  onSoloLevel?: (level: number) => void;
   onShowRules: () => void;
   onShowLove: () => void;
 }
@@ -25,6 +26,7 @@ export default function Home({
   deepLinkCode,
   onEnterRoom,
   onSinglePlayer,
+  onSoloLevel,
   onShowRules,
   onShowLove,
 }: Props) {
@@ -158,9 +160,9 @@ export default function Home({
               <button
                 key={n}
                 className="btn ghost small"
-                onClick={() => {
-                  window.location.href = `?solo=${n}${isDevEnvironment() ? "&dev=1" : ""}`;
-                }}
+                onClick={() =>
+                  onSoloLevel ? onSoloLevel(n) : (window.location.search = `?solo=${n}`)
+                }
               >
                 L{n}
               </button>
