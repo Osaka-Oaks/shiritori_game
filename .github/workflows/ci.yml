@@ -491,6 +491,51 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
+  deploy-flutter-production:
+    name: Deploy Flutter production
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    needs: [changes, build-flutter, security]
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      needs.security.result == 'success' &&
+      needs.build-flutter.result == 'success' &&
+      (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.ci-config == 'true' || github.event.inputs.environment == 'production')
+    environment:
+      name: production-flutter
+      url: ${{ env.FLUTTER_LIVE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm/_npx
+          key: firebase-tools-${{ env.FIREBASE_TOOLS_VERSION }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-shiritori-flutter
+          path: shiritori_flutter/build/web
+      - name: Ensure Firebase hosting site exists
+        working-directory: shiritori_flutter
+        run: |
+          npx firebase-tools@${{ env.FIREBASE_TOOLS_VERSION }} hosting:sites:create shiritori-flutter \
+            --project ${{ env.FIREBASE_PROJECT }} --non-interactive --token "$FIREBASE_TOKEN" 2>/dev/null || true
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Deploy Flutter hosting
+        working-directory: shiritori_flutter
+        run: >
+          npx firebase-tools@${{ env.FIREBASE_TOOLS_VERSION }} deploy
+          --only hosting
+          --project ${{ env.FIREBASE_PROJECT }}
+          --non-interactive
+          --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
   deploy-staging:
     name: Deploy staging preview
     runs-on: ubuntu-latest
