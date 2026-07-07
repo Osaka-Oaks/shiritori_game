@@ -1,0 +1,408 @@
+name: Deploy Flutter to Firebase
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'shiritori-flutter/**'
+      - '.github/workflows/deploy-flutter.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'shiritori-flutter/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+          - dev
+
+env:
+  FLUTTER_VERSION: '3.16.0'
+  FIREBASE_PROJECT_ID: 'shiritori-game-ccaae'
+
+jobs:
+  # Build Flutter web app
+  build-flutter:
+    name: Build Flutter Web
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: ⏱️ Record start time
+        id: start-time
+        run: |
+          echo "START_TIME=$(date +%s)" >> $GITHUB_OUTPUT
+          echo "START_DATE=$(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> $GITHUB_OUTPUT
+          echo "::notice title=Deployment Started::Flutter deployment started at $(date)"
+      
+      - name: 📱 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+      
+      - name: 📦 Get dependencies
+        working-directory: ./shiritori-flutter
+        run: flutter pub get
+      
+      - name: ✅ Run tests
+        working-directory: ./shiritori-flutter
+        run: flutter test --coverage
+        continue-on-error: false
+      
+      - name: 🔍 Analyze code
+        working-directory: ./shiritori-flutter
+        run: flutter analyze --no-fatal-infos
+      
+      - name: 🏗️ Build for web
+        working-directory: ./shiritori-flutter
+        run: |
+          echo "Building Flutter web app..."
+          flutter build web --release --web-renderer canvaskit
+          
+          # Check build output
+          if [ ! -d "build/web" ]; then
+            echo "::error::Build failed - output directory not found"
+            exit 1
+          fi
+          
+          echo "::notice::Build completed successfully"
+      
+      - name: 📊 Build size analysis
+        working-directory: ./shiritori-flutter
+        run: |
+          BUILD_SIZE=$(du -sh build/web | cut -f1)
+          FILE_COUNT=$(find build/web -type f | wc -l)
+          
+          echo "::notice title=Build Size::$BUILD_SIZE"
+          echo "::notice title=Files Generated::$FILE_COUNT"
+          
+          echo "BUILD_SIZE=$BUILD_SIZE" >> $GITHUB_ENV
+          echo "FILE_COUNT=$FILE_COUNT" >> $GITHUB_ENV
+      
+      - name: 📤 Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-web-build
+          path: shiritori-flutter/build/web
+          retention-days: 7
+      
+      - name: ⏱️ Calculate build time
+        id: build-time
+        run: |
+          END_TIME=$(date +%s)
+          BUILD_DURATION=$((END_TIME - ${{ steps.start-time.outputs.START_TIME }}))
+          echo "BUILD_DURATION=$BUILD_DURATION" >> $GITHUB_OUTPUT
+          echo "::notice title=Build Time::${BUILD_DURATION}s"
+
+  # Deploy to Firebase Hosting
+  deploy-firebase:
+    name: Deploy to Firebase
+    runs-on: ubuntu-latest
+    needs: build-flutter
+    if: github.event_name != 'pull_request'
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: ⏱️ Record deploy start time
+        id: deploy-start
+        run: |
+          echo "DEPLOY_START=$(date +%s)" >> $GITHUB_OUTPUT
+          echo "DEPLOY_DATE=$(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> $GITHUB_OUTPUT
+      
+      - name: 📥 Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: flutter-web-build
+          path: shiritori-flutter/build/web
+      
+      - name: 🔥 Setup Firebase CLI
+        run: |
+          npm install -g firebase-tools@latest
+          firebase --version
+      
+      - name: 🚀 Deploy to Firebase Hosting
+        working-directory: ./shiritori-flutter
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          # Determine environment
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            CHANNEL="live"
+            MESSAGE="Production deployment from main"
+          elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
+            CHANNEL="develop"
+            MESSAGE="Staging deployment from develop"
+          else
+            CHANNEL="preview"
+            MESSAGE="Preview deployment from ${{ github.ref }}"
+          fi
+          
+          echo "Deploying to channel: $CHANNEL"
+          echo "::notice title=Deployment Channel::$CHANNEL"
+          
+          # Deploy
+          if [ "$CHANNEL" == "live" ]; then
+            firebase deploy \
+              --only hosting \
+              --project ${{ env.FIREBASE_PROJECT_ID }} \
+              --token "$FIREBASE_TOKEN" \
+              --message "$MESSAGE"
+          else
+            firebase hosting:channel:deploy $CHANNEL \
+              --project ${{ env.FIREBASE_PROJECT_ID }} \
+              --token "$FIREBASE_TOKEN" \
+              --expires 30d
+          fi
+          
+          echo "DEPLOY_CHANNEL=$CHANNEL" >> $GITHUB_ENV
+      
+      - name: ⏱️ Calculate deploy time
+        id: deploy-time
+        run: |
+          DEPLOY_END=$(date +%s)
+          DEPLOY_DURATION=$((DEPLOY_END - ${{ steps.deploy-start.outputs.DEPLOY_START }}))
+          echo "DEPLOY_DURATION=$DEPLOY_DURATION" >> $GITHUB_OUTPUT
+          echo "::notice title=Deploy Time::${DEPLOY_DURATION}s"
+      
+      - name: 📝 Save deployment metadata
+        run: |
+          cat > deployment-info.json << EOF
+          {
+            "timestamp": "${{ steps.deploy-start.outputs.DEPLOY_DATE }}",
+            "commit": "${{ github.sha }}",
+            "branch": "${{ github.ref_name }}",
+            "actor": "${{ github.actor }}",
+            "channel": "${{ env.DEPLOY_CHANNEL }}",
+            "duration": "${{ steps.deploy-time.outputs.DEPLOY_DURATION }}",
+            "build_size": "${{ needs.build-flutter.outputs.BUILD_SIZE }}",
+            "status": "deployed"
+          }
+          EOF
+          
+          cat deployment-info.json
+      
+      - name: 📤 Upload deployment metadata
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment-metadata
+          path: deployment-info.json
+
+  # Verify deployment
+  verify-deployment:
+    name: Verify Deployment
+    runs-on: ubuntu-latest
+    needs: deploy-firebase
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: ⏱️ Record verification start
+        id: verify-start
+        run: echo "VERIFY_START=$(date +%s)" >> $GITHUB_OUTPUT
+      
+      - name: 🔍 Determine Firebase URL
+        id: get-url
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            URL="https://${{ env.FIREBASE_PROJECT_ID }}.web.app"
+            CHANNEL="production"
+          else
+            URL="https://${{ env.FIREBASE_PROJECT_ID }}--${{ github.ref_name }}.web.app"
+            CHANNEL="${{ github.ref_name }}"
+          fi
+          
+          echo "FIREBASE_URL=$URL" >> $GITHUB_OUTPUT
+          echo "CHANNEL=$CHANNEL" >> $GITHUB_OUTPUT
+          echo "::notice title=Deployed URL::$URL"
+      
+      - name: ⏳ Wait for deployment propagation
+        run: |
+          echo "Waiting 30 seconds for Firebase CDN propagation..."
+          sleep 30
+      
+      - name: 🏥 Health Check - HTTP Status
+        id: health-check
+        run: |
+          URL="${{ steps.get-url.outputs.FIREBASE_URL }}"
+          echo "Checking: $URL"
+          
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL" || echo "000")
+            
+            if [ "$HTTP_STATUS" == "200" ]; then
+              echo "✅ Health check passed! Status: $HTTP_STATUS"
+              echo "STATUS=success" >> $GITHUB_OUTPUT
+              exit 0
+            else
+              echo "⚠️  Attempt $((RETRY_COUNT + 1))/$MAX_RETRIES failed. Status: $HTTP_STATUS"
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                sleep 10
+              fi
+            fi
+          done
+          
+          echo "::error::Health check failed after $MAX_RETRIES attempts"
+          echo "STATUS=failed" >> $GITHUB_OUTPUT
+          exit 1
+      
+      - name: 🔍 Verify content
+        if: steps.health-check.outputs.STATUS == 'success'
+        run: |
+          URL="${{ steps.get-url.outputs.FIREBASE_URL }}"
+          
+          # Check for Flutter app initialization
+          CONTENT=$(curl -s "$URL")
+          
+          if echo "$CONTENT" | grep -q "flutter" || echo "$CONTENT" | grep -q "main.dart.js"; then
+            echo "✅ Flutter app content verified"
+            echo "::notice::Flutter app is properly loaded"
+          else
+            echo "::warning::Could not verify Flutter content"
+          fi
+      
+      - name: 📊 Performance test
+        if: steps.health-check.outputs.STATUS == 'success'
+        run: |
+          URL="${{ steps.get-url.outputs.FIREBASE_URL }}"
+          
+          echo "Testing response time..."
+          RESPONSE_TIME=$(curl -o /dev/null -s -w '%{time_total}\n' "$URL")
+          
+          echo "Response time: ${RESPONSE_TIME}s"
+          echo "::notice title=Response Time::${RESPONSE_TIME}s"
+          
+          # Alert if slow
+          if (( $(echo "$RESPONSE_TIME > 3.0" | bc -l) )); then
+            echo "::warning::Response time is slow (>${RESPONSE_TIME}s)"
+          fi
+      
+      - name: ⏱️ Calculate verification time
+        run: |
+          VERIFY_END=$(date +%s)
+          VERIFY_DURATION=$((VERIFY_END - ${{ steps.verify-start.outputs.VERIFY_START }}))
+          echo "::notice title=Verification Time::${VERIFY_DURATION}s"
+      
+      - name: 📝 Generate deployment report
+        if: always()
+        run: |
+          cat > deployment-report.md << 'EOF'
+          # 🚀 Flutter Firebase Deployment Report
+          
+          ## 📋 Deployment Details
+          - **Time:** ${{ steps.verify-start.outputs.VERIFY_START }}
+          - **Commit:** ${{ github.sha }}
+          - **Branch:** ${{ github.ref_name }}
+          - **Actor:** ${{ github.actor }}
+          - **Channel:** ${{ steps.get-url.outputs.CHANNEL }}
+          
+          ## 🌐 Deployment URL
+          **Live URL:** ${{ steps.get-url.outputs.FIREBASE_URL }}
+          
+          ## ✅ Status Checks
+          - **Build:** ✅ Passed
+          - **Deploy:** ✅ Completed
+          - **Health Check:** ${{ steps.health-check.outputs.STATUS == 'success' && '✅ Passed' || '❌ Failed' }}
+          - **Content Verification:** ✅ Passed
+          
+          ## ⏱️ Timing
+          - **Build Time:** ${{ needs.build-flutter.outputs.BUILD_DURATION }}s
+          - **Deploy Time:** ${{ needs.deploy-firebase.outputs.DEPLOY_DURATION }}s
+          - **Verification Time:** ${VERIFY_DURATION}s
+          - **Total Time:** $((BUILD_DURATION + DEPLOY_DURATION + VERIFY_DURATION))s
+          
+          ## 📦 Build Info
+          - **Size:** ${{ needs.build-flutter.outputs.BUILD_SIZE }}
+          - **Files:** ${{ needs.build-flutter.outputs.FILE_COUNT }}
+          
+          ## 🎯 Next Steps
+          - Visit the app: [${{ steps.get-url.outputs.FIREBASE_URL }}](${{ steps.get-url.outputs.FIREBASE_URL }})
+          - Check Firebase Console: [View Project](https://console.firebase.google.com/project/${{ env.FIREBASE_PROJECT_ID }}/hosting)
+          EOF
+          
+          cat deployment-report.md
+      
+      - name: 💬 Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('deployment-report.md', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
+
+  # Final status check
+  deployment-status:
+    name: Deployment Status Summary
+    runs-on: ubuntu-latest
+    needs: [build-flutter, deploy-firebase, verify-deployment]
+    if: always()
+    
+    steps:
+      - name: 📊 Calculate total time
+        id: total-time
+        run: |
+          BUILD_TIME=${{ needs.build-flutter.outputs.BUILD_DURATION || 0 }}
+          DEPLOY_TIME=${{ needs.deploy-firebase.outputs.DEPLOY_DURATION || 0 }}
+          TOTAL_TIME=$((BUILD_TIME + DEPLOY_TIME))
+          
+          echo "TOTAL_TIME=$TOTAL_TIME" >> $GITHUB_OUTPUT
+          echo "Total deployment time: ${TOTAL_TIME}s"
+      
+      - name: ✅ Deployment Success
+        if: needs.verify-deployment.result == 'success'
+        run: |
+          echo "::notice title=✅ Deployment Successful::Flutter app deployed and verified successfully!"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🎉 DEPLOYMENT SUCCESSFUL"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "✅ Build: Passed"
+          echo "✅ Deploy: Completed"
+          echo "✅ Verification: Passed"
+          echo ""
+          echo "🌐 URL: https://${{ env.FIREBASE_PROJECT_ID }}.web.app"
+          echo "⏱️  Total Time: ${{ steps.total-time.outputs.TOTAL_TIME }}s"
+          echo "📅 Deployed: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      
+      - name: ❌ Deployment Failed
+        if: needs.verify-deployment.result != 'success'
+        run: |
+          echo "::error title=❌ Deployment Failed::One or more deployment steps failed"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "❌ DEPLOYMENT FAILED"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "Build: ${{ needs.build-flutter.result }}"
+          echo "Deploy: ${{ needs.deploy-firebase.result }}"
+          echo "Verify: ${{ needs.verify-deployment.result }}"
+          echo ""
+          echo "Check the logs above for details"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          exit 1

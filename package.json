@@ -45,6 +45,9 @@
     "deploy:firestore": "npm run install:kawaii && npm --prefix kawaii-shiritori run deploy:firestore",
     "deploy:kawaii": "npm run install:kawaii && npm --prefix kawaii-shiritori run deploy",
     "deploy:kawaii:hosting": "npm run install:kawaii && npm --prefix kawaii-shiritori run deploy:hosting",
+    "deploy:flutter": "cd shiritori-flutter && flutter build web --release && firebase deploy --only hosting",
+    "deploy:flutter:test": "bash scripts/test-flutter-deployment.sh",
+    "deploy:flutter:staging": "cd shiritori-flutter && flutter build web --release && firebase hosting:channel:deploy develop",
     "deps:report": "node scripts/deps-report.mjs",
     "deps:outdated": "npm run deps:outdated:online && npm run deps:outdated:kawaii",
     "deps:outdated:online": "npm --prefix shiritori-online outdated || true",
@@ -96,7 +99,12 @@
     "monitor:grafana:stop": "docker stop grafana && docker rm grafana",
     "monitor:datadog:install": "brew install datadog/agent/datadog-agent",
     "monitor:all:start": "npm run monitor:elk:start && npm run monitor:grafana:start",
-    "monitor:all:stop": "npm run monitor:elk:stop && npm run monitor:grafana:stop"
+    "monitor:all:stop": "npm run monitor:elk:stop && npm run monitor:grafana:stop",
+    "port:kill": "bash scripts/kill-port.sh",
+    "port:kill:5601": "bash scripts/kill-port.sh 5601",
+    "port:kill:3000": "bash scripts/kill-port.sh 3000",
+    "port:kill:5173": "bash scripts/kill-port.sh 5173",
+    "port:kill:all": "bash scripts/kill-all-ports.sh"
   },
   "devDependencies": {
     "prettier": "^3.2.0",
