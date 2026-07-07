@@ -91,7 +91,7 @@ jobs:
           find dist/ -type f -o -path build/ -type f | xargs ls -lh | sort -k5 -hr | head -10 || true
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.app }}-build
           path: ${{ matrix.app }}/dist

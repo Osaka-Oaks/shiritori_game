@@ -55,7 +55,7 @@ jobs:
           npm ci --prefix kawaii-shiritori && npm run build --prefix kawaii-shiritori
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: manual-deploy-dist
           path: |
