@@ -3,6 +3,7 @@
 # Usage: deployment-verify.sh --app <name> --url <url> --env <env> [--ci-status <ok|fail>]
 set -euo pipefail
 
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 APP=""
 URL=""
 ENV="production"
@@ -10,7 +11,7 @@ CI_STATUS="ok"
 SHA="${GITHUB_SHA:-local}"
 BRANCH="${GITHUB_REF_NAME:-local}"
 RUN_ID="${GITHUB_RUN_ID:-0}"
-OUT="${DEPLOYMENT_LOG:-.github/deployments.jsonl}"
+OUT="${DEPLOYMENT_LOG:-$ROOT/.github/deployments.jsonl}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -42,7 +43,7 @@ else
 fi
 
 if [ "$APP" = "shiritori_flutter" ]; then
-  if ! bash "$(dirname "$0")/test-flutter-url.sh" "$URL" "$ENV" >/tmp/flutter-smoke.log 2>&1; then
+  if ! bash "$ROOT/scripts/test-flutter-url.sh" "$URL" "$ENV" >/tmp/flutter-smoke.log 2>&1; then
     SMOKE_STATUS="failed"
     FAILURES+=("flutter_smoke")
     cat /tmp/flutter-smoke.log >&2 || true
