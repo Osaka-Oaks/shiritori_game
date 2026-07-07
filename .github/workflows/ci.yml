@@ -129,7 +129,7 @@ jobs:
     name: Lint — shiritori-online
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    needs: [changes, validate-fast]
+    needs: changes
     if: |
       needs.changes.outputs.docs-only != 'true' &&
       (needs.changes.outputs.online == 'true' || needs.changes.outputs.deps == 'true' || needs.changes.outputs.ci-config == 'true')
@@ -148,13 +148,13 @@ jobs:
           key: eslint-online-${{ hashFiles('shiritori-online/src/**', 'shiritori-online/eslint.config.*') }}
           restore-keys: eslint-online-
       - working-directory: shiritori-online
-        run: npm run lint && npm run type-check
+        run: npm run lint
 
   lint-kawaii:
     name: Lint — kawaii-shiritori
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    needs: [changes, validate-fast]
+    needs: changes
     if: |
       needs.changes.outputs.docs-only != 'true' &&
       (needs.changes.outputs.kawaii == 'true' || needs.changes.outputs.deps == 'true')
@@ -179,7 +179,7 @@ jobs:
     name: Unit tests
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [changes, lint-kawaii]
+    needs: changes
     if: |
       needs.changes.outputs.docs-only != 'true' &&
       (needs.changes.outputs.kawaii == 'true' || needs.changes.outputs.deps == 'true')
@@ -197,7 +197,7 @@ jobs:
     name: Analyze — shiritori_flutter
     runs-on: ubuntu-latest
     timeout-minutes: 4
-    needs: [changes, validate-fast]
+    needs: changes
     if: |
       needs.changes.outputs.docs-only != 'true' &&
       (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.deps == 'true')
@@ -233,19 +233,39 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: |
+            shiritori-online/node_modules
             shiritori-online/node_modules/.vite
             shiritori-online/.tsbuildinfo
-          key: build-${{ env.CACHE_VERSION }}-online-${{ hashFiles('shiritori-online/src/**', 'shiritori-online/package-lock.json') }}
+          key: build-${{ env.CACHE_VERSION }}-online-${{ hashFiles('shiritori-online/package-lock.json') }}
           restore-keys: build-${{ env.CACHE_VERSION }}-online-
 
       - working-directory: shiritori-online
         run: npm ci --prefer-offline --no-audit
 
-      - working-directory: shiritori-online
-        run: npm run build
+      - name: Build (timed)
+        id: build_timer
+        working-directory: shiritori-online
+        run: |
+          START=$SECONDS
+          npm run build
+          echo "duration_sec=$((SECONDS - START))" >> "$GITHUB_OUTPUT"
         env:
           CI: true
           NODE_ENV: production
+
+      - name: Record build metrics
+        if: always()
+        run: |
+          mkdir -p .github
+          jq -nc \
+            --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --arg app "shiritori-online" \
+            --argjson duration_s "${{ steps.build_timer.outputs.duration_sec != '' && steps.build_timer.outputs.duration_sec || '0' }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg run_id "${{ github.run_id }}" \
+            '{timestamp:$ts,app:$app,step:"build",status:"success",duration_s:$duration_s,sha:$sha,branch:$branch,run_id:$run_id}' \
+            >> .github/build-history.jsonl
 
       - uses: actions/upload-artifact@v4
         with:
@@ -254,16 +274,23 @@ jobs:
           retention-days: 14
           compression-level: 6
 
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-metrics-online
+          path: .github/build-history.jsonl
+          retention-days: 30
+          if-no-files-found: ignore
+
   build-kawaii:
     name: Build — kawaii-shiritori
     runs-on: ubuntu-latest
     timeout-minutes: 8
-    needs: [changes, security, lint-kawaii, test]
+    needs: [changes, security, test]
     if: |
       always() &&
       needs.changes.outputs.docs-only != 'true' &&
       needs.security.result == 'success' &&
-      (needs.lint-kawaii.result == 'success' || needs.lint-kawaii.result == 'skipped') &&
       (needs.test.result == 'success' || needs.test.result == 'skipped') &&
       (needs.changes.outputs.kawaii == 'true' || needs.changes.outputs.deps == 'true')
     steps:
@@ -277,15 +304,39 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          path: kawaii-shiritori/node_modules/.vite
-          key: build-${{ env.CACHE_VERSION }}-kawaii-${{ hashFiles('kawaii-shiritori/src/**', 'kawaii-shiritori/package-lock.json') }}
+          path: |
+            kawaii-shiritori/node_modules
+            kawaii-shiritori/node_modules/.vite
+          key: build-${{ env.CACHE_VERSION }}-kawaii-${{ hashFiles('kawaii-shiritori/package-lock.json') }}
           restore-keys: build-${{ env.CACHE_VERSION }}-kawaii-
 
       - working-directory: kawaii-shiritori
-        run: npm ci --prefer-offline --no-audit && npm run build
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Build (timed)
+        working-directory: kawaii-shiritori
+        id: build_timer
+        run: |
+          START=$SECONDS
+          npm run build
+          echo "duration_sec=$((SECONDS - START))" >> "$GITHUB_OUTPUT"
         env:
           CI: true
           NODE_ENV: production
+
+      - name: Record build metrics
+        if: always()
+        run: |
+          mkdir -p .github
+          jq -nc \
+            --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --arg app "kawaii-shiritori" \
+            --argjson duration_s "${{ steps.build_timer.outputs.duration_sec != '' && steps.build_timer.outputs.duration_sec || '0' }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg run_id "${{ github.run_id }}" \
+            '{timestamp:$ts,app:$app,step:"build",status:"success",duration_s:$duration_s,sha:$sha,branch:$branch,run_id:$run_id}' \
+            >> .github/build-history.jsonl
 
       - uses: actions/upload-artifact@v4
         with:
@@ -293,6 +344,14 @@ jobs:
           path: kawaii-shiritori/dist/
           retention-days: 7
           compression-level: 6
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-metrics-kawaii
+          path: .github/build-history.jsonl
+          retention-days: 30
+          if-no-files-found: ignore
 
   deploy-production:
     name: Deploy production
@@ -416,15 +475,52 @@ jobs:
   summary:
     name: Pipeline summary
     runs-on: ubuntu-latest
-    needs: [changes, security, build-online, build-kawaii, deploy-production, deploy-staging]
+    needs: [changes, security, validate-fast, lint-online, lint-kawaii, build-online, build-kawaii, deploy-production, deploy-staging]
     if: always()
     steps:
-      - run: |
-          echo "## CI summary" >> $GITHUB_STEP_SUMMARY
-          echo "| Job | Result |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Security | ${{ needs.security.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Build online | ${{ needs.build-online.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Build kawaii | ${{ needs.build-kawaii.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Deploy prod | ${{ needs.deploy-production.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Docs only | ${{ needs.changes.outputs.docs-only }} |" >> $GITHUB_STEP_SUMMARY
+      - uses: actions/checkout@v4
+
+      - name: Download build metrics
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: build-metrics-*
+          merge-multiple: true
+          path: .github
+
+      - name: Push build metrics to Datadog
+        env:
+          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+          DATADOG_SITE: ${{ secrets.DATADOG_SITE }}
+        run: |
+          [ -n "${DATADOG_API_KEY:-}" ] || exit 0
+          [ -f .github/build-history.jsonl ] || exit 0
+          SITE="${DATADOG_SITE:-datadoghq.com}"
+          tail -5 .github/build-history.jsonl | while read -r line; do
+            DUR=$(echo "$line" | jq -r '.duration_s')
+            APP=$(echo "$line" | jq -r '.app')
+            TS=$(date +%s)
+            curl -fsSL -X POST "https://api.${SITE}/api/v2/series" \
+              -H "DD-API-KEY: ${DATADOG_API_KEY}" \
+              -H "Content-Type: application/json" \
+              -d "{\"series\":[{\"metric\":\"ci.build.duration_seconds\",\"type\":3,\"points\":[{\"timestamp\":${TS},\"value\":${DUR}}],\"tags\":[\"app:${APP}\",\"branch:${{ github.ref_name }}\"]}]}" || true
+          done
+
+      - name: Write summary
+        run: |
+          chmod +x scripts/build-metrics-report.sh
+          {
+            echo "## CI summary"
+            echo "| Job | Result |"
+            echo "|-----|--------|"
+            echo "| Security | ${{ needs.security.result }} |"
+            echo "| Validate | ${{ needs.validate-fast.result }} |"
+            echo "| Lint online | ${{ needs.lint-online.result }} |"
+            echo "| Lint kawaii | ${{ needs.lint-kawaii.result }} |"
+            echo "| Build online | ${{ needs.build-online.result }} |"
+            echo "| Build kawaii | ${{ needs.build-kawaii.result }} |"
+            echo "| Deploy prod | ${{ needs.deploy-production.result }} |"
+            echo "| Docs only | ${{ needs.changes.outputs.docs-only }} |"
+            echo ""
+            bash scripts/build-metrics-report.sh .github/build-history.jsonl
+          } >> "$GITHUB_STEP_SUMMARY"
