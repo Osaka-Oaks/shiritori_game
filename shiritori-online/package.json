@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "npx tsc --noEmit --incremental && npx vite build",
+    "build": "node ../scripts/generate-firebase-public-config.mjs shiritori-online && npx tsc --noEmit --incremental && npx vite build",
     "type-check": "npx tsc --noEmit --incremental",
     "lint": "eslint . --quiet --cache --cache-location .eslintcache",
     "lint:fix": "eslint . --fix",
