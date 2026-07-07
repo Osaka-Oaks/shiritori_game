@@ -1,12 +1,49 @@
 {
   "name": "shiritori-game-workspace",
   "private": true,
-  "description": "Root command runner for the Shiritori Online app.",
+  "version": "1.0.0",
+  "description": "Shiritori game monorepo — two-player online + feature-rich kawaii app.",
+  "packageManager": "npm@10.9.2",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "install:app": "npm --prefix shiritori-online install",
+    "install:kawaii": "npm --prefix kawaii-shiritori install",
+    "install:all": "npm run install:app && npm run install:kawaii",
     "dev": "npm --prefix shiritori-online run dev",
-    "build": "npm --prefix shiritori-online run build",
+    "dev:kawaii": "npm --prefix kawaii-shiritori run dev",
+    "build": "npm run install:app && npm --prefix shiritori-online run build",
+    "build:kawaii": "npm run install:kawaii && npm --prefix kawaii-shiritori run build",
     "preview": "npm --prefix shiritori-online run preview",
-    "deploy": "npm --prefix shiritori-online run deploy"
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "format:json": "prettier --write \"**/*.{json,yml,yaml}\"",
+    "lint": "npm run lint:online && npm run lint:kawaii",
+    "lint:online": "npm --prefix shiritori-online run lint",
+    "lint:kawaii": "npm --prefix kawaii-shiritori run lint",
+    "test": "npm --prefix kawaii-shiritori run test",
+    "validate": "npm run format:check && npm run lint && npm run test && npm run build && npm run build:kawaii",
+    "deploy": "npm run install:app && npm --prefix shiritori-online run deploy",
+    "deploy:hosting": "npm run install:app && npm --prefix shiritori-online run deploy:hosting",
+    "deploy:database": "npm run install:app && npm --prefix shiritori-online run deploy:database",
+    "deploy:rules": "npm run deploy:database",
+    "deploy:firestore": "npm run install:kawaii && npm --prefix kawaii-shiritori run deploy:firestore",
+    "deploy:kawaii": "npm run install:kawaii && npm --prefix kawaii-shiritori run deploy",
+    "deploy:kawaii:hosting": "npm run install:kawaii && npm --prefix kawaii-shiritori run deploy:hosting",
+    "deps:report": "node scripts/deps-report.mjs",
+    "deps:outdated": "npm run deps:outdated:online && npm run deps:outdated:kawaii",
+    "deps:outdated:online": "npm --prefix shiritori-online outdated || true",
+    "deps:outdated:kawaii": "npm --prefix kawaii-shiritori outdated || true",
+    "deps:sync": "syncpack list-mismatches --config syncpack.config.cjs",
+    "deps:fix": "syncpack fix-mismatches --config syncpack.config.cjs",
+    "deps:lint": "syncpack lint-semver-ranges --config syncpack.config.cjs",
+    "debug:module": "bash kawaii-shiritori/tools/scripts/debug-module.sh",
+    "check:modules": "bash kawaii-shiritori/tools/scripts/check-all-modules.sh"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.0",
+    "syncpack": "^13.0.4"
   }
 }

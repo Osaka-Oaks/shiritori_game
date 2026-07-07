@@ -1,0 +1,191 @@
+name: CI
+
+# Format, lint, test, build on every push/PR.
+# Deploy shiritori-online to Firebase Hosting + RTDB rules on push to main.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            shiritori-online/package-lock.json
+            kawaii-shiritori/package-lock.json
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Check root JSON/YAML formatting
+        run: npm run format:check
+
+      - name: Install shiritori-online dependencies
+        working-directory: shiritori-online
+        run: npm ci
+
+      - name: Check shiritori-online formatting
+        working-directory: shiritori-online
+        run: npm run format:check
+
+      - name: Install kawaii-shiritori dependencies
+        working-directory: kawaii-shiritori
+        run: npm ci
+
+      - name: Check kawaii-shiritori formatting
+        working-directory: kawaii-shiritori
+        run: npm run format:check
+
+  lint:
+    name: ESLint — ${{ matrix.app }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [shiritori-online, kawaii-shiritori]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.app }}
+        run: npm ci
+
+      - name: ESLint
+        working-directory: ${{ matrix.app }}
+        run: npm run lint
+
+  test:
+    name: Unit tests (kawaii-shiritori)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: kawaii-shiritori/package-lock.json
+
+      - name: Install dependencies
+        working-directory: kawaii-shiritori
+        run: npm ci
+
+      - name: Run tests
+        working-directory: kawaii-shiritori
+        run: npm run test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-kawaii
+          path: kawaii-shiritori/coverage/
+          retention-days: 14
+          if-no-files-found: ignore
+
+  build:
+    name: Build — ${{ matrix.app }}
+    runs-on: ubuntu-latest
+    needs: [format, lint, test]
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [shiritori-online, kawaii-shiritori]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.app }}
+        run: npm ci
+
+      - name: Build
+        working-directory: ${{ matrix.app }}
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.app }}
+          path: ${{ matrix.app }}/dist/
+          retention-days: 14
+
+  deploy:
+    name: Deploy shiritori-online
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://shiritori-game-ccaae.web.app
+    defaults:
+      run:
+        working-directory: shiritori-online
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-shiritori-online
+          path: shiritori-online/dist
+
+      - name: Deploy to Firebase
+        run: >
+          npx firebase-tools@latest deploy
+          --only hosting,database
+          --project shiritori-game-ccaae
+          --non-interactive
+          --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+  smoke-test:
+    name: Smoke test live site
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Verify homepage
+        run: |
+          curl -fsSL -o /dev/null -w "HTTP %{http_code}\n" https://shiritori-game-ccaae.web.app/
+          curl -fsSL https://shiritori-game-ccaae.web.app/ | grep -q "しりとり"
