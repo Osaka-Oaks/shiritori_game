@@ -25,8 +25,8 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
   const [error, setError] = React.useState<string>("");
 
   // Check browser support
-  const hasBluetoothSupport = typeof navigator !== 'undefined' && 'bluetooth' in navigator;
-  const hasWebRTCSupport = typeof RTCPeerConnection !== 'undefined';
+  const hasBluetoothSupport = typeof navigator !== "undefined" && "bluetooth" in navigator;
+  const hasWebRTCSupport = typeof RTCPeerConnection !== "undefined";
 
   const handleStartScan = async (method: ConnectionMethod) => {
     setStatus("scanning");
@@ -53,17 +53,19 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
     try {
       const device = await (navigator as any).bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: ['battery_service']
+        optionalServices: ["battery_service"],
       });
-      
-      setNearbyDevices([{
-        id: device.id,
-        name: device.name || "Unknown Device",
-        distance: "near"
-      }]);
+
+      setNearbyDevices([
+        {
+          id: device.id,
+          name: device.name || "Unknown Device",
+          distance: "near",
+        },
+      ]);
       setStatus("idle");
     } catch (err: any) {
-      if (err.name === 'NotFoundError') {
+      if (err.name === "NotFoundError") {
         setError("No devices found. Make sure Bluetooth is enabled.");
       } else {
         setError(err.message);
@@ -79,7 +81,7 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
       setNearbyDevices([
         { id: "peer1", name: "Sarah's iPhone", distance: "near" },
         { id: "peer2", name: "Mike's Pixel", distance: "medium" },
-        { id: "peer3", name: "Emma's Galaxy", distance: "far" }
+        { id: "peer3", name: "Emma's Galaxy", distance: "far" },
       ]);
       setStatus("idle");
     }, 2000);
@@ -144,9 +146,7 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
             </button>
           </div>
 
-          <button
-            className="w-full bg-secondary text-on-secondary font-headline font-bold py-4 px-6 rounded-xl shadow-md hover:bg-opacity-90 transition-all"
-          >
+          <button className="w-full bg-secondary text-on-secondary font-headline font-bold py-4 px-6 rounded-xl shadow-md hover:bg-opacity-90 transition-all">
             Start Local Game
           </button>
         </motion.div>
@@ -156,8 +156,10 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
       {status === "idle" && !connectedDevice && (
         <>
           <section className="space-y-3">
-            <h3 className="font-headline font-bold text-base text-on-surface">Choose Connection Method</h3>
-            
+            <h3 className="font-headline font-bold text-base text-on-surface">
+              Choose Connection Method
+            </h3>
+
             <div className="grid grid-cols-1 gap-3">
               {/* Nearby Share (WiFi Direct / WebRTC) */}
               <button
@@ -183,7 +185,9 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
                       Find players nearby using WiFi Direct
                     </p>
                     {hasWebRTCSupport && (
-                      <span className="text-xs text-secondary font-bold mt-1 inline-block">✓ Supported</span>
+                      <span className="text-xs text-secondary font-bold mt-1 inline-block">
+                        ✓ Supported
+                      </span>
                     )}
                   </div>
                 </div>
@@ -200,8 +204,12 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
                 disabled={!hasBluetoothSupport}
               >
                 <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-full ${hasBluetoothSupport ? 'bg-blue-500/10' : 'bg-outline/10'} flex items-center justify-center`}>
-                    <Bluetooth className={`w-6 h-6 ${hasBluetoothSupport ? 'text-blue-500' : 'text-outline'}`} />
+                  <div
+                    className={`w-12 h-12 rounded-full ${hasBluetoothSupport ? "bg-blue-500/10" : "bg-outline/10"} flex items-center justify-center`}
+                  >
+                    <Bluetooth
+                      className={`w-6 h-6 ${hasBluetoothSupport ? "text-blue-500" : "text-outline"}`}
+                    />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-headline font-bold text-base text-on-surface">Bluetooth</h4>
@@ -209,9 +217,13 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
                       Connect via Bluetooth Low Energy
                     </p>
                     {hasBluetoothSupport ? (
-                      <span className="text-xs text-secondary font-bold mt-1 inline-block">✓ Supported</span>
+                      <span className="text-xs text-secondary font-bold mt-1 inline-block">
+                        ✓ Supported
+                      </span>
                     ) : (
-                      <span className="text-xs text-error font-bold mt-1 inline-block">✗ Not Available</span>
+                      <span className="text-xs text-error font-bold mt-1 inline-block">
+                        ✗ Not Available
+                      </span>
                     )}
                   </div>
                 </div>
@@ -231,11 +243,15 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
                     <Wifi className="w-6 h-6 text-tertiary-container" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-headline font-bold text-base text-on-surface">WiFi Direct</h4>
+                    <h4 className="font-headline font-bold text-base text-on-surface">
+                      WiFi Direct
+                    </h4>
                     <p className="text-xs text-on-surface-variant mt-1">
                       Scan QR code to join game
                     </p>
-                    <span className="text-xs text-secondary font-bold mt-1 inline-block">✓ Always Available</span>
+                    <span className="text-xs text-secondary font-bold mt-1 inline-block">
+                      ✓ Always Available
+                    </span>
                   </div>
                 </div>
               </button>
@@ -260,7 +276,9 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
         >
           <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto" />
           <div>
-            <h3 className="font-headline font-bold text-lg text-on-surface">Scanning for devices...</h3>
+            <h3 className="font-headline font-bold text-lg text-on-surface">
+              Scanning for devices...
+            </h3>
             <p className="text-sm text-on-surface-variant mt-2">
               Make sure nearby players have the game open
             </p>
@@ -289,7 +307,7 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
           </div>
 
           <div className="space-y-2">
-            {nearbyDevices.map((device) => (
+            {nearbyDevices.map(device => (
               <motion.div
                 key={device.id}
                 initial={{ opacity: 0, x: -20 }}
@@ -302,7 +320,9 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
                       <Smartphone className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-headline font-bold text-sm text-on-surface">{device.name}</h4>
+                      <h4 className="font-headline font-bold text-sm text-on-surface">
+                        {device.name}
+                      </h4>
                       <p className="text-xs text-on-surface-variant">
                         {device.distance === "near" && "📶 Very close"}
                         {device.distance === "medium" && "📶 Nearby"}
@@ -333,9 +353,7 @@ export default function LocalMultiplayerView({ profile, onBack }: LocalMultiplay
           <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto" />
           <div>
             <h3 className="font-headline font-bold text-lg text-on-surface">Connecting...</h3>
-            <p className="text-sm text-on-surface-variant mt-2">
-              Establishing secure connection
-            </p>
+            <p className="text-sm text-on-surface-variant mt-2">Establishing secure connection</p>
           </div>
         </motion.div>
       )}

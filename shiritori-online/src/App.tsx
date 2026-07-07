@@ -5,9 +5,11 @@ import GameRoom from "./components/GameRoom";
 import Rules from "./components/Rules";
 import Welcome from "./components/Welcome";
 import LoveNote from "./components/LoveNote";
+import FloatingDictionary from "./components/FloatingDictionary";
+import SinglePlayer from "./components/SinglePlayer";
 import { useSettings } from "./settings";
 
-type View = { name: "home" } | { name: "room"; code: string };
+type View = { name: "home" } | { name: "room"; code: string } | { name: "solo" };
 
 const LOVE_KEY = "shiritori_lovenote_seen";
 
@@ -19,15 +21,13 @@ export default function App() {
   const [showRules, setShowRules] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const [showLove, setShowLove] = useState(false);
-  const [playerName, setPlayerName] = useState(
-    () => localStorage.getItem("shiritori_name") || ""
-  );
+  const [playerName, setPlayerName] = useState(() => localStorage.getItem("shiritori_name") || "");
 
   // Anonymous sign-in on first load.
   useEffect(() => {
     ensureSignedIn()
       .then(setUid)
-      .catch((e) => setAuthError(t("connectError") + "\n" + (e?.message ?? "")));
+      .catch(e => setAuthError(t("connectError") + "\n" + (e?.message ?? "")));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -68,9 +68,7 @@ export default function App() {
     />
   ) : null;
 
-  const loveNote = showLove ? (
-    <LoveNote fromName={playerName} onClose={closeLove} />
-  ) : null;
+  const loveNote = showLove ? <LoveNote fromName={playerName} onClose={closeLove} /> : null;
 
   if (authError) {
     return (
@@ -103,17 +101,20 @@ export default function App() {
 
   return (
     <>
-      {view.name === "home" ? (
+      {view.name === "home" && (
         <Home
           uid={uid}
           name={playerName}
           setName={setName}
           deepLinkCode={deepLinkCode}
           onEnterRoom={enterRoom}
+          onSinglePlayer={() => setView({ name: "solo" })}
           onShowRules={() => setShowRules(true)}
           onShowLove={() => setShowLove(true)}
         />
-      ) : (
+      )}
+      {view.name === "solo" && <SinglePlayer name={playerName} onLeave={leaveRoom} />}
+      {view.name === "room" && (
         <GameRoom
           uid={uid}
           code={view.code}
@@ -122,6 +123,7 @@ export default function App() {
         />
       )}
       {showRules && <Rules onClose={() => setShowRules(false)} />}
+      <FloatingDictionary />
       {welcome}
       {loveNote}
     </>

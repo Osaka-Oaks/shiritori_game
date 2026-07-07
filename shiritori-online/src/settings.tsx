@@ -14,9 +14,7 @@ export type Theme = "light" | "dark" | "system";
 type Resolved = "light" | "dark";
 
 function getSystemTheme(): Resolved {
-  return window.matchMedia?.("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
 /* ========================== Language ========================== */
@@ -97,7 +95,10 @@ const STRINGS = {
   hint: { en: "Hint", ja: "ヒント" },
   noHint: { en: "No hint available — you're on your own! 💪", ja: "ヒントなし — がんばって！💪" },
   checking: { en: "Checking word…", ja: "ことばをかくにんちゅう…" },
-  notRealWord: { en: "Not a real Japanese word — try another!", ja: "日本語のことばではありません — 別のことばを試してね！" },
+  notRealWord: {
+    en: "Not a real Japanese word — try another!",
+    ja: "日本語のことばではありません — 別のことばを試してね！",
+  },
   waitingOpp: { en: "Waiting for {name} to play…", ja: "{name}さんの番をまっています…" },
   opponentFallback: { en: "your opponent", ja: "あいて" },
 
@@ -127,9 +128,7 @@ function render(s: Str, lang: Lang): string {
 
 function interpolate(text: string, vars?: Record<string, string | number>): string {
   if (!vars) return text;
-  return text.replace(/\{(\w+)\}/g, (_, k) =>
-    vars[k] !== undefined ? String(vars[k]) : `{${k}}`
-  );
+  return text.replace(/\{(\w+)\}/g, (_, k) => (vars[k] !== undefined ? String(vars[k]) : `{${k}}`));
 }
 
 /* ========================== Context ========================== */
@@ -183,11 +182,11 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   }, [lang]);
 
   const cycleTheme = useCallback(
-    () => setTheme((t) => THEME_ORDER[(THEME_ORDER.indexOf(t) + 1) % THEME_ORDER.length]),
+    () => setTheme(t => THEME_ORDER[(THEME_ORDER.indexOf(t) + 1) % THEME_ORDER.length]),
     []
   );
   const cycleLang = useCallback(
-    () => setLang((l) => LANG_ORDER[(LANG_ORDER.indexOf(l) + 1) % LANG_ORDER.length]),
+    () => setLang(l => LANG_ORDER[(LANG_ORDER.indexOf(l) + 1) % LANG_ORDER.length]),
     []
   );
 
@@ -240,7 +239,14 @@ export function SettingsControls({ compact = false }: { compact?: boolean }) {
         aria-label="Change language"
         style={compact ? { width: "auto", padding: "0 10px", fontSize: 13 } : undefined}
       >
-        {compact ? <span>{LANG_LABEL[lang]}</span> : (<><span className="ic">🌐</span><span>{LANG_LABEL[lang]}</span></>)}
+        {compact ? (
+          <span>{LANG_LABEL[lang]}</span>
+        ) : (
+          <>
+            <span className="ic">🌐</span>
+            <span>{LANG_LABEL[lang]}</span>
+          </>
+        )}
       </button>
     </div>
   );

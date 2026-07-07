@@ -21,28 +21,28 @@ Memorize **5 words for each common kana**. Start with these:
 
 ### Essential Sounds (Learn First)
 
-| Kana | Easy Words | Translation |
-|------|------------|-------------|
-| **あ** | あさ, あめ, あき | morning, rain, autumn |
-| **い** | いぬ, いえ, いし | dog, house, stone |
-| **う** | うみ, うた, うま | sea, song, horse |
-| **え** | えき, えほん, えび | station, picture book, shrimp |
-| **お** | おちゃ, おとこ, おんな | tea, man, woman |
-| **か** | かさ, かめ, かお | umbrella, turtle, face |
-| **き** | きつね, きっぷ, きのこ | fox, ticket, mushroom |
-| **く** | くるま, くま, くつ | car, bear, shoes |
-| **け** | けしごむ, けいと | eraser, yarn |
-| **こ** | こども, こえ, こおり | child, voice, ice |
+| Kana   | Easy Words             | Translation                   |
+| ------ | ---------------------- | ----------------------------- |
+| **あ** | あさ, あめ, あき       | morning, rain, autumn         |
+| **い** | いぬ, いえ, いし       | dog, house, stone             |
+| **う** | うみ, うた, うま       | sea, song, horse              |
+| **え** | えき, えほん, えび     | station, picture book, shrimp |
+| **お** | おちゃ, おとこ, おんな | tea, man, woman               |
+| **か** | かさ, かめ, かお       | umbrella, turtle, face        |
+| **き** | きつね, きっぷ, きのこ | fox, ticket, mushroom         |
+| **く** | くるま, くま, くつ     | car, bear, shoes              |
+| **け** | けしごむ, けいと       | eraser, yarn                  |
+| **こ** | こども, こえ, こおり   | child, voice, ice             |
 
 ### High-Value Sounds (Easy Follow-ups)
 
-| Kana | Safe Words | Why Important |
-|------|------------|---------------|
+| Kana   | Safe Words           | Why Important            |
+| ------ | -------------------- | ------------------------ |
 | **さ** | さかな, さくら, さる | Many words start with さ |
-| **た** | たまご, たけ, たぬき | Common starting sound |
-| **な** | なつ, なまえ, なす | Easy to chain |
-| **ま** | まど, まち, まつり | Multiple options |
-| **は** | はな, はし, はこ | Popular sound |
+| **た** | たまご, たけ, たぬき | Common starting sound    |
+| **な** | なつ, なまえ, なす   | Easy to chain            |
+| **ま** | まど, まち, まつり   | Multiple options         |
+| **は** | はな, はし, はこ     | Popular sound            |
 
 ---
 
@@ -51,6 +51,7 @@ Memorize **5 words for each common kana**. Start with these:
 **Try to end your words with these sounds:**
 
 ### Safe Ending Sounds (Many Follow-ups)
+
 - **か** → かさ, かばん, かめ, かお, かぜ, かみ
 - **さ** → さかな, さくら, さる, さとう
 - **た** → たまご, たいよう, たけ, たぬき
@@ -60,6 +61,7 @@ Memorize **5 words for each common kana**. Start with these:
 - **ら** → らっぱ, らくだ
 
 ### Example Strategy Chain
+
 ```
 ねこ (neko) → ends in こ
   ↓
@@ -75,6 +77,7 @@ You know many こ words:
 ## ⚠️ Strategy #3: Avoid Dangerous Endings
 
 ### Fatal Ending (NEVER!)
+
 - **ん** - Instant automatic loss!
   - ❌ らいおん (raion - lion)
   - ❌ みかん (mikan - orange)
@@ -82,6 +85,7 @@ You know many こ words:
   - ❌ ごはん (gohan - rice)
 
 ### Difficult Endings (Limited Options)
+
 - **ゆ** - Very few words start with ゆ
 - **ぢ** - Rare starting sound
 - **づ** - Rare starting sound
@@ -96,6 +100,7 @@ You know many こ words:
 ### Essential 50 Words to Master
 
 #### 🐾 Animals (10)
+
 1. いぬ (inu) - dog
 2. ねこ (neko) - cat
 3. とり (tori) - bird
@@ -108,6 +113,7 @@ You know many こ words:
 10. たぬき (tanuki) - raccoon dog
 
 #### 🍱 Food (10)
+
 1. すし (sushi) - sushi
 2. りんご (ringo) - apple
 3. たまご (tamago) - egg
@@ -120,6 +126,7 @@ You know many こ words:
 10. ぶどう (budou) - grape
 
 #### 🏞️ Places (10)
+
 1. えき (eki) - station
 2. がっこう (gakkou) - school
 3. こうえん (kouen) - park
@@ -132,6 +139,7 @@ You know many こ words:
 10. てら (tera) - temple
 
 #### 📦 Things (10)
+
 1. ほん (hon) - book ⚠️ ends in ん
 2. かさ (kasa) - umbrella
 3. いす (isu) - chair
@@ -144,6 +152,7 @@ You know many こ words:
 10. はこ (hako) - box
 
 #### 👥 People (10)
+
 1. せんせい (sensei) - teacher
 2. おとこ (otoko) - man
 3. おんな (onna) - woman
@@ -184,11 +193,13 @@ Think: Animals → たぬき (raccoon dog)
 Native speakers think in hiragana:
 
 **Think like this:**
+
 ```
 ねこ → こども → もも ✅
 ```
 
 **NOT like this:**
+
 ```
 neko → kodomo → momo ❌
 ```
@@ -255,6 +266,7 @@ Keep this quick reference on your phone:
 ### Daily 15-Minute Routine
 
 **Day 1-7: Flashcard Drill**
+
 - Pick a kana (e.g., か)
 - Write 10 words starting with it
 - Say them out loud with Japanese pronunciation
@@ -262,6 +274,7 @@ Keep this quick reference on your phone:
 
 **Day 8-14: Chain Building**
 Chain words together and watch for traps:
+
 ```
 いぬ (inu - dog)
   ↓
@@ -276,6 +289,7 @@ TRAP! Ends in ん!
 ```
 
 **Day 15-30: Speed Practice**
+
 - Set 30-second timer
 - Generate words for random kana
 - Use practice mode in the app
@@ -294,21 +308,25 @@ At this level, you'll be **surprisingly competitive** with casual native speaker
 ## 🎓 8-Week Training Program
 
 ### Week 1-2: Foundation (50 words)
+
 - Focus: あ-お (vowel sounds)
 - Practice: Flashcards 15 min/day
 - Goal: Instant recall of 5 words per sound
 
 ### Week 3-4: Common Sounds (50 words)
+
 - Focus: か-こ, さ-そ
 - Practice: Chain building
 - Goal: Link words smoothly
 
 ### Week 5-6: Extended Vocab (50 words)
+
 - Focus: た-と, な-の, は-ほ
 - Practice: Speed drills
 - Goal: <3 second response time
 
 ### Week 7-8: Competition Ready (80 words)
+
 - Focus: ま-も, や-よ, ら-わ
 - Practice: Mock games vs bots
 - Goal: 5+ turn survival
@@ -318,12 +336,14 @@ At this level, you'll be **surprisingly competitive** with casual native speaker
 ## 💡 Pro Tips
 
 ### Before the Game
+
 1. ✅ Review your weak sounds
 2. ✅ Warm up with 5-minute practice
 3. ✅ Remind yourself: goal is survival, not winning
 4. ✅ Relax and have fun!
 
 ### During the Game
+
 1. ✅ Listen carefully to ending sound
 2. ✅ Think category first (animal? food?)
 3. ✅ Check if your word ends in ん before saying it
@@ -331,6 +351,7 @@ At this level, you'll be **surprisingly competitive** with casual native speaker
 5. ✅ Learn from opponent's words
 
 ### After the Game
+
 1. ✅ Write down new words you heard
 2. ✅ Add them to your practice list
 3. ✅ Note which sounds gave you trouble
@@ -341,12 +362,15 @@ At this level, you'll be **surprisingly competitive** with casual native speaker
 ## 🌟 Advanced Tactics
 
 ### Defensive Play
+
 If you're struggling, **end with safe sounds like か, さ, た** to give yourself easier options next turn.
 
 ### Offensive Play
+
 If you want to challenge opponent, **end with rare sounds like ゆ, ぴ, ぎ** (but be ready for them to know words you don't!).
 
 ### Reading Opponent
+
 - If they hesitate on certain sounds, force those
 - If they're strong on animals, try objects/places
 - Match their pace to reduce pressure
@@ -362,6 +386,7 @@ The app's Practice Mode is designed for this strategy:
 3. **Speed Challenge**: Improve reaction time
 
 **Recommended routine:**
+
 - Morning: 10 min Flashcard Mode (new words)
 - Evening: 10 min Chain Practice (application)
 - Weekly: Speed Challenge (testing)

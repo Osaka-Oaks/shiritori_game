@@ -1,6 +1,7 @@
 # 🌸 Kawaii Shiritori - Advanced Features Guide
 
 ## 📚 Table of Contents
+
 - [Overview](#overview)
 - [New Features](#new-features)
 - [Dictionary System](#dictionary-system)
@@ -21,12 +22,14 @@ This enhanced version of Kawaii Shiritori includes advanced features for both be
 ## ✨ New Features
 
 ### 1. **Japanese-English Dictionary (500+ Words)**
+
 - Curated JLPT N5-N3 vocabulary
 - Hiragana, Romaji, Kanji, and English translations
 - Fast lookup by sound, reading, or translation
 - Beginner-friendly word selection
 
 ### 2. **Practice Mode**
+
 - **Flashcard Drill**: Learn words for each hiragana character
 - **Chain Practice**: Practice continuous word chains
 - **Speed Challenge**: 30-second rapid-fire mode
@@ -35,6 +38,7 @@ This enhanced version of Kawaii Shiritori includes advanced features for both be
 - Strategy tips and hints
 
 ### 3. **Multiplayer Mode** (Firebase Ready)
+
 - Create and join game rooms
 - 2-4 player support
 - Room codes for easy sharing
@@ -42,6 +46,7 @@ This enhanced version of Kawaii Shiritori includes advanced features for both be
 - Real-time turn-based gameplay
 
 ### 4. **Unity WebGL Integration**
+
 - 3D game board visualization
 - Animated character mascots
 - Particle effects for valid words
@@ -49,6 +54,7 @@ This enhanced version of Kawaii Shiritori includes advanced features for both be
 - Fullscreen support
 
 ### 5. **Dictionary Validation**
+
 - Real-time word validation against dictionary
 - Checks for words ending in ん (fatal moves)
 - Duplicate word detection
@@ -59,6 +65,7 @@ This enhanced version of Kawaii Shiritori includes advanced features for both be
 ## 📖 Dictionary System
 
 ### Features
+
 - **500+ curated words** for Shiritori gameplay
 - **Indexed by starting sound** for fast lookups
 - **Multiple lookup methods**: hiragana, romaji, kanji, or translation
@@ -66,22 +73,24 @@ This enhanced version of Kawaii Shiritori includes advanced features for both be
 - **Safe word suggestions** (excludes words ending in ん)
 
 ### Usage Example
+
 ```typescript
-import { dictionary } from './lib/dictionaryHelper';
+import { dictionary } from "./lib/dictionaryHelper";
 
 // Find a word
-const word = dictionary.findWord('ねこ');
+const word = dictionary.findWord("ねこ");
 // Returns: { word: 'ねこ', romaji: 'neko', kanji: '猫', translation: 'cat', ... }
 
 // Get words starting with a sound
-const words = dictionary.getWordsByStartSound('ね');
+const words = dictionary.getWordsByStartSound("ね");
 // Returns: [{ word: 'ねこ', ... }, { word: 'ねずみ', ... }, ...]
 
 // Get random safe word
-const randomWord = dictionary.getRandomWordStartingWith('り', ['りんご']);
+const randomWord = dictionary.getRandomWordStartingWith("り", ["りんご"]);
 ```
 
 ### Dictionary Structure
+
 ```json
 {
   "word": "ねこ",
@@ -100,31 +109,37 @@ const randomWord = dictionary.getRandomWordStartingWith('り', ['りんご']);
 ### Three Drill Types
 
 #### 1. **Flashcard Mode**
+
 - Learn words for each hiragana character
 - Visual kana display with romaji
 - Example words with translations
 - Self-paced learning
 
 #### 2. **Chain Practice**
+
 - Practice continuous word chains
 - Follow Shiritori rules
 - Build muscle memory for quick recall
 - Track correct/incorrect answers
 
 #### 3. **Speed Challenge**
+
 - 30-second time limit
 - Rapid-fire word submissions
 - Score tracking
 - Best streak recording
 
 ### Statistics Tracked
+
 - ✅ Correct answers
 - ❌ Incorrect answers
 - 🔥 Current streak
 - 🏆 Best streak
 
 ### Beginner Strategy Tips
+
 Built-in tips include:
+
 - Learn 5 words per hiragana (~230 words total)
 - Avoid words ending in ん (instant loss!)
 - Force easy sounds: か, さ, た, な, は, ま
@@ -135,6 +150,7 @@ Built-in tips include:
 ## 👥 Multiplayer Mode
 
 ### Features
+
 - **Room Creation**: Host games with custom settings
 - **Room Codes**: 6-character codes for easy sharing
 - **Player Limits**: 2-4 players per room
@@ -182,6 +198,7 @@ VITE_FIREBASE_APP_ID=1:123456789:web:abcdef
 ## 🎮 Unity WebGL Integration
 
 ### Features
+
 - **3D Visualization**: Immersive game board
 - **Character Animations**: Kawaii mascot reactions
 - **Particle Effects**: Celebrations for valid words
@@ -190,6 +207,7 @@ VITE_FIREBASE_APP_ID=1:123456789:web:abcdef
 ### Setup Unity WebGL
 
 1. **Build Your Unity Project**
+
    ```
    File → Build Settings → WebGL → Build
    ```
@@ -208,13 +226,14 @@ VITE_FIREBASE_APP_ID=1:123456789:web:abcdef
 
 ```typescript
 // Send data to Unity
-unityInstance.SendMessage('GameManager', 'OnWordSubmitted', 'ねこ');
+unityInstance.SendMessage("GameManager", "OnWordSubmitted", "ねこ");
 
 // Receive events from Unity (set up in Unity C#)
-window.ReactApp.handleUnityEvent({ type: 'wordPlayed', word: 'ねこ' });
+window.ReactApp.handleUnityEvent({ type: "wordPlayed", word: "ねこ" });
 ```
 
 ### Architecture
+
 - **React**: Game logic, UI, Firebase state
 - **Unity**: Visual effects, animations, 3D board
 - **Firebase**: Multiplayer synchronization
@@ -226,6 +245,7 @@ This separation keeps the codebase maintainable and allows independent updates.
 ## ⚙️ Setup Instructions
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 - (Optional) Unity 2021.3+ for WebGL builds
@@ -271,6 +291,7 @@ VITE_FIREBASE_APP_ID=your_app_id
 ### Survival Vocabulary (Essential 50 Words)
 
 **Animals**
+
 - いぬ (inu) - dog
 - ねこ (neko) - cat
 - とり (tori) - bird
@@ -278,6 +299,7 @@ VITE_FIREBASE_APP_ID=your_app_id
 - さる (saru) - monkey
 
 **Food**
+
 - すし (sushi) - sushi
 - りんご (ringo) - apple
 - みかん (mikan) - orange ⚠️ (ends in ん!)
@@ -285,6 +307,7 @@ VITE_FIREBASE_APP_ID=your_app_id
 - たまご (tamago) - egg
 
 **Places**
+
 - えき (eki) - station
 - がっこう (gakkou) - school
 - こうえん (kouen) - park
@@ -292,7 +315,9 @@ VITE_FIREBASE_APP_ID=your_app_id
 - やま (yama) - mountain
 
 ### Safe Ending Sounds
+
 Force these sounds to give yourself easy follow-ups:
+
 - **か (ka)**: かさ, かばん, かめ
 - **さ (sa)**: さかな, さくら, さる
 - **た (ta)**: たまご, たけ, たぬき
@@ -300,12 +325,14 @@ Force these sounds to give yourself easy follow-ups:
 - **ま (ma)**: まど, まち, まつり
 
 ### Dangerous Sounds to Avoid Ending With
+
 - **ゆ (yu)**: Limited follow-up options
 - **ぢ (ji/di)**: Very rare starting sound
 - **ぴ (pi)**: Few common words
 - **を (wo)**: Almost no words start with this
 
 ### Practice Regimen
+
 1. **Week 1-2**: Master 10 words for each of あ, い, う, え, お
 2. **Week 3-4**: Learn か-row and さ-row words
 3. **Week 5-6**: Practice word chains for 15 min/day
@@ -316,6 +343,7 @@ Force these sounds to give yourself easy follow-ups:
 ## 📱 Mobile PWA Support
 
 The app works on mobile browsers with:
+
 - Responsive design
 - Touch-optimized controls
 - Offline dictionary caching
@@ -326,12 +354,14 @@ The app works on mobile browsers with:
 ## 🚀 Deployment
 
 ### Vercel / Netlify
+
 ```bash
 npm run build
 # Deploy dist/ folder
 ```
 
 ### Firebase Hosting
+
 ```bash
 npm run build
 firebase deploy
@@ -342,6 +372,7 @@ firebase deploy
 ## 🎨 Customization
 
 The app uses Tailwind CSS with custom design tokens:
+
 - Primary color: `#f27d26` (orange)
 - Secondary color: Emerald
 - Dark mode ready
@@ -372,6 +403,7 @@ The app uses Tailwind CSS with custom design tokens:
 ## 📧 Support
 
 For questions or issues:
+
 - Check existing game rooms in multiplayer lobby
 - Review practice mode tips
 - Consult dictionary for valid words

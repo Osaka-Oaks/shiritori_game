@@ -7,4 +7,16 @@ export default defineConfig({
   server: {
     host: true, // expose on LAN so you can test from your phone during dev
   },
+  build: {
+    // Split heavy vendors into separate, long-cached chunks so repeat visits
+    // only re-download app code — faster loads and smaller rebuild diffs.
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          firebase: ["firebase/app", "firebase/auth", "firebase/database"],
+          react: ["react", "react-dom"],
+        },
+      },
+    },
+  },
 });

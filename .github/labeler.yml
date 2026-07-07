@@ -1,0 +1,23 @@
+# Path-based auto-labeling for PRs (actions/labeler v5 syntax).
+"area: shiritori-online":
+  - changed-files:
+      - any-glob-to-any-file: ["shiritori-online/**"]
+
+"area: kawaii-shiritori":
+  - changed-files:
+      - any-glob-to-any-file: ["kawaii-shiritori/**"]
+
+"area: ci/cd":
+  - changed-files:
+      - any-glob-to-any-file: [".github/**"]
+
+"area: dictionary":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/dictionary*.ts"
+          - "**/dictionary*.json"
+          - "**/words.ts"
+
+"dependencies":
+  - changed-files:
+      - any-glob-to-any-file: ["**/package.json", "**/package-lock.json"]

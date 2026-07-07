@@ -11,11 +11,11 @@ interface VoiceInputButtonProps {
 
 type RecognitionStatus = "idle" | "listening" | "processing" | "error";
 
-export default function VoiceInputButton({ 
-  onResult, 
+export default function VoiceInputButton({
+  onResult,
   onError,
   language = "ja-JP",
-  className = ""
+  className = "",
 }: VoiceInputButtonProps) {
   const [status, setStatus] = React.useState<RecognitionStatus>("idle");
   const [transcript, setTranscript] = React.useState("");
@@ -24,7 +24,8 @@ export default function VoiceInputButton({
 
   React.useEffect(() => {
     // Check if browser supports Web Speech API
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     setIsSupported(!!SpeechRecognition);
 
     if (SpeechRecognition) {
@@ -63,12 +64,13 @@ export default function VoiceInputButton({
 
       recognition.onerror = (event: any) => {
         setStatus("error");
-        const errorMsg = event.error === "no-speech" 
-          ? "No speech detected. Please try again."
-          : event.error === "not-allowed"
-          ? "Microphone access denied. Please enable it in settings."
-          : "Voice recognition error. Please try again.";
-        
+        const errorMsg =
+          event.error === "no-speech"
+            ? "No speech detected. Please try again."
+            : event.error === "not-allowed"
+              ? "Microphone access denied. Please enable it in settings."
+              : "Voice recognition error. Please try again.";
+
         onError?.(errorMsg);
         setTimeout(() => setStatus("idle"), 2000);
       };
@@ -91,7 +93,9 @@ export default function VoiceInputButton({
 
   const handleToggleListening = () => {
     if (!isSupported) {
-      onError?.("Voice recognition is not supported in your browser. Please use Chrome, Edge, or Safari.");
+      onError?.(
+        "Voice recognition is not supported in your browser. Please use Chrome, Edge, or Safari."
+      );
       return;
     }
 
@@ -131,10 +135,10 @@ export default function VoiceInputButton({
           status === "listening"
             ? "bg-error text-white animate-pulse shadow-lg"
             : status === "processing"
-            ? "bg-secondary text-on-secondary"
-            : status === "error"
-            ? "bg-error/20 text-error"
-            : "bg-primary/10 text-primary hover:bg-primary/20"
+              ? "bg-secondary text-on-secondary"
+              : status === "error"
+                ? "bg-error/20 text-error"
+                : "bg-primary/10 text-primary hover:bg-primary/20"
         } ${className}`}
         title={status === "listening" ? "Tap to stop" : "Tap to speak"}
       >
@@ -222,8 +226,9 @@ export function useVoiceInput(options: {
   const recognition = React.useRef<any>(null);
 
   React.useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
     if (!SpeechRecognition) {
       setError("Voice recognition not supported");
       return;
@@ -259,12 +264,13 @@ export function useVoiceInput(options: {
     };
 
     recognition.current.onerror = (event: any) => {
-      const errorMsg = event.error === "no-speech" 
-        ? "No speech detected"
-        : event.error === "not-allowed"
-        ? "Microphone access denied"
-        : "Recognition error";
-      
+      const errorMsg =
+        event.error === "no-speech"
+          ? "No speech detected"
+          : event.error === "not-allowed"
+            ? "Microphone access denied"
+            : "Recognition error";
+
       setError(errorMsg);
       options.onError?.(errorMsg);
       setIsListening(false);
@@ -302,6 +308,6 @@ export function useVoiceInput(options: {
     transcript,
     error,
     startListening,
-    stopListening
+    stopListening,
   };
 }

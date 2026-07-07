@@ -1,465 +1,604 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
-<title>Shiritori! - Play</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "tertiary": "#735c00",
-                        "surface-container-lowest": "#ffffff",
-                        "on-surface": "#1e1830",
-                        "on-primary": "#ffffff",
-                        "on-secondary": "#ffffff",
-                        "on-primary-fixed-variant": "#7b2947",
-                        "on-primary-fixed": "#3f001b",
-                        "error": "#ba1a1a",
-                        "surface": "#fdf7ff",
-                        "primary-container": "#ff94b4",
-                        "secondary-container": "#92f5dc",
-                        "inverse-primary": "#ffb1c6",
-                        "on-error-container": "#93000a",
-                        "on-tertiary-fixed-variant": "#574500",
-                        "on-background": "#1e1830",
-                        "surface-container-highest": "#e9ddff",
-                        "primary-fixed-dim": "#ffb1c6",
-                        "surface-container": "#f3eaff",
-                        "tertiary-container": "#d4b142",
-                        "on-tertiary": "#ffffff",
-                        "outline-variant": "#d9c0c5",
-                        "secondary-fixed": "#92f5dc",
-                        "on-secondary-fixed-variant": "#005143",
-                        "background": "#fdf7ff",
-                        "surface-variant": "#e9ddff",
-                        "tertiary-fixed": "#ffe088",
-                        "surface-dim": "#e0d5f6",
-                        "inverse-surface": "#332c46",
-                        "inverse-on-surface": "#f6eeff",
-                        "surface-container-high": "#eee4ff",
-                        "primary-fixed": "#ffd9e1",
-                        "on-secondary-container": "#007260",
-                        "on-tertiary-fixed": "#241a00",
-                        "secondary-fixed-dim": "#76d8c0",
-                        "on-tertiary-container": "#564400",
-                        "on-primary-container": "#7a2846",
-                        "outline": "#867276",
-                        "error-container": "#ffdad6",
-                        "secondary": "#006b5a",
-                        "surface-tint": "#98415e",
-                        "primary": "#98415e",
-                        "tertiary-fixed-dim": "#e7c353",
-                        "on-secondary-fixed": "#00201a",
-                        "on-surface-variant": "#544246",
-                        "surface-bright": "#fdf7ff",
-                        "on-error": "#ffffff",
-                        "surface-container-low": "#f8f1ff"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "unit": "8px",
-                        "bubble-padding": "16px",
-                        "gutter": "16px",
-                        "container-margin": "24px",
-                        "safe-area-inset-bottom": "env(safe-area-inset-bottom)"
-                    },
-                    "fontFamily": {
-                        "headline-lg-mobile": ["Plus Jakarta Sans"],
-                        "body-lg": ["Quicksand"],
-                        "label-caps": ["Quicksand"],
-                        "headline-lg": ["Plus Jakarta Sans"],
-                        "body-md": ["Quicksand"],
-                        "display-game": ["Plus Jakarta Sans"]
-                    },
-                    "fontSize": {
-                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
-                        "body-lg": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
-                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
-                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
-                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
-                        "display-game": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }]
-                    }
-                }
-            }
-        }
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+      name="viewport"
+    />
+    <title>Shiritori! - Play</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              tertiary: "#735c00",
+              "surface-container-lowest": "#ffffff",
+              "on-surface": "#1e1830",
+              "on-primary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#7b2947",
+              "on-primary-fixed": "#3f001b",
+              error: "#ba1a1a",
+              surface: "#fdf7ff",
+              "primary-container": "#ff94b4",
+              "secondary-container": "#92f5dc",
+              "inverse-primary": "#ffb1c6",
+              "on-error-container": "#93000a",
+              "on-tertiary-fixed-variant": "#574500",
+              "on-background": "#1e1830",
+              "surface-container-highest": "#e9ddff",
+              "primary-fixed-dim": "#ffb1c6",
+              "surface-container": "#f3eaff",
+              "tertiary-container": "#d4b142",
+              "on-tertiary": "#ffffff",
+              "outline-variant": "#d9c0c5",
+              "secondary-fixed": "#92f5dc",
+              "on-secondary-fixed-variant": "#005143",
+              background: "#fdf7ff",
+              "surface-variant": "#e9ddff",
+              "tertiary-fixed": "#ffe088",
+              "surface-dim": "#e0d5f6",
+              "inverse-surface": "#332c46",
+              "inverse-on-surface": "#f6eeff",
+              "surface-container-high": "#eee4ff",
+              "primary-fixed": "#ffd9e1",
+              "on-secondary-container": "#007260",
+              "on-tertiary-fixed": "#241a00",
+              "secondary-fixed-dim": "#76d8c0",
+              "on-tertiary-container": "#564400",
+              "on-primary-container": "#7a2846",
+              outline: "#867276",
+              "error-container": "#ffdad6",
+              secondary: "#006b5a",
+              "surface-tint": "#98415e",
+              primary: "#98415e",
+              "tertiary-fixed-dim": "#e7c353",
+              "on-secondary-fixed": "#00201a",
+              "on-surface-variant": "#544246",
+              "surface-bright": "#fdf7ff",
+              "on-error": "#ffffff",
+              "surface-container-low": "#f8f1ff",
+            },
+            borderRadius: {
+              DEFAULT: "1rem",
+              lg: "2rem",
+              xl: "3rem",
+              full: "9999px",
+            },
+            spacing: {
+              unit: "8px",
+              "bubble-padding": "16px",
+              gutter: "16px",
+              "container-margin": "24px",
+              "safe-area-inset-bottom": "env(safe-area-inset-bottom)",
+            },
+            fontFamily: {
+              "headline-lg-mobile": ["Plus Jakarta Sans"],
+              "body-lg": ["Quicksand"],
+              "label-caps": ["Quicksand"],
+              "headline-lg": ["Plus Jakarta Sans"],
+              "body-md": ["Quicksand"],
+              "display-game": ["Plus Jakarta Sans"],
+            },
+            fontSize: {
+              "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "700" }],
+              "body-lg": ["20px", { lineHeight: "28px", fontWeight: "500" }],
+              "label-caps": [
+                "12px",
+                { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" },
+              ],
+              "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "700" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "500" }],
+              "display-game": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "800" },
+              ],
+            },
+          },
+        },
+      };
     </script>
-<style>
-        body {
-            background-color: #fdf7ff;
-            color: #1e1830;
-            overflow: hidden; /* Prevent scrolling, app-like feel */
-        }
-        
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
+    <style>
+      body {
+        background-color: #fdf7ff;
+        color: #1e1830;
+        overflow: hidden; /* Prevent scrolling, app-like feel */
+      }
 
-        .material-symbols-outlined.fill {
-            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
 
-        /* Subtle squish animation for buttons */
-        .btn-squish:active {
-            transform: translateY(2px);
-            box-shadow: 0 0px 0 0 rgba(0,0,0,0) !important;
-        }
-        
-        /* Floating animation for turn indicator */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-            100% { transform: translateY(0px); }
-        }
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
-        }
+      .material-symbols-outlined.fill {
+        font-variation-settings:
+          "FILL" 1,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
 
-        /* Dotted line for history */
-        .history-line {
-            position: absolute;
-            left: 50%;
-            top: 24px;
-            bottom: 0;
-            width: 2px;
-            border-left: 2px dotted #ff94b4;
-            transform: translateX(-50%);
-            z-index: 0;
+      /* Subtle squish animation for buttons */
+      .btn-squish:active {
+        transform: translateY(2px);
+        box-shadow: 0 0px 0 0 rgba(0, 0, 0, 0) !important;
+      }
+
+      /* Floating animation for turn indicator */
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
         }
-        
-        /* Powerup menu reveal */
-        .powerup-menu {
-            opacity: 0;
-            transform: scale(0.9) translateY(10px);
-            pointer-events: none;
-            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        50% {
+          transform: translateY(-5px);
         }
-        .powerup-menu.active {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-            pointer-events: auto;
+        100% {
+          transform: translateY(0px);
         }
+      }
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      /* Dotted line for history */
+      .history-line {
+        position: absolute;
+        left: 50%;
+        top: 24px;
+        bottom: 0;
+        width: 2px;
+        border-left: 2px dotted #ff94b4;
+        transform: translateX(-50%);
+        z-index: 0;
+      }
+
+      /* Powerup menu reveal */
+      .powerup-menu {
+        opacity: 0;
+        transform: scale(0.9) translateY(10px);
+        pointer-events: none;
+        transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .powerup-menu.active {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        pointer-events: auto;
+      }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-</head>
-<body class="font-body-md text-body-md flex flex-col h-screen w-full relative">
-<!-- TopAppBar -->
-<header class="w-full top-0 sticky bg-surface dark:bg-surface-dim shadow-[0_2px_0_0_rgba(152,65,94,0.1)] flex items-center justify-between px-gutter h-16 w-full z-50">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-primary-container overflow-hidden border-2 border-surface flex items-center justify-center">
-<img alt="Cute animal mascot profile picture" class="w-full h-full object-cover" data-alt="A cute, stylized digital illustration of a cheerful shiba inu dog's face, rendered in a soft pastel color palette with bright, welcoming light. The style is modern kawaii, vector-like with smooth curves and a playful expression, fitting for a language learning app mascot. Set against a solid light pink background to ensure it stands out clearly as a profile avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAhGgljqsqv9TjA1w8oJvAroRa4sVp4WYWWH7-yTfECPHP1Wj_OukHz67zLzOZJfViMqUGjC5Y1s4G5tM9y4gSF_-85y7idVgPkgadWNwV93yuJUZdjhT_4c3-qi3LiMf-Au4l3KQ2NEgHSi371jGRuK7sZjFCKCppJ3mA7GRL7ZGQHiNLkGaTNfc96bYF3_OAR63hiFChR48MqboTcXg_1e2SNWy-N3RrLx2rEPQmmGP2U5ENpcZNQx24m5NrHEZv36pVUcjbGEp1"/>
-</div>
-<h1 class="font-display-game text-headline-lg-mobile text-primary dark:text-primary-container">しりとり</h1>
-</div>
-<button class="p-2 rounded-full hover:bg-primary-container/20 transition-colors active:scale-95 text-primary dark:text-primary-fixed-dim">
-<span class="material-symbols-outlined">settings</span>
-</button>
-</header>
-<!-- Main Canvas Area -->
-<main class="flex-1 relative w-full overflow-hidden flex flex-col md:flex-row">
-<!-- 3D Board Background -->
-<div class="absolute inset-0 w-full h-full z-0">
-<!-- STITCH_THREEJS_START:ANIMATION_12 class="absolute inset-0 w-full h-full" -->
-<div class="absolute inset-0 w-full h-full" style="display:block;">
-<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
-<div id="threejs-container-ANIMATION_12" style="width:100%;height:100%"></div>
-<script>
-(function() {
-  const container = document.getElementById('threejs-container-ANIMATION_12');
-  const devicePixelRatio = window.devicePixelRatio || 1;
-  
-const width = container.clientWidth || window.innerWidth;
-const height = container.clientHeight || window.innerHeight;
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="font-body-md text-body-md flex flex-col h-screen w-full relative">
+    <!-- TopAppBar -->
+    <header
+      class="w-full top-0 sticky bg-surface dark:bg-surface-dim shadow-[0_2px_0_0_rgba(152,65,94,0.1)] flex items-center justify-between px-gutter h-16 w-full z-50"
+    >
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 rounded-full bg-primary-container overflow-hidden border-2 border-surface flex items-center justify-center"
+        >
+          <img
+            alt="Cute animal mascot profile picture"
+            class="w-full h-full object-cover"
+            data-alt="A cute, stylized digital illustration of a cheerful shiba inu dog's face, rendered in a soft pastel color palette with bright, welcoming light. The style is modern kawaii, vector-like with smooth curves and a playful expression, fitting for a language learning app mascot. Set against a solid light pink background to ensure it stands out clearly as a profile avatar."
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAhGgljqsqv9TjA1w8oJvAroRa4sVp4WYWWH7-yTfECPHP1Wj_OukHz67zLzOZJfViMqUGjC5Y1s4G5tM9y4gSF_-85y7idVgPkgadWNwV93yuJUZdjhT_4c3-qi3LiMf-Au4l3KQ2NEgHSi371jGRuK7sZjFCKCppJ3mA7GRL7ZGQHiNLkGaTNfc96bYF3_OAR63hiFChR48MqboTcXg_1e2SNWy-N3RrLx2rEPQmmGP2U5ENpcZNQx24m5NrHEZv36pVUcjbGEp1"
+          />
+        </div>
+        <h1
+          class="font-display-game text-headline-lg-mobile text-primary dark:text-primary-container"
+        >
+          しりとり
+        </h1>
+      </div>
+      <button
+        class="p-2 rounded-full hover:bg-primary-container/20 transition-colors active:scale-95 text-primary dark:text-primary-fixed-dim"
+      >
+        <span class="material-symbols-outlined">settings</span>
+      </button>
+    </header>
+    <!-- Main Canvas Area -->
+    <main class="flex-1 relative w-full overflow-hidden flex flex-col md:flex-row">
+      <!-- 3D Board Background -->
+      <div class="absolute inset-0 w-full h-full z-0">
+        <!-- STITCH_THREEJS_START:ANIMATION_12 class="absolute inset-0 w-full h-full" -->
+        <div class="absolute inset-0 w-full h-full" style="display: block">
+          <script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+          <div id="threejs-container-ANIMATION_12" style="width: 100%; height: 100%"></div>
+          <script>
+            (function () {
+              const container = document.getElementById("threejs-container-ANIMATION_12");
+              const devicePixelRatio = window.devicePixelRatio || 1;
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
-camera.position.set(0, 12, 12);
-camera.lookAt(0, 0, 0);
+              const width = container.clientWidth || window.innerWidth;
+              const height = container.clientHeight || window.innerHeight;
 
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-renderer.setSize(width, height);
-renderer.setPixelRatio(window.devicePixelRatio);
-container.appendChild(renderer.domElement);
+              const scene = new THREE.Scene();
+              const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+              camera.position.set(0, 12, 12);
+              camera.lookAt(0, 0, 0);
 
-// Lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-scene.add(ambientLight);
+              const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+              renderer.setSize(width, height);
+              renderer.setPixelRatio(window.devicePixelRatio);
+              container.appendChild(renderer.domElement);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-directionalLight.position.set(5, 10, 7);
-scene.add(directionalLight);
+              // Lighting
+              const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+              scene.add(ambientLight);
 
-// Board Colors (Kawaii Palette)
-const colors = {
-  primary: 0xff94b4,
-  secondary: 0xe0d5f6,
-  accent: 0xa7f3d0,
-  board: 0xfdf7ff,
-  tile: 0xffffff
-};
+              const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+              directionalLight.position.set(5, 10, 7);
+              scene.add(directionalLight);
 
-// Create the Board (Monopoly style 5x5 grid for mobile)
-const boardSize = 5;
-const tileSize = 2;
-const boardPadding = 0.2;
+              // Board Colors (Kawaii Palette)
+              const colors = {
+                primary: 0xff94b4,
+                secondary: 0xe0d5f6,
+                accent: 0xa7f3d0,
+                board: 0xfdf7ff,
+                tile: 0xffffff,
+              };
 
-const boardGroup = new THREE.Group();
+              // Create the Board (Monopoly style 5x5 grid for mobile)
+              const boardSize = 5;
+              const tileSize = 2;
+              const boardPadding = 0.2;
 
-for (let i = 0; i < boardSize; i++) {
-  for (let j = 0; j < boardSize; j++) {
-    // Only build the perimeter for a Monopoly feel
-    if (i === 0 || i === boardSize - 1 || j === 0 || j === boardSize - 1) {
-      const tileGeom = new THREE.BoxGeometry(tileSize - boardPadding, 0.5, tileSize - boardPadding);
-      const tileMat = new THREE.MeshPhongMaterial({ 
-        color: (i + j) % 2 === 0 ? colors.tile : colors.secondary,
-        flatShading: true
-      });
-      const tile = new THREE.Mesh(tileGeom, tileMat);
-      tile.position.set(
-        (i - (boardSize - 1) / 2) * tileSize,
-        0,
-        (j - (boardSize - 1) / 2) * tileSize
-      );
-      boardGroup.add(tile);
-      
-      // Add a little colored "property" stripe on top
-      const stripeGeom = new THREE.BoxGeometry(tileSize - boardPadding, 0.1, (tileSize - boardPadding) * 0.2);
-      const stripeMat = new THREE.MeshPhongMaterial({ color: colors.primary });
-      const stripe = new THREE.Mesh(stripeGeom, stripeMat);
-      stripe.position.set(tile.position.x, 0.3, tile.position.z + (tileSize/2 - 0.2));
-      boardGroup.add(stripe);
-    }
-  }
-}
-scene.add(boardGroup);
+              const boardGroup = new THREE.Group();
 
-// Character 1: Neko (Pink)
-const characterGroup = new THREE.Group();
-const bodyGeom = new THREE.SphereGeometry(0.5, 32, 32);
-const bodyMat = new THREE.MeshPhongMaterial({ color: colors.primary });
-const body = new THREE.Mesh(bodyGeom, bodyMat);
-characterGroup.add(body);
+              for (let i = 0; i < boardSize; i++) {
+                for (let j = 0; j < boardSize; j++) {
+                  // Only build the perimeter for a Monopoly feel
+                  if (i === 0 || i === boardSize - 1 || j === 0 || j === boardSize - 1) {
+                    const tileGeom = new THREE.BoxGeometry(
+                      tileSize - boardPadding,
+                      0.5,
+                      tileSize - boardPadding
+                    );
+                    const tileMat = new THREE.MeshPhongMaterial({
+                      color: (i + j) % 2 === 0 ? colors.tile : colors.secondary,
+                      flatShading: true,
+                    });
+                    const tile = new THREE.Mesh(tileGeom, tileMat);
+                    tile.position.set(
+                      (i - (boardSize - 1) / 2) * tileSize,
+                      0,
+                      (j - (boardSize - 1) / 2) * tileSize
+                    );
+                    boardGroup.add(tile);
 
-const earGeom = new THREE.ConeGeometry(0.2, 0.4, 3);
-const earMat = new THREE.MeshPhongMaterial({ color: colors.primary });
-const leftEar = new THREE.Mesh(earGeom, earMat);
-leftEar.position.set(-0.3, 0.5, 0);
-leftEar.rotation.z = 0.3;
-characterGroup.add(leftEar);
-
-const rightEar = new THREE.Mesh(earGeom, earMat);
-rightEar.position.set(0.3, 0.5, 0);
-rightEar.rotation.z = -0.3;
-characterGroup.add(rightEar);
-
-characterGroup.position.set(-4, 0.7, 4); // Starting position
-scene.add(characterGroup);
-
-// Power-up item (Rotating Diamond)
-const powerUpGeom = new THREE.OctahedronGeometry(0.4);
-const powerUpMat = new THREE.MeshPhongMaterial({ color: colors.accent, emissive: colors.accent, emissiveIntensity: 0.5 });
-const powerUp = new THREE.Mesh(powerUpGeom, powerUpMat);
-powerUp.position.set(4, 1.2, -4);
-scene.add(powerUp);
-
-// Floating Animation Loop
-function animate() {
-  requestAnimationFrame(animate);
-  
-  const time = Date.now() * 0.001;
-  
-  // Float character
-  characterGroup.position.y = 0.7 + Math.sin(time * 3) * 0.1;
-  
-  // Rotate board slightly for depth
-  boardGroup.rotation.y = Math.sin(time * 0.2) * 0.05;
-  
-  // Rotate powerup
-  powerUp.rotation.y += 0.02;
-  powerUp.position.y = 1.2 + Math.cos(time * 2) * 0.2;
-  
-  renderer.render(scene, camera);
-}
-
-window.addEventListener('resize', () => {
-  const newWidth = container.clientWidth || window.innerWidth;
-  const newHeight = container.clientHeight || window.innerHeight;
-  camera.aspect = newWidth / newHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(newWidth, newHeight);
-});
-
-animate();
-
-})();
-</script>
-</div>
-<!-- STITCH_THREEJS_END:ANIMATION_12 -->
-</div>
-<!-- Desktop Layout Wrapper -->
-<div class="relative z-10 flex-1 flex flex-col w-full h-full max-w-7xl mx-auto px-4 md:px-8 py-4 pointer-events-none pb-[80px] md:pb-4">
-<!-- Top HUD: Scores & Turn Indicator -->
-<div class="flex justify-between items-start w-full pointer-events-auto">
-<!-- Player Score (Left) -->
-<div class="flex flex-col items-center gap-1 bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-xl shadow-sm border border-outline-variant/30">
-<span class="font-label-caps text-label-caps text-on-surface-variant">YOU</span>
-<span class="font-headline-lg text-headline-lg text-primary">240</span>
-</div>
-<!-- Turn Indicator (Center) -->
-<div class="flex flex-col items-center gap-2 animate-float mt-2">
-<div class="bg-primary text-on-primary px-6 py-2 rounded-full shadow-[0_4px_0_0_#7a2846] border-2 border-surface-container-lowest flex items-center gap-2">
-<span class="material-symbols-outlined fill">campaign</span>
-<span class="font-headline-lg-mobile text-headline-lg-mobile">Your Turn!</span>
-</div>
-</div>
-<!-- Opponent Score (Right) -->
-<div class="flex flex-col items-center gap-1 bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-xl shadow-sm border border-outline-variant/30">
-<span class="font-label-caps text-label-caps text-on-surface-variant">OPPONENT</span>
-<span class="font-headline-lg text-headline-lg text-secondary">180</span>
-</div>
-</div>
-<!-- Spacer to push bottom UI down -->
-<div class="flex-1"></div>
-<!-- Bottom UI Area (History, Powerups, Input) -->
-<div class="flex flex-col gap-4 pointer-events-auto w-full max-w-md mx-auto relative z-20">
-<!-- History Feed (Compact Overlay) -->
-<div class="bg-surface-container-lowest/90 backdrop-blur-md rounded-xl p-3 shadow-md border border-outline-variant/30 relative overflow-hidden">
-<div class="history-line"></div>
-<div class="flex flex-col gap-2 relative z-10">
-<!-- Opponent Word -->
-<div class="flex items-center gap-2 self-end">
-<span class="font-label-caps text-label-caps text-on-surface-variant opacity-70">Opponent</span>
-<div class="bg-surface-container px-3 py-1 rounded-full shadow-[0_2px_0_0_rgba(0,0,0,0.05)] border border-surface-dim text-on-surface">
-<span class="font-body-md text-body-md">Saku<strong class="text-secondary ml-1 font-bold">ra</strong></span>
-</div>
-</div>
-<!-- Player Word -->
-<div class="flex items-center gap-2 self-start">
-<div class="bg-primary-container px-3 py-1 rounded-full shadow-[0_2px_0_0_rgba(152,65,94,0.1)] text-on-primary-container">
-<span class="font-body-md text-body-md">Raio<strong class="text-tertiary ml-1 font-bold">n</strong></span>
-</div>
-<span class="font-label-caps text-label-caps text-on-surface-variant opacity-70">You</span>
-</div>
-<!-- Opponent Word (Latest) -->
-<div class="flex items-center gap-2 self-end">
-<span class="font-label-caps text-label-caps text-on-surface-variant opacity-70">Opponent</span>
-<div class="bg-surface-container px-3 py-1 rounded-full shadow-[0_2px_0_0_rgba(0,0,0,0.05)] border border-surface-dim text-on-surface">
-<span class="font-body-md text-body-md">Nek<strong class="text-secondary ml-1 font-bold">o</strong></span>
-</div>
-</div>
-</div>
-</div>
-<!-- Input Area & Powerups -->
-<div class="flex gap-2 items-end relative w-full">
-<!-- Powerup Menu -->
-<div class="absolute bottom-full left-0 mb-2 bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant/50 p-2 flex flex-col gap-2 powerup-menu w-48" id="powerupMenu">
-<button class="flex items-center gap-3 w-full p-2 hover:bg-surface-container rounded-lg text-left transition-colors text-on-surface">
-<span class="material-symbols-outlined text-secondary">lightbulb</span>
-<span class="font-body-md text-body-md flex-1">Word Hint</span>
-<span class="font-label-caps text-label-caps bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full">x2</span>
-</button>
-<button class="flex items-center gap-3 w-full p-2 hover:bg-surface-container rounded-lg text-left transition-colors text-on-surface">
-<span class="material-symbols-outlined text-tertiary">shield</span>
-<span class="font-body-md text-body-md flex-1">Point Shield</span>
-<span class="font-label-caps text-label-caps bg-tertiary-container text-on-tertiary-container px-2 py-0.5 rounded-full">x1</span>
-</button>
-</div>
-<!-- Powerup Button -->
-<button class="w-12 h-12 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center shadow-[0_3px_0_0_#564400] btn-squish transition-transform flex-shrink-0 relative" id="powerupBtn">
-<span class="material-symbols-outlined fill">bolt</span>
-<!-- Notification dot -->
-<span class="absolute top-0 right-0 w-3 h-3 bg-error rounded-full border-2 border-surface-container-lowest"></span>
-</button>
-<!-- Main Input -->
-<div class="flex-1 relative">
-<span class="absolute left-4 top-1/2 -translate-y-1/2 font-headline-lg text-headline-lg text-primary/40 pointer-events-none">O</span>
-<input class="w-full h-14 pl-12 pr-12 rounded-full border-2 border-primary bg-surface-container-lowest shadow-[0_4px_0_0_#98415e] font-body-lg text-body-lg text-on-surface focus:outline-none focus:border-primary-fixed focus:ring-0 transition-all placeholder:text-on-surface-variant/50" placeholder="Type next word..." type="text"/>
-<button class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center hover:bg-surface-tint transition-colors">
-<span class="material-symbols-outlined">send</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-</main>
-<!-- BottomNavBar (Mobile Only) -->
-<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-[env(safe-area-inset-bottom,16px)] bg-surface-container dark:bg-surface-container-high shadow-[0_-4px_12px_0_rgba(152,65,94,0.08)] rounded-t-lg">
-<!-- Play (Active) -->
-<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 translate-y-[-2px] shadow-[0_2px_0_0_#7a2846] transition-all duration-100">
-<span class="material-symbols-outlined fill">sports_esports</span>
-<span class="font-label-caps text-label-caps mt-1">Play</span>
-</button>
-<!-- History (Inactive) -->
-<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest transition-all active:translate-y-0 duration-100">
-<span class="material-symbols-outlined">history</span>
-<span class="font-label-caps text-label-caps mt-1">History</span>
-</button>
-<!-- Library (Inactive) -->
-<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest transition-all active:translate-y-0 duration-100">
-<span class="material-symbols-outlined">menu_book</span>
-<span class="font-label-caps text-label-caps mt-1">Library</span>
-</button>
-<!-- Rules (Inactive) -->
-<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest transition-all active:translate-y-0 duration-100">
-<span class="material-symbols-outlined">gavel</span>
-<span class="font-label-caps text-label-caps mt-1">Rules</span>
-</button>
-</nav>
-<!-- Desktop Sidebar Navigation (Hidden on Mobile) -->
-<nav class="hidden md:flex flex-col gap-2 p-4 w-64 bg-surface-container-low border-l border-outline-variant/30 h-full overflow-y-auto">
-<h2 class="font-label-caps text-label-caps text-on-surface-variant mb-2 px-2">NAVIGATION</h2>
-<!-- Play (Active) -->
-<button class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-xl shadow-[0_2px_0_0_#7a2846] translate-y-[-1px] font-body-lg text-body-lg text-left transition-all">
-<span class="material-symbols-outlined fill">sports_esports</span>
-<span>Play</span>
-</button>
-<!-- History (Inactive) -->
-<button class="flex items-center gap-3 px-4 py-3 text-on-surface-variant rounded-xl hover:bg-surface-container transition-colors font-body-lg text-body-lg text-left">
-<span class="material-symbols-outlined">history</span>
-<span>History</span>
-</button>
-<!-- Library (Inactive) -->
-<button class="flex items-center gap-3 px-4 py-3 text-on-surface-variant rounded-xl hover:bg-surface-container transition-colors font-body-lg text-body-lg text-left">
-<span class="material-symbols-outlined">menu_book</span>
-<span>Library</span>
-</button>
-<!-- Rules (Inactive) -->
-<button class="flex items-center gap-3 px-4 py-3 text-on-surface-variant rounded-xl hover:bg-surface-container transition-colors font-body-lg text-body-lg text-left">
-<span class="material-symbols-outlined">gavel</span>
-<span>Rules</span>
-</button>
-</nav>
-<script>
-        // Simple logic to toggle powerup menu
-        document.addEventListener('DOMContentLoaded', () => {
-            const powerupBtn = document.getElementById('powerupBtn');
-            const powerupMenu = document.getElementById('powerupMenu');
-
-            powerupBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                powerupMenu.classList.toggle('active');
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!powerupBtn.contains(e.target) && !powerupMenu.contains(e.target)) {
-                    powerupMenu.classList.remove('active');
+                    // Add a little colored "property" stripe on top
+                    const stripeGeom = new THREE.BoxGeometry(
+                      tileSize - boardPadding,
+                      0.1,
+                      (tileSize - boardPadding) * 0.2
+                    );
+                    const stripeMat = new THREE.MeshPhongMaterial({ color: colors.primary });
+                    const stripe = new THREE.Mesh(stripeGeom, stripeMat);
+                    stripe.position.set(
+                      tile.position.x,
+                      0.3,
+                      tile.position.z + (tileSize / 2 - 0.2)
+                    );
+                    boardGroup.add(stripe);
+                  }
                 }
-            });
+              }
+              scene.add(boardGroup);
+
+              // Character 1: Neko (Pink)
+              const characterGroup = new THREE.Group();
+              const bodyGeom = new THREE.SphereGeometry(0.5, 32, 32);
+              const bodyMat = new THREE.MeshPhongMaterial({ color: colors.primary });
+              const body = new THREE.Mesh(bodyGeom, bodyMat);
+              characterGroup.add(body);
+
+              const earGeom = new THREE.ConeGeometry(0.2, 0.4, 3);
+              const earMat = new THREE.MeshPhongMaterial({ color: colors.primary });
+              const leftEar = new THREE.Mesh(earGeom, earMat);
+              leftEar.position.set(-0.3, 0.5, 0);
+              leftEar.rotation.z = 0.3;
+              characterGroup.add(leftEar);
+
+              const rightEar = new THREE.Mesh(earGeom, earMat);
+              rightEar.position.set(0.3, 0.5, 0);
+              rightEar.rotation.z = -0.3;
+              characterGroup.add(rightEar);
+
+              characterGroup.position.set(-4, 0.7, 4); // Starting position
+              scene.add(characterGroup);
+
+              // Power-up item (Rotating Diamond)
+              const powerUpGeom = new THREE.OctahedronGeometry(0.4);
+              const powerUpMat = new THREE.MeshPhongMaterial({
+                color: colors.accent,
+                emissive: colors.accent,
+                emissiveIntensity: 0.5,
+              });
+              const powerUp = new THREE.Mesh(powerUpGeom, powerUpMat);
+              powerUp.position.set(4, 1.2, -4);
+              scene.add(powerUp);
+
+              // Floating Animation Loop
+              function animate() {
+                requestAnimationFrame(animate);
+
+                const time = Date.now() * 0.001;
+
+                // Float character
+                characterGroup.position.y = 0.7 + Math.sin(time * 3) * 0.1;
+
+                // Rotate board slightly for depth
+                boardGroup.rotation.y = Math.sin(time * 0.2) * 0.05;
+
+                // Rotate powerup
+                powerUp.rotation.y += 0.02;
+                powerUp.position.y = 1.2 + Math.cos(time * 2) * 0.2;
+
+                renderer.render(scene, camera);
+              }
+
+              window.addEventListener("resize", () => {
+                const newWidth = container.clientWidth || window.innerWidth;
+                const newHeight = container.clientHeight || window.innerHeight;
+                camera.aspect = newWidth / newHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newWidth, newHeight);
+              });
+
+              animate();
+            })();
+          </script>
+        </div>
+        <!-- STITCH_THREEJS_END:ANIMATION_12 -->
+      </div>
+      <!-- Desktop Layout Wrapper -->
+      <div
+        class="relative z-10 flex-1 flex flex-col w-full h-full max-w-7xl mx-auto px-4 md:px-8 py-4 pointer-events-none pb-[80px] md:pb-4"
+      >
+        <!-- Top HUD: Scores & Turn Indicator -->
+        <div class="flex justify-between items-start w-full pointer-events-auto">
+          <!-- Player Score (Left) -->
+          <div
+            class="flex flex-col items-center gap-1 bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-xl shadow-sm border border-outline-variant/30"
+          >
+            <span class="font-label-caps text-label-caps text-on-surface-variant">YOU</span>
+            <span class="font-headline-lg text-headline-lg text-primary">240</span>
+          </div>
+          <!-- Turn Indicator (Center) -->
+          <div class="flex flex-col items-center gap-2 animate-float mt-2">
+            <div
+              class="bg-primary text-on-primary px-6 py-2 rounded-full shadow-[0_4px_0_0_#7a2846] border-2 border-surface-container-lowest flex items-center gap-2"
+            >
+              <span class="material-symbols-outlined fill">campaign</span>
+              <span class="font-headline-lg-mobile text-headline-lg-mobile">Your Turn!</span>
+            </div>
+          </div>
+          <!-- Opponent Score (Right) -->
+          <div
+            class="flex flex-col items-center gap-1 bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-xl shadow-sm border border-outline-variant/30"
+          >
+            <span class="font-label-caps text-label-caps text-on-surface-variant">OPPONENT</span>
+            <span class="font-headline-lg text-headline-lg text-secondary">180</span>
+          </div>
+        </div>
+        <!-- Spacer to push bottom UI down -->
+        <div class="flex-1"></div>
+        <!-- Bottom UI Area (History, Powerups, Input) -->
+        <div class="flex flex-col gap-4 pointer-events-auto w-full max-w-md mx-auto relative z-20">
+          <!-- History Feed (Compact Overlay) -->
+          <div
+            class="bg-surface-container-lowest/90 backdrop-blur-md rounded-xl p-3 shadow-md border border-outline-variant/30 relative overflow-hidden"
+          >
+            <div class="history-line"></div>
+            <div class="flex flex-col gap-2 relative z-10">
+              <!-- Opponent Word -->
+              <div class="flex items-center gap-2 self-end">
+                <span class="font-label-caps text-label-caps text-on-surface-variant opacity-70"
+                  >Opponent</span
+                >
+                <div
+                  class="bg-surface-container px-3 py-1 rounded-full shadow-[0_2px_0_0_rgba(0,0,0,0.05)] border border-surface-dim text-on-surface"
+                >
+                  <span class="font-body-md text-body-md"
+                    >Saku<strong class="text-secondary ml-1 font-bold">ra</strong></span
+                  >
+                </div>
+              </div>
+              <!-- Player Word -->
+              <div class="flex items-center gap-2 self-start">
+                <div
+                  class="bg-primary-container px-3 py-1 rounded-full shadow-[0_2px_0_0_rgba(152,65,94,0.1)] text-on-primary-container"
+                >
+                  <span class="font-body-md text-body-md"
+                    >Raio<strong class="text-tertiary ml-1 font-bold">n</strong></span
+                  >
+                </div>
+                <span class="font-label-caps text-label-caps text-on-surface-variant opacity-70"
+                  >You</span
+                >
+              </div>
+              <!-- Opponent Word (Latest) -->
+              <div class="flex items-center gap-2 self-end">
+                <span class="font-label-caps text-label-caps text-on-surface-variant opacity-70"
+                  >Opponent</span
+                >
+                <div
+                  class="bg-surface-container px-3 py-1 rounded-full shadow-[0_2px_0_0_rgba(0,0,0,0.05)] border border-surface-dim text-on-surface"
+                >
+                  <span class="font-body-md text-body-md"
+                    >Nek<strong class="text-secondary ml-1 font-bold">o</strong></span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Input Area & Powerups -->
+          <div class="flex gap-2 items-end relative w-full">
+            <!-- Powerup Menu -->
+            <div
+              class="absolute bottom-full left-0 mb-2 bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant/50 p-2 flex flex-col gap-2 powerup-menu w-48"
+              id="powerupMenu"
+            >
+              <button
+                class="flex items-center gap-3 w-full p-2 hover:bg-surface-container rounded-lg text-left transition-colors text-on-surface"
+              >
+                <span class="material-symbols-outlined text-secondary">lightbulb</span>
+                <span class="font-body-md text-body-md flex-1">Word Hint</span>
+                <span
+                  class="font-label-caps text-label-caps bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full"
+                  >x2</span
+                >
+              </button>
+              <button
+                class="flex items-center gap-3 w-full p-2 hover:bg-surface-container rounded-lg text-left transition-colors text-on-surface"
+              >
+                <span class="material-symbols-outlined text-tertiary">shield</span>
+                <span class="font-body-md text-body-md flex-1">Point Shield</span>
+                <span
+                  class="font-label-caps text-label-caps bg-tertiary-container text-on-tertiary-container px-2 py-0.5 rounded-full"
+                  >x1</span
+                >
+              </button>
+            </div>
+            <!-- Powerup Button -->
+            <button
+              class="w-12 h-12 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center shadow-[0_3px_0_0_#564400] btn-squish transition-transform flex-shrink-0 relative"
+              id="powerupBtn"
+            >
+              <span class="material-symbols-outlined fill">bolt</span>
+              <!-- Notification dot -->
+              <span
+                class="absolute top-0 right-0 w-3 h-3 bg-error rounded-full border-2 border-surface-container-lowest"
+              ></span>
+            </button>
+            <!-- Main Input -->
+            <div class="flex-1 relative">
+              <span
+                class="absolute left-4 top-1/2 -translate-y-1/2 font-headline-lg text-headline-lg text-primary/40 pointer-events-none"
+                >O</span
+              >
+              <input
+                class="w-full h-14 pl-12 pr-12 rounded-full border-2 border-primary bg-surface-container-lowest shadow-[0_4px_0_0_#98415e] font-body-lg text-body-lg text-on-surface focus:outline-none focus:border-primary-fixed focus:ring-0 transition-all placeholder:text-on-surface-variant/50"
+                placeholder="Type next word..."
+                type="text"
+              />
+              <button
+                class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center hover:bg-surface-tint transition-colors"
+              >
+                <span class="material-symbols-outlined">send</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- BottomNavBar (Mobile Only) -->
+    <nav
+      class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-[env(safe-area-inset-bottom,16px)] bg-surface-container dark:bg-surface-container-high shadow-[0_-4px_12px_0_rgba(152,65,94,0.08)] rounded-t-lg"
+    >
+      <!-- Play (Active) -->
+      <button
+        class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 translate-y-[-2px] shadow-[0_2px_0_0_#7a2846] transition-all duration-100"
+      >
+        <span class="material-symbols-outlined fill">sports_esports</span>
+        <span class="font-label-caps text-label-caps mt-1">Play</span>
+      </button>
+      <!-- History (Inactive) -->
+      <button
+        class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest transition-all active:translate-y-0 duration-100"
+      >
+        <span class="material-symbols-outlined">history</span>
+        <span class="font-label-caps text-label-caps mt-1">History</span>
+      </button>
+      <!-- Library (Inactive) -->
+      <button
+        class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest transition-all active:translate-y-0 duration-100"
+      >
+        <span class="material-symbols-outlined">menu_book</span>
+        <span class="font-label-caps text-label-caps mt-1">Library</span>
+      </button>
+      <!-- Rules (Inactive) -->
+      <button
+        class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest transition-all active:translate-y-0 duration-100"
+      >
+        <span class="material-symbols-outlined">gavel</span>
+        <span class="font-label-caps text-label-caps mt-1">Rules</span>
+      </button>
+    </nav>
+    <!-- Desktop Sidebar Navigation (Hidden on Mobile) -->
+    <nav
+      class="hidden md:flex flex-col gap-2 p-4 w-64 bg-surface-container-low border-l border-outline-variant/30 h-full overflow-y-auto"
+    >
+      <h2 class="font-label-caps text-label-caps text-on-surface-variant mb-2 px-2">NAVIGATION</h2>
+      <!-- Play (Active) -->
+      <button
+        class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-xl shadow-[0_2px_0_0_#7a2846] translate-y-[-1px] font-body-lg text-body-lg text-left transition-all"
+      >
+        <span class="material-symbols-outlined fill">sports_esports</span>
+        <span>Play</span>
+      </button>
+      <!-- History (Inactive) -->
+      <button
+        class="flex items-center gap-3 px-4 py-3 text-on-surface-variant rounded-xl hover:bg-surface-container transition-colors font-body-lg text-body-lg text-left"
+      >
+        <span class="material-symbols-outlined">history</span>
+        <span>History</span>
+      </button>
+      <!-- Library (Inactive) -->
+      <button
+        class="flex items-center gap-3 px-4 py-3 text-on-surface-variant rounded-xl hover:bg-surface-container transition-colors font-body-lg text-body-lg text-left"
+      >
+        <span class="material-symbols-outlined">menu_book</span>
+        <span>Library</span>
+      </button>
+      <!-- Rules (Inactive) -->
+      <button
+        class="flex items-center gap-3 px-4 py-3 text-on-surface-variant rounded-xl hover:bg-surface-container transition-colors font-body-lg text-body-lg text-left"
+      >
+        <span class="material-symbols-outlined">gavel</span>
+        <span>Rules</span>
+      </button>
+    </nav>
+    <script>
+      // Simple logic to toggle powerup menu
+      document.addEventListener("DOMContentLoaded", () => {
+        const powerupBtn = document.getElementById("powerupBtn");
+        const powerupMenu = document.getElementById("powerupMenu");
+
+        powerupBtn.addEventListener("click", e => {
+          e.stopPropagation();
+          powerupMenu.classList.toggle("active");
         });
+
+        document.addEventListener("click", e => {
+          if (!powerupBtn.contains(e.target) && !powerupMenu.contains(e.target)) {
+            powerupMenu.classList.remove("active");
+          }
+        });
+      });
     </script>
-</body></html>
+  </body>
+</html>

@@ -42,11 +42,7 @@
           "format": "date-time"
         }
       },
-      "required": [
-        "uid",
-        "name",
-        "accentColor"
-      ]
+      "required": ["uid", "name", "accentColor"]
     }
   },
   "firestore": {

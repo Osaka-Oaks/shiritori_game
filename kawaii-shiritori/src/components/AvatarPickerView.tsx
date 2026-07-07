@@ -12,30 +12,78 @@ interface AvatarPickerProps {
 const AVATAR_OPTIONS = [
   {
     name: "Neko",
-    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuANOuGrOsv-96XQvI8bosq_UYcnNGdxDKm5cOF2YbrvU1TWSXsQvqqqDS4bVFmwbRDeWP4shfrZmDoXtHB3gt-9IJJITzse1D_ewjhj3qT-paPy294Mz5tih9ZdTEGRa-1chVf5KhcVghmhCvUGqQppn9DFqiQvq1gT1wE0GO0Ac5b15y8tju5B5TTWmXgZeg2ysTvNs_UqjgtaKDCqvK68L8-TWauBjqCXJacIiX80f33WvQ2maDkrMR3v9xaMaCfTi-YQA5YXO6Jj"
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuANOuGrOsv-96XQvI8bosq_UYcnNGdxDKm5cOF2YbrvU1TWSXsQvqqqDS4bVFmwbRDeWP4shfrZmDoXtHB3gt-9IJJITzse1D_ewjhj3qT-paPy294Mz5tih9ZdTEGRa-1chVf5KhcVghmhCvUGqQppn9DFqiQvq1gT1wE0GO0Ac5b15y8tju5B5TTWmXgZeg2ysTvNs_UqjgtaKDCqvK68L8-TWauBjqCXJacIiX80f33WvQ2maDkrMR3v9xaMaCfTi-YQA5YXO6Jj",
   },
   {
     name: "Shiba",
-    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuDv2_dSmuLzNIvq77bleM6yYK1w2nskbF-805BwE30p1TCTfPqHucQDAhM51009utAwsM6gOV0Pf4wEKJ7SxEX9Zv2R7bHUD9Y48kWy2ryoViyezxrLRkfiMgWMXsgiswNZmqFEyeSZFvAUfS-BjXK2NuUE1tD4HE6ks_DU_weW0RR9jrg9ESv15u3kPcSXDOMX7jQdFtaqgPe82uxThMpWFrN0mLCMa8PEBZTMiDunmvltqaE4mghXOTvBoEhYqMx7RPt3lUshKVvY"
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuDv2_dSmuLzNIvq77bleM6yYK1w2nskbF-805BwE30p1TCTfPqHucQDAhM51009utAwsM6gOV0Pf4wEKJ7SxEX9Zv2R7bHUD9Y48kWy2ryoViyezxrLRkfiMgWMXsgiswNZmqFEyeSZFvAUfS-BjXK2NuUE1tD4HE6ks_DU_weW0RR9jrg9ESv15u3kPcSXDOMX7jQdFtaqgPe82uxThMpWFrN0mLCMa8PEBZTMiDunmvltqaE4mghXOTvBoEhYqMx7RPt3lUshKVvY",
   },
   {
     name: "Bunny",
-    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuC5Lg5SU1xKaPIp0mM--d-Cep1T93IrZoLObvX2XNsHO8P-sgdUN8q_D1v5DWfBUXEkKW59oJtJcM0q8o4_1jT5XFM9M3Mu3amwXXKFMPfo_S6MscBlMqBrO4sDHxvHNL1KlKIXI91sYZkaYd-X8aH6yzGf6ABkJUT1E2QAQnPRZLZ0C9c67gWNbWx6hmp-2oMyST2EHB4FLVV-XvbRz-RXEZegVx39CKMnsJnPtoetEXNsOdQjg-KTjAmi2s2j1M3NOXlLjHtcDQo7"
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuC5Lg5SU1xKaPIp0mM--d-Cep1T93IrZoLObvX2XNsHO8P-sgdUN8q_D1v5DWfBUXEkKW59oJtJcM0q8o4_1jT5XFM9M3Mu3amwXXKFMPfo_S6MscBlMqBrO4sDHxvHNL1KlKIXI91sYZkaYd-X8aH6yzGf6ABkJUT1E2QAQnPRZLZ0C9c67gWNbWx6hmp-2oMyST2EHB4FLVV-XvbRz-RXEZegVx39CKMnsJnPtoetEXNsOdQjg-KTjAmi2s2j1M3NOXlLjHtcDQo7",
   },
   {
     name: "Panda",
-    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuDFRYI5dsRRAnSJV4BppuP-eap7bMIE9mKy65rz08TBAULgei4Nofz3ln4LLTJfnHXvxtI-k4mEBCtsri257VesEzQ_eAxT9XBju7KMfc8NepRD17o5rkW1rgB16wNNM83jLvs7I1Xt238IFjgIhxUJFFqePYlA3i9H0cDZwrLONCXS_lJlAFQyEWosSLb5-jZUzarDzM2vKfIA6q8FTDBOM41TYWjdxEtc1nFCSjBYamaJZItiEsKZreGwqaOW1KWuVddOmpiTur0p"
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuDFRYI5dsRRAnSJV4BppuP-eap7bMIE9mKy65rz08TBAULgei4Nofz3ln4LLTJfnHXvxtI-k4mEBCtsri257VesEzQ_eAxT9XBju7KMfc8NepRD17o5rkW1rgB16wNNM83jLvs7I1Xt238IFjgIhxUJFFqePYlA3i9H0cDZwrLONCXS_lJlAFQyEWosSLb5-jZUzarDzM2vKfIA6q8FTDBOM41TYWjdxEtc1nFCSjBYamaJZItiEsKZreGwqaOW1KWuVddOmpiTur0p",
   },
   {
     name: "Fox",
-    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCiUGinuf2_gEvw9lg5ziXpJoQjS-EeUXJC9gLJzBVu-t_8T8IzvBA59uUGDh2nOF1RVA69aXXq4cV93HG3vK63mPS5tLLq8UOiG1SRTrOG8BLiJsmY-uR4C6rSRFy3o5bNmAyaRF40RFn70d0YeGD62DLDNWyXfODBbQMQvJVcs4VF39YgKjYfQhTxjMt2QcD5GkKlzMc82brS_TiSv3euPOO9TQX8hPd7Gj5KMPY9ai1Cd98Kmn92TA--FlZqnuwS3kAVtI023Bs4"
-  }
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCiUGinuf2_gEvw9lg5ziXpJoQjS-EeUXJC9gLJzBVu-t_8T8IzvBA59uUGDh2nOF1RVA69aXXq4cV93HG3vK63mPS5tLLq8UOiG1SRTrOG8BLiJsmY-uR4C6rSRFy3o5bNmAyaRF40RFn70d0YeGD62DLDNWyXfODBbQMQvJVcs4VF39YgKjYfQhTxjMt2QcD5GkKlzMc82brS_TiSv3euPOO9TQX8hPd7Gj5KMPY9ai1Cd98Kmn92TA--FlZqnuwS3kAVtI023Bs4",
+  },
+  {
+    name: "Pikachu",
+    url: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+  },
+  {
+    name: "Charizard",
+    url: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",
+  },
+  {
+    name: "Squirtle",
+    url: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png",
+  },
+  {
+    name: "Bulbasaur",
+    url: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+  },
+  {
+    name: "Eevee",
+    url: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png",
+  },
+  {
+    name: "Mewtwo",
+    url: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png",
+  },
+  {
+    name: "Snorlax",
+    url: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/143.png",
+  },
+  {
+    name: "Jigglypuff",
+    url: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/39.png",
+  },
+  {
+    name: "Leonardo",
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuDnBGc7sxBqvE8yDhUqMQYXNHSR_1y_Y8Nz5TKf1tN2s0P4yP4rg7QyE7vZQjRqtZ0ZU8hMC7qW5sR7bYS4tHwqZZr0Xh0LGqZqZZqZ",
+  },
+  {
+    name: "Raphael",
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCKQYRB1sVWNx8PqFqH5yqHqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH",
+  },
+  {
+    name: "Michelangelo",
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuBYZPqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5",
+  },
+  {
+    name: "Donatello",
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuD7GfqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH5yqH",
+  },
 ];
 
 export default function AvatarPickerView({
   initialProfile,
   opponents,
-  onConfirm
+  onConfirm,
 }: AvatarPickerProps) {
   const [profile, setProfile] = React.useState<PlayerProfile>(initialProfile);
   const [selectedBot, setSelectedBot] = React.useState<OpponentBot>(opponents[0]);
@@ -85,8 +133,10 @@ export default function AvatarPickerView({
 
       {/* Profile Setup Section */}
       <section className="w-full flex flex-col items-center space-y-6 bg-surface-container-lowest rounded-3xl p-6 border-2 border-surface-container-highest shadow-soft">
-        <h3 className="font-label-caps text-xs text-primary font-bold text-center self-start">YOUR PLAYER PROFILE</h3>
-        
+        <h3 className="font-label-caps text-xs text-primary font-bold text-center self-start">
+          YOUR PLAYER PROFILE
+        </h3>
+
         {/* Big pulsing active preview */}
         <div className="relative">
           <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-surface-container-high border-4 border-primary p-0.5 shadow-soft overflow-hidden">
@@ -108,16 +158,18 @@ export default function AvatarPickerView({
             className="w-full bg-surface border-2 border-primary rounded-none py-3 px-6 pr-12 text-center font-body font-bold text-on-surface placeholder:text-outline/40 focus:outline-none focus:border-white focus:ring-2 focus:ring-primary/20 transition-all shadow-[4px_4px_0px_0px_#f27d26]"
             placeholder="Type your nickname..."
             value={profile.name}
-            onChange={(e) => setProfile(prev => ({ ...prev, name: e.target.value.slice(0, 15) }))}
+            onChange={e => setProfile(prev => ({ ...prev, name: e.target.value.slice(0, 15) }))}
           />
           <Edit className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-outline" />
         </div>
 
         {/* Dynamic options selection grid */}
         <div className="w-full">
-          <p className="font-label-caps text-[10px] text-on-surface-variant/75 text-center mb-3">SELECT AVATAR</p>
+          <p className="font-label-caps text-[10px] text-on-surface-variant/75 text-center mb-3">
+            SELECT AVATAR
+          </p>
           <div className="grid grid-cols-6 gap-2 md:gap-3">
-            {AVATAR_OPTIONS.map((item) => {
+            {AVATAR_OPTIONS.map(item => {
               const works = profile.avatarUrl === item.url;
               return (
                 <button
@@ -150,7 +202,9 @@ export default function AvatarPickerView({
               className="relative aspect-square rounded-2xl bg-surface border-2 border-dashed border-outline-variant hover:border-primary flex flex-col items-center justify-center transition-all bg-surface-container-low group hover:scale-105"
             >
               <Upload className="w-4 h-4 text-outline group-hover:text-primary transition-colors" />
-              <span className="text-[8px] font-label-caps text-outline group-hover:text-primary mt-1">Upload</span>
+              <span className="text-[8px] font-label-caps text-outline group-hover:text-primary mt-1">
+                Upload
+              </span>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -165,10 +219,12 @@ export default function AvatarPickerView({
 
       {/* Opponent Selection Section */}
       <section className="w-full bg-surface-container-lowest rounded-3xl p-6 border-2 border-surface-container-highest shadow-soft space-y-4">
-        <h3 className="font-label-caps text-xs text-primary font-bold self-start">SELECT AI OPPONENT</h3>
+        <h3 className="font-label-caps text-xs text-primary font-bold self-start">
+          SELECT AI OPPONENT
+        </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {opponents.map((bot) => {
+          {opponents.map(bot => {
             const index = selectedBot.id === bot.id;
             return (
               <button
@@ -192,7 +248,9 @@ export default function AvatarPickerView({
 
                 <div>
                   <h4 className="font-headline font-bold text-sm text-on-surface">{bot.name}</h4>
-                  <span className={`text-[9px] font-label-caps px-2 py-0.5 rounded-full inline-block mt-1 ${getDifficultyColor(bot.difficulty)}`}>
+                  <span
+                    className={`text-[9px] font-label-caps px-2 py-0.5 rounded-full inline-block mt-1 ${getDifficultyColor(bot.difficulty)}`}
+                  >
                     {bot.difficulty.toUpperCase()}
                   </span>
                 </div>

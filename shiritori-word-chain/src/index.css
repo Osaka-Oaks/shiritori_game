@@ -1,21 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-serif: "Playfair Display", "Times New Roman", Georgia, serif;
   --font-mono: "JetBrains Mono", monospace;
-  
-  --color-gold-cream: #C5A059;
-  --color-gold-hover: #D7B574;
+
+  --color-gold-cream: #c5a059;
+  --color-gold-hover: #d7b574;
   --color-dark-bg: #050505;
-  --color-dark-surface: #0E0E0E;
+  --color-dark-surface: #0e0e0e;
   --color-dark-surface-lg: #161616;
 }
 
 body {
   background-color: #050505;
-  color: #D1D1D1;
+  color: #d1d1d1;
   font-family: var(--font-sans);
 }
 
@@ -38,7 +38,7 @@ body {
 }
 
 .gold-text {
-  color: #C5A059;
+  color: #c5a059;
 }
 
 .gold-border {
@@ -59,7 +59,7 @@ body {
 }
 
 .text-gold {
-  color: #C5A059;
+  color: #c5a059;
 }
 
 /* Scrollbar styling */

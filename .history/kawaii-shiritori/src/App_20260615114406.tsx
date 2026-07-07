@@ -12,60 +12,113 @@ import MultiplayerView from "./components/MultiplayerView";
 import LocalMultiplayerView from "./components/LocalMultiplayerView";
 import UnityGameView from "./components/UnityGameView";
 import { motion, AnimatePresence } from "motion/react";
-import { Gamepad2, History, BookOpen, Trophy, HelpCircle, Heart, Sparkles, X, Swords, Target, Users } from "lucide-react";
-import { 
-  fetchRemoteConfig, 
-  requestNotificationPermission, 
+import {
+  Gamepad2,
+  History,
+  BookOpen,
+  Trophy,
+  HelpCircle,
+  Heart,
+  Sparkles,
+  X,
+  Swords,
+  Target,
+  Users,
+} from "lucide-react";
+import {
+  fetchRemoteConfig,
+  requestNotificationPermission,
   listenForMessages,
   GamePerformance,
-  setAnalyticsUserProperties 
+  setAnalyticsUserProperties,
 } from "./lib/firebase";
 
 const BOT_OPPONENTS: OpponentBot[] = [
   {
     id: "usagi",
     name: "Usagi Chan",
-    avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuC5Lg5SU1xKaPIp0mM--d-Cep1T93IrZoLObvX2XNsHO8P-sgdUN8q_D1v5DWfBUXEkKW59oJtJcM0q8o4_1jT5XFM9M3Mu3amwXXKFMPfo_S6MscBlMqBrO4sDHxvHNL1KlKIXI91sYZkaYd-X8aH6yzGf6ABkJUT1E2QAQnPRZLZ0C9c67gWNbWx6hmp-2oMyST2EHB4FLVV-XvbRz-RXEZegVx39CKMnsJnPtoetEXNsOdQjg-KTjAmi2s2j1M3NOXlLjHtcDQo7",
+    avatarUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuC5Lg5SU1xKaPIp0mM--d-Cep1T93IrZoLObvX2XNsHO8P-sgdUN8q_D1v5DWfBUXEkKW59oJtJcM0q8o4_1jT5XFM9M3Mu3amwXXKFMPfo_S6MscBlMqBrO4sDHxvHNL1KlKIXI91sYZkaYd-X8aH6yzGf6ABkJUT1E2QAQnPRZLZ0C9c67gWNbWx6hmp-2oMyST2EHB4FLVV-XvbRz-RXEZegVx39CKMnsJnPtoetEXNsOdQjg-KTjAmi2s2j1M3NOXlLjHtcDQo7",
     difficulty: "easy",
-    description: "A lovable, speedy little bunny. Plays very easy everyday nouns starting from standard sounds."
+    description:
+      "A lovable, speedy little bunny. Plays very easy everyday nouns starting from standard sounds.",
   },
   {
     id: "inu_sensei",
     name: "Inu Sensei",
-    avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDv2_dSmuLzNIvq77bleM6yYK1w2nskbF-805BwE30p1TCTfPqHucQDAhM51009utAwsM6gOV0Pf4wEKJ7SxEX9Zv2R7bHUD9Y48kWy2ryoViyezxrLRkfiMgWMXsgiswNZmqFEyeSZFvAUfS-BjXK2NuUE1tD4HE6ks_DU_weW0RR9jrg9ESv15u3kPcSXDOMX7jQdFtaqgPe82uxThMpWFrN0mLCMa8PEBZTMiDunmvltqaE4mghXOTvBoEhYqMx7RPt3lUshKVvY",
+    avatarUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDv2_dSmuLzNIvq77bleM6yYK1w2nskbF-805BwE30p1TCTfPqHucQDAhM51009utAwsM6gOV0Pf4wEKJ7SxEX9Zv2R7bHUD9Y48kWy2ryoViyezxrLRkfiMgWMXsgiswNZmqFEyeSZFvAUfS-BjXK2NuUE1tD4HE6ks_DU_weW0RR9jrg9ESv15u3kPcSXDOMX7jQdFtaqgPe82uxThMpWFrN0mLCMa8PEBZTMiDunmvltqaE4mghXOTvBoEhYqMx7RPt3lUshKVvY",
     difficulty: "medium",
-    description: "The wise Shiba dog. Plays highly balanced, interesting nouns. A delightful, strategic match!"
+    description:
+      "The wise Shiba dog. Plays highly balanced, interesting nouns. A delightful, strategic match!",
   },
   {
     id: "neko_master",
     name: "Neko Master",
-    avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBtgTJqbRrHR2A3kE3800L-klEN5Xn6-0v2Aa9D0SlnqU1DCP3BhnHXWghoFfL6hSsN1FgrjDtMuQUoSw9-xYVpSZMToJQx2tFlV6D2ngX5OuZT5cj3zk200QkuLB_UewEHTwuWRCVz9_q5-zmcpDpKWe-YrQnTqDPnYjkUfgahX40ChVBXYlskeWfuxd_VL3-UKJsmzBw8Fz96Ca8kuo7wD9D74opPtuFFAyxVH5PEFL_KwOepANbXGRwen5j8dl3p4nXwzKHJ-ApH",
+    avatarUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBtgTJqbRrHR2A3kE3800L-klEN5Xn6-0v2Aa9D0SlnqU1DCP3BhnHXWghoFfL6hSsN1FgrjDtMuQUoSw9-xYVpSZMToJQx2tFlV6D2ngX5OuZT5cj3zk200QkuLB_UewEHTwuWRCVz9_q5-zmcpDpKWe-YrQnTqDPnYjkUfgahX40ChVBXYlskeWfuxd_VL3-UKJsmzBw8Fz96Ca8kuo7wD9D74opPtuFFAyxVH5PEFL_KwOepANbXGRwen5j8dl3p4nXwzKHJ-ApH",
     difficulty: "hard",
-    description: "The Grandmaster of Japanese word games. Plays challenging, multisyllabic vocabulary. Master tier!"
-  }
+    description:
+      "The Grandmaster of Japanese word games. Plays challenging, multisyllabic vocabulary. Master tier!",
+  },
 ];
 
 const INITIAL_LEADERBOARD: LeaderboardUser[] = [
-  { rank: 1, name: "Neko Master", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBtgTJqbRrHR2A3kE3800L-klEN5Xn6-0v2Aa9D0SlnqU1DCP3BhnHXWghoFfL6hSsN1FgrjDtMuQUoSw9-xYVpSZMToJQx2tFlV6D2ngX5OuZT5cj3zk200QkuLB_UewEHTwuWRCVz9_q5-zmcpDpKWe-YrQnTqDPnYjkUfgahX40ChVBXYlskeWfuxd_VL3-UKJsmzBw8Fz96Ca8kuo7wD9D74opPtuFFAyxVH5PEFL_KwOepANbXGRwen5j8dl3p4nXwzKHJ-ApH", score: 2500 },
-  { rank: 2, name: "Sakura San", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuANOuGrOsv-96XQvI8bosq_UYcnNGdxDKm5cOF2YbrvU1TWSXsQvqqqDS4bVFmwbRDeWP4shfrZmDoXtHB3gt-9IJJITzse1D_ewjhj3qT-paPy294Mz5tih9ZdTEGRa-1chVf5KhcVghmhCvUGqQppn9DFqiQvq1gT1wE0GO0Ac5b15y8tju5B5TTWmXgZeg2ysTvNs_UqjgtaKDCqvK68L8-TWauBjqCXJacIiX80f33WvQ2maDkrMR3v9xaMaCfTi-YQA5YXO6Jj", score: 1800 },
-  { rank: 3, name: "Inu Sensei", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDv2_dSmuLzNIvq77bleM6yYK1w2nskbF-805BwE30p1TCTfPqHucQDAhM51009utAwsM6gOV0Pf4wEKJ7SxEX9Zv2R7bHUD9Y48kWy2ryoViyezxrLRkfiMgWMXsgiswNZmqFEyeSZFvAUfS-BjXK2NuUE1tD4HE6ks_DU_weW0RR9jrg9ESv15u3kPcSXDOMX7jQdFtaqgPe82uxThMpWFrN0mLCMa8PEBZTMiDunmvltqaE4mghXOTvBoEhYqMx7RPt3lUshKVvY", score: 1200 },
-  { rank: 4, name: "Haru Chan", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDD-0xFlMJoGr1RST4hByi07rC_6PAviMKob8wj8uioHoe4f4E92-JmQDXgh68sUWTe8HXRvsYMq1-sh6YQPQGAuQzqkDlxLTbZWrhSDAz0D9ncR-nTE-bZUeMT21DVWBlah5mWPl_GzvP1e0jLJ0Rp-_pFdEg_PS26_k8JpoKK_MkyyZ2__lzdPwrIi9kRjaEbOGZFDZpKHo6aUnHvq06fxLS4-w5gF2QgiIS8hhHvHqOOSqvBiHM2JbrcdbYSZbHHFdgMm5AR2_8k", score: 850 },
-  { rank: 5, name: "Usagi Chan", avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuC5Lg5SU1xKaPIp0mM--d-Cep1T93IrZoLObvX2XNsHO8P-sgdUN8q_D1v5DWfBUXEkKW59oJtJcM0q8o4_1jT5XFM9M3Mu3amwXXKFMPfo_S6MscBlMqBrO4sDHxvHNL1KlKIXI91sYZkaYd-X8aH6yzGf6ABkJUT1E2QAQnPRZLZ0C9c67gWNbWx6hmp-2oMyST2EHB4FLVV-XvbRz-RXEZegVx39CKMnsJnPtoetEXNsOdQjg-KTjAmi2s2j1M3NOXlLjHtcDQo7", score: 480 }
+  {
+    rank: 1,
+    name: "Neko Master",
+    avatarUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBtgTJqbRrHR2A3kE3800L-klEN5Xn6-0v2Aa9D0SlnqU1DCP3BhnHXWghoFfL6hSsN1FgrjDtMuQUoSw9-xYVpSZMToJQx2tFlV6D2ngX5OuZT5cj3zk200QkuLB_UewEHTwuWRCVz9_q5-zmcpDpKWe-YrQnTqDPnYjkUfgahX40ChVBXYlskeWfuxd_VL3-UKJsmzBw8Fz96Ca8kuo7wD9D74opPtuFFAyxVH5PEFL_KwOepANbXGRwen5j8dl3p4nXwzKHJ-ApH",
+    score: 2500,
+  },
+  {
+    rank: 2,
+    name: "Sakura San",
+    avatarUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuANOuGrOsv-96XQvI8bosq_UYcnNGdxDKm5cOF2YbrvU1TWSXsQvqqqDS4bVFmwbRDeWP4shfrZmDoXtHB3gt-9IJJITzse1D_ewjhj3qT-paPy294Mz5tih9ZdTEGRa-1chVf5KhcVghmhCvUGqQppn9DFqiQvq1gT1wE0GO0Ac5b15y8tju5B5TTWmXgZeg2ysTvNs_UqjgtaKDCqvK68L8-TWauBjqCXJacIiX80f33WvQ2maDkrMR3v9xaMaCfTi-YQA5YXO6Jj",
+    score: 1800,
+  },
+  {
+    rank: 3,
+    name: "Inu Sensei",
+    avatarUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDv2_dSmuLzNIvq77bleM6yYK1w2nskbF-805BwE30p1TCTfPqHucQDAhM51009utAwsM6gOV0Pf4wEKJ7SxEX9Zv2R7bHUD9Y48kWy2ryoViyezxrLRkfiMgWMXsgiswNZmqFEyeSZFvAUfS-BjXK2NuUE1tD4HE6ks_DU_weW0RR9jrg9ESv15u3kPcSXDOMX7jQdFtaqgPe82uxThMpWFrN0mLCMa8PEBZTMiDunmvltqaE4mghXOTvBoEhYqMx7RPt3lUshKVvY",
+    score: 1200,
+  },
+  {
+    rank: 4,
+    name: "Haru Chan",
+    avatarUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDD-0xFlMJoGr1RST4hByi07rC_6PAviMKob8wj8uioHoe4f4E92-JmQDXgh68sUWTe8HXRvsYMq1-sh6YQPQGAuQzqkDlxLTbZWrhSDAz0D9ncR-nTE-bZUeMT21DVWBlah5mWPl_GzvP1e0jLJ0Rp-_pFdEg_PS26_k8JpoKK_MkyyZ2__lzdPwrIi9kRjaEbOGZFDZpKHo6aUnHvq06fxLS4-w5gF2QgiIS8hhHvHqOOSqvBiHM2JbrcdbYSZbHHFdgMm5AR2_8k",
+    score: 850,
+  },
+  {
+    rank: 5,
+    name: "Usagi Chan",
+    avatarUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuC5Lg5SU1xKaPIp0mM--d-Cep1T93IrZoLObvX2XNsHO8P-sgdUN8q_D1v5DWfBUXEkKW59oJtJcM0q8o4_1jT5XFM9M3Mu3amwXXKFMPfo_S6MscBlMqBrO4sDHxvHNL1KlKIXI91sYZkaYd-X8aH6yzGf6ABkJUT1E2QAQnPRZLZ0C9c67gWNbWx6hmp-2oMyST2EHB4FLVV-XvbRz-RXEZegVx39CKMnsJnPtoetEXNsOdQjg-KTjAmi2s2j1M3NOXlLjHtcDQo7",
+    score: 480,
+  },
 ];
 
 export default function App() {
   // --- CORE DECONSTRUCT COGNOMEN STATE ---
   const [activeView, setActiveView] = React.useState<AppView>("HOME");
-  
+
   // Player state loaded from storage
   const [profile, setProfile] = React.useState<PlayerProfile>(() => {
     const saved = localStorage.getItem("shiritori_profile");
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) { /* fallback */ }
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        /* fallback */
+      }
     }
     return {
       name: "Jarrel-Chan",
-      avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDAhGgljqsqv9TjA1w8oJvAroRa4sVp4WYWWH7-yTfECPHP1Wj_OukHz67zLzOZJfViMqUGjC5Y1s4G5tM9y4gSF_-85y7idVgPkgadWNwV93yuJUZdjhT_4c3-qi3LiMf-Au4l3KQ2NEgHSi371jGRuK7sZjFCKCppJ3mA7GRL7ZGQHiNLkGaTNfc96bYF3_OAR63hiFChR48MqboTcXg_1e2SNWy-N3RrLx2rEPQmmGP2U5ENpcZNQx24m5NrHEZv36pVUcjbGEp1"
+      avatarUrl:
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuDAhGgljqsqv9TjA1w8oJvAroRa4sVp4WYWWH7-yTfECPHP1Wj_OukHz67zLzOZJfViMqUGjC5Y1s4G5tM9y4gSF_-85y7idVgPkgadWNwV93yuJUZdjhT_4c3-qi3LiMf-Au4l3KQ2NEgHSi371jGRuK7sZjFCKCppJ3mA7GRL7ZGQHiNLkGaTNfc96bYF3_OAR63hiFChR48MqboTcXg_1e2SNWy-N3RrLx2rEPQmmGP2U5ENpcZNQx24m5NrHEZv36pVUcjbGEp1",
     };
   });
 
@@ -73,7 +126,11 @@ export default function App() {
   const [matches, setMatches] = React.useState<MatchHistory[]>(() => {
     const saved = localStorage.getItem("shiritori_matches_v2");
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) { /* fallback */ }
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        /* fallback */
+      }
     }
     return [];
   });
@@ -112,7 +169,7 @@ export default function App() {
       .sort((a, b) => b.score - a.score)
       .map((item, idx) => ({
         ...item,
-        rank: idx + 1
+        rank: idx + 1,
       }));
   }, [matches, profile]);
 
@@ -194,32 +251,40 @@ export default function App() {
       case "LOCAL_MULTIPLAYER":
         return <LocalMultiplayerView profile={profile} onBack={() => setActiveView("HOME")} />;
       default:
-        return <div className="text-center py-20 font-body">Tab parsing anomaly error inside view registry.</div>;
+        return (
+          <div className="text-center py-20 font-body">
+            Tab parsing anomaly error inside view registry.
+          </div>
+        );
     }
   };
 
   return (
     <div className="min-h-screen bg-surface confetti-bg flex flex-col font-sans text-on-surface antialiased overflow-x-hidden">
-      
       {/* GLOBAL APPLICATION BRAND GLASS HEADER HEADER */}
       <header className="sticky top-0 z-30 bg-surface/80 backdrop-blur-md border-b-2 border-surface-container-high py-3 px-5 flex items-center justify-between shadow-xs">
-        <div 
-          onClick={() => setActiveView("HOME")} 
+        <div
+          onClick={() => setActiveView("HOME")}
           className="flex items-center gap-2 cursor-pointer group"
         >
           <span className="text-2xl filter drop-shadow">🌸</span>
           <div>
             <h1 className="font-display-game font-extrabold text-lg text-primary tracking-tight leading-none flex items-center gap-1">
-              しりとり <span className="font-medium text-xs text-on-surface-variant font-body">Shiritori Duel!</span>
+              しりとり{" "}
+              <span className="font-medium text-xs text-on-surface-variant font-body">
+                Shiritori Duel!
+              </span>
             </h1>
-            <p className="text-[9px] text-outline-variant font-body font-bold mt-0.5">KAWAII EDITION</p>
+            <p className="text-[9px] text-outline-variant font-body font-bold mt-0.5">
+              KAWAII EDITION
+            </p>
           </div>
         </div>
 
         {/* Small preview of active profile info */}
         {activeView !== "GAME_ROOM" && (
-          <div 
-            onClick={() => setActiveView("AVATAR_PICKER")} 
+          <div
+            onClick={() => setActiveView("AVATAR_PICKER")}
             className="flex items-center gap-2 bg-surface-container-low border border-primary/10 pl-2.5 pr-3 py-1.5 rounded-full cursor-pointer hover:border-primary/40 transition-colors shadow-sm"
           >
             <img
@@ -290,25 +355,37 @@ export default function App() {
                   <h4 className="font-headline font-bold text-sm text-on-surface">
                     Opponent: {detailModalMatch.opponentName}
                   </h4>
-                  <p className="text-[10px] text-outline font-body">Match date: {detailModalMatch.date}</p>
+                  <p className="text-[10px] text-outline font-body">
+                    Match date: {detailModalMatch.date}
+                  </p>
                 </div>
               </div>
 
               {/* Stats dashboard details */}
               <div className="grid grid-cols-3 gap-2 text-center font-body text-xs">
                 <div className="bg-slate-100/50 p-2.5 rounded-xl border border-outline-variant/15">
-                  <span className="text-[9px] font-label-caps text-on-surface-variant block">SCORE</span>
+                  <span className="text-[9px] font-label-caps text-on-surface-variant block">
+                    SCORE
+                  </span>
                   <span className="font-headline font-bold text-sm text-primary">
                     {detailModalMatch.playerScore} - {detailModalMatch.opponentScore}
                   </span>
                 </div>
                 <div className="bg-slate-100/50 p-2.5 rounded-xl border border-outline-variant/15">
-                  <span className="text-[9px] font-label-caps text-on-surface-variant block">CHAINS</span>
-                  <span className="font-headline font-bold text-sm text-secondary">{detailModalMatch.chainLength} words</span>
+                  <span className="text-[9px] font-label-caps text-on-surface-variant block">
+                    CHAINS
+                  </span>
+                  <span className="font-headline font-bold text-sm text-secondary">
+                    {detailModalMatch.chainLength} words
+                  </span>
                 </div>
                 <div className="bg-slate-100/50 p-2.5 rounded-xl border border-outline-variant/15">
-                  <span className="text-[9px] font-label-caps text-on-surface-variant block">RESULT</span>
-                  <span className={`font-headline font-bold text-sm ${detailModalMatch.didWin ? 'text-secondary' : 'text-error'}`}>
+                  <span className="text-[9px] font-label-caps text-on-surface-variant block">
+                    RESULT
+                  </span>
+                  <span
+                    className={`font-headline font-bold text-sm ${detailModalMatch.didWin ? "text-secondary" : "text-error"}`}
+                  >
                     {detailModalMatch.didWin ? "VICTORY" : "DEFEAT"}
                   </span>
                 </div>
@@ -316,14 +393,21 @@ export default function App() {
 
               <div className="space-y-1.5 pt-1.5 font-body">
                 <p className="text-xs text-on-surface-variant leading-relaxed">
-                  The match duel came to an end due to the word chain matching ending sound validation. The last played word recorded was <strong className="font-extrabold text-primary font-display-game font-semibold">{detailModalMatch.fatalWord || "N/A"}</strong>.
+                  The match duel came to an end due to the word chain matching ending sound
+                  validation. The last played word recorded was{" "}
+                  <strong className="font-extrabold text-primary font-display-game font-semibold">
+                    {detailModalMatch.fatalWord || "N/A"}
+                  </strong>
+                  .
                 </p>
 
                 <div className="flex gap-2 pt-2">
                   <button
                     onClick={() => {
                       // Lookup matching opponent bot config of this record
-                      const matchedBot = BOT_OPPONENTS.find(b => b.name === detailModalMatch.opponentName) || BOT_OPPONENTS[1];
+                      const matchedBot =
+                        BOT_OPPONENTS.find(b => b.name === detailModalMatch.opponentName) ||
+                        BOT_OPPONENTS[1];
                       setSelectedBot(matchedBot);
                       setDetailModalMatch(null);
                       setActiveView("GAME_ROOM");
@@ -347,7 +431,9 @@ export default function App() {
           <button
             onClick={() => setActiveView("HOME")}
             className={`flex flex-col items-center gap-1 cursor-pointer transition-transform duration-100 active:scale-95 ${
-              activeView === 'HOME' || activeView === 'AVATAR_PICKER' ? 'text-primary' : 'text-outline hover:text-primary/70'
+              activeView === "HOME" || activeView === "AVATAR_PICKER"
+                ? "text-primary"
+                : "text-outline hover:text-primary/70"
             }`}
           >
             <Gamepad2 className="w-5.5 h-5.5" />
@@ -358,7 +444,7 @@ export default function App() {
           <button
             onClick={() => setActiveView("HISTORY")}
             className={`flex flex-col items-center gap-1 cursor-pointer transition-transform duration-100 active:scale-95 ${
-              activeView === 'HISTORY' ? 'text-primary' : 'text-outline hover:text-primary/70'
+              activeView === "HISTORY" ? "text-primary" : "text-outline hover:text-primary/70"
             }`}
           >
             <History className="w-5.5 h-5.5" />
@@ -369,7 +455,7 @@ export default function App() {
           <button
             onClick={() => setActiveView("LIBRARY")}
             className={`flex flex-col items-center gap-1 cursor-pointer transition-transform duration-100 active:scale-95 ${
-              activeView === 'LIBRARY' ? 'text-primary' : 'text-outline hover:text-primary/70'
+              activeView === "LIBRARY" ? "text-primary" : "text-outline hover:text-primary/70"
             }`}
           >
             <BookOpen className="w-5.5 h-5.5" />
@@ -380,7 +466,7 @@ export default function App() {
           <button
             onClick={() => setActiveView("LEADERBOARD")}
             className={`flex flex-col items-center gap-1 cursor-pointer transition-transform duration-100 active:scale-95 ${
-              activeView === 'LEADERBOARD' ? 'text-primary' : 'text-outline hover:text-primary/70'
+              activeView === "LEADERBOARD" ? "text-primary" : "text-outline hover:text-primary/70"
             }`}
           >
             <Trophy className="w-5.5 h-5.5" />
@@ -391,7 +477,7 @@ export default function App() {
           <button
             onClick={() => setActiveView("RULES")}
             className={`flex flex-col items-center gap-1 cursor-pointer transition-transform duration-100 active:scale-95 ${
-              activeView === 'RULES' ? 'text-primary' : 'text-outline hover:text-primary/70'
+              activeView === "RULES" ? "text-primary" : "text-outline hover:text-primary/70"
             }`}
           >
             <HelpCircle className="w-5.5 h-5.5" />

@@ -53,7 +53,9 @@ body {
   font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 
 button {
@@ -127,7 +129,9 @@ input {
   border-radius: 16px;
   background: var(--accent);
   color: #fff;
-  transition: transform 0.08s ease, opacity 0.2s ease;
+  transition:
+    transform 0.08s ease,
+    opacity 0.2s ease;
 }
 .btn:hover:not(:disabled) {
   transform: translateY(-1px);
@@ -242,7 +246,9 @@ input {
   padding: 12px;
   box-shadow: var(--shadow);
   border: 3px solid transparent;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 .player-pill .who {
   font-size: 12px;
@@ -292,7 +298,9 @@ input {
 .timer > div {
   height: 100%;
   background: var(--accent);
-  transition: width 0.25s linear, background 0.25s ease;
+  transition:
+    width 0.25s linear,
+    background 0.25s ease;
 }
 .timer.danger > div {
   background: var(--bad);
@@ -868,11 +876,8 @@ input {
   justify-content: center;
   padding: 24px;
   overflow: hidden;
-  background: radial-gradient(
-      circle at 50% 0%,
-      rgba(255, 145, 160, 0.28),
-      transparent 60%
-    ),
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 145, 160, 0.28), transparent 60%),
     rgba(58, 45, 34, 0.5);
   backdrop-filter: blur(6px);
 }
@@ -964,4 +969,220 @@ input {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ── Floating dictionary ─────────────────────────────────── */
+.dict-fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.dict-fab:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+.dict-fab:active {
+  transform: scale(0.96);
+}
+
+.dict-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background: rgba(30, 20, 10, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+@media (min-width: 640px) {
+  .dict-sheet {
+    align-items: center;
+  }
+}
+.dict-inner {
+  background: var(--card);
+  width: 100%;
+  max-width: 560px;
+  max-height: 85vh;
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: 16px 18px calc(18px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow);
+}
+@media (min-width: 640px) {
+  .dict-inner {
+    border-radius: var(--radius);
+  }
+}
+.dict-title {
+  font-size: 18px;
+  margin: 0;
+}
+.dict-search {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 16px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg);
+  color: var(--ink);
+  outline: none;
+  margin-bottom: 12px;
+}
+.dict-search:focus {
+  border-color: var(--accent);
+}
+.dict-results {
+  overflow-y: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+}
+.dict-hint {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.dict-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: var(--bg);
+}
+.dict-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dict-kana {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.dict-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.dict-card-head .speak {
+  margin-left: auto;
+}
+.dict-romaji {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 2px;
+}
+.dict-en {
+  color: var(--ink);
+  font-size: 15px;
+  margin-top: 4px;
+}
+.dict-pos {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--them);
+  margin-right: 4px;
+}
+.dict-jisho {
+  width: 100%;
+  margin-top: 8px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+}
+
+/* ── Single-player (vs CPU) ──────────────────────────────── */
+.sp-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 480px;
+  margin-bottom: 10px;
+}
+.sp-level {
+  font-weight: 700;
+  color: var(--accent-ink);
+}
+.sp-timer {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--muted);
+}
+.sp-timer.low {
+  color: var(--bad);
+}
+.sp-turn {
+  text-align: center;
+  font-size: 16px;
+  color: var(--ink);
+  margin: 4px 0 8px;
+}
+.sp-result {
+  text-align: center;
+}
+.sp-result h2 {
+  margin: 4px 0;
+}
+.sp-chain {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 40vh;
+  overflow-y: auto;
+  margin: 8px 0;
+}
+.sp-word {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+.sp-word.you {
+  border-color: var(--me);
+  background: var(--accent-soft);
+}
+.sp-word.cpu {
+  border-color: var(--them);
+  background: var(--them-soft);
+}
+.sp-kana {
+  font-size: 18px;
+  font-weight: 700;
+}
+.sp-meaning {
+  font-size: 13px;
+  color: var(--muted);
+}
+.sp-who {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sp-preview {
+  color: var(--accent-ink);
+  font-weight: 600;
+  margin: 6px 0 0;
 }

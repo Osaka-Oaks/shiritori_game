@@ -124,17 +124,17 @@ jobs:
           cache: npm
 
       - run: npm ci
-      
+
       - name: Validate JSON syntax
         run: |
           npm run validate:json
           echo "✅ All JSON files are valid" >> $GITHUB_STEP_SUMMARY
-      
+
       - name: Check JSON formatting
         run: |
           npm run format:json:check
           echo "✅ All JSON files are properly formatted" >> $GITHUB_STEP_SUMMARY
-      
+
       - name: Upload JSON validation report
         if: always()
         uses: actions/upload-artifact@v4

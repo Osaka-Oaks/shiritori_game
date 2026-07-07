@@ -34,7 +34,6 @@ export default function LeaderboardView({ users }: LeaderboardViewProps) {
       {/* Podium Render block */}
       <section className="bg-surface-container-low rounded-3xl p-5 border-2 border-surface-container-highest shadow-soft">
         <div className="grid grid-cols-3 gap-2 pt-6 items-end relative min-h-[220px]">
-          
           {/* Podium 2nd Place */}
           {podium[0] && (
             <motion.div
@@ -149,8 +148,8 @@ export default function LeaderboardView({ users }: LeaderboardViewProps) {
           <div
             key={item.name}
             className={`flex items-center justify-between p-3.5 rounded-2xl border-2 transition-all shadow-sm ${
-              item.isCurrentUser 
-                ? "bg-primary-container/15 border-primary" 
+              item.isCurrentUser
+                ? "bg-primary-container/15 border-primary"
                 : "bg-surface-container-lowest border-surface-container-highest"
             }`}
           >
@@ -175,7 +174,9 @@ export default function LeaderboardView({ users }: LeaderboardViewProps) {
                     </span>
                   )}
                 </h4>
-                <p className="text-[10px] text-on-surface-variant/80 font-body">Regular Competitor</p>
+                <p className="text-[10px] text-on-surface-variant/80 font-body">
+                  Regular Competitor
+                </p>
               </div>
             </div>
 
@@ -193,7 +194,13 @@ export default function LeaderboardView({ users }: LeaderboardViewProps) {
         <div className="bg-inverse-surface text-inverse-on-surface rounded-2xl p-3 shadow-md flex items-center justify-between font-body text-xs px-5 border border-primary/25">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-primary-container" />
-            <span>You are currently ranked <strong className="font-bold underline text-primary-container">#{currentUser.rank}</strong> out of {sorted.length} players.</span>
+            <span>
+              You are currently ranked{" "}
+              <strong className="font-bold underline text-primary-container">
+                #{currentUser.rank}
+              </strong>{" "}
+              out of {sorted.length} players.
+            </span>
           </div>
           <ChevronUp className="w-4 h-4 animate-bounce text-primary-container" />
         </div>

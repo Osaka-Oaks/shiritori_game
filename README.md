@@ -12,14 +12,14 @@ installable as a PWA.
 
 ## What's in this repo
 
-| Folder | What it is |
-|---|---|
-| **`shiritori-online/`** | ✅ The finished, deployed game — React 18 + TypeScript + Vite, Firebase Realtime Database. **This is the one that's live.** |
-| `kawaii-shiritori/` | Earlier prototype (kept for reference) |
-| `shiritori-word-chain/` | Earlier prototype (kept for reference) |
-| `shiritori-v1/` | Early Next.js scaffold (kept for reference) |
-| `stitch_bilingual_shiritori_blitz/` | Design mockups (static HTML screens) |
-| `How to Play Shiritori.*` | The bilingual rules guide |
+| Folder                              | What it is                                                                                                                  |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **`shiritori-online/`**             | ✅ The finished, deployed game — React 18 + TypeScript + Vite, Firebase Realtime Database. **This is the one that's live.** |
+| `kawaii-shiritori/`                 | Earlier prototype (kept for reference)                                                                                      |
+| `shiritori-word-chain/`             | Earlier prototype (kept for reference)                                                                                      |
+| `shiritori-v1/`                     | Early Next.js scaffold (kept for reference)                                                                                 |
+| `stitch_bilingual_shiritori_blitz/` | Design mockups (static HTML screens)                                                                                        |
+| `How to Play Shiritori.*`           | The bilingual rules guide                                                                                                   |
 
 The working game lives in **[`shiritori-online/`](shiritori-online/)**. Treat
 the other app folders as references unless you are intentionally porting a
@@ -82,7 +82,7 @@ The deploy step authenticates with a Firebase CI token stored as a GitHub secret
 2. Add it at **Repo → Settings → Secrets and variables → Actions → New repository
    secret**:
    - Name: `FIREBASE_TOKEN`
-   - Value: *(the token)*
+   - Value: _(the token)_
 
 That's it. From then on:
 

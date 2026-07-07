@@ -10,6 +10,7 @@ interface Props {
   setName: (n: string) => void;
   deepLinkCode: string;
   onEnterRoom: (code: string) => void;
+  onSinglePlayer: () => void;
   onShowRules: () => void;
   onShowLove: () => void;
 }
@@ -22,6 +23,7 @@ export default function Home({
   setName,
   deepLinkCode,
   onEnterRoom,
+  onSinglePlayer,
   onShowRules,
   onShowLove,
 }: Props) {
@@ -87,14 +89,14 @@ export default function Home({
         <input
           className="field"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
           placeholder={t("namePlaceholder")}
           maxLength={16}
         />
 
         <label className="label">{t("turnTimer")}</label>
         <div className="seg">
-          {TIME_OPTIONS.map((tt) => (
+          {TIME_OPTIONS.map(tt => (
             <button
               key={tt}
               className={timeLimit === tt ? "on" : ""}
@@ -108,7 +110,7 @@ export default function Home({
         <button
           className="btn ghost"
           style={{ marginTop: 10 }}
-          onClick={() => setShowSettings((s) => !s)}
+          onClick={() => setShowSettings(s => !s)}
         >
           {showSettings ? `▲ ${t("hideHouseRules")}` : `▼ ${t("houseRules")}`}
         </button>
@@ -119,17 +121,13 @@ export default function Home({
               label={t("smallKana")}
               sub={t("smallKanaSub")}
               on={rules.smallKanaLenient}
-              onToggle={() =>
-                setRules((r) => ({ ...r, smallKanaLenient: !r.smallKanaLenient }))
-              }
+              onToggle={() => setRules(r => ({ ...r, smallKanaLenient: !r.smallKanaLenient }))}
             />
             <Toggle
               label={t("dakuten")}
               sub={t("dakutenSub")}
               on={rules.dakutenLenient}
-              onToggle={() =>
-                setRules((r) => ({ ...r, dakutenLenient: !r.dakutenLenient }))
-              }
+              onToggle={() => setRules(r => ({ ...r, dakutenLenient: !r.dakutenLenient }))}
             />
           </div>
         )}
@@ -143,13 +141,22 @@ export default function Home({
           {busy === "create" ? t("creating") : `✨ ${t("createRoom")}`}
         </button>
 
+        <button
+          className="btn secondary"
+          style={{ marginTop: 10 }}
+          onClick={onSinglePlayer}
+          disabled={busy !== null}
+        >
+          🤖 Play vs CPU (solo practice)
+        </button>
+
         <div className="divider">{t("orJoin")}</div>
 
         <div className="row">
           <input
             className="field"
             value={joinCode}
-            onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+            onChange={e => setJoinCode(e.target.value.toUpperCase())}
             placeholder={t("codePlaceholder")}
             maxLength={4}
             autoCapitalize="characters"
@@ -160,11 +167,7 @@ export default function Home({
               fontWeight: 700,
             }}
           />
-          <button
-            className="btn secondary"
-            onClick={handleJoin}
-            disabled={busy !== null}
-          >
+          <button className="btn secondary" onClick={handleJoin} disabled={busy !== null}>
             {busy === "join" ? t("joining") : t("join")}
           </button>
         </div>

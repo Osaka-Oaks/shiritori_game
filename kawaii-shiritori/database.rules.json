@@ -1,0 +1,99 @@
+{
+  "rules": {
+    "games": {
+      "$gameId": {
+        ".read": "auth != null",
+
+        "seats": {
+          "0": {
+            ".write": "auth != null && !data.exists()"
+          },
+          "1": {
+            ".write": "auth != null && !data.exists() && root.child('games/' + $gameId + '/seats/0').val() !== auth.uid"
+          }
+        },
+
+        "names": {
+          "0": {
+            ".write": "auth != null && root.child('games/' + $gameId + '/seats/0').val() === auth.uid"
+          },
+          "1": {
+            ".write": "auth != null && root.child('games/' + $gameId + '/seats/1').val() === auth.uid"
+          }
+        },
+
+        "turn": {
+          ".write": "auth != null && root.child('games/' + $gameId + '/seats/' + data.val()).val() === auth.uid"
+        },
+
+        "words": {
+          "$index": {
+            ".write": "auth != null && !data.exists() && newData.child('by').val() === auth.uid && newData.child('seat').val() === root.child('games/' + $gameId + '/turn').val() && root.child('games/' + $gameId + '/seats/' + newData.child('seat').val()).val() === auth.uid"
+          }
+        },
+
+        "status": {
+          ".write": "auth != null && (root.child('games/' + $gameId + '/seats/0').val() === auth.uid || root.child('games/' + $gameId + '/seats/1').val() === auth.uid)"
+        },
+
+        "winnerSeat": {
+          ".write": "auth != null && (root.child('games/' + $gameId + '/seats/0').val() === auth.uid || root.child('games/' + $gameId + '/seats/1').val() === auth.uid)"
+        },
+
+        "loserSeat": {
+          ".write": "auth != null && (root.child('games/' + $gameId + '/seats/0').val() === auth.uid || root.child('games/' + $gameId + '/seats/1').val() === auth.uid)"
+        },
+
+        "loseReasonCode": {
+          ".write": "auth != null && (root.child('games/' + $gameId + '/seats/0').val() === auth.uid || root.child('games/' + $gameId + '/seats/1').val() === auth.uid)"
+        },
+
+        "currentKana": {
+          ".write": "auth != null && (root.child('games/' + $gameId + '/seats/0').val() === auth.uid || root.child('games/' + $gameId + '/seats/1').val() === auth.uid)"
+        },
+
+        "turnStartedAt": {
+          ".write": "auth != null && (root.child('games/' + $gameId + '/seats/0').val() === auth.uid || root.child('games/' + $gameId + '/seats/1').val() === auth.uid)"
+        },
+
+        "code": {
+          ".write": "auth != null && !data.exists()"
+        },
+
+        "createdAt": {
+          ".write": "auth != null && !data.exists()"
+        },
+
+        "hostUid": {
+          ".write": "auth != null && !data.exists() && newData.val() === auth.uid"
+        },
+
+        "timeLimit": {
+          ".write": "auth != null && !data.exists()"
+        },
+
+        "startSeat": {
+          ".write": "auth != null && !data.exists()"
+        },
+
+        "settings": {
+          ".write": "auth != null && (root.child('games/' + $gameId + '/hostUid').val() === auth.uid || !data.exists())"
+        }
+      }
+    },
+
+    "presence": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && $uid === auth.uid"
+      }
+    },
+
+    "activeGames": {
+      ".read": "auth != null",
+      "$gameId": {
+        ".write": "auth != null"
+      }
+    }
+  }
+}

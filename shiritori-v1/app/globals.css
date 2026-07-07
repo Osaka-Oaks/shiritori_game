@@ -15,9 +15,12 @@
   --asagi: #9db8d2;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   background: var(--ai);
@@ -96,7 +99,9 @@ main {
   border-color: var(--shu);
   color: #fff;
 }
-.btn:disabled { opacity: 0.5; }
+.btn:disabled {
+  opacity: 0.5;
+}
 .btn:focus-visible {
   outline: 2px solid var(--kinari);
   outline-offset: 2px;
@@ -118,7 +123,9 @@ main {
   margin-top: 14px;
   font-size: 0.95rem;
 }
-.muted { color: var(--asagi); }
+.muted {
+  color: var(--asagi);
+}
 
 /* ---------- room ---------- */
 
@@ -134,7 +141,10 @@ main {
   letter-spacing: 0.05em;
 }
 
-.waiting { text-align: center; padding: 40px 0; }
+.waiting {
+  text-align: center;
+  padding: 40px 0;
+}
 .big-code {
   font-size: 3rem;
   font-weight: 700;
@@ -164,8 +174,12 @@ main {
   width: 2px;
   background: rgba(157, 184, 210, 0.3);
 }
-.chain li:first-child::before { top: 50%; }
-.chain li:last-child::before { bottom: 50%; }
+.chain li:first-child::before {
+  top: 50%;
+}
+.chain li:last-child::before {
+  bottom: 50%;
+}
 .chain li::after {
   content: "";
   position: absolute;
@@ -177,7 +191,9 @@ main {
   border-radius: 50%;
   background: var(--asagi);
 }
-.chain li.mine::after { background: var(--shu); }
+.chain li.mine::after {
+  background: var(--shu);
+}
 
 .chain-player {
   display: block;
@@ -190,8 +206,14 @@ main {
   color: var(--shu);
   font-weight: 700;
 }
-.empty { font-size: 1rem; padding-left: 18px; }
-.empty::before, .empty::after { display: none; }
+.empty {
+  font-size: 1rem;
+  padding-left: 18px;
+}
+.empty::before,
+.empty::after {
+  display: none;
+}
 
 /* play area pinned visually at the bottom of the flow */
 .play-area {
@@ -223,11 +245,21 @@ main {
   outline: none;
   min-width: 0;
 }
-.input-row input:focus { border-color: var(--shu); }
-.input-row .btn { width: auto; padding: 12px 20px; }
+.input-row input:focus {
+  border-color: var(--shu);
+}
+.input-row .btn {
+  width: auto;
+  padding: 12px 20px;
+}
 
-.waiting-turn { font-size: 1rem; }
+.waiting-turn {
+  font-size: 1rem;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; transition: none !important; }
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
 }

@@ -1,7 +1,18 @@
 import React from "react";
 import { PlayerProfile, MatchHistory } from "../types";
 import { motion } from "motion/react";
-import { Play, BookOpen, RefreshCw, ChevronRight, User, Cpu, Target, Users, Smartphone } from "lucide-react";
+import {
+  Play,
+  BookOpen,
+  RefreshCw,
+  ChevronRight,
+  User,
+  Cpu,
+  Target,
+  Users,
+  Smartphone,
+  Gamepad2,
+} from "lucide-react";
 
 interface HomeViewProps {
   profile: PlayerProfile;
@@ -12,9 +23,40 @@ interface HomeViewProps {
   onOpenPractice?: () => void;
   onOpenMultiplayer?: () => void;
   onOpenLocalMultiplayer?: () => void;
+  onOpen2DGame?: () => void;
 }
 
-const KANA_LIST = ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と', 'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ'];
+const KANA_LIST = [
+  "あ",
+  "い",
+  "う",
+  "え",
+  "お",
+  "か",
+  "き",
+  "く",
+  "け",
+  "こ",
+  "さ",
+  "し",
+  "す",
+  "せ",
+  "そ",
+  "た",
+  "ち",
+  "つ",
+  "て",
+  "と",
+  "な",
+  "に",
+  "ぬ",
+  "ね",
+  "の",
+  "は",
+  "ひ",
+  "ふ",
+  "へ",
+];
 
 export default function HomeView({
   profile,
@@ -25,6 +67,7 @@ export default function HomeView({
   onOpenPractice,
   onOpenMultiplayer,
   onOpenLocalMultiplayer,
+  onOpen2DGame,
 }: HomeViewProps) {
   // Generate random static positions for background kana floating
   const floatingKana = React.useMemo(() => {
@@ -66,8 +109,12 @@ export default function HomeView({
       <div className="w-full max-w-md flex flex-col items-center z-10 text-center space-y-6">
         {/* Animated Hero Mascot */}
         <div className="relative mb-2 border border-white/10 p-5 bg-surface-container-low relative w-full flex items-center justify-center">
-          <span className="absolute top-1.5 left-2 text-[8px] font-mono text-primary tracking-[3px]">FIG. 01 // INDEXED_NEKO</span>
-          <span className="absolute bottom-1.5 right-2 text-[8px] font-mono text-white/30 tracking-widest">SCALE: 1:1</span>
+          <span className="absolute top-1.5 left-2 text-[8px] font-mono text-primary tracking-[3px]">
+            FIG. 01 // INDEXED_NEKO
+          </span>
+          <span className="absolute bottom-1.5 right-2 text-[8px] font-mono text-white/30 tracking-widest">
+            SCALE: 1:1
+          </span>
           <div className="absolute right-3 top-3 w-2 h-2 rounded-none bg-primary animate-pulse" />
           <motion.div
             className="relative w-40 h-40 md:w-48 md:h-48 flex items-center justify-center cursor-pointer"
@@ -92,7 +139,9 @@ export default function HomeView({
 
         {/* Brand Headline tagline */}
         <div className="space-y-2">
-          <span className="struct-index text-xs tracking-[4px] uppercase block">No. 01 // ARCHITECTURAL LEDGER</span>
+          <span className="struct-index text-xs tracking-[4px] uppercase block">
+            No. 01 // ARCHITECTURAL LEDGER
+          </span>
           <h2 className="font-headline text-5xl md:text-7xl font-black text-white tracking-[-3px] leading-none uppercase">
             SHIRI<span className="text-primary">TORI</span>
           </h2>
@@ -134,6 +183,16 @@ export default function HomeView({
           </motion.button>
 
           <motion.button
+            onClick={onOpen2DGame}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="squish-btn w-full bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 text-white font-display-game font-bold py-3 px-6 rounded-none flex items-center justify-center gap-3 transition-all cursor-pointer text-xs uppercase tracking-widest border border-pink-400/60 shadow-lg animate-pulse"
+          >
+            <Gamepad2 className="w-5 h-5" />
+            🎮 2D Game Mode (NEW!)
+          </motion.button>
+
+          <motion.button
             onClick={onOpenPractice}
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.99 }}
@@ -157,8 +216,13 @@ export default function HomeView({
         {/* Recent Active Matches Feed */}
         <section className="w-full px-2 pt-4">
           <div className="flex items-center justify-between mb-3 px-2">
-            <h3 className="font-label-caps text-label-caps text-on-surface-variant text-xs">RECENT GAMES</h3>
-            <span onClick={onStartGame} className="text-xs text-primary font-bold hover:underline cursor-pointer">
+            <h3 className="font-label-caps text-label-caps text-on-surface-variant text-xs">
+              RECENT GAMES
+            </h3>
+            <span
+              onClick={onStartGame}
+              className="text-xs text-primary font-bold hover:underline cursor-pointer"
+            >
               New Game
             </span>
           </div>
@@ -189,13 +253,17 @@ export default function HomeView({
                         {match.opponentName}
                       </p>
                       <p className="text-[11px] text-on-surface-variant/80 font-medium">
-                        {match.didWin ? "Match finished • You won!" : `Active • Last: ${match.fatalWord || "Ringo"}`}
+                        {match.didWin
+                          ? "Match finished • You won!"
+                          : `Active • Last: ${match.fatalWord || "Ringo"}`}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    {!match.didWin && <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />}
+                    {!match.didWin && (
+                      <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
+                    )}
                     <ChevronRight className="w-4 h-4 text-outline group-hover:text-primary transition-colors" />
                   </div>
                 </motion.div>

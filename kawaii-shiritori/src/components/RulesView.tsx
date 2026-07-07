@@ -8,26 +8,26 @@ export default function RulesView() {
       title: "1. Japanese Nouns ONLY",
       desc: "Words must be standard Japanese nouns (usually in Hiragana/Katakana). Verbs, adjectives, or particles are strictly banned!",
       icon: <BadgeCheck className="w-5 h-5 text-secondary" />,
-      bg: "bg-secondary-container/10 border-secondary/20"
+      bg: "bg-secondary-container/10 border-secondary/20",
     },
     {
       title: "2. The Word Chain Rule",
       desc: "Your word must start with the exact final syllable (sound) of the previous word. Example: さくら (Sakura) -> らいおん (Raion - wait, that ends in N!).",
       icon: <Star className="w-5 h-5 text-tertiary" />,
-      bg: "bg-tertiary-fixed/20 border-tertiary-container/30"
+      bg: "bg-tertiary-fixed/20 border-tertiary-container/30",
     },
     {
       title: "3. Avoid 'ん' (N) at All Costs",
       desc: "Since no Japanese words start with the syllable 'ん' (N), ending your word in 'ん' / 'ン' leads to an direct FATAL GAME OVER!",
       icon: <ShieldAlert className="w-5 h-5 text-error" />,
-      bg: "bg-error-container/25 border-error/20"
+      bg: "bg-error-container/25 border-error/20",
     },
     {
       title: "4. No Duplication",
       desc: "You cannot repeat any word that has already been spoken in the current match duel.",
       icon: <Clock className="w-5 h-5 text-primary" />,
-      bg: "bg-primary-container/15 border-primary/20 animate-pulse"
-    }
+      bg: "bg-primary-container/15 border-primary/20 animate-pulse",
+    },
   ];
 
   return (
@@ -45,15 +45,20 @@ export default function RulesView() {
         </div>
 
         <div className="p-6 text-center space-y-2">
-          <h2 className="font-headline text-3xl font-extrabold text-on-surface">How to Playしりとり</h2>
+          <h2 className="font-headline text-3xl font-extrabold text-on-surface">
+            How to Playしりとり
+          </h2>
           <p className="font-body text-sm font-medium text-on-surface-variant max-w-md mx-auto">
-            Shiritori is a classic Japanese word game that tests vocabulary, phonetic awareness, and quick-thinking puzzle skills. Let's learn!
+            Shiritori is a classic Japanese word game that tests vocabulary, phonetic awareness, and
+            quick-thinking puzzle skills. Let's learn!
           </p>
         </div>
       </div>
 
       {/* Structured Guideline Checklist Step Cards */}
-      <h3 className="font-label-caps text-xs text-primary font-bold self-start mt-2 px-1">OFFICIAL TOURNAMENT RULES</h3>
+      <h3 className="font-label-caps text-xs text-primary font-bold self-start mt-2 px-1">
+        OFFICIAL TOURNAMENT RULES
+      </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {steps.map((step, idx) => (
           <motion.div
@@ -92,7 +97,9 @@ export default function RulesView() {
           <span className="px-2.5 py-1.5 bg-secondary-container text-on-secondary-container rounded-xl shadow-xs">
             ぱんだ (panda)
           </span>
-          <span className="text-error font-body font-medium">⚠️ end in だ... next player wins!</span>
+          <span className="text-error font-body font-medium">
+            ⚠️ end in だ... next player wins!
+          </span>
         </div>
       </section>
     </div>

@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { 
+import {
   User as FirebaseUser,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   signInWithPopup,
   GoogleAuthProvider,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { auth, db, handleFirestoreError, OperationType } from "../firebase";
@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Sync auth state
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async currentUser => {
       setUser(currentUser);
       if (currentUser) {
         // Fetch or create Firestore profile
@@ -68,16 +68,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const newProfile: UserProfile = {
           uid: firebaseUser.uid,
           email: firebaseUser.email || "",
-          displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Guest Player",
+          displayName:
+            firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Guest Player",
           highScore: 0,
           gamesPlayed: 0,
-          createdAt: new Date() // Will convert to Firestore Timestamp or request.time in write
+          createdAt: new Date(), // Will convert to Firestore Timestamp or request.time in write
         };
-        
+
         // Write profile document securely
         await setDoc(userRef, {
           ...newProfile,
-          createdAt: new Date() // Firestore automatically serializes js Date objects
+          createdAt: new Date(), // Firestore automatically serializes js Date objects
         });
         setProfile(newProfile);
       }
@@ -93,7 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = async (email: string, password: string, displayName: string) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
-    
+
     // Create new profile explicitly
     const docPath = `users/${firebaseUser.uid}`;
     try {
@@ -103,7 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         displayName: displayName || email.split("@")[0],
         highScore: 0,
         gamesPlayed: 0,
-        createdAt: new Date()
+        createdAt: new Date(),
       };
       await setDoc(doc(db, "users", firebaseUser.uid), newProfile);
       setProfile(newProfile);
@@ -129,7 +130,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const userRef = doc(db, "users", user.uid);
       await updateDoc(userRef, { highScore: score });
-      setProfile(prev => prev ? { ...prev, highScore: score } : null);
+      setProfile(prev => (prev ? { ...prev, highScore: score } : null));
     } catch (err) {
       handleFirestoreError(err, OperationType.UPDATE, docPath);
     }
@@ -143,24 +144,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const userRef = doc(db, "users", user.uid);
       const updatedCount = profile.gamesPlayed + 1;
       await updateDoc(userRef, { gamesPlayed: updatedCount });
-      setProfile(prev => prev ? { ...prev, gamesPlayed: updatedCount } : null);
+      setProfile(prev => (prev ? { ...prev, gamesPlayed: updatedCount } : null));
     } catch (err) {
       handleFirestoreError(err, OperationType.UPDATE, docPath);
     }
   };
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      profile,
-      loading,
-      login,
-      signup,
-      logout,
-      loginWithGoogle,
-      updateHighScore,
-      incrementGamesPlayed
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        profile,
+        loading,
+        login,
+        signup,
+        logout,
+        loginWithGoogle,
+        updateHighScore,
+        incrementGamesPlayed,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
