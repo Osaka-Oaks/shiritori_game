@@ -13,8 +13,8 @@
 **Issue:** Using `Math.random()` for security-sensitive operations.
 
 **Fixed in:**
-- `@/Users/jarrel/Documents/Github/shiritori_game/kawaii-shiritori/src/views/AuthView.tsx` - User ID generation
-- `@/Users/jarrel/Documents/Github/shiritori_game/shiritori-online/src/services/roomService.ts` - Room code generation
+- `kawaii-shiritori/src/components/AuthView.tsx` - User ID generation
+- `shiritori-online/src/lib/game/room-service.ts` - Room code generation
 
 **Solution:**
 ```typescript
@@ -37,7 +37,7 @@ const roomCode = Array.from(crypto.getRandomValues(new Uint32Array(1)))
 **Issue:** Passwords stored in plain text in localStorage.
 
 **Fixed in:**
-- `@/Users/jarrel/Documents/Github/shiritori_game/kawaii-shiritori/src/views/AuthView.tsx`
+- `kawaii-shiritori/src/components/AuthView.tsx`
 
 **Solution:**
 ```typescript
@@ -62,8 +62,8 @@ localStorage.setItem('auth_password', hashedPassword);
 **Issue:** No rate limiting on Express servers.
 
 **Fixed in:**
-- `@/Users/jarrel/Documents/Github/shiritori_game/kawaii-shiritori/server.ts`
-- `@/Users/jarrel/Documents/Github/shiritori_game/shiritori-online/server.ts`
+- `kawaii-shiritori/server.ts`
+- `shiritori-word-chain/server.ts`
 
 **Solution:**
 ```typescript
