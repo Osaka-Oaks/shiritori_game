@@ -1,0 +1,82 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isValidUser() {
+      return request.resource.data.keys().hasAll(['displayName', 'createdAt']) &&
+             request.resource.data.displayName is string &&
+             request.resource.data.createdAt is timestamp;
+    }
+    
+    function isValidGame() {
+      return request.resource.data.keys().hasAll(['playerIds', 'status', 'createdAt']) &&
+             request.resource.data.playerIds is list &&
+             request.resource.data.status in ['waiting', 'active', 'completed'] &&
+             request.resource.data.createdAt is timestamp;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      // Anyone can read user profiles
+      allow read: if true;
+      
+      // Users can only write their own profile
+      allow create: if isOwner(userId) && isValidUser();
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+    }
+    
+    // Games collection
+    match /games/{gameId} {
+      // Anyone can read games
+      allow read: if true;
+      
+      // Authenticated users can create games
+      allow create: if isAuthenticated() && isValidGame();
+      
+      // Only players in the game can update it
+      allow update: if isAuthenticated() && 
+                       request.auth.uid in resource.data.playerIds;
+      
+      // Only game creator can delete
+      allow delete: if isAuthenticated() && 
+                       request.auth.uid == resource.data.creatorId;
+    }
+    
+    // Leaderboard collection
+    match /leaderboard/{userId} {
+      // Anyone can read leaderboard
+      allow read: if true;
+      
+      // Users can only update their own stats
+      allow write: if isOwner(userId);
+    }
+    
+    // Game history sub-collection
+    match /users/{userId}/history/{historyId} {
+      // Users can read their own history
+      allow read: if isOwner(userId);
+      
+      // Users can write their own history
+      allow write: if isOwner(userId);
+    }
+    
+    // Settings collection
+    match /settings/{settingId} {
+      // Anyone can read settings
+      allow read: if true;
+      
+      // Only admins can write settings
+      allow write: if false;
+    }
+  }
+}

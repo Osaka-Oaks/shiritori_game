@@ -10,6 +10,9 @@ import {
   ChevronUp,
   Maximize2,
   Minimize2,
+  Eye,
+  EyeOff,
+  PictureInPicture2,
 } from "lucide-react";
 
 interface JishoWord {
@@ -40,7 +43,10 @@ interface FloatingDictionaryProps {
 
 export default function FloatingDictionary({ onClose }: FloatingDictionaryProps) {
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isPipMode, setIsPipMode] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+  const [opacity, setOpacity] = useState(1);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<JishoWord[]>([]);
   const [loading, setLoading] = useState(false);
@@ -130,6 +136,27 @@ export default function FloatingDictionary({ onClose }: FloatingDictionaryProps)
     }
   };
 
+  // Hidden state - just show icon
+  if (isHidden) {
+    return (
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        style={{
+          position: "fixed",
+          right: 20,
+          bottom: 20,
+          zIndex: 9999,
+        }}
+        className="bg-primary text-on-primary rounded-full p-3 shadow-2xl hover:scale-110 transition-transform cursor-pointer"
+        onClick={() => setIsHidden(false)}
+      >
+        <BookOpen className="w-6 h-6" />
+      </motion.div>
+    );
+  }
+
+  // Minimized state - floating icon
   if (isMinimized) {
     return (
       <motion.div
@@ -141,6 +168,7 @@ export default function FloatingDictionary({ onClose }: FloatingDictionaryProps)
           top: position.y,
           zIndex: 9999,
           cursor: isDragging ? "grabbing" : "grab",
+          opacity: opacity,
         }}
         onMouseDown={handleMouseDown}
         className="bg-primary text-on-primary rounded-full p-4 shadow-2xl hover:scale-110 transition-transform"
@@ -149,6 +177,113 @@ export default function FloatingDictionary({ onClose }: FloatingDictionaryProps)
           <BookOpen className="w-6 h-6" />
           <span className="text-sm">辞書</span>
         </button>
+      </motion.div>
+    );
+  }
+
+  // Picture-in-Picture mode - compact view
+  if (isPipMode) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: opacity, scale: 1 }}
+        style={{
+          position: "fixed",
+          left: position.x,
+          top: position.y,
+          width: "280px",
+          maxHeight: "320px",
+          zIndex: 9999,
+          cursor: isDragging ? "grabbing" : "auto",
+        }}
+        className="bg-surface-container/95 backdrop-blur-md rounded-xl shadow-2xl border border-primary/30 overflow-hidden flex flex-col"
+      >
+        {/* PiP Header */}
+        <div
+          className="dict-header bg-primary/90 text-on-primary p-2 flex items-center justify-between cursor-grab active:cursor-grabbing"
+          onMouseDown={handleMouseDown}
+        >
+          <div className="flex items-center gap-1">
+            <BookOpen className="w-4 h-4" />
+            <span className="text-xs font-bold">辞書</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setIsPipMode(false)}
+              className="p-1 hover:bg-white/20 rounded transition-all"
+              title="Exit PiP"
+            >
+              <Maximize2 className="w-3 h-3" />
+            </button>
+            <button
+              onClick={() => setIsHidden(true)}
+              className="p-1 hover:bg-white/20 rounded transition-all"
+              title="Hide"
+            >
+              <EyeOff className="w-3 h-3" />
+            </button>
+            {onClose && (
+              <button onClick={onClose} className="p-1 hover:bg-white/20 rounded transition-all">
+                <X className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* PiP Content - Selected word only */}
+        <div className="flex-1 overflow-y-auto p-3">
+          {selectedWord ? (
+            <div className="space-y-2">
+              <div className="flex items-start justify-between">
+                <div className="space-y-0.5">
+                  {selectedWord.japanese[0]?.word && (
+                    <h4 className="font-headline font-bold text-lg text-on-surface">
+                      {selectedWord.japanese[0].word}
+                    </h4>
+                  )}
+                  <p className="font-body text-sm text-primary">{selectedWord.japanese[0].reading}</p>
+                </div>
+                <button
+                  onClick={() => speakWord(selectedWord.japanese[0].reading)}
+                  className="p-1.5 bg-secondary text-on-secondary rounded-lg hover:bg-opacity-90 transition-all"
+                >
+                  <Volume2 className="w-3 h-3" />
+                </button>
+              </div>
+              <div className="space-y-1">
+                {selectedWord.senses.slice(0, 2).map((sense, idx) => (
+                  <p key={idx} className="text-xs text-on-surface">
+                    {idx + 1}. {sense.english_definitions.slice(0, 2).join(", ")}
+                  </p>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <BookOpen className="w-8 h-8 text-outline mx-auto opacity-50 mb-2" />
+              <p className="text-xs text-on-surface-variant">Search for a word</p>
+            </div>
+          )}
+        </div>
+
+        {/* Opacity Control */}
+        <div className="p-2 bg-surface-container-low border-t border-outline-variant/20">
+          <div className="flex items-center gap-2">
+            <Eye className="w-3 h-3 text-on-surface-variant" />
+            <input
+              type="range"
+              min="0.3"
+              max="1"
+              step="0.1"
+              value={opacity}
+              onChange={e => setOpacity(parseFloat(e.target.value))}
+              className="flex-1 h-1 accent-primary"
+            />
+            <span className="text-xs text-on-surface-variant font-mono">
+              {Math.round(opacity * 100)}%
+            </span>
+          </div>
+        </div>
       </motion.div>
     );
   }
@@ -167,8 +302,9 @@ export default function FloatingDictionary({ onClose }: FloatingDictionaryProps)
         maxHeight: isExpanded ? "80vh" : "500px",
         zIndex: 9999,
         cursor: isDragging ? "grabbing" : "auto",
+        opacity: opacity,
       }}
-      className="bg-surface-container rounded-2xl shadow-2xl border-2 border-primary/20 overflow-hidden flex flex-col"
+      className="bg-surface-container/95 backdrop-blur-md rounded-2xl shadow-2xl border-2 border-primary/20 overflow-hidden flex flex-col"
     >
       {/* Header */}
       <div
@@ -182,19 +318,35 @@ export default function FloatingDictionary({ onClose }: FloatingDictionaryProps)
         </div>
         <div className="flex items-center gap-2">
           <button
+            onClick={() => setIsPipMode(true)}
+            className="p-1 hover:bg-white/20 rounded transition-all"
+            title="Picture-in-Picture"
+          >
+            <PictureInPicture2 className="w-4 h-4" />
+          </button>
+          <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="p-1 hover:bg-white/20 rounded transition-all"
+            title={isExpanded ? "Minimize" : "Maximize"}
           >
             {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>
           <button
+            onClick={() => setIsHidden(true)}
+            className="p-1 hover:bg-white/20 rounded transition-all"
+            title="Hide"
+          >
+            <EyeOff className="w-4 h-4" />
+          </button>
+          <button
             onClick={() => setIsMinimized(true)}
             className="p-1 hover:bg-white/20 rounded transition-all"
+            title="Minimize"
           >
             <ChevronDown className="w-4 h-4" />
           </button>
           {onClose && (
-            <button onClick={onClose} className="p-1 hover:bg-white/20 rounded transition-all">
+            <button onClick={onClose} className="p-1 hover:bg-white/20 rounded transition-all" title="Close">
               <X className="w-4 h-4" />
             </button>
           )}
@@ -348,11 +500,29 @@ export default function FloatingDictionary({ onClose }: FloatingDictionaryProps)
         )}
       </div>
 
-      {/* Footer */}
-      <div className="bg-surface-container-low p-3 border-t border-outline-variant/20 text-center">
-        <p className="text-xs text-on-surface-variant">
-          Powered by <span className="text-primary font-bold">Jisho.org</span> API
-        </p>
+      {/* Footer with Opacity Control */}
+      <div className="bg-surface-container-low p-3 border-t border-outline-variant/20">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-xs text-on-surface-variant flex-shrink-0">
+            Powered by <span className="text-primary font-bold">Jisho.org</span>
+          </p>
+          <div className="flex items-center gap-2 flex-1 max-w-xs">
+            <Eye className="w-3 h-3 text-on-surface-variant flex-shrink-0" />
+            <input
+              type="range"
+              min="0.3"
+              max="1"
+              step="0.1"
+              value={opacity}
+              onChange={e => setOpacity(parseFloat(e.target.value))}
+              className="flex-1 h-1 accent-primary"
+              title="Opacity"
+            />
+            <span className="text-xs text-on-surface-variant font-mono flex-shrink-0">
+              {Math.round(opacity * 100)}%
+            </span>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

@@ -118,7 +118,10 @@ const STRINGS = {
 
   // Solo / vs CPU
   soloTitle: { en: "Practice vs CPU", ja: "CPUとれんしゅう" },
-  soloSubtitle: { en: "Pick a level — get instant feedback", ja: "レベルをえらんで — すぐへんしんがくれる" },
+  soloSubtitle: {
+    en: "Pick a level — get instant feedback",
+    ja: "レベルをえらんで — すぐへんしんがくれる",
+  },
   soloYourTurn: { en: "Your turn", ja: "あなたの番" },
   soloCpuThinking: { en: "CPU is thinking…", ja: "CPUがかんがえちゅう…" },
   soloPlay: { en: "Play", ja: "プレイ" },
