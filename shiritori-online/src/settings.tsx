@@ -126,6 +126,7 @@ const STRINGS = {
   soloChangeLevel: { en: "Change level", ja: "レベルへんこう" },
   soloPracticeBtn: { en: "Practice vs CPU (solo)", ja: "CPUとれんしゅう（ひとり）" },
   soloDevHint: { en: "Dev: add ?dev=1 to URL for test tools", ja: "開発：?dev=1 でテストツール" },
+  soloQuickLevels: { en: "Quick start level:", ja: "クイックスタート：" },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;

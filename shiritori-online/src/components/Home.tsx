@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createRoom, joinRoom } from "../lib/roomService";
 import { DEFAULT_RULES, type RuleSettings } from "../lib/shiritori";
 import { useSettings, SettingsControls } from "../settings";
+import { isDevEnvironment } from "../lib/devMode";
 import Petals from "./Petals";
 
 interface Props {
@@ -149,6 +150,29 @@ export default function Home({
         >
           🤖 {t("soloPracticeBtn")}
         </button>
+
+        <div className="sp-quick-levels">
+          <span className="sp-quick-label">{t("soloQuickLevels")}</span>
+          <div className="sp-quick-btns">
+            {[1, 2, 3, 4, 5].map(n => (
+              <button
+                key={n}
+                className="btn ghost small"
+                onClick={() => {
+                  window.location.href = `?solo=${n}${isDevEnvironment() ? "&dev=1" : ""}`;
+                }}
+              >
+                L{n}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {isDevEnvironment() && (
+          <p className="sp-dev-hint">
+            🛠 {t("soloDevHint")} — <code>?solo=3&amp;dev=1</code>
+          </p>
+        )}
 
         <div className="divider">{t("orJoin")}</div>
 

@@ -1284,3 +1284,31 @@ input {
   padding: 6px 10px;
   font-size: 13px;
 }
+.sp-quick-levels {
+  margin-top: 12px;
+  text-align: center;
+}
+.sp-quick-label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.sp-quick-btns {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.sp-dev-hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+  text-align: center;
+}
+.sp-dev-hint code {
+  font-size: 11px;
+  background: var(--bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+}

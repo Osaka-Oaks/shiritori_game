@@ -5,7 +5,9 @@ name: Labels & project board
 on:
   push:
     branches: [main]
-    paths: [".github/labels.yml"]
+    paths:
+      - ".github/labels.yml"
+      - ".github/labeler.yml"
   pull_request_target:
     types: [opened, synchronize, reopened]
   issues:

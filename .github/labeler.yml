@@ -21,3 +21,46 @@
 "dependencies":
   - changed-files:
       - any-glob-to-any-file: ["**/package.json", "**/package-lock.json"]
+
+"game: solo":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "shiritori-online/src/components/SinglePlayer.tsx"
+          - "shiritori-online/src/lib/soloEngine.ts"
+          - "shiritori-online/src/lib/levels.ts"
+          - "shiritori-online/src/lib/devMode.ts"
+
+"game: levels":
+  - changed-files:
+      - any-glob-to-any-file: ["shiritori-online/src/lib/levels.ts"]
+
+"game: dev-tools":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "shiritori-online/src/lib/devMode.ts"
+          - "**/devMode.ts"
+
+"game: multiplayer":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "shiritori-online/src/components/GameRoom.tsx"
+          - "shiritori-online/src/lib/roomService.ts"
+
+"action: ci":
+  - changed-files:
+      - any-glob-to-any-file: [".github/workflows/ci*.yml", ".github/workflows/deps*.yml"]
+
+"action: deploy":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/deploy*.yml"
+          - "**/firebase.json"
+          - "**/database.rules.json"
+          - "**/firestore.rules"
+
+"action: security":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/security.yml"
+          - "scripts/security-check.sh"
+          - ".gitleaks.toml"
