@@ -68,7 +68,7 @@ audit_app shiritori-online
 audit_app kawaii-shiritori
 
 # Quick pattern scan for hardcoded API keys in src (not tests)
-if rg -l 'AIza[0-9A-Za-z_-]{20,}' shiritori-online/src kawaii-shiritori/src 2>/dev/null; then
+if grep -rE 'AIza[0-9A-Za-z_-]{20,}' shiritori-online/src kawaii-shiritori/src 2>/dev/null; then
   fail "Possible hardcoded Firebase API key in source"
 else
   pass "No hardcoded API key patterns in src"

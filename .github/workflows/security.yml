@@ -1,16 +1,21 @@
 name: Security
 
-# Static analysis + dependency vulnerability scanning.
-# Runs on pushes/PRs to main and weekly (Mondays) to catch newly-disclosed CVEs.
+# CodeQL + dependency review + scheduled audits.
+# Fast security gate also runs in ci.yml on every branch.
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - develop
+      - "feature/**"
+      - "fix/**"
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - develop
   schedule:
     - cron: "0 6 * * 1"
 
-# Least-privilege by default; CodeQL needs to write security events.
 permissions:
   contents: read
 
@@ -30,20 +35,16 @@ jobs:
       matrix:
         language: [javascript-typescript]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+      - uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
           queries: security-and-quality
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
+      - uses: github/codeql-action/autobuild@v3
 
-      - name: Perform CodeQL analysis
-        uses: github/codeql-action/analyze@v3
+      - uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}"
 
@@ -55,25 +56,53 @@ jobs:
       matrix:
         app: [shiritori-online, kawaii-shiritori]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: ${{ matrix.app }}/package-lock.json
 
-      - name: Install dependencies
-        working-directory: ${{ matrix.app }}
+      - working-directory: ${{ matrix.app }}
         run: npm ci
 
-      # Report high/critical; do not block merges on known transitive advisories.
-      - name: Audit (high & critical)
+      - name: Critical vulnerabilities (blocking)
+        working-directory: ${{ matrix.app }}
+        run: npm audit --audit-level=critical
+
+      - name: High vulnerabilities (report)
         working-directory: ${{ matrix.app }}
         continue-on-error: true
-        run: npm audit --audit-level=high
+        run: |
+          npm audit --audit-level=high --json > audit-report.json || true
+          node -e "
+            const r=require('./audit-report.json');
+            const v=r.metadata?.vulnerabilities||{};
+            console.log('critical:', v.critical||0, 'high:', v.high||0, 'moderate:', v.moderate||0);
+          "
+
+      - name: Upload audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-${{ matrix.app }}
+          path: ${{ matrix.app }}/audit-report.json
+          retention-days: 30
+          if-no-files-found: ignore
+
+  secret-scan:
+    name: Secret scan (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
 
   dependency-review:
     name: Dependency review
@@ -83,11 +112,24 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Review dependency changes
-        uses: actions/dependency-review-action@v4
+      - uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: high
           comment-summary-in-pr: always
+
+  rules-check:
+    name: Firebase rules validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate RTDB rules JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('shiritori-online/database.rules.json','utf8'))"
+
+      - name: Validate Firestore indexes JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('kawaii-shiritori/firestore.indexes.json','utf8'))"
+
+      - name: Firestore rules header
+        run: grep -q rules_version kawaii-shiritori/firestore.rules
