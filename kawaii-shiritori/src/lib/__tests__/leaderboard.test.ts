@@ -1,4 +1,10 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+
+// leaderboard.ts imports db from ./firebase, whose module init throws
+// when VITE_FIREBASE_* env vars are absent (e.g. on CI runners). These
+// tests only cover pure scoring logic, so stub the module out.
+vi.mock("../firebase", () => ({ db: {} }));
+
 import { LeaderboardService } from "../leaderboard";
 
 describe("LeaderboardService", () => {
