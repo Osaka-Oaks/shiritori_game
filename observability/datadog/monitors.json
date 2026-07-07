@@ -1,0 +1,40 @@
+{
+  "monitors": [
+    {
+      "name": "Shiritori — homepage uptime",
+      "type": "synthetics alert",
+      "message": "Production Shiritori app is down or degraded. @pagerduty",
+      "tags": ["service:shiritori-online", "env:production"],
+      "options": {
+        "thresholds": { "critical": 1 },
+        "notify_no_data": true,
+        "no_data_timeframe": 10,
+        "renotify_interval": 30
+      },
+      "query": "avg(last_5m):avg:shiritori.uptime{env:production} < 1"
+    },
+    {
+      "name": "Shiritori — slow homepage",
+      "type": "metric alert",
+      "message": "Homepage response > 3s for 5 minutes",
+      "tags": ["service:shiritori-online", "env:production"],
+      "query": "avg(last_5m):avg:shiritori.response_ms{endpoint:homepage,env:production} > 3000"
+    }
+  ],
+  "synthetics": {
+    "name": "Shiritori production probe",
+    "type": "api",
+    "subtype": "http",
+    "locations": ["aws:us-east-1"],
+    "request": {
+      "method": "GET",
+      "url": "https://shiritori-game-ccaae.web.app/health.json",
+      "timeout": 10
+    },
+    "assertions": [
+      { "operator": "is", "type": "statusCode", "target": 200 },
+      { "operator": "contains", "type": "body", "target": "\"status\":\"ok\"" }
+    ],
+    "tick_every": 300
+  }
+}
