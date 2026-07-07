@@ -1,0 +1,124 @@
+name: Deploy Documentation to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '*.md'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: 🏗️ Build Jekyll Site
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📄 Copy documentation to docs/
+        run: |
+          # Copy key markdown files to docs for Jekyll
+          mkdir -p docs/security
+          mkdir -p docs/deployment
+          mkdir -p docs/build
+          mkdir -p docs/monitoring
+          
+          # Security docs
+          cp SECURITY.md docs/security/policy.md || true
+          cp SECURITY_FIXES.md docs/security/fixes.md || true
+          cp GITHUB_SECRETS_SETUP.md docs/security/github-secrets.md || true
+          cp GITHUB_SECURITY_SETUP.md docs/security/github-security.md || true
+          
+          # Deployment docs
+          cp GITLAB_SETUP.md docs/deployment/gitlab.md || true
+          cp FLUTTER_DEPLOYMENT_GUIDE.md docs/deployment/flutter.md || true
+          cp DEPLOYMENT_CI_CD_SUMMARY.md docs/deployment/index.md || true
+          cp FLUTTER_FIREBASE_SETUP.md docs/deployment/firebase.md || true
+          
+          # Build docs
+          cp BUILD_OPTIMIZATION_QUICKSTART.md docs/build/optimization.md || true
+          cp BUILD_TRACKING_SUMMARY.md docs/build/tracking.md || true
+          cp PERFORMANCE_GUIDE.md docs/build/performance.md || true
+          
+          # Monitoring docs
+          cp MONITORING_OBSERVABILITY_GUIDE.md docs/monitoring/observability.md || true
+          cp DOCKER_TROUBLESHOOTING.md docs/monitoring/docker.md || true
+          cp monitoring/QUICKSTART.md docs/monitoring/setup.md || true
+          
+          echo "✅ Documentation files copied to docs/"
+
+      - name: 🔧 Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: 💎 Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+          working-directory: docs
+
+      - name: 📦 Create Gemfile
+        working-directory: docs
+        run: |
+          cat > Gemfile << 'EOF'
+          source "https://rubygems.org"
+          gem "jekyll", "~> 4.3"
+          gem "jekyll-theme-cayman"
+          gem "jekyll-relative-links"
+          gem "jekyll-optional-front-matter"
+          gem "jekyll-readme-index"
+          gem "jekyll-titles-from-headings"
+          gem "webrick"
+          EOF
+          
+          bundle install
+
+      - name: 🏗️ Build with Jekyll
+        working-directory: docs
+        run: |
+          bundle exec jekyll build --destination ../_site
+        env:
+          JEKYLL_ENV: production
+
+      - name: 📊 Site Size
+        run: |
+          echo "Site size: $(du -sh _site | cut -f1)"
+          echo "File count: $(find _site -type f | wc -l)"
+
+      - name: 📤 Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: 🚀 Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: ✅ Deployment Complete
+        run: |
+          echo "📚 Documentation deployed!"
+          echo "🌐 URL: ${{ steps.deployment.outputs.page_url }}"
+          echo ""
+          echo "To enable GitHub Pages:"
+          echo "1. Go to Settings → Pages"
+          echo "2. Source: GitHub Actions"
+          echo "3. Visit the URL above"
