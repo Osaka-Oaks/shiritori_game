@@ -40,7 +40,12 @@
     "deps:fix": "syncpack fix-mismatches --config syncpack.config.cjs",
     "deps:lint": "syncpack lint-semver-ranges --config syncpack.config.cjs",
     "debug:module": "bash kawaii-shiritori/tools/scripts/debug-module.sh",
-    "check:modules": "bash kawaii-shiritori/tools/scripts/check-all-modules.sh"
+    "check:modules": "bash kawaii-shiritori/tools/scripts/check-all-modules.sh",
+    "pre-deploy": "bash scripts/pre-deploy-check.sh",
+    "test:deployment": "bash scripts/test-deployment.sh",
+    "ci:validate": "npm run format:check && npm run lint && npm run test",
+    "ci:build": "npm run build && npm run build:kawaii",
+    "ci:full": "npm run ci:validate && npm run ci:build"
   },
   "devDependencies": {
     "prettier": "^3.2.0",
