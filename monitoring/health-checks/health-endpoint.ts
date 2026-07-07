@@ -1,10 +1,10 @@
 // Health Check Endpoint for Shiritori Game
 // Provides comprehensive application health status
 
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
 interface HealthStatus {
-  status: 'healthy' | 'degraded' | 'unhealthy';
+  status: "healthy" | "degraded" | "unhealthy";
   timestamp: string;
   uptime: number;
   checks: {
@@ -19,7 +19,7 @@ interface HealthStatus {
 }
 
 interface CheckResult {
-  status: 'pass' | 'warn' | 'fail';
+  status: "pass" | "warn" | "fail";
   responseTime?: number;
   message?: string;
   details?: any;
@@ -30,7 +30,7 @@ const HEALTH_CHECK_TIMEOUT = 5000;
 
 export class HealthCheckService {
   private startTime = Date.now();
-  private version = process.env.npm_package_version || '1.0.0';
+  private version = process.env.npm_package_version || "1.0.0";
   private buildTime = process.env.BUILD_TIME || new Date().toISOString();
 
   /**
@@ -45,11 +45,10 @@ export class HealthCheckService {
       this.checkDependencies(),
     ]);
 
-    const [database, firebase, memory, storage, dependencies] = checks.map(
-      (result) =>
-        result.status === 'fulfilled'
-          ? result.value
-          : { status: 'fail' as const, message: 'Check timed out' }
+    const [database, firebase, memory, storage, dependencies] = checks.map(result =>
+      result.status === "fulfilled"
+        ? result.value
+        : { status: "fail" as const, message: "Check timed out" }
     );
 
     const overallStatus = this.calculateOverallStatus([
@@ -84,25 +83,25 @@ export class HealthCheckService {
     try {
       // Add your database check here
       // Example: await db.ping();
-      
+
       const responseTime = Date.now() - start;
-      
+
       if (responseTime > 1000) {
         return {
-          status: 'warn',
+          status: "warn",
           responseTime,
-          message: 'Database response time is slow',
+          message: "Database response time is slow",
         };
       }
 
       return {
-        status: 'pass',
+        status: "pass",
         responseTime,
-        message: 'Database is accessible',
+        message: "Database is accessible",
       };
     } catch (error) {
       return {
-        status: 'fail',
+        status: "fail",
         responseTime: Date.now() - start,
         message: `Database error: ${error}`,
       };
@@ -117,25 +116,25 @@ export class HealthCheckService {
     try {
       // Check Firestore
       // const firestoreOk = await admin.firestore().listCollections();
-      
+
       // Check Authentication
       // const authOk = await admin.auth().listUsers(1);
-      
+
       const responseTime = Date.now() - start;
 
       return {
-        status: 'pass',
+        status: "pass",
         responseTime,
-        message: 'Firebase services are operational',
+        message: "Firebase services are operational",
         details: {
-          firestore: 'connected',
-          auth: 'connected',
-          storage: 'connected',
+          firestore: "connected",
+          auth: "connected",
+          storage: "connected",
         },
       };
     } catch (error) {
       return {
-        status: 'fail',
+        status: "fail",
         responseTime: Date.now() - start,
         message: `Firebase error: ${error}`,
       };
@@ -149,15 +148,15 @@ export class HealthCheckService {
     const usage = process.memoryUsage();
     const heapUsedPercent = (usage.heapUsed / usage.heapTotal) * 100;
 
-    let status: 'pass' | 'warn' | 'fail' = 'pass';
-    let message = 'Memory usage is normal';
+    let status: "pass" | "warn" | "fail" = "pass";
+    let message = "Memory usage is normal";
 
     if (heapUsedPercent > 90) {
-      status = 'fail';
-      message = 'Critical: Memory usage above 90%';
+      status = "fail";
+      message = "Critical: Memory usage above 90%";
     } else if (heapUsedPercent > 75) {
-      status = 'warn';
-      message = 'Warning: Memory usage above 75%';
+      status = "warn";
+      message = "Warning: Memory usage above 75%";
     }
 
     return {
@@ -182,12 +181,12 @@ export class HealthCheckService {
       // await bucket.exists();
 
       return {
-        status: 'pass',
-        message: 'Storage is accessible',
+        status: "pass",
+        message: "Storage is accessible",
       };
     } catch (error) {
       return {
-        status: 'fail',
+        status: "fail",
         message: `Storage error: ${error}`,
       };
     }
@@ -202,41 +201,41 @@ export class HealthCheckService {
     // Check external APIs
     try {
       // Example: Check Jisho API
-      const jishoResponse = await fetch('https://jisho.org/api/v1/search/words?keyword=test', {
+      const jishoResponse = await fetch("https://jisho.org/api/v1/search/words?keyword=test", {
         signal: AbortSignal.timeout(HEALTH_CHECK_TIMEOUT),
       });
-      
+
       if (!jishoResponse.ok) {
-        dependencies.push('Jisho API unavailable');
+        dependencies.push("Jisho API unavailable");
       }
     } catch {
-      dependencies.push('Jisho API timeout');
+      dependencies.push("Jisho API timeout");
     }
 
     if (dependencies.length > 0) {
       return {
-        status: 'warn',
-        message: 'Some dependencies are unavailable',
+        status: "warn",
+        message: "Some dependencies are unavailable",
         details: { issues: dependencies },
       };
     }
 
     return {
-      status: 'pass',
-      message: 'All dependencies are operational',
+      status: "pass",
+      message: "All dependencies are operational",
     };
   }
 
   /**
    * Calculate overall health status
    */
-  private calculateOverallStatus(checks: CheckResult[]): 'healthy' | 'degraded' | 'unhealthy' {
-    const hasFailures = checks.some((check) => check.status === 'fail');
-    const hasWarnings = checks.some((check) => check.status === 'warn');
+  private calculateOverallStatus(checks: CheckResult[]): "healthy" | "degraded" | "unhealthy" {
+    const hasFailures = checks.some(check => check.status === "fail");
+    const hasWarnings = checks.some(check => check.status === "warn");
 
-    if (hasFailures) return 'unhealthy';
-    if (hasWarnings) return 'degraded';
-    return 'healthy';
+    if (hasFailures) return "unhealthy";
+    if (hasWarnings) return "degraded";
+    return "healthy";
   }
 
   /**
@@ -262,16 +261,16 @@ export class HealthCheckService {
       const firebase = await this.checkFirebase();
       const memory = await this.checkMemory();
 
-      const ready = firebase.status !== 'fail' && memory.status !== 'fail';
+      const ready = firebase.status !== "fail" && memory.status !== "fail";
 
       return {
         ready,
-        message: ready ? 'Server is ready' : 'Server is not ready',
+        message: ready ? "Server is ready" : "Server is not ready",
       };
     } catch {
       return {
         ready: false,
-        message: 'Readiness check failed',
+        message: "Readiness check failed",
       };
     }
   }
@@ -282,45 +281,47 @@ export function setupHealthEndpoints(app: any) {
   const healthService = new HealthCheckService();
 
   // Detailed health check
-  app.get('/health', async (req: Request, res: Response) => {
+  app.get("/health", async (req: Request, res: Response) => {
     const health = await healthService.checkHealth();
-    const statusCode = health.status === 'healthy' ? 200 : health.status === 'degraded' ? 200 : 503;
+    const statusCode = health.status === "healthy" ? 200 : health.status === "degraded" ? 200 : 503;
     res.status(statusCode).json(health);
   });
 
   // Liveness probe (Kubernetes)
-  app.get('/health/live', async (req: Request, res: Response) => {
+  app.get("/health/live", async (req: Request, res: Response) => {
     const liveness = await healthService.liveness();
     res.status(200).json(liveness);
   });
 
   // Readiness probe (Kubernetes)
-  app.get('/health/ready', async (req: Request, res: Response) => {
+  app.get("/health/ready", async (req: Request, res: Response) => {
     const readiness = await healthService.readiness();
     const statusCode = readiness.ready ? 200 : 503;
     res.status(statusCode).json(readiness);
   });
 
   // Simple ping endpoint
-  app.get('/ping', (req: Request, res: Response) => {
-    res.status(200).send('pong');
+  app.get("/ping", (req: Request, res: Response) => {
+    res.status(200).send("pong");
   });
 
   // Metrics endpoint (Prometheus format)
-  app.get('/metrics', (req: Request, res: Response) => {
+  app.get("/metrics", (req: Request, res: Response) => {
     const health = healthService.checkHealth();
     // Convert to Prometheus format
     // This is a simplified example
-    res.set('Content-Type', 'text/plain');
-    res.send(`
+    res.set("Content-Type", "text/plain");
+    res.send(
+      `
 # HELP shiritori_up Application is up
 # TYPE shiritori_up gauge
 shiritori_up 1
 
 # HELP shiritori_uptime_seconds Application uptime in seconds
 # TYPE shiritori_uptime_seconds counter
-shiritori_uptime_seconds ${healthService['getUptime']()}
-    `.trim());
+shiritori_uptime_seconds ${healthService["getUptime"]()}
+    `.trim()
+    );
   });
 }
 

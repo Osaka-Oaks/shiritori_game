@@ -19,13 +19,13 @@ terraform plan -var="project_id=shiritori-game-ccaae"
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `versions.tf` | Terraform & provider pins |
-| `variables.tf` | Input variables |
-| `main.tf` | Resources (start commented — uncomment as needed) |
-| `outputs.tf` | Exported values |
-| `backend.tf` | Remote state (uncomment & configure) |
+| File           | Purpose                                           |
+| -------------- | ------------------------------------------------- |
+| `versions.tf`  | Terraform & provider pins                         |
+| `variables.tf` | Input variables                                   |
+| `main.tf`      | Resources (start commented — uncomment as needed) |
+| `outputs.tf`   | Exported values                                   |
+| `backend.tf`   | Remote state (uncomment & configure)              |
 
 ## Issue template
 

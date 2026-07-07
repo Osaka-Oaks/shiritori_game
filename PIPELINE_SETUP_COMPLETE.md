@@ -9,6 +9,7 @@ Your complete automated deployment pipeline is ready!
 ### 1. GitHub Actions Workflows
 
 **`.github/workflows/deploy-and-test.yml`** - Complete deployment pipeline
+
 - ✅ Code validation
 - ✅ Build & test (both apps)
 - ✅ Deploy to Firebase
@@ -16,6 +17,7 @@ Your complete automated deployment pipeline is ready!
 - ✅ Status reporting
 
 **Features:**
+
 - 🚀 Auto-deploy on push to main
 - 🎯 Manual trigger available
 - 📊 Detailed GitHub summaries
@@ -25,6 +27,7 @@ Your complete automated deployment pipeline is ready!
 ### 2. Testing Scripts
 
 **`scripts/test-deployment.sh`** - Live site validation
+
 - Tests HTTP status (200 checks)
 - Verifies content presence
 - Measures response time
@@ -32,6 +35,7 @@ Your complete automated deployment pipeline is ready!
 - Validates SPA routing
 
 **`scripts/pre-deploy-check.sh`** - Pre-deployment validation
+
 - Git status check
 - Dependency verification
 - Security audit
@@ -41,6 +45,7 @@ Your complete automated deployment pipeline is ready!
 ### 3. NPM Scripts
 
 Added to `package.json`:
+
 ```json
 {
   "pre-deploy": "bash scripts/pre-deploy-check.sh",
@@ -71,7 +76,7 @@ Just ran `npm run test:deployment`:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✅ Homepage accessible (HTTP 200)
-✅ Expected content found  
+✅ Expected content found
 ✅ Assets referenced
 ✅ Response time: 0.048s
 ⚠️  Firebase hosting header not found
@@ -82,6 +87,7 @@ Just ran `npm run test:deployment`:
 ```
 
 **Your site is LIVE:**
+
 - 🌐 https://shiritori-game-ccaae.web.app
 - ⚡ Response time: <50ms
 - 🔒 Database secured
@@ -94,6 +100,7 @@ Just ran `npm run test:deployment`:
 ### Automated Deployment (Recommended)
 
 **Just push to main:**
+
 ```bash
 git add .
 git commit -m "feat: your awesome changes"
@@ -101,6 +108,7 @@ git push origin main
 ```
 
 **What happens automatically:**
+
 1. ⏱️ **2 min** - Code validation
 2. ⏱️ **3 min** - Build both apps
 3. ⏱️ **2 min** - Deploy to Firebase
@@ -110,6 +118,7 @@ git push origin main
 **Total: ~9 minutes from push to live!**
 
 **Monitor progress:**
+
 ```
 https://github.com/JorelFuji/shiritori_game/actions
 ```
@@ -117,23 +126,27 @@ https://github.com/JorelFuji/shiritori_game/actions
 ### Manual Deployment (When Needed)
 
 **Pre-flight check:**
+
 ```bash
 npm run pre-deploy
 ```
 
 **Deploy Shiritori Online:**
+
 ```bash
 cd shiritori-online
 npm run deploy
 ```
 
 **Deploy Kawaii Shiritori:**
+
 ```bash
 cd kawaii-shiritori
 npm run deploy
 ```
 
 **Test deployment:**
+
 ```bash
 npm run test:deployment
 ```
@@ -145,6 +158,7 @@ npm run test:deployment
 ### What Gets Tested
 
 **Code Quality:**
+
 - ✅ ESLint checks
 - ✅ TypeScript validation
 - ✅ Prettier formatting
@@ -152,11 +166,13 @@ npm run test:deployment
 - ✅ Security audit
 
 **Build Verification:**
+
 - ✅ Production builds succeed
 - ✅ Bundle sizes reported
 - ✅ Artifacts saved (30 days)
 
 **Deployment Testing:**
+
 - ✅ HTTP 200 status
 - ✅ Content verification
 - ✅ Performance metrics
@@ -165,6 +181,7 @@ npm run test:deployment
 - ✅ Security headers
 
 **Post-Deployment:**
+
 - ✅ Deployment record created
 - ✅ Commit status updated
 - ✅ Summary generated
@@ -175,14 +192,17 @@ Every deployment generates a detailed report:
 
 ```markdown
 ## 📦 Build Output
+
 ✅ Build successful!
 Size: 2.3M
 
 ## 🚀 Deployment
+
 - Shiritori Online: ✅ Deployed
 - Kawaii Shiritori: ✅ Deployed
 
 ## 🧪 Testing Results
+
 - ✅ Homepage: HTTP 200
 - ✅ Content: Found
 - ✅ Performance: 0.5s
@@ -200,6 +220,7 @@ Size: 2.3M
 ### Required Setup
 
 **1. Firebase Token (Already set up)**
+
 ```bash
 # Check if token exists
 firebase projects:list
@@ -210,11 +231,13 @@ firebase login:ci
 ```
 
 **2. GitHub Actions (Enabled)**
+
 - ✅ Workflows enabled in repository
 - ✅ Secrets configured
 - ✅ Environments set up
 
 **3. Firebase Project**
+
 - ✅ Project ID: shiritori-game-ccaae
 - ✅ Hosting enabled
 - ✅ Realtime Database enabled
@@ -223,6 +246,7 @@ firebase login:ci
 ### Optional Enhancements
 
 **Add Slack notifications:**
+
 ```yaml
 - name: Notify Slack
   uses: slackapi/slack-github-action@v1
@@ -235,11 +259,12 @@ firebase login:ci
 ```
 
 **Add Discord webhook:**
+
 ```yaml
 - name: Discord Notification
   uses: Ilshidur/action-discord@master
   with:
-    args: 'Deployed to production! 🚀'
+    args: "Deployed to production! 🚀"
   env:
     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
 ```
@@ -296,32 +321,32 @@ open https://github.com/JorelFuji/shiritori_game/actions
 
 ### Pipeline Components
 
-| Component | Status | Details |
-|-----------|--------|---------|
-| GitHub Actions | ✅ Created | `.github/workflows/deploy-and-test.yml` |
-| Test Scripts | ✅ Working | Verified against live site |
-| Pre-deploy Check | ✅ Ready | Comprehensive validation |
-| Documentation | ✅ Complete | 3 detailed guides |
-| NPM Scripts | ✅ Added | 5 new commands |
+| Component        | Status      | Details                                 |
+| ---------------- | ----------- | --------------------------------------- |
+| GitHub Actions   | ✅ Created  | `.github/workflows/deploy-and-test.yml` |
+| Test Scripts     | ✅ Working  | Verified against live site              |
+| Pre-deploy Check | ✅ Ready    | Comprehensive validation                |
+| Documentation    | ✅ Complete | 3 detailed guides                       |
+| NPM Scripts      | ✅ Added    | 5 new commands                          |
 
 ### Live Deployment
 
-| Service | Status | URL |
-|---------|--------|-----|
-| Shiritori Online | ✅ Live | https://shiritori-game-ccaae.web.app |
-| Kawaii Shiritori | ✅ Live | https://shiritori-game-ccaae.web.app |
-| Realtime Database | 🔒 Secured | Rules active |
-| Firestore | 🔒 Secured | Rules active |
+| Service           | Status     | URL                                  |
+| ----------------- | ---------- | ------------------------------------ |
+| Shiritori Online  | ✅ Live    | https://shiritori-game-ccaae.web.app |
+| Kawaii Shiritori  | ✅ Live    | https://shiritori-game-ccaae.web.app |
+| Realtime Database | 🔒 Secured | Rules active                         |
+| Firestore         | 🔒 Secured | Rules active                         |
 
 ### Test Results
 
-| Test | Status | Time |
-|------|--------|------|
-| Homepage | ✅ 200 | 48ms |
-| Content | ✅ Found | - |
-| Assets | ✅ Loaded | - |
-| Database | ✅ Online | - |
-| Routes | ✅ All working | - |
+| Test     | Status         | Time |
+| -------- | -------------- | ---- |
+| Homepage | ✅ 200         | 48ms |
+| Content  | ✅ Found       | -    |
+| Assets   | ✅ Loaded      | -    |
+| Database | ✅ Online      | -    |
+| Routes   | ✅ All working | -    |
 
 ---
 
@@ -330,6 +355,7 @@ open https://github.com/JorelFuji/shiritori_game/actions
 ### Development Workflow
 
 **Standard flow:**
+
 ```bash
 # 1. Make changes
 vim src/components/MyComponent.tsx
@@ -354,6 +380,7 @@ npm run test:deployment
 ### Emergency Procedures
 
 **Rollback:**
+
 ```bash
 # Option 1: Git revert
 git revert HEAD
@@ -365,6 +392,7 @@ firebase hosting:clone source:PREVIOUS_RELEASE destination:live
 ```
 
 **Hotfix:**
+
 ```bash
 # Create fix
 git checkout -b hotfix/critical-bug
@@ -411,12 +439,14 @@ git push origin main
 ### Pipeline Fails
 
 **Check these first:**
+
 1. GitHub Actions logs
 2. Build errors in logs
 3. Firebase deployment errors
 4. FIREBASE_TOKEN validity
 
 **Common fixes:**
+
 ```bash
 # Recreate token
 firebase login:ci
@@ -437,6 +467,7 @@ npm run ci:full
 **Too slow:** >15 minutes
 
 **If too slow:**
+
 - Check GitHub status
 - Verify Firebase status
 - Cancel and retry
@@ -447,6 +478,7 @@ npm run ci:full
 **Problem:** Pushed but site shows old version
 
 **Solutions:**
+
 1. Check pipeline completed successfully
 2. Clear browser cache (Cmd+Shift+R)
 3. Test in incognito mode
@@ -460,12 +492,14 @@ npm run ci:full
 ### Pipeline Performance
 
 **Target metrics:**
+
 - ⏱️ **Total time**: <10 minutes
 - ✅ **Success rate**: >95%
 - 🚀 **Deploy frequency**: 1-2x/week
 - 🔄 **Rollback time**: <5 minutes
 
 **Current performance:**
+
 - ⏱️ Total time: ~9 minutes ✅
 - ✅ Test passing: 7/7 tests ✅
 - 🚀 Site response: 48ms ✅
@@ -474,6 +508,7 @@ npm run ci:full
 ### Site Health
 
 **Live metrics:**
+
 - 📊 HTTP Status: 200 ✅
 - ⚡ Response Time: <50ms ✅
 - 🎯 Content Accuracy: 100% ✅
@@ -517,11 +552,13 @@ git push origin main
 ```
 
 Then visit:
+
 ```
 https://github.com/JorelFuji/shiritori_game/actions
 ```
 
 **Watch your code automatically:**
+
 - ✅ Get validated
 - ✅ Get tested
 - ✅ Get built
@@ -539,4 +576,4 @@ https://github.com/JorelFuji/shiritori_game/actions
 
 ---
 
-*Questions? Check the docs or create a GitHub issue!* 📖
+_Questions? Check the docs or create a GitHub issue!_ 📖

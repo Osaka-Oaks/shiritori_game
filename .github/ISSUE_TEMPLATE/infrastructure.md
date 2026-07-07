@@ -3,7 +3,7 @@ name: 🏗️ Infrastructure (markdown)
 about: Terraform / OpenTofu / cloud IaC — markdown flavor
 title: "[Infra]: "
 labels: ["area: infra", "status: triage"]
-assignees: ''
+assignees: ""
 ---
 
 <!-- Full template: .github/templates/issue-infrastructure.md -->
@@ -19,9 +19,9 @@ assignees: ''
 
 ## What to change
 
-| Resource | Action | Notes |
-|----------|--------|-------|
-| | create / update / destroy | |
+| Resource | Action                    | Notes |
+| -------- | ------------------------- | ----- |
+|          | create / update / destroy |       |
 
 ## Module path
 

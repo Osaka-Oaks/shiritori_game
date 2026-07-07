@@ -26,16 +26,16 @@ logs_config:
 apm_config:
   enabled: true
   env: production
-  
+
   # Trace collection
   apm_non_local_traffic: true
-  
+
   # Service mapping
   receiver_port: 8126
-  
+
   # Sampling
   max_traces_per_second: 100
-  
+
   # Resource names
   filter_tags:
     require:
@@ -126,7 +126,7 @@ dogstatsd_mapper_profiles:
         name: "shiritori.game.metric"
         tags:
           game_type: "$1"
-      
+
       - match: "shiritori.player.*"
         name: "shiritori.player.metric"
         tags:
@@ -142,7 +142,7 @@ monitors:
     tags:
       - severity:high
       - team:engineering
-  
+
   # Low uptime
   - name: "Application Down"
     type: service check
@@ -151,7 +151,7 @@ monitors:
     tags:
       - severity:critical
       - team:engineering
-  
+
   # Slow response time
   - name: "Slow Response Time"
     type: metric alert
@@ -160,7 +160,7 @@ monitors:
     tags:
       - severity:medium
       - team:engineering
-  
+
   # Build time increase
   - name: "Build Time Increased"
     type: metric alert
@@ -178,17 +178,17 @@ dashboards:
         title: "Request Rate"
         requests:
           - q: "sum:trace.web.request.hits{env:production}.as_rate()"
-      
+
       - type: query_value
         title: "Uptime"
         requests:
           - q: "avg:system.uptime{*}"
-      
+
       - type: timeseries
         title: "Error Rate"
         requests:
           - q: "sum:trace.web.request.errors{env:production}.as_rate()"
-      
+
       - type: heatmap
         title: "Response Time Distribution"
         requests:
@@ -205,13 +205,13 @@ logs_config:
         - type: grok-parser
           name: parse_logs
           grok:
-            match_rules: '%{date:timestamp} %{word:level} %{data:message}'
-        
+            match_rules: "%{date:timestamp} %{word:level} %{data:message}"
+
         - type: status-remapper
           name: remap_status
           sources:
             - level
-    
+
     # Build logs
     - name: ci_logs
       filter:
@@ -232,19 +232,19 @@ rum:
   enabled: true
   application_id: ${DD_RUM_APP_ID}
   client_token: ${DD_RUM_CLIENT_TOKEN}
-  
+
   # Session tracking
   session_sample_rate: 100
   session_replay_sample_rate: 20
-  
+
   # Performance tracking
   track_interactions: true
   track_resources: true
   track_long_tasks: true
-  
+
   # Error tracking
   track_errors: true
-  
+
   # Custom actions
   actions:
     - name: "game_start"
@@ -262,7 +262,7 @@ synthetics:
       - aws:us-west-1
       - aws:eu-west-1
       - aws:ap-southeast-1
-    frequency: 60  # seconds
+    frequency: 60 # seconds
     assertions:
       - type: statusCode
         operator: is
@@ -273,7 +273,7 @@ synthetics:
     tags:
       - env:production
       - critical:true
-  
+
   # API health check
   - name: "API Health Check"
     type: api
@@ -297,15 +297,15 @@ slos:
     type: metric
     metric:
       type: availability
-      numerator: 'sum:trace.web.request.hits{!http.status_code:5*}'
-      denominator: 'sum:trace.web.request.hits{*}'
+      numerator: "sum:trace.web.request.hits{!http.status_code:5*}"
+      denominator: "sum:trace.web.request.hits{*}"
     target: 99.9
     timeframe: 30d
-  
+
   - name: "Response Time"
     type: metric
     metric:
       type: latency
-      numerator: 'sum:trace.web.request.duration{p95}'
-    target: 2.0  # seconds
+      numerator: "sum:trace.web.request.duration{p95}"
+    target: 2.0 # seconds
     timeframe: 7d

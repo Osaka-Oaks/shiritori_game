@@ -3,7 +3,7 @@ name: 🧪 Dev / test (markdown)
 about: QA checklist — markdown flavor
 title: "[Test]: "
 labels: ["game: dev-tools", "status: triage"]
-assignees: ''
+assignees: ""
 ---
 
 <!-- Full template: .github/templates/issue-dev-test.md -->
@@ -22,8 +22,8 @@ assignees: ''
 
 ## Steps
 
-1. 
-2. 
+1.
+2.
 
 ## Expected result
 

@@ -92,11 +92,11 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   runApp(const MyApp());
 }
 ```
@@ -130,12 +130,12 @@ if (Firebase.apps.isNotEmpty) {
 
 ## 📦 Installed Packages
 
-| Package | Purpose |
-|---------|---------|
-| `firebase_core` | Firebase initialization |
-| `firebase_auth` | User authentication |
-| `cloud_firestore` | Firestore database |
-| `firebase_database` | Realtime Database |
+| Package             | Purpose                 |
+| ------------------- | ----------------------- |
+| `firebase_core`     | Firebase initialization |
+| `firebase_auth`     | User authentication     |
+| `cloud_firestore`   | Firestore database      |
+| `firebase_database` | Realtime Database       |
 
 ### Add More Services
 
@@ -267,6 +267,7 @@ npm run deploy:flutter:test
 ```
 
 **Tests include:**
+
 - HTTP Status (200 OK)
 - Response Time
 - Flutter Content
@@ -396,7 +397,7 @@ flutter run -d macos
 ✅ **Cloud Firestore** - NoSQL database  
 ✅ **Realtime Database** - Real-time sync  
 ✅ **Auto Configuration** - All platforms  
-✅ **Complete Docs** - Step-by-step guides  
+✅ **Complete Docs** - Step-by-step guides
 
 ---
 

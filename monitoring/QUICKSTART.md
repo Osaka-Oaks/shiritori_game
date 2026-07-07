@@ -56,11 +56,13 @@ npm run monitor:elk:stop
 ```
 
 **Access:**
+
 - Kibana: http://localhost:5601
 - Elasticsearch: http://localhost:9200
 - Logstash: http://localhost:9600
 
 **⚠️ Getting Docker authentication errors?**
+
 - Use `npm run monitor:elk:lite` instead
 - See [DOCKER_TROUBLESHOOTING.md](../DOCKER_TROUBLESHOOTING.md)
 
@@ -78,6 +80,7 @@ npm run monitor:grafana:stop
 **Credentials:** admin / admin (change on first login)
 
 **Import Dashboard:**
+
 1. Login to Grafana
 2. Go to Dashboards → Import
 3. Upload `monitoring/grafana/dashboard.json`
@@ -125,9 +128,11 @@ curl http://localhost:3000/ping
 ## 📈 What Each Tool Does
 
 ### ELK Stack
+
 **Purpose:** Log aggregation, search, and analysis
 
 **What you get:**
+
 - ✅ Centralized logs from all services
 - ✅ Full-text search across logs
 - ✅ Log visualization dashboards
@@ -135,15 +140,18 @@ curl http://localhost:3000/ping
 - ✅ Historical log analysis
 
 **Best for:**
+
 - Debugging errors
 - Analyzing user behavior
 - Security monitoring
 - Compliance/auditing
 
 ### Grafana
+
 **Purpose:** Metrics visualization and alerting
 
 **What you get:**
+
 - ✅ Real-time metrics dashboards
 - ✅ Beautiful visualizations
 - ✅ Alert configuration
@@ -151,15 +159,18 @@ curl http://localhost:3000/ping
 - ✅ Custom dashboard creation
 
 **Best for:**
+
 - Real-time monitoring
 - Performance tracking
 - Infrastructure health
 - Business metrics
 
 ### Datadog
+
 **Purpose:** All-in-one observability platform
 
 **What you get:**
+
 - ✅ Application Performance Monitoring (APM)
 - ✅ Real User Monitoring (RUM)
 - ✅ Infrastructure monitoring
@@ -168,6 +179,7 @@ curl http://localhost:3000/ping
 - ✅ Incident management
 
 **Best for:**
+
 - Complete observability
 - User experience tracking
 - APM and tracing
@@ -180,24 +192,28 @@ curl http://localhost:3000/ping
 ### Critical Metrics
 
 **Uptime:**
+
 ```
 Target: 99.9% (43 min downtime/month)
 Alert: Down for >2 minutes
 ```
 
 **Response Time:**
+
 ```
 Target: <500ms (p95)
 Alert: >2 seconds
 ```
 
 **Error Rate:**
+
 ```
 Target: <0.1%
 Alert: >10 errors/minute
 ```
 
 **Build Time:**
+
 ```
 Target: <5 minutes
 Alert: >10 minutes
@@ -229,6 +245,7 @@ Alert: >10 minutes
 ### Slack Integration
 
 **Grafana:**
+
 ```
 1. Settings → Notification channels
 2. Add Slack webhook
@@ -236,6 +253,7 @@ Alert: >10 minutes
 ```
 
 **Datadog:**
+
 ```
 1. Integrations → Slack
 2. Add webhook URL
@@ -243,6 +261,7 @@ Alert: >10 minutes
 ```
 
 **ELK:**
+
 ```
 1. Stack Management → Watcher
 2. Create new watch
@@ -252,12 +271,14 @@ Alert: >10 minutes
 ### PagerDuty Integration
 
 **For critical alerts:**
+
 - Application down
 - Database unreachable
 - High error rate
 - Security incidents
 
 **Setup:**
+
 ```
 1. Create PagerDuty service
 2. Get integration key
@@ -272,6 +293,7 @@ Alert: >10 minutes
 ### Pre-built Dashboards
 
 **Grafana:** `monitoring/grafana/dashboard.json`
+
 - Application health
 - Request rate
 - Response time
@@ -280,12 +302,14 @@ Alert: >10 minutes
 - System resources
 
 **Kibana:** Auto-created by Filebeat/Metricbeat
+
 - Log analysis
 - System metrics
 - APM dashboard
 - Uptime monitoring
 
 **Datadog:** Configured in `monitoring/datadog/datadog.yaml`
+
 - Application overview
 - Infrastructure health
 - Build metrics
@@ -298,6 +322,7 @@ Alert: >10 minutes
 ### ELK Stack Issues
 
 **Elasticsearch won't start:**
+
 ```bash
 # Check memory
 docker stats
@@ -309,6 +334,7 @@ environment:
 ```
 
 **No logs appearing:**
+
 ```bash
 # Check Logstash
 curl http://localhost:9600/_node/stats/pipelines
@@ -318,6 +344,7 @@ echo '{"test": "message"}' | nc localhost 5000
 ```
 
 **Kibana can't connect:**
+
 ```bash
 # Check Elasticsearch
 curl http://localhost:9200
@@ -329,12 +356,14 @@ docker-compose restart kibana
 ### Grafana Issues
 
 **Can't login:**
+
 ```bash
 # Reset admin password
 docker exec -it grafana grafana-cli admin reset-admin-password admin
 ```
 
 **Dashboard not loading:**
+
 ```bash
 # Check Grafana logs
 docker logs grafana
@@ -343,6 +372,7 @@ docker logs grafana
 ### Datadog Issues
 
 **Agent not sending data:**
+
 ```bash
 # Check agent status
 sudo datadog-agent status
@@ -359,11 +389,12 @@ curl -X POST "https://api.datadoghq.com/api/v1/validate" \
 Your monitoring stack is now running!
 
 **Access your dashboards:**
+
 ```bash
 # Grafana
 open http://localhost:3000
 
-# Kibana  
+# Kibana
 open http://localhost:5601
 
 # Datadog
@@ -371,6 +402,7 @@ open https://app.datadoghq.com
 ```
 
 **Stop everything:**
+
 ```bash
 npm run monitor:all:stop
 ```

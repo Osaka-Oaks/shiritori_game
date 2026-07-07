@@ -14,11 +14,13 @@ npm run build:fast
 ```
 
 **What it does:**
+
 - Skips source map generation (saves ~30% time)
 - Uses esbuild minifier (faster than terser)
 - Optimized for CI/CD pipelines
 
 **When to use:**
+
 - CI/CD builds
 - Production deployments
 - When you don't need debugging
@@ -36,7 +38,7 @@ npm run build:track
 # Output example:
 # ⏱️  Build Time Tracking - kawaii-shiritori
 # Started at: 2026-07-06 22:56:00
-# 
+#
 # ✅ Build Complete!
 # 📊 Build Statistics:
 #   Total:            180s
@@ -73,11 +75,11 @@ npm run build:report
 
 ## 🎯 Current Performance
 
-| Metric | Before Optimization | After Optimization | Improvement |
-|--------|-------------------|-------------------|-------------|
-| **kawaii-shiritori** | 10 min | 4 min | **60%** |
-| **shiritori-online** | 8 min | 3 min | **62%** |
-| **shiritori-flutter** | 6 min | 2 min | **67%** |
+| Metric                | Before Optimization | After Optimization | Improvement |
+| --------------------- | ------------------- | ------------------ | ----------- |
+| **kawaii-shiritori**  | 10 min              | 4 min              | **60%**     |
+| **shiritori-online**  | 8 min               | 3 min              | **62%**     |
+| **shiritori-flutter** | 6 min               | 2 min              | **67%**     |
 
 ---
 
@@ -95,6 +97,7 @@ npm run build:analyze
 ```
 
 **You'll see:**
+
 ```
 📊 Build Time Analysis
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -125,6 +128,7 @@ Slowest:             180s ⚠️
 The project includes `vite.config.build-optimized.ts`:
 
 **Features:**
+
 - ✅ esbuild minifier (faster than terser)
 - ✅ Disabled source maps in CI
 - ✅ Manual code splitting
@@ -173,16 +177,17 @@ strategy:
 
 ### Build Time Indicators
 
-| Time | Status | Action |
-|------|--------|--------|
-| < 3 min | 🚀 Fast | Great! Keep it up |
-| 3-5 min | ⚡ Good | Minor optimizations available |
-| 5-10 min | 🟡 Slow | Review recommendations |
-| > 10 min | 🔴 Very Slow | Immediate action needed |
+| Time     | Status       | Action                        |
+| -------- | ------------ | ----------------------------- |
+| < 3 min  | 🚀 Fast      | Great! Keep it up             |
+| 3-5 min  | ⚡ Good      | Minor optimizations available |
+| 5-10 min | 🟡 Slow      | Review recommendations        |
+| > 10 min | 🔴 Very Slow | Immediate action needed       |
 
 ### Common Issues & Fixes
 
 **Slow dependency installation (>60s):**
+
 ```bash
 # Use npm ci with cache
 npm ci --prefer-offline
@@ -193,6 +198,7 @@ pnpm install
 ```
 
 **Large bundle size (>3MB):**
+
 ```bash
 # Analyze bundle
 npm run build -- --mode analyze
@@ -202,6 +208,7 @@ npm run build -- --mode analyze
 ```
 
 **High build variance:**
+
 ```bash
 # Clear cache and rebuild
 rm -rf node_modules .vite dist
@@ -219,29 +226,29 @@ Copy to your app's `vite.config.ts`:
 export default defineConfig({
   build: {
     // ✅ Use esbuild (faster)
-    minify: 'esbuild',
-    
+    minify: "esbuild",
+
     // ✅ Disable source maps in CI
     sourcemap: process.env.CI ? false : true,
-    
+
     // ✅ Manual chunks for caching
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'firebase': ['firebase/app', 'firebase/auth'],
-        }
-      }
+          "react-vendor": ["react", "react-dom"],
+          firebase: ["firebase/app", "firebase/auth"],
+        },
+      },
     },
-    
+
     // ✅ Skip size reporting (faster)
     reportCompressedSize: false,
   },
-  
+
   // ✅ Pre-bundle dependencies
   optimizeDeps: {
-    include: ['react', 'react-dom', 'firebase/app'],
-  }
+    include: ["react", "react-dom", "firebase/app"],
+  },
 });
 ```
 
@@ -252,12 +259,14 @@ export default defineConfig({
 Build tracking creates two files:
 
 **1. `build-times.log`** (Human readable)
+
 ```
 2026-07-06 22:56:00 | kawaii-shiritori | production | Total: 180s | Build: 165s | Deps: 15s | Size: 2.6MB | Branch: main
 2026-07-06 23:10:00 | kawaii-shiritori | production | Total: 175s | Build: 162s | Deps: 13s | Size: 2.6MB | Branch: main
 ```
 
 **2. `build-times.json`** (Machine readable)
+
 ```json
 [
   {
@@ -286,12 +295,14 @@ Build tracking creates two files:
 ## 🚨 When to Optimize
 
 **Optimize if:**
+
 - ❌ Build time > 5 minutes
 - ❌ Dependency install > 60 seconds
 - ❌ Bundle size > 3MB
 - ❌ High variance between builds (>2 minutes difference)
 
 **You're good if:**
+
 - ✅ Build time < 3 minutes
 - ✅ Consistent build times
 - ✅ Bundle size < 2MB
@@ -323,12 +334,14 @@ npm run build:kawaii
 ## 💡 Pro Tips
 
 **1. Use Fast Build in CI**
+
 ```yaml
 # .github/workflows/build.yml
 - run: npm run build:fast
 ```
 
 **2. Track Weekly**
+
 ```bash
 # Every Monday
 npm run build:track
@@ -336,6 +349,7 @@ npm run build:analyze
 ```
 
 **3. Set Performance Budget**
+
 ```bash
 # Alert if build time > 5 minutes
 if [ $BUILD_TIME -gt 300 ]; then
@@ -344,6 +358,7 @@ fi
 ```
 
 **4. Compare Branches**
+
 ```bash
 # On main
 npm run build:track
@@ -398,11 +413,13 @@ Slowest:             195s 🟡
 ## 🎯 Next Steps
 
 1. **Run your first tracked build:**
+
    ```bash
    npm run build:track
    ```
 
 2. **Check the results:**
+
    ```bash
    npm run build:analyze
    ```
@@ -419,4 +436,4 @@ Slowest:             195s 🟡
 **Tracking:** Complete performance analytics  
 **Status:** ✅ Ready to Use!
 
-*Start optimizing: `npm run build:fast`*
+_Start optimizing: `npm run build:fast`_

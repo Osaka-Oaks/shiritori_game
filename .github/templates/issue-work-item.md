@@ -8,11 +8,11 @@
 
 ## Kanban
 
-| Field | Value |
-|-------|-------|
-| Column | Backlog / Ready / In progress / Review / Done |
-| Priority | Low / Medium / High |
-| Area | shiritori-online / kawaii-shiritori / shiritori_flutter / CI/CD / Dictionary / Solo / Infra / Other |
+| Field    | Value                                                                                               |
+| -------- | --------------------------------------------------------------------------------------------------- |
+| Column   | Backlog / Ready / In progress / Review / Done                                                       |
+| Priority | Low / Medium / High                                                                                 |
+| Area     | shiritori-online / kawaii-shiritori / shiritori_flutter / CI/CD / Dictionary / Solo / Infra / Other |
 
 ## Description
 

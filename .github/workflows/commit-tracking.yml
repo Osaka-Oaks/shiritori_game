@@ -3,7 +3,7 @@ name: Commit Tracking & Monitoring
 # Track every commit, file change, and deployment
 on:
   push:
-    branches: ['**']
+    branches: ["**"]
   pull_request:
     types: [opened, synchronize, reopened]
   deployment_status:
@@ -31,14 +31,14 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const sha = context.sha;
-            
+
             // Get commit details
             const { data: commit } = await github.rest.repos.getCommit({
               owner,
               repo,
               ref: sha
             });
-            
+
             // Extract info
             const author = commit.commit.author.name;
             const message = commit.commit.message;
@@ -46,43 +46,43 @@ jobs:
             const additions = commit.stats.additions;
             const deletions = commit.stats.deletions;
             const total = commit.stats.total;
-            
+
             // Categorize files
             const filesByType = {};
             for (const file of commit.files) {
               const ext = file.filename.split('.').pop();
               filesByType[ext] = (filesByType[ext] || 0) + 1;
             }
-            
+
             // Create detailed summary
             const summary = `## 📝 Commit Analysis
-            
+
             **SHA**: \`${sha.substring(0, 7)}\`
             **Author**: ${author}
             **Branch**: \`${context.ref.replace('refs/heads/', '')}\`
-            
+
             ### Changes
             - **Files**: ${filesChanged}
             - **Additions**: +${additions}
             - **Deletions**: -${deletions}
             - **Total**: ${total} lines
-            
+
             ### Files by Type
             ${Object.entries(filesByType).map(([ext, count]) => `- \`${ext}\`: ${count} file(s)`).join('\n')}
-            
+
             ### Modified Files
             ${commit.files.slice(0, 10).map(f => `- \`${f.filename}\` (+${f.additions}/-${f.deletions})`).join('\n')}
             ${commit.files.length > 10 ? `\n*...and ${commit.files.length - 10} more*` : ''}
-            
+
             ### Commit Message
             \`\`\`
             ${message}
             \`\`\`
             `;
-            
+
             console.log(summary);
             core.summary.addRaw(summary).write();
-            
+
             // Set outputs
             core.setOutput('filesChanged', filesChanged);
             core.setOutput('additions', additions);
@@ -92,11 +92,11 @@ jobs:
       - name: Create commit badge
         run: |
           mkdir -p .github/badges
-          
+
           FILES="${{ steps.analyze.outputs.filesChanged }}"
           ADDITIONS="${{ steps.analyze.outputs.additions }}"
           DELETIONS="${{ steps.analyze.outputs.deletions }}"
-          
+
           echo "![Files](https://img.shields.io/badge/files-${FILES}-blue)" > .github/badges/last-commit.md
           echo "![Changes](https://img.shields.io/badge/changes-+${ADDITIONS}_--${DELETIONS}-green)" >> .github/badges/last-commit.md
 
@@ -113,7 +113,7 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            
+
             // Get recent commits (last 24 hours)
             const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
             const { data: commits } = await github.rest.repos.listCommits({
@@ -122,12 +122,12 @@ jobs:
               since: yesterday.toISOString(),
               per_page: 100
             });
-            
+
             // Track file changes
             const fileChanges = new Map();
             let totalAdditions = 0;
             let totalDeletions = 0;
-            
+
             for (const commit of commits) {
               const { data: detail } = await github.rest.repos.getCommit({
                 owner,
@@ -154,31 +154,31 @@ jobs:
               totalAdditions += detail.stats.additions;
               totalDeletions += detail.stats.deletions;
             }
-            
+
             // Sort by most changed
             const sortedFiles = Array.from(fileChanges.entries())
               .sort((a, b) => b[1].changes - a[1].changes)
               .slice(0, 20);
-            
+
             const report = `## 📊 24-Hour Change Report
-            
+
             **Period**: ${yesterday.toISOString().split('T')[0]} to ${new Date().toISOString().split('T')[0]}
             **Commits**: ${commits.length}
             **Total Changes**: +${totalAdditions}/-${totalDeletions}
-            
+
             ### Most Changed Files
             | File | Changes | Commits |
             |------|---------|---------|
             ${sortedFiles.map(([file, stats]) => 
               `| \`${file}\` | +${stats.additions}/-${stats.deletions} | ${stats.commits} |`
             ).join('\n')}
-            
+
             ### Active Contributors
             ${Array.from(new Set(commits.map(c => c.commit.author.name)))
               .map(author => `- ${author}`)
               .join('\n')}
             `;
-            
+
             core.summary.addRaw(report).write();
             console.log(report);
 
@@ -194,7 +194,7 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const branch = context.ref.replace('refs/heads/', '');
-            
+
             // Get branch protection
             let protected = false;
             try {
@@ -203,14 +203,14 @@ jobs:
             } catch (e) {
               protected = false;
             }
-            
+
             // Get commit status
             const { data: statuses } = await github.rest.repos.getCombinedStatusForRef({
               owner,
               repo,
               ref: branch
             });
-            
+
             // Get recent commits
             const { data: commits } = await github.rest.repos.listCommits({
               owner,
@@ -218,31 +218,31 @@ jobs:
               sha: branch,
               per_page: 10
             });
-            
+
             // Calculate health score
             const passRate = statuses.statuses.filter(s => s.state === 'success').length / Math.max(statuses.statuses.length, 1);
             const health = passRate > 0.9 ? '🟢 Healthy' : passRate > 0.7 ? '🟡 Fair' : '🔴 Needs Attention';
-            
+
             const report = `## 🏥 Branch Health: \`${branch}\`
-            
+
             **Status**: ${health}
             **Protected**: ${protected ? '🔒 Yes' : '⚠️ No'}
             **Recent Commits**: ${commits.length}
             **Check Pass Rate**: ${(passRate * 100).toFixed(0)}%
-            
+
             ### Recent Checks
             ${statuses.statuses.slice(0, 5).map(s => 
               `- ${s.state === 'success' ? '✅' : s.state === 'pending' ? '🔄' : '❌'} ${s.context}`
             ).join('\n') || '- No checks yet'}
-            
+
             ### Latest Commits
             ${commits.slice(0, 5).map(c => 
               `- \`${c.sha.substring(0, 7)}\` ${c.commit.message.split('\n')[0]}`
             ).join('\n')}
             `;
-            
+
             core.summary.addRaw(report).write();
-            
+
             // Create status badge
             const color = passRate > 0.9 ? 'brightgreen' : passRate > 0.7 ? 'yellow' : 'red';
             console.log(`Branch ${branch}: ${health} (${(passRate * 100).toFixed(0)}% pass rate)`);
@@ -260,7 +260,7 @@ jobs:
             const sha = context.sha;
             const branch = context.ref.replace('refs/heads/', '');
             const env = branch === 'main' ? 'production' : 'staging';
-            
+
             // Create deployment
             const { data: deployment } = await github.rest.repos.createDeployment({
               owner,
@@ -270,9 +270,9 @@ jobs:
               auto_merge: false,
               required_contexts: []
             });
-            
+
             console.log(`Created deployment ${deployment.id} for ${env}`);
-            
+
             // Set deployment status to in_progress
             await github.rest.repos.createDeploymentStatus({
               owner,
@@ -281,17 +281,17 @@ jobs:
               state: 'in_progress',
               description: 'Deployment started'
             });
-            
+
             // Log deployment
             const log = `## 🚀 Deployment Initiated
-            
+
             **Environment**: ${env}
             **SHA**: \`${sha.substring(0, 7)}\`
             **Branch**: \`${branch}\`
             **Time**: ${new Date().toISOString()}
             **Deployment ID**: ${deployment.id}
             `;
-            
+
             core.summary.addRaw(log).write();
 
   feature-status:
@@ -308,7 +308,7 @@ jobs:
             const { owner, repo } = context.repo;
             const branch = context.ref.replace('refs/heads/', '');
             const feature = branch.replace('feature/', '');
-            
+
             // Get commits on this branch
             const { data: comparison } = await github.rest.repos.compareCommits({
               owner,
@@ -316,12 +316,12 @@ jobs:
               base: 'develop',
               head: branch
             });
-            
+
             const commits = comparison.commits.length;
             const filesChanged = comparison.files.length;
             const additions = comparison.commits.reduce((sum, c) => sum + (c.stats?.additions || 0), 0);
             const deletions = comparison.commits.reduce((sum, c) => sum + (c.stats?.deletions || 0), 0);
-            
+
             // Check if PR exists
             const { data: prs } = await github.rest.pulls.list({
               owner,
@@ -329,30 +329,30 @@ jobs:
               head: `${owner}:${branch}`,
               state: 'open'
             });
-            
+
             const hasPR = prs.length > 0;
             const prNumber = hasPR ? prs[0].number : null;
-            
+
             const status = `## 🎯 Feature Status: \`${feature}\`
-            
+
             **Branch**: \`${branch}\`
             **Progress**: ${hasPR ? '🔄 In Review' : '🚧 In Development'}
             ${hasPR ? `**PR**: #${prNumber}` : ''}
-            
+
             ### Statistics
             - **Commits**: ${commits}
             - **Files Changed**: ${filesChanged}
             - **Lines**: +${additions}/-${deletions}
-            
+
             ### Ready for Review?
             ${hasPR ? '✅ PR is open' : '⚠️ No PR yet - create one when ready'}
-            
+
             ### Next Steps
             ${hasPR 
               ? '- Wait for code review\n- Address feedback\n- Merge when approved' 
               : '- Complete development\n- Test locally\n- Create pull request'}
             `;
-            
+
             core.summary.addRaw(status).write();
             console.log(status);
 
@@ -365,25 +365,25 @@ jobs:
       - name: Create activity log
         run: |
           mkdir -p .github/logs
-          
+
           cat > .github/logs/activity-$(date +%Y%m%d).log << EOF
           ================================================
           ACTIVITY LOG - $(date -u +"%Y-%m-%d %H:%M:%S UTC")
           ================================================
-          
+
           Repository: ${{ github.repository }}
           Event: ${{ github.event_name }}
           Ref: ${{ github.ref }}
           SHA: ${{ github.sha }}
           Actor: ${{ github.actor }}
-          
+
           Workflow: ${{ github.workflow }}
           Run ID: ${{ github.run_id }}
           Run Number: ${{ github.run_number }}
-          
+
           ================================================
           EOF
-          
+
           cat .github/logs/activity-$(date +%Y%m%d).log
 
       - name: Upload activity log

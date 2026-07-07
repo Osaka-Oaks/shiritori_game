@@ -17,7 +17,13 @@
 
 "area: observability":
   - changed-files:
-      - any-glob-to-any-file: ["observability/**", "scripts/health-pulse.sh", "scripts/push-observability-metrics.sh", ".github/workflows/uptime.yml"]
+      - any-glob-to-any-file:
+          [
+            "observability/**",
+            "scripts/health-pulse.sh",
+            "scripts/push-observability-metrics.sh",
+            ".github/workflows/uptime.yml",
+          ]
 
 "area: ci/cd":
   - changed-files:

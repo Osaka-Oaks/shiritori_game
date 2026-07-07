@@ -4,15 +4,15 @@ Independent **Flutter + Dart** build of the bilingual Shiritori game. Uses the s
 
 ## Stack
 
-| Layer | Technology |
-|-------|------------|
-| Language | **Dart** |
-| UI framework | **Flutter** (Material 3) |
-| Backend | **Firebase** — Auth (anonymous), Realtime Database |
-| Firebase project | `shiritori-game-ccaae` |
-| Web hosting | https://shiritori-flutter.web.app |
-| Web | Primary target (`flutter run -d chrome`, `flutter build web`) |
-| Mobile | Android + iOS registered in Firebase |
+| Layer            | Technology                                                    |
+| ---------------- | ------------------------------------------------------------- |
+| Language         | **Dart**                                                      |
+| UI framework     | **Flutter** (Material 3)                                      |
+| Backend          | **Firebase** — Auth (anonymous), Realtime Database            |
+| Firebase project | `shiritori-game-ccaae`                                        |
+| Web hosting      | https://shiritori-flutter.web.app                             |
+| Web              | Primary target (`flutter run -d chrome`, `flutter build web`) |
+| Mobile           | Android + iOS registered in Firebase                          |
 
 ## Firebase setup (FlutterFire)
 
@@ -50,19 +50,19 @@ flutterfire configure --project=shiritori-game-ccaae --platforms=web,android,ios
 
 This registers platform apps in Firebase and writes:
 
-| File | Purpose |
-|------|---------|
-| `lib/firebase_options.dart` | Per-platform Firebase config |
-| `android/app/google-services.json` | Android SDK config |
-| `ios/Runner/GoogleService-Info.plist` | iOS SDK config |
+| File                                  | Purpose                      |
+| ------------------------------------- | ---------------------------- |
+| `lib/firebase_options.dart`           | Per-platform Firebase config |
+| `android/app/google-services.json`    | Android SDK config           |
+| `ios/Runner/GoogleService-Info.plist` | iOS SDK config               |
 
 **Registered apps in `shiritori-game-ccaae`:**
 
-| Platform | App | App ID |
-|----------|-----|--------|
-| Web | Shiritori Game Web (shared with React) | `1:324507601155:web:d69804f7cf3dba96ec4136` |
-| Android | shiritori_flutter | `1:324507601155:android:1e8c704834cf594fec4136` |
-| iOS | shiritori_flutter | `1:324507601155:ios:45bb4ebcba9ae116ec4136` |
+| Platform | App                                    | App ID                                          |
+| -------- | -------------------------------------- | ----------------------------------------------- |
+| Web      | Shiritori Game Web (shared with React) | `1:324507601155:web:d69804f7cf3dba96ec4136`     |
+| Android  | shiritori_flutter                      | `1:324507601155:android:1e8c704834cf594fec4136` |
+| iOS      | shiritori_flutter                      | `1:324507601155:ios:45bb4ebcba9ae116ec4136`     |
 
 Web reuses the existing web app so both React and Flutter talk to the same RTDB and Auth project.
 
@@ -120,8 +120,8 @@ CI deploys on push to `main` when `shiritori_flutter/` changes.
 
 ## Troubleshooting
 
-| Issue | Fix |
-|-------|-----|
-| `flutterfire configure` fails on iOS (`xcodeproj`) | `sudo gem install xcodeproj`, then re-run configure |
-| Android build fails | Confirm `applicationId` is `com.shiritori.shiritori_flutter` and `google-services.json` includes that package |
-| Web auth/DB errors | Enable **Anonymous Auth** and **Realtime Database** in Firebase Console for `shiritori-game-ccaae` |
+| Issue                                              | Fix                                                                                                           |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `flutterfire configure` fails on iOS (`xcodeproj`) | `sudo gem install xcodeproj`, then re-run configure                                                           |
+| Android build fails                                | Confirm `applicationId` is `com.shiritori.shiritori_flutter` and `google-services.json` includes that package |
+| Web auth/DB errors                                 | Enable **Anonymous Auth** and **Realtime Database** in Firebase Console for `shiritori-game-ccaae`            |

@@ -109,9 +109,7 @@ export default function AuthView({ currentUser, onLogin, onLogout, onRegister }:
       }
 
       const stored = match.password;
-      const valid = isSha256Hex(stored)
-        ? stored === passwordHash
-        : stored === password;
+      const valid = isSha256Hex(stored) ? stored === passwordHash : stored === password;
 
       if (!valid) {
         setErrorMsg("Incorrect email or password combination.");

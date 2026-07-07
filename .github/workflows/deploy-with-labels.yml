@@ -5,21 +5,21 @@ on:
   push:
     branches: [main, develop]
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy'
+        description: "Environment to deploy"
         required: true
-        default: 'production'
+        default: "production"
         type: choice
         options:
           - production
           - staging
       tags:
-        description: 'Deployment tags (comma-separated)'
+        description: "Deployment tags (comma-separated)"
         required: false
-        default: ''
+        default: ""
 
 permissions:
   contents: write
@@ -73,24 +73,24 @@ jobs:
         id: tags
         run: |
           TAGS="${{ github.event.inputs.tags }}"
-          
+
           # Auto-generate tags from commit message
           COMMIT_MSG=$(git log -1 --pretty=%B)
-          
+
           # Extract hashtags from commit message
           HASHTAGS=$(echo "$COMMIT_MSG" | grep -o '#[a-zA-Z0-9_-]*' | tr '\n' ',' | sed 's/,$//')
-          
+
           if [ -z "$TAGS" ]; then
             TAGS="$HASHTAGS"
           else
             TAGS="$TAGS,$HASHTAGS"
           fi
-          
+
           # Add default tags
           TAGS="$TAGS,version:${{ steps.version.outputs.version }}"
           TAGS="$TAGS,env:${{ steps.env.outputs.environment }}"
           TAGS="$TAGS,branch:${GITHUB_REF#refs/heads/}"
-          
+
           echo "tags=$TAGS" >> $GITHUB_OUTPUT
           echo "🏷️ Tags: $TAGS"
 
@@ -101,7 +101,7 @@ jobs:
           script: |
             const tags = '${{ steps.tags.outputs.tags }}'.split(',').filter(Boolean);
             const labels = [];
-            
+
             // Convert tags to labels
             for (const tag of tags) {
               if (tag.startsWith('#')) {
@@ -111,15 +111,15 @@ jobs:
                 labels.push(`${key}-${value}`);
               }
             }
-            
+
             // Add deployment labels
             labels.push('deployment');
             labels.push(`env-${{ steps.env.outputs.environment }}`);
-            
+
             const labelStr = labels.join(',');
             core.setOutput('labels', labelStr);
             console.log(`🏷️ Labels: ${labelStr}`);
-            
+
             return labels;
 
       - name: Create deployment issue
@@ -130,26 +130,26 @@ jobs:
             const env = '${{ steps.env.outputs.environment }}';
             const tags = '${{ steps.tags.outputs.tags }}'.split(',').filter(Boolean);
             const labels = '${{ steps.labels.outputs.labels }}'.split(',').filter(Boolean);
-            
+
             const body = `## 🚀 Deployment: ${version}
-            
+
             **Environment**: ${env}
             **Version**: \`${version}\`
             **Branch**: \`${context.ref}\`
             **SHA**: \`${context.sha.substring(0, 7)}\`
             **Triggered by**: @${context.actor}
-            
+
             ### 🏷️ Tags
             ${tags.map(t => `- \`${t}\``).join('\n')}
-            
+
             ### ⏱️ Timeline
             - **Started**: ${new Date().toISOString()}
             - **Status**: 🔄 In Progress
-            
+
             ---
             *This issue will be auto-updated with deployment status*
             `;
-            
+
             const { data: issue } = await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -157,7 +157,7 @@ jobs:
               body: body,
               labels: labels
             });
-            
+
             console.log(`Created deployment issue: #${issue.number}`);
             core.exportVariable('DEPLOY_ISSUE', issue.number);
 
@@ -173,7 +173,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
           cache: npm
 
       - name: Install dependencies
@@ -186,7 +186,7 @@ jobs:
         run: |
           echo "🏗️ Building shiritori-online..."
           npm run build --prefix shiritori-online
-          
+
           echo "🏗️ Building kawaii-shiritori..."
           npm run build --prefix kawaii-shiritori
 
@@ -194,7 +194,7 @@ jobs:
         run: |
           VERSION="${{ needs.prepare-deployment.outputs.version }}"
           TAGS="${{ needs.prepare-deployment.outputs.tags }}"
-          
+
           # Add version file
           echo "{\"version\":\"$VERSION\",\"tags\":\"$TAGS\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > shiritori-online/dist/version.json
           echo "{\"version\":\"$VERSION\",\"tags\":\"$TAGS\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > kawaii-shiritori/dist/version.json
@@ -202,7 +202,7 @@ jobs:
       - name: Deploy to Firebase
         run: |
           ENV="${{ needs.prepare-deployment.outputs.environment }}"
-          
+
           if [ "$ENV" = "production" ]; then
             echo "🚀 Deploying to production..."
             npx firebase-tools@latest deploy \
@@ -226,7 +226,7 @@ jobs:
             const version = '${{ needs.prepare-deployment.outputs.version }}';
             const env = '${{ needs.prepare-deployment.outputs.environment }}';
             const url = env === 'production' ? '${{ env.PROD_URL }}' : '${{ env.STAGING_URL }}';
-            
+
             // Create deployment
             const { data: deployment } = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
@@ -237,7 +237,7 @@ jobs:
               auto_merge: false,
               required_contexts: []
             });
-            
+
             // Set deployment status
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
@@ -247,7 +247,7 @@ jobs:
               environment_url: url,
               description: `Deployed to ${env}`
             });
-            
+
             console.log(`✅ Deployment recorded: ${deployment.id}`);
 
   test-deployment:
@@ -276,14 +276,14 @@ jobs:
         id: test-homepage
         run: |
           URL="${{ steps.url.outputs.url }}"
-          
+
           echo "Testing $URL..."
           STATUS=$(curl -o /dev/null -s -w "%{http_code}" $URL)
           TIME=$(curl -o /dev/null -s -w "%{time_total}" $URL)
-          
+
           echo "status=$STATUS" >> $GITHUB_OUTPUT
           echo "time=$TIME" >> $GITHUB_OUTPUT
-          
+
           if [ "$STATUS" -eq 200 ]; then
             echo "✅ Homepage: HTTP $STATUS (${TIME}s)"
           else
@@ -294,14 +294,14 @@ jobs:
       - name: Test version endpoint
         run: |
           URL="${{ steps.url.outputs.url }}/version.json"
-          
+
           echo "Testing version endpoint..."
           RESPONSE=$(curl -s $URL)
           VERSION=$(echo $RESPONSE | grep -o '"version":"[^"]*"' | cut -d'"' -f4)
-          
+
           echo "📌 Deployed version: $VERSION"
           echo "Expected: ${{ needs.prepare-deployment.outputs.version }}"
-          
+
           if [ "$VERSION" = "${{ needs.prepare-deployment.outputs.version }}" ]; then
             echo "✅ Version matches"
           else
@@ -312,7 +312,7 @@ jobs:
         run: |
           URL="${{ steps.url.outputs.url }}"
           CONTENT=$(curl -s $URL)
-          
+
           if echo "$CONTENT" | grep -q "しりとり"; then
             echo "✅ Japanese content found"
           else
@@ -324,7 +324,7 @@ jobs:
         run: |
           URL="${{ steps.url.outputs.url }}"
           ROUTES=("/" "/game" "/leaderboard")
-          
+
           for ROUTE in "${ROUTES[@]}"; do
             STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL$ROUTE")
             if [ "$STATUS" -eq 200 ]; then
@@ -337,17 +337,17 @@ jobs:
       - name: Performance check
         run: |
           URL="${{ steps.url.outputs.url }}"
-          
+
           # Test multiple times
           TOTAL=0
           for i in {1..5}; do
             TIME=$(curl -o /dev/null -s -w "%{time_total}" $URL)
             TOTAL=$(echo "$TOTAL + $TIME" | bc)
           done
-          
+
           AVG=$(echo "scale=3; $TOTAL / 5" | bc)
           echo "⚡ Average response time: ${AVG}s"
-          
+
           if (( $(echo "$AVG < 2.0" | bc -l) )); then
             echo "✅ Performance acceptable"
           else
@@ -363,30 +363,30 @@ jobs:
             const time = '${{ steps.test-homepage.outputs.time }}';
             const version = '${{ needs.prepare-deployment.outputs.version }}';
             const tags = '${{ needs.prepare-deployment.outputs.tags }}';
-            
+
             const report = `## 🧪 Deployment Test Report
-            
+
             **URL**: ${url}
             **Version**: \`${version}\`
             **Environment**: ${{ needs.prepare-deployment.outputs.environment }}
-            
+
             ### Results
             - **Homepage**: ✅ HTTP ${status} (${time}s)
             - **Content**: ✅ Japanese text found
             - **Version**: ✅ Matches deployment
             - **Routes**: ✅ All routes accessible
             - **Performance**: ✅ Average < 2s
-            
+
             ### 🏷️ Deployment Tags
             ${tags.split(',').filter(Boolean).map(t => `- \`${t}\``).join('\n')}
-            
+
             ### ✅ Status
             All tests passed! Deployment is healthy.
-            
+
             ---
             *Tested at ${new Date().toISOString()}*
             `;
-            
+
             core.summary.addRaw(report).write();
             console.log(report);
 
@@ -402,34 +402,34 @@ jobs:
           script: |
             const issueNumber = process.env.DEPLOY_ISSUE;
             if (!issueNumber) return;
-            
+
             const success = '${{ needs.test-deployment.result }}' === 'success';
             const version = '${{ needs.prepare-deployment.outputs.version }}';
             const env = '${{ needs.prepare-deployment.outputs.environment }}';
             const url = env === 'production' ? '${{ env.PROD_URL }}' : '${{ env.STAGING_URL }}';
-            
+
             const status = success ? '✅ Completed' : '❌ Failed';
             const emoji = success ? '🎉' : '❌';
-            
+
             const comment = `${emoji} **Deployment ${status}**
-            
+
             **Version**: \`${version}\`
             **Environment**: ${env}
             **URL**: ${url}
             **Completed**: ${new Date().toISOString()}
-            
+
             ${success ? '✅ All tests passed!' : '❌ Some tests failed. Check logs.'}
-            
+
             [View deployment logs](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
             `;
-            
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: parseInt(issueNumber),
               body: comment
             });
-            
+
             // Close issue if successful
             if (success) {
               await github.rest.issues.update({

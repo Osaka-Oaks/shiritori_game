@@ -1,6 +1,6 @@
 name: shiritori_flutter
 description: "Bilingual Shiritori — Flutter cross-platform (web-first)"
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:

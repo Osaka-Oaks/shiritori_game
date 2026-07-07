@@ -52,14 +52,15 @@ Authentication: Personal access token
 
 **Settings → CI/CD → Variables**
 
-| Variable | Value | Protected | Masked |
-|----------|-------|-----------|--------|
-| `FIREBASE_TOKEN` | (from `firebase login:ci`) | ✅ | ✅ |
-| `FIREBASE_PROJECT_ID` | shiritori-game-ccaae | ✅ | ❌ |
-| `NODE_VERSION` | 24 | ❌ | ❌ |
-| `FLUTTER_VERSION` | 3.44.4 | ❌ | ❌ |
+| Variable              | Value                      | Protected | Masked |
+| --------------------- | -------------------------- | --------- | ------ |
+| `FIREBASE_TOKEN`      | (from `firebase login:ci`) | ✅        | ✅     |
+| `FIREBASE_PROJECT_ID` | shiritori-game-ccaae       | ✅        | ❌     |
+| `NODE_VERSION`        | 24                         | ❌        | ❌     |
+| `FLUTTER_VERSION`     | 3.44.4                     | ❌        | ❌     |
 
 **Get Firebase token:**
+
 ```bash
 firebase login:ci
 # Copy the token and add to GitLab variables
@@ -85,11 +86,11 @@ git push gitlab main
 
 ```yaml
 stages:
-  - validate   # Lint, format, typecheck
-  - test       # Unit tests, coverage
-  - build      # Build apps
-  - deploy     # Deploy to Firebase
-  - verify     # Health checks
+  - validate # Lint, format, typecheck
+  - test # Unit tests, coverage
+  - build # Build apps
+  - deploy # Deploy to Firebase
+  - verify # Health checks
 ```
 
 ### Key Features
@@ -99,7 +100,7 @@ stages:
 ✅ **Coverage reports** - Integrated with GitLab  
 ✅ **Manual deployment** - Production requires approval  
 ✅ **Health verification** - Post-deploy checks  
-✅ **Build tracking** - Performance metrics  
+✅ **Build tracking** - Performance metrics
 
 ---
 
@@ -108,6 +109,7 @@ stages:
 ### Stage 1: Validate
 
 **Jobs:**
+
 - `lint` - ESLint + Prettier
 - `typecheck` - TypeScript validation
 - `security` - Security audit
@@ -126,12 +128,14 @@ npm run validate:json
 ### Stage 2: Test
 
 **Jobs:**
+
 - `test:shiritori-online` - React app tests
 - `test:kawaii-shiritori` - Kawaii app tests
 
 **Duration:** ~3 minutes
 
 **Features:**
+
 - Coverage reports
 - Cobertura format
 - GitLab integration
@@ -148,6 +152,7 @@ Settings → CI/CD → Pipelines → Coverage
 ### Stage 3: Build
 
 **Jobs:**
+
 - `build:shiritori-online` - React build
 - `build:kawaii-shiritori` - Kawaii build
 - `build:flutter` - Flutter web build
@@ -156,6 +161,7 @@ Settings → CI/CD → Pipelines → Coverage
 **Duration:** ~5 minutes
 
 **Artifacts:**
+
 - `shiritori-online/dist` (7 days)
 - `kawaii-shiritori/dist` (7 days)
 - `shiritori_flutter/build/web` (7 days)
@@ -171,6 +177,7 @@ flutter build web --release
 ### Stage 4: Deploy
 
 **Jobs:**
+
 - `deploy:production` - Deploy to production (manual)
 - `deploy:flutter` - Deploy Flutter app (manual)
 - `deploy:staging` - Deploy to staging (auto on develop)
@@ -178,6 +185,7 @@ flutter build web --release
 **Duration:** ~2 minutes
 
 **Environments:**
+
 - **Production:** https://shiritori-game-ccaae.web.app
 - **Flutter:** https://shiritori-flutter.web.app
 - **Staging:** https://shiritori-game-ccaae--develop.web.app
@@ -191,6 +199,7 @@ firebase deploy --only hosting --project shiritori-game-ccaae
 ### Stage 5: Verify
 
 **Jobs:**
+
 - `verify:production` - HTTP 200 check
 - `verify:flutter` - Flutter site check
 - `monitor:health` - Scheduled health check
@@ -215,11 +224,13 @@ Add in **Settings → CI/CD → Variables**
 **Description:** Firebase deployment token
 
 **Get it:**
+
 ```bash
 firebase login:ci
 ```
 
 **Settings:**
+
 - ✅ Protected
 - ✅ Masked
 - ✅ Expand variable reference
@@ -233,6 +244,7 @@ firebase login:ci
 **Value:** `shiritori-game-ccaae`
 
 **Settings:**
+
 - ✅ Protected
 - ❌ Masked
 
@@ -261,6 +273,7 @@ firebase login:ci
 **Default setup** - No configuration needed.
 
 **Features:**
+
 - 400 CI/CD minutes/month (free tier)
 - 2,000 minutes/month (Premium)
 - Unlimited (Ultimate)
@@ -341,6 +354,7 @@ build:flutter:
 **Branch:** `main`
 
 **Steps:**
+
 1. Push to `main`
 2. Pipeline runs validate → test → build
 3. Go to **CI/CD → Pipelines**
@@ -359,6 +373,7 @@ build:flutter:
 **Branch:** `develop`
 
 **Steps:**
+
 1. Push to `develop`
 2. Pipeline auto-deploys
 
@@ -373,6 +388,7 @@ build:flutter:
 **Branch:** `main`
 
 **Steps:**
+
 1. Push to `main`
 2. Pipeline builds Flutter app
 3. Go to **CI/CD → Pipelines**
@@ -390,6 +406,7 @@ build:flutter:
 **View:** CI/CD → Pipelines
 
 **Metrics:**
+
 - Success rate
 - Average duration
 - Failed jobs
@@ -401,6 +418,7 @@ build:flutter:
 **View:** Settings → CI/CD → General pipelines
 
 **Enable:**
+
 ```yaml
 coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 ```
@@ -415,6 +433,7 @@ Merge requests → Changes → Coverage
 **View:** Deployments → Environments
 
 **Features:**
+
 - Environment URL
 - Deployment status
 - Rollback option
@@ -426,6 +445,7 @@ Merge requests → Changes → Coverage
 **Setup:** CI/CD → Schedules → New schedule
 
 **Example:**
+
 ```
 Name: Nightly health check
 Interval: 0 2 * * * (daily at 2 AM)
@@ -440,11 +460,13 @@ Variables: SCHEDULE_TYPE=health
 ### Pipeline Fails at Validation
 
 **Error:**
+
 ```
 npm ERR! Lifecycle script `lint` failed
 ```
 
 **Fix:**
+
 ```bash
 # Run locally first
 npm run lint
@@ -465,6 +487,7 @@ git push
 ### Build Artifacts Not Found
 
 **Error:**
+
 ```
 ERROR: Job `deploy:production` failed: artifact not found
 ```
@@ -475,7 +498,7 @@ Check `dependencies:` in deploy job:
 ```yaml
 deploy:production:
   dependencies:
-    - build:shiritori-online  # Must match build job name
+    - build:shiritori-online # Must match build job name
 ```
 
 ---
@@ -483,11 +506,13 @@ deploy:production:
 ### Firebase Deployment Fails
 
 **Error:**
+
 ```
 Error: FIREBASE_TOKEN not set
 ```
 
 **Fix:**
+
 1. Generate token: `firebase login:ci`
 2. Add to GitLab: Settings → CI/CD → Variables
 3. Name: `FIREBASE_TOKEN`
@@ -500,12 +525,14 @@ Error: FIREBASE_TOKEN not set
 ### Runner Out of Disk Space
 
 **Error:**
+
 ```
 ERROR: Job failed: exit code 1
 No space left on device
 ```
 
 **Fix:**
+
 ```bash
 # SSH into runner
 docker exec -it gitlab-runner bash
@@ -522,6 +549,7 @@ rm -rf /cache/*
 ### Coverage Not Showing
 
 **Fix:**
+
 ```yaml
 test:
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
@@ -589,7 +617,7 @@ test:
 artifacts:
   paths:
     - dist/
-  expire_in: 7 days  # Don't keep forever
+  expire_in: 7 days # Don't keep forever
 ```
 
 ### 4. Manual Gates for Production

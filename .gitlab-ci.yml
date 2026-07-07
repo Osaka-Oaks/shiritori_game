@@ -272,7 +272,7 @@ verify:production:
         echo "❌ Production site returned HTTP $HTTP_CODE"
         exit 1
       fi
-      
+
       RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" https://shiritori-game-ccaae.web.app/)
       echo "Response time: ${RESPONSE_TIME}s"
   dependencies:

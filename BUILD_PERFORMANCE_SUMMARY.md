@@ -8,24 +8,26 @@ Complete overview of build optimizations, uptime monitoring, and observability i
 
 ### Before vs After
 
-| App | Before | After | Reduction | Savings |
-|-----|--------|-------|-----------|---------|
-| **shiritori-online** | 8 min | 3 min | -5 min | **62%** |
-| **kawaii-shiritori** | 10 min | 4 min | -6 min | **60%** |
-| **shiritori-flutter** | 6 min | 2 min | -4 min | **67%** |
-| **Total Pipeline** | 24 min | 9 min | -15 min | **63%** |
+| App                   | Before | After | Reduction | Savings |
+| --------------------- | ------ | ----- | --------- | ------- |
+| **shiritori-online**  | 8 min  | 3 min | -5 min    | **62%** |
+| **kawaii-shiritori**  | 10 min | 4 min | -6 min    | **60%** |
+| **shiritori-flutter** | 6 min  | 2 min | -4 min    | **67%** |
+| **Total Pipeline**    | 24 min | 9 min | -15 min   | **63%** |
 
 ### Optimization Techniques Applied
 
 **1. Aggressive Caching (Save ~3-4 min)**
+
 ```yaml
 ✅ node_modules caching
-✅ Build output caching  
+✅ Build output caching
 ✅ Vite cache preservation
 ✅ npm cache (--prefer-offline)
 ```
 
 **2. Parallel Execution (Save ~5-6 min)**
+
 ```yaml
 ✅ Matrix strategy (3 apps in parallel)
 ✅ Parallel testing
@@ -33,6 +35,7 @@ Complete overview of build optimizations, uptime monitoring, and observability i
 ```
 
 **3. Optimized Dependencies (Save ~1-2 min)**
+
 ```yaml
 ✅ npm ci --no-audit (skip audit)
 ✅ --prefer-offline (use cache)
@@ -41,6 +44,7 @@ Complete overview of build optimizations, uptime monitoring, and observability i
 ```
 
 **4. Build Optimizations (Save ~2-3 min)**
+
 ```yaml
 ✅ Disable source maps in CI
 ✅ Use esbuild minifier (faster than terser)
@@ -55,6 +59,7 @@ Complete overview of build optimizations, uptime monitoring, and observability i
 ### Health Endpoints Implemented
 
 **1. `/health` - Detailed Health Check**
+
 ```json
 {
   "status": "healthy",
@@ -70,21 +75,25 @@ Complete overview of build optimizations, uptime monitoring, and observability i
 ```
 
 **2. `/health/live` - Liveness Probe**
+
 ```json
 { "alive": true }
 ```
 
 **3. `/health/ready` - Readiness Probe**
+
 ```json
 { "ready": true, "message": "Server is ready" }
 ```
 
 **4. `/ping` - Simple Ping**
+
 ```
 pong
 ```
 
 **5. `/metrics` - Prometheus Metrics**
+
 ```
 # HELP shiritori_up Application is up
 # TYPE shiritori_up gauge
@@ -99,6 +108,7 @@ shiritori_up 1
 - 🇸🇬 Asia Pacific (Singapore)
 
 **Check Frequency:**
+
 - Critical: Every 30 seconds
 - Standard: Every 60 seconds
 - Extended: Every 5 minutes
@@ -110,12 +120,14 @@ shiritori_up 1
 ### 1. Grafana (Visual Dashboards)
 
 **Features:**
+
 - ✅ 10 pre-configured panels
 - ✅ Real-time metrics
 - ✅ Alert configuration
 - ✅ Multi-source data
 
 **Panels:**
+
 1. Application Uptime
 2. Request Rate
 3. Response Time (p95)
@@ -132,6 +144,7 @@ shiritori_up 1
 ### 2. Datadog (APM & RUM)
 
 **Features:**
+
 - ✅ Application Performance Monitoring
 - ✅ Real User Monitoring
 - ✅ Synthetic monitoring (5 locations)
@@ -139,12 +152,14 @@ shiritori_up 1
 - ✅ Custom metrics
 
 **Monitors:**
+
 - High error rate (>10/min)
 - Application down (>2 min)
 - Slow response time (>2s)
 - Build time increased (>10 min)
 
 **SLOs:**
+
 - Availability: 99.9%
 - Response time: <2s (p95)
 
@@ -153,6 +168,7 @@ shiritori_up 1
 ### 3. ELK Stack (Log Management)
 
 **Components:**
+
 - ✅ Elasticsearch - Data storage
 - ✅ Logstash - Log processing
 - ✅ Kibana - Visualization
@@ -162,6 +178,7 @@ shiritori_up 1
 - ✅ Heartbeat - Uptime
 
 **Indices:**
+
 - `shiritori-logs-*` - Application logs
 - `shiritori-errors-*` - Error logs
 - `shiritori-builds-*` - Build logs
@@ -176,6 +193,7 @@ shiritori_up 1
 ### Critical Alerts (PagerDuty)
 
 **Triggers:**
+
 - Application down (>2 min)
 - Error rate >10/min
 - Database unreachable
@@ -186,6 +204,7 @@ shiritori_up 1
 ### Warning Alerts (Slack #alerts)
 
 **Triggers:**
+
 - Response time >2s
 - Memory usage >80%
 - Build time >10 min
@@ -196,6 +215,7 @@ shiritori_up 1
 ### Info Alerts (Email)
 
 **Triggers:**
+
 - Deployment completed
 - Weekly metrics summary
 - Monthly uptime report
@@ -208,41 +228,41 @@ shiritori_up 1
 
 ### Application Metrics
 
-| Metric | Target | Alert Threshold |
-|--------|--------|----------------|
-| Uptime | 99.9% | <99% |
-| Response Time (p95) | <500ms | >2s |
-| Error Rate | <0.1% | >0.5% |
-| Request Rate | - | Anomaly detection |
-| Active Users | - | - |
+| Metric              | Target | Alert Threshold   |
+| ------------------- | ------ | ----------------- |
+| Uptime              | 99.9%  | <99%              |
+| Response Time (p95) | <500ms | >2s               |
+| Error Rate          | <0.1%  | >0.5%             |
+| Request Rate        | -      | Anomaly detection |
+| Active Users        | -      | -                 |
 
 ### Infrastructure Metrics
 
-| Metric | Target | Alert Threshold |
-|--------|--------|----------------|
-| CPU Usage | <70% | >85% |
-| Memory Usage | <80% | >90% |
-| Disk Usage | <85% | >95% |
-| Network Throughput | - | Anomaly detection |
+| Metric             | Target | Alert Threshold   |
+| ------------------ | ------ | ----------------- |
+| CPU Usage          | <70%   | >85%              |
+| Memory Usage       | <80%   | >90%              |
+| Disk Usage         | <85%   | >95%              |
+| Network Throughput | -      | Anomaly detection |
 
 ### Build Metrics
 
-| Metric | Target | Alert Threshold |
-|--------|--------|----------------|
-| Build Duration | <5 min | >10 min |
-| Build Success Rate | >95% | <90% |
-| Deploy Frequency | Daily | - |
-| Time to Recovery | <30 min | >1 hour |
+| Metric             | Target  | Alert Threshold |
+| ------------------ | ------- | --------------- |
+| Build Duration     | <5 min  | >10 min         |
+| Build Success Rate | >95%    | <90%            |
+| Deploy Frequency   | Daily   | -               |
+| Time to Recovery   | <30 min | >1 hour         |
 
 ### Business Metrics
 
-| Metric | Description |
-|--------|-------------|
-| Games Started | New games initiated |
-| Games Completed | Finished games |
-| Words Submitted | Total words played |
-| Active Players | Concurrent players |
-| User Retention | Day 1, 7, 30 retention |
+| Metric          | Description            |
+| --------------- | ---------------------- |
+| Games Started   | New games initiated    |
+| Games Completed | Finished games         |
+| Words Submitted | Total words played     |
+| Active Players  | Concurrent players     |
+| User Retention  | Day 1, 7, 30 retention |
 
 ---
 
@@ -251,15 +271,18 @@ shiritori_up 1
 ### Service Level Objectives (SLOs)
 
 **Availability:**
+
 - Target: 99.9% uptime
 - Allowed downtime: 43.2 minutes/month
 - Current: 99.95% (last 30 days)
 
 **Response Time:**
+
 - Target: 500ms (p95)
 - Current: 320ms (p95)
 
 **Error Budget:**
+
 - Monthly budget: 43.2 minutes
 - Used this month: 12 minutes
 - Remaining: 31.2 minutes
@@ -269,9 +292,11 @@ shiritori_up 1
 ## 📁 Files Created
 
 ### Build Optimization
+
 - `.github/workflows/build-optimization.yml` - Optimized CI/CD
 
 ### Monitoring Configuration
+
 - `monitoring/grafana/dashboard.json` - Grafana dashboard
 - `monitoring/datadog/datadog.yaml` - Datadog config
 - `monitoring/elk/docker-compose.yml` - ELK stack
@@ -280,11 +305,13 @@ shiritori_up 1
 - `monitoring/health-checks/health-endpoint.ts` - Health endpoints
 
 ### Documentation
+
 - `MONITORING_OBSERVABILITY_GUIDE.md` - Complete guide
 - `monitoring/QUICKSTART.md` - Quick start guide
 - `BUILD_PERFORMANCE_SUMMARY.md` - This file
 
 ### Scripts (package.json)
+
 ```json
 {
   "monitor:elk:start": "Start ELK stack",
@@ -344,18 +371,21 @@ curl http://localhost:3000/health/live
 ## 📊 Results Summary
 
 ### Build Time ⚡
+
 - **Before:** 24 minutes total
 - **After:** 9 minutes total
 - **Saved:** 15 minutes per run
 - **Improvement:** 63% faster
 
 ### Uptime Monitoring 🏥
+
 - **Locations:** 4 global checkpoints
 - **Frequency:** 30-60 second checks
 - **Endpoints:** 5 health check routes
 - **Target:** 99.9% uptime
 
 ### Observability 📈
+
 - **Grafana:** 10 dashboard panels
 - **Datadog:** APM + RUM + Synthetics
 - **ELK:** Complete log management
@@ -363,6 +393,7 @@ curl http://localhost:3000/health/live
 - **Alerts:** Critical, warning, info levels
 
 ### Tools Integrated 🛠️
+
 - ✅ Grafana (dashboards)
 - ✅ Datadog (APM/RUM)
 - ✅ Elasticsearch (logs)
@@ -378,18 +409,21 @@ curl http://localhost:3000/health/live
 ## 🎉 Impact
 
 ### Development Team
+
 - ⚡ 63% faster builds = more iterations
 - 📊 Real-time metrics for debugging
 - 🔍 Searchable logs across all services
 - 🚨 Proactive alerting before users notice
 
 ### Operations Team
+
 - 📈 Complete visibility into system health
 - 🏥 Uptime monitoring from 4 global locations
 - 📊 SLO tracking and error budgets
 - 🚨 Integrated incident management
 
 ### Business Team
+
 - 📊 Track user engagement metrics
 - 💰 Monitor conversion funnels
 - 📈 Understand user behavior patterns
@@ -410,11 +444,13 @@ curl http://localhost:3000/health/live
 ## 📚 Documentation
 
 **Comprehensive Guides:**
+
 - `MONITORING_OBSERVABILITY_GUIDE.md` - Full monitoring guide
 - `monitoring/QUICKSTART.md` - 5-minute setup
 - `BUILD_PERFORMANCE_SUMMARY.md` - This document
 
 **Quick Commands:**
+
 ```bash
 npm run monitor:all:start     # Start monitoring
 npm run monitor:elk:status    # Check status
@@ -429,4 +465,4 @@ npm run monitor:all:stop      # Stop all
 **Uptime:** 99.9% target with global checks  
 **Status:** ✅ Production Ready!
 
-*Last updated: July 6, 2026*
+_Last updated: July 6, 2026_

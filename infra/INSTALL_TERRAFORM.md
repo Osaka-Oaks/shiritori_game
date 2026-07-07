@@ -74,24 +74,30 @@ tofu --version
 ## 🎯 Which Should You Install?
 
 ### Terraform (HashiCorp)
+
 **Pros:**
+
 - ✅ Original, well-established
 - ✅ Large community
 - ✅ Extensive documentation
 - ✅ Enterprise support
 
 **Cons:**
+
 - ❌ Proprietary license (BSL 1.1)
 - ❌ Some restrictions on commercial use
 
 ### OpenTofu (Linux Foundation)
+
 **Pros:**
+
 - ✅ Open-source (MPL 2.0)
 - ✅ No licensing restrictions
 - ✅ Community-driven
 - ✅ Compatible with Terraform
 
 **Cons:**
+
 - ❌ Newer project (fork of Terraform 1.5)
 - ❌ Smaller community (growing)
 
@@ -233,6 +239,7 @@ tofu init && tofu validate
 ---
 
 **Quick Install:**
+
 ```bash
 # Terraform
 brew install hashicorp/tap/terraform
@@ -246,5 +253,5 @@ brew install --cask google-cloud-sdk
 
 ---
 
-*Last updated: July 2026*  
-*Status: ✅ Ready to Install*
+_Last updated: July 2026_  
+_Status: ✅ Ready to Install_

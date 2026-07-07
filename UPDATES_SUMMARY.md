@@ -91,6 +91,7 @@ npm run build:analyze
 ```
 
 **Features:**
+
 - ✅ esbuild minifier (faster than terser)
 - ✅ Disabled source maps in CI
 - ✅ Manual code splitting
@@ -99,6 +100,7 @@ npm run build:analyze
 - ✅ Performance recommendations
 
 **Documentation:**
+
 - [Build Optimization Quick Start](BUILD_OPTIMIZATION_QUICKSTART.md)
 - [Build Performance Summary](BUILD_PERFORMANCE_SUMMARY.md)
 - [Build Tracking Summary](BUILD_TRACKING_SUMMARY.md)
@@ -120,12 +122,14 @@ open http://localhost:5601  # Kibana
 ```
 
 **Tools:**
+
 - 🔍 **Grafana** - Metrics dashboards
 - 📊 **Datadog** - APM & RUM
 - 📈 **ELK Stack** - Logs & analysis
 - 💓 **Heartbeat** - Uptime monitoring
 
 **Metrics Tracked:**
+
 - Response time (p50, p95, p99)
 - Request rate & throughput
 - Error rate & 5xx errors
@@ -135,6 +139,7 @@ open http://localhost:5601  # Kibana
 - Build time
 
 **Documentation:**
+
 - [Monitoring Quick Start](monitoring/QUICKSTART.md)
 - [Monitoring & Observability Guide](MONITORING_OBSERVABILITY_GUIDE.md)
 
@@ -157,6 +162,7 @@ npm run deploy:flutter:staging
 ```
 
 **Features:**
+
 - ✅ Automatic CI/CD via GitHub Actions
 - ✅ 10 comprehensive health checks
 - ✅ Build, deploy, verify time tracking
@@ -165,6 +171,7 @@ npm run deploy:flutter:staging
 - ✅ Status notifications
 
 **Health Checks:**
+
 1. HTTP Status (200 OK)
 2. Response Time (<3s)
 3. Content Type
@@ -177,6 +184,7 @@ npm run deploy:flutter:staging
 10. Service Worker
 
 **Documentation:**
+
 - [Flutter Deploy Quick Start](FLUTTER_DEPLOY_QUICKSTART.md)
 - [Flutter Deployment Guide](FLUTTER_DEPLOYMENT_GUIDE.md)
 - [CI/CD Summary](DEPLOYMENT_CI_CD_SUMMARY.md)
@@ -202,6 +210,7 @@ npm run port:kill -- 8080
 ```
 
 **Features:**
+
 - ✅ Kill specific ports
 - ✅ Kill all dev ports at once
 - ✅ Process information display
@@ -210,6 +219,7 @@ npm run port:kill -- 8080
 - ✅ Verification
 
 **Documentation:**
+
 - [Port Management Guide](PORT_MANAGEMENT_GUIDE.md)
 
 ---
@@ -283,6 +293,7 @@ open http://localhost:5601  # Kibana
 ### 🎨 Updated Files
 
 #### Main Documentation
+
 - ✅ **[README.md](README.md)** - Complete rewrite with GFM
   - Added badges and shields
   - Feature tables
@@ -291,6 +302,7 @@ open http://localhost:5601  # Kibana
   - Complete command reference
 
 #### GitHub Actions Workflows
+
 - ✅ **[deploy-flutter.yml](.github/workflows/deploy-flutter.yml)** - NEW
   - Build, deploy, verify Flutter app
   - 10 health checks
@@ -304,45 +316,49 @@ open http://localhost:5601  # Kibana
   - Time tracking
 
 #### Scripts
+
 - ✅ **[kill-port.sh](scripts/kill-port.sh)** - NEW
   - Kill processes on specific ports
-  
+
 - ✅ **[kill-all-ports.sh](scripts/kill-all-ports.sh)** - NEW
   - Kill all dev server ports
-  
+
 - ✅ **[track-build-time.sh](scripts/track-build-time.sh)** - NEW
   - Track and log build times
-  
+
 - ✅ **[analyze-build-times.js](scripts/analyze-build-times.js)** - NEW
   - Analyze build performance
-  
+
 - ✅ **[test-flutter-deployment.sh](scripts/test-flutter-deployment.sh)** - NEW
   - Test Flutter deployment health
 
 #### Monitoring Configurations
+
 - ✅ **[monitoring/grafana/dashboard.json](monitoring/grafana/dashboard.json)** - NEW
   - Grafana dashboard config
-  
+
 - ✅ **[monitoring/datadog/datadog.yaml](monitoring/datadog/datadog.yaml)** - NEW
   - Datadog agent configuration
-  
+
 - ✅ **[monitoring/elk/docker-compose.yml](monitoring/elk/docker-compose.yml)** - NEW
   - ELK stack setup
-  
+
 - ✅ **[monitoring/elk/logstash/pipeline/](monitoring/elk/logstash/pipeline/)** - NEW
   - Log processing pipeline
-  
+
 - ✅ **[monitoring/elk/heartbeat/](monitoring/elk/heartbeat/)** - NEW
   - Uptime monitoring config
-  
+
 - ✅ **[monitoring/health-checks/](monitoring/health-checks/)** - NEW
   - Health check endpoints
 
 #### Build Configuration
+
 - ✅ **[vite.config.build-optimized.ts](vite.config.build-optimized.ts)** - NEW
   - Optimized build configuration
 
 #### Package.json
+
 - ✅ **[package.json](package.json)** - Updated
   - Added 30+ new scripts
   - Build optimization commands
@@ -409,13 +425,13 @@ shiritori_game/
 
 ### Quick Access
 
-| Topic | Quick Start | Complete Guide |
-|-------|-------------|----------------|
-| **Build** | [Quick Start](BUILD_OPTIMIZATION_QUICKSTART.md) | [Complete Guide](BUILD_PERFORMANCE_SUMMARY.md) |
-| **Monitoring** | [Quick Start](monitoring/QUICKSTART.md) | [Complete Guide](MONITORING_OBSERVABILITY_GUIDE.md) |
-| **Deployment** | [Quick Start](FLUTTER_DEPLOY_QUICKSTART.md) | [Complete Guide](FLUTTER_DEPLOYMENT_GUIDE.md) |
-| **Ports** | [Guide](PORT_MANAGEMENT_GUIDE.md) | - |
-| **All Docs** | - | [Index](DOCUMENTATION_INDEX.md) |
+| Topic          | Quick Start                                     | Complete Guide                                      |
+| -------------- | ----------------------------------------------- | --------------------------------------------------- |
+| **Build**      | [Quick Start](BUILD_OPTIMIZATION_QUICKSTART.md) | [Complete Guide](BUILD_PERFORMANCE_SUMMARY.md)      |
+| **Monitoring** | [Quick Start](monitoring/QUICKSTART.md)         | [Complete Guide](MONITORING_OBSERVABILITY_GUIDE.md) |
+| **Deployment** | [Quick Start](FLUTTER_DEPLOY_QUICKSTART.md)     | [Complete Guide](FLUTTER_DEPLOYMENT_GUIDE.md)       |
+| **Ports**      | [Guide](PORT_MANAGEMENT_GUIDE.md)               | -                                                   |
+| **All Docs**   | -                                               | [Index](DOCUMENTATION_INDEX.md)                     |
 
 ---
 
@@ -493,12 +509,14 @@ tofu:apply              # Apply changes
 ### For Developers
 
 1. **Start Using Fast Builds**
+
    ```bash
    npm run build:fast
    npm run build:track
    ```
 
 2. **Set Up Monitoring**
+
    ```bash
    npm run monitor:all:start
    ```

@@ -38,16 +38,19 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 ### 1. Getting Started
 
 #### [Installation](docs/Installation.md)
+
 - Prerequisites
 - Environment setup
 - First build
 
 #### [Quick Start](README.md#quick-start)
+
 - Run locally in 3 commands
 - Access apps
 - Verify setup
 
 #### [Project Structure](docs/ProjectStructure.md)
+
 - Monorepo layout
 - Package organization
 - Key directories
@@ -57,22 +60,26 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 ### 2. Development
 
 #### [Development Guide](docs/Development.md)
+
 - Local development
 - Hot reload
 - Debug tools
 
 #### [Code Style](docs/CodeStyle.md)
+
 - ESLint configuration
 - Prettier formatting
 - TypeScript conventions
 
 #### [Testing](docs/Testing.md)
+
 - Unit tests
 - Integration tests
 - E2E tests
 - Coverage
 
 #### [Git Workflow](docs/GitWorkflow.md)
+
 - Branch strategy
 - Commit conventions
 - Pull request process
@@ -82,21 +89,25 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 ### 3. Architecture
 
 #### [System Architecture](docs/Architecture.md)
+
 - High-level overview
 - Component diagram
 - Data flow
 
 #### [Frontend Architecture](docs/Frontend.md)
+
 - React structure
 - State management
 - Routing
 
 #### [Flutter Architecture](shiritori_flutter/README.md)
+
 - Widget tree
 - State management
 - Platform support
 
 #### [Backend Architecture](docs/Backend.md)
+
 - Firebase services
 - Realtime Database
 - Authentication
@@ -107,21 +118,25 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 ### 4. Features
 
 #### [Game Logic](docs/GameLogic.md)
+
 - Shiritori rules
 - Word validation
 - Dictionary system
 
 #### [Multiplayer](docs/Multiplayer.md)
+
 - Real-time sync
 - Room management
 - Player matching
 
 #### [Japanese Input](JAPANESE_INPUT_GUIDE.md)
+
 - Hiragana/Katakana/Kanji
 - IME support
 - Word conversion
 
 #### [LINE Integration](PERFORMANCE_GUIDE.md#line-characters)
+
 - LINE characters
 - Stickers
 - Sound effects
@@ -131,16 +146,19 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 ### 5. Build & Optimization
 
 #### [Build Optimization](BUILD_OPTIMIZATION_QUICKSTART.md)
+
 - Fast builds (60% faster)
 - Bundle optimization
 - Code splitting
 
 #### [Build Tracking](BUILD_TRACKING_SUMMARY.md)
+
 - Performance metrics
 - Build time analysis
 - Historical data
 
 #### [Performance](PERFORMANCE_GUIDE.md)
+
 - Caching strategies
 - Lag prevention
 - Response time optimization
@@ -150,21 +168,25 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 ### 6. Deployment
 
 #### [GitHub CI/CD](.github/workflows/)
+
 - Automated pipelines
 - Branch protection
 - Status checks
 
 #### [GitLab CI/CD](GITLAB_SETUP.md)
+
 - Pipeline configuration
 - Runners setup
 - Environment variables
 
 #### [Firebase Deployment](FLUTTER_FIREBASE_SETUP.md)
+
 - Hosting setup
 - Database rules
 - Security configuration
 
 #### [Flutter Deployment](FLUTTER_DEPLOY_QUICKSTART.md)
+
 - Multi-platform build
 - Web deployment
 - App stores (future)
@@ -174,17 +196,20 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 ### 7. Infrastructure
 
 #### [Infrastructure as Code](infra/README.md)
+
 - Terraform setup
 - OpenTofu support
 - Environment management
 
 #### [Monitoring](MONITORING_OBSERVABILITY_GUIDE.md)
+
 - ELK Stack
 - Grafana
 - Datadog
 - Health checks
 
 #### [Port Management](PORT_MANAGEMENT_GUIDE.md)
+
 - Kill ports
 - Prevent conflicts
 - Debug tools
@@ -194,16 +219,19 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 ### 8. Security
 
 #### [Security Policy](SECURITY.md)
+
 - Responsible disclosure
 - Supported versions
 - Contact information
 
 #### [Security Fixes](SECURITY_FIXES.md)
+
 - Fixed vulnerabilities
 - False positives
 - Pending issues
 
 #### [Authentication](docs/Authentication.md)
+
 - Firebase Auth
 - Anonymous users
 - User profiles
@@ -213,16 +241,19 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 ### 9. Operations
 
 #### [Monitoring Setup](monitoring/QUICKSTART.md)
+
 - 5-minute setup
 - Dashboard access
 - Alert configuration
 
 #### [Docker Troubleshooting](DOCKER_TROUBLESHOOTING.md)
+
 - Common issues
 - Authentication problems
 - Lite stack option
 
 #### [Debugging](docs/Debugging.md)
+
 - Debug tools
 - Error tracking
 - Log analysis
@@ -232,16 +263,19 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 ### 10. API Reference
 
 #### [Firebase API](docs/FirebaseAPI.md)
+
 - Realtime Database
 - Authentication
 - Cloud Functions
 
 #### [Game API](docs/GameAPI.md)
+
 - Room creation
 - Move validation
 - State management
 
 #### [Dictionary API](MULTI_DICTIONARY_GUIDE.md)
+
 - Word lookup
 - Validation
 - Kanji support
@@ -252,23 +286,23 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 
 ### "I want to..."
 
-| Use Case | Documentation |
-|----------|---------------|
-| **Get started quickly** | [README.md](README.md) → [Quick Start](#quick-start) |
-| **Understand the project** | [Project Structure](docs/ProjectStructure.md) |
-| **Run locally** | [Installation](docs/Installation.md) |
-| **Contribute code** | [Development Guide](docs/Development.md) |
-| **Run tests** | [Testing Guide](docs/Testing.md) |
-| **Speed up builds** | [Build Optimization](BUILD_OPTIMIZATION_QUICKSTART.md) |
-| **Deploy to Firebase** | [Firebase Setup](FLUTTER_FIREBASE_SETUP.md) |
-| **Set up CI/CD** | [GitHub Actions](.github/workflows/) or [GitLab](GITLAB_SETUP.md) |
-| **Monitor the app** | [Monitoring Guide](monitoring/QUICKSTART.md) |
-| **Fix port conflicts** | [Port Management](PORT_MANAGEMENT_GUIDE.md) |
-| **Report security issue** | [Security Policy](SECURITY.md) |
-| **Add new feature** | [Development](docs/Development.md) + [Testing](docs/Testing.md) |
-| **Fix a bug** | [Debugging Guide](docs/Debugging.md) |
-| **Deploy Flutter app** | [Flutter Deploy](FLUTTER_DEPLOY_QUICKSTART.md) |
-| **Optimize performance** | [Performance Guide](PERFORMANCE_GUIDE.md) |
+| Use Case                   | Documentation                                                     |
+| -------------------------- | ----------------------------------------------------------------- |
+| **Get started quickly**    | [README.md](README.md) → [Quick Start](#quick-start)              |
+| **Understand the project** | [Project Structure](docs/ProjectStructure.md)                     |
+| **Run locally**            | [Installation](docs/Installation.md)                              |
+| **Contribute code**        | [Development Guide](docs/Development.md)                          |
+| **Run tests**              | [Testing Guide](docs/Testing.md)                                  |
+| **Speed up builds**        | [Build Optimization](BUILD_OPTIMIZATION_QUICKSTART.md)            |
+| **Deploy to Firebase**     | [Firebase Setup](FLUTTER_FIREBASE_SETUP.md)                       |
+| **Set up CI/CD**           | [GitHub Actions](.github/workflows/) or [GitLab](GITLAB_SETUP.md) |
+| **Monitor the app**        | [Monitoring Guide](monitoring/QUICKSTART.md)                      |
+| **Fix port conflicts**     | [Port Management](PORT_MANAGEMENT_GUIDE.md)                       |
+| **Report security issue**  | [Security Policy](SECURITY.md)                                    |
+| **Add new feature**        | [Development](docs/Development.md) + [Testing](docs/Testing.md)   |
+| **Fix a bug**              | [Debugging Guide](docs/Debugging.md)                              |
+| **Deploy Flutter app**     | [Flutter Deploy](FLUTTER_DEPLOY_QUICKSTART.md)                    |
+| **Optimize performance**   | [Performance Guide](PERFORMANCE_GUIDE.md)                         |
 
 ---
 
@@ -348,31 +382,37 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 ### By Topic
 
 **Getting Started**
+
 - [README.md](README.md)
 - [Installation](docs/Installation.md)
 - [Quick Start](#quick-start)
 
 **Development**
+
 - [Development Guide](docs/Development.md)
 - [Testing](docs/Testing.md)
 - [Debugging](docs/Debugging.md)
 
 **Deployment**
+
 - [GitHub CI/CD](.github/workflows/)
 - [GitLab CI/CD](GITLAB_SETUP.md)
 - [Firebase Deploy](FLUTTER_FIREBASE_SETUP.md)
 
 **Performance**
+
 - [Build Optimization](BUILD_OPTIMIZATION_QUICKSTART.md)
 - [Performance Guide](PERFORMANCE_GUIDE.md)
 - [Caching](PERFORMANCE_GUIDE.md#advanced-caching)
 
 **Security**
+
 - [Security Policy](SECURITY.md)
 - [Security Fixes](SECURITY_FIXES.md)
 - [Authentication](docs/Authentication.md)
 
 **Monitoring**
+
 - [Monitoring Guide](MONITORING_OBSERVABILITY_GUIDE.md)
 - [Docker Setup](monitoring/QUICKSTART.md)
 - [Troubleshooting](DOCKER_TROUBLESHOOTING.md)
@@ -411,18 +451,18 @@ Welcome to the Shiritori Game documentation! This wiki provides comprehensive gu
 
 ### Coverage by Category
 
-| Category | Files | Status |
-|----------|-------|--------|
-| Getting Started | 5 | ✅ Complete |
-| Development | 8 | ✅ Complete |
-| Build & Optimization | 4 | ✅ Complete |
-| Deployment | 6 | ✅ Complete |
-| Infrastructure | 5 | ✅ Complete |
-| Monitoring | 4 | ✅ Complete |
-| Security | 3 | ✅ Complete |
-| Features | 5 | ✅ Complete |
-| API Reference | 3 | ⏳ In Progress |
-| Troubleshooting | 3 | ✅ Complete |
+| Category             | Files | Status         |
+| -------------------- | ----- | -------------- |
+| Getting Started      | 5     | ✅ Complete    |
+| Development          | 8     | ✅ Complete    |
+| Build & Optimization | 4     | ✅ Complete    |
+| Deployment           | 6     | ✅ Complete    |
+| Infrastructure       | 5     | ✅ Complete    |
+| Monitoring           | 4     | ✅ Complete    |
+| Security             | 3     | ✅ Complete    |
+| Features             | 5     | ✅ Complete    |
+| API Reference        | 3     | ⏳ In Progress |
+| Troubleshooting      | 3     | ✅ Complete    |
 
 **Total:** 46+ documentation files
 

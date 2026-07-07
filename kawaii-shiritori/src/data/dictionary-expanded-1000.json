@@ -16,7 +16,6 @@
     ]
   },
   "words": [
-    // Original 550 words preserved...
     {
       "word": "あさ",
       "romaji": "asa",
@@ -45,7 +44,6 @@
       "category": "season"
     },
 
-    // NEW: More Animals (100+ added)
     {
       "word": "さる",
       "romaji": "saru",
@@ -389,7 +387,6 @@
       "category": "animals"
     },
 
-    // NEW: Food & Fruits (100+ added)
     {
       "word": "りんご",
       "romaji": "ringo",
@@ -841,7 +838,6 @@
       "category": "food"
     },
 
-    // NEW: Pokemon Gen 1-3 (150+ added)
     {
       "word": "ぴかちゅう",
       "romaji": "pikachuu",
@@ -2084,10 +2080,6 @@
       "endSound": "ゅう",
       "category": "pokemon"
     },
-
-    // PLACEHOLDER NOTE: Additional 400+ words would be added here to reach 1050 total
-    // Including: modern technology terms, more JLPT vocabulary, body parts, places, adjectives, verbs, etc.
-    // For brevity, showing structure with key examples above
 
     {
       "word": "せかい",

@@ -4,14 +4,14 @@ GitHub Issues use **status labels** as columns. See also [COMMITS.md](COMMITS.md
 
 ## Cron schedule (UTC)
 
-| Schedule | Workflow | Job |
-|----------|----------|-----|
-| `*/5 * * * *` | `uptime.yml` | 5-endpoint health + auto-resolve |
-| `0 5 * * *` | `stale.yml` | Mark stale issues/PRs |
-| `0 6 * * 1` | `security.yml` | CodeQL weekly |
-| `0 8 * * 1` | `cron-jobs.yml` | Weekly work digest |
-| `0 9 * * 1` | `deps-monitor.yml` | Dependency report |
-| `0 9 1 * *` | `cron-jobs.yml` | Monthly workflow health + label sync |
+| Schedule      | Workflow           | Job                                  |
+| ------------- | ------------------ | ------------------------------------ |
+| `*/5 * * * *` | `uptime.yml`       | 5-endpoint health + auto-resolve     |
+| `0 5 * * *`   | `stale.yml`        | Mark stale issues/PRs                |
+| `0 6 * * 1`   | `security.yml`     | CodeQL weekly                        |
+| `0 8 * * 1`   | `cron-jobs.yml`    | Weekly work digest                   |
+| `0 9 * * 1`   | `deps-monitor.yml` | Dependency report                    |
+| `0 9 1 * *`   | `cron-jobs.yml`    | Monthly workflow health + label sync |
 
 Manual runs: Actions → **Cron jobs** → Run workflow.
 

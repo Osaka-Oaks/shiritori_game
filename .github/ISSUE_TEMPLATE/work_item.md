@@ -3,18 +3,18 @@ name: 📋 Work item (markdown)
 about: Kanban work item — copy-friendly markdown template
 title: "[Work]: "
 labels: ["status: backlog"]
-assignees: ''
+assignees: ""
 ---
 
 <!-- Full template: .github/templates/issue-work-item.md -->
 
 ## Kanban
 
-| Field | Value |
-|-------|-------|
-| Column | Backlog |
-| Priority | Medium |
-| Area | shiritori-online |
+| Field    | Value            |
+| -------- | ---------------- |
+| Column   | Backlog          |
+| Priority | Medium           |
+| Area     | shiritori-online |
 
 ## Description
 

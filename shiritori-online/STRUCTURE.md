@@ -46,13 +46,13 @@ src/
 
 ## Naming conventions
 
-| Kind | Convention | Example |
-|------|------------|---------|
-| Folders | `kebab-case`, grouped by domain | `lib/game/`, `components/shell/` |
-| Lib modules | `kebab-case.ts` | `room-service.ts`, `solo-engine.ts` |
-| React components | `PascalCase.tsx` | `FloatingDictionary.tsx` |
-| CSS classes | `kebab-case`, prefixed by feature | `dict-pip`, `dict-fab` |
-| localStorage keys | `snake_case` with app prefix | `shiritori_dict_pip_pos` |
+| Kind              | Convention                        | Example                             |
+| ----------------- | --------------------------------- | ----------------------------------- |
+| Folders           | `kebab-case`, grouped by domain   | `lib/game/`, `components/shell/`    |
+| Lib modules       | `kebab-case.ts`                   | `room-service.ts`, `solo-engine.ts` |
+| React components  | `PascalCase.tsx`                  | `FloatingDictionary.tsx`            |
+| CSS classes       | `kebab-case`, prefixed by feature | `dict-pip`, `dict-fab`              |
+| localStorage keys | `snake_case` with app prefix      | `shiritori_dict_pip_pos`            |
 
 ## Dictionary PiP behavior
 

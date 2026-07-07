@@ -22,6 +22,7 @@
 <td width="50%">
 
 ### 🎮 **Game Features**
+
 - ✅ Real-time multiplayer
 - ✅ Bilingual UI (EN/JP)
 - ✅ Light/Dark theme
@@ -33,6 +34,7 @@
 <td width="50%">
 
 ### 🛠️ **Development Features**
+
 - ⚡ **60% faster builds**
 - 📊 Complete monitoring stack
 - 🚀 Automated CI/CD
@@ -64,23 +66,23 @@
 
 ### 🎮 Applications
 
-| Folder | Description | Status |
-|--------|-------------|--------|
-| **[`shiritori-online/`](shiritori-online/)** | 🚀 Production React app - Live game with Firebase backend | ✅ **LIVE** |
-| **[`kawaii-shiritori/`](kawaii-shiritori/)** | 🎨 Alternative React implementation with enhanced features | ✅ Active |
-| **[`shiritori-flutter/`](shiritori-flutter/)** | 📱 Flutter cross-platform app (Web, iOS, Android) | ✅ Active |
-| `shiritori-word-chain/` | Earlier prototype (reference only) | 📦 Archived |
-| `shiritori-v1/` | Early Next.js scaffold (reference only) | 📦 Archived |
-| `stitch_bilingual_shiritori_blitz/` | Design mockups & static HTML | 🎨 Reference |
+| Folder                                         | Description                                                | Status       |
+| ---------------------------------------------- | ---------------------------------------------------------- | ------------ |
+| **[`shiritori-online/`](shiritori-online/)**   | 🚀 Production React app - Live game with Firebase backend  | ✅ **LIVE**  |
+| **[`kawaii-shiritori/`](kawaii-shiritori/)**   | 🎨 Alternative React implementation with enhanced features | ✅ Active    |
+| **[`shiritori-flutter/`](shiritori-flutter/)** | 📱 Flutter cross-platform app (Web, iOS, Android)          | ✅ Active    |
+| `shiritori-word-chain/`                        | Earlier prototype (reference only)                         | 📦 Archived  |
+| `shiritori-v1/`                                | Early Next.js scaffold (reference only)                    | 📦 Archived  |
+| `stitch_bilingual_shiritori_blitz/`            | Design mockups & static HTML                               | 🎨 Reference |
 
 ### 🛠️ Infrastructure & Tools
 
-| Folder | Description | Docs |
-|--------|-------------|------|
-| **[`.github/workflows/`](.github/workflows/)** | CI/CD automation (deploy, build optimization, Flutter) | [CI/CD Guide](#-deployment) |
-| **[`scripts/`](scripts/)** | Build tracking, port management, utilities | [Scripts Guide](#-scripts) |
-| **[`monitoring/`](monitoring/)** | Grafana, Datadog, ELK stack configurations | [Monitoring Guide](MONITORING_OBSERVABILITY_GUIDE.md) |
-| **[`infra/`](infra/)** | Terraform/OpenTofu infrastructure as code | [IaC Guide](infra/README.md) |
+| Folder                                         | Description                                            | Docs                                                  |
+| ---------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
+| **[`.github/workflows/`](.github/workflows/)** | CI/CD automation (deploy, build optimization, Flutter) | [CI/CD Guide](#-deployment)                           |
+| **[`scripts/`](scripts/)**                     | Build tracking, port management, utilities             | [Scripts Guide](#-scripts)                            |
+| **[`monitoring/`](monitoring/)**               | Grafana, Datadog, ELK stack configurations             | [Monitoring Guide](MONITORING_OBSERVABILITY_GUIDE.md) |
+| **[`infra/`](infra/)**                         | Terraform/OpenTofu infrastructure as code              | [IaC Guide](infra/README.md)                          |
 
 > **💡 Tip:** The main production game is in **`shiritori-online/`**. Other apps are active alternatives or references.
 
@@ -118,6 +120,7 @@ npm run dev:kawaii
 <summary><b>📱 Flutter App (with Firebase)</b></summary>
 
 **First time setup:**
+
 ```bash
 # 1. Setup Flutter + Firebase (one time)
 npm run flutter:setup
@@ -127,6 +130,7 @@ npm run dev:flutter
 ```
 
 **Already set up:**
+
 ```bash
 npm run dev:flutter
 ```
@@ -233,6 +237,7 @@ npm run build:report
 ### Build Time Tracking
 
 Every build tracks:
+
 - ⏱️ Total time, build time, dependency time
 - 📦 Bundle size and file count
 - 🌿 Git branch and commit
@@ -377,12 +382,12 @@ npm run deploy:flutter:test
 
 ### Live URLs
 
-| App | Environment | URL |
-|-----|-------------|-----|
-| 🎮 Shiritori Online | Production | https://shiritori-game-ccaae.web.app |
-| 🎨 Kawaii Shiritori | Production | https://kawaii-shiritori.web.app |
-| 📱 Flutter App | Production | https://shiritori-game-ccaae.web.app |
-| 📱 Flutter App | Staging | https://shiritori-game-ccaae--develop.web.app |
+| App                 | Environment | URL                                           |
+| ------------------- | ----------- | --------------------------------------------- |
+| 🎮 Shiritori Online | Production  | https://shiritori-game-ccaae.web.app          |
+| 🎨 Kawaii Shiritori | Production  | https://kawaii-shiritori.web.app              |
+| 📱 Flutter App      | Production  | https://shiritori-game-ccaae.web.app          |
+| 📱 Flutter App      | Staging     | https://shiritori-game-ccaae--develop.web.app |
 
 **📚 [Flutter Deployment Guide](FLUTTER_DEPLOYMENT_GUIDE.md)** | **🚀 [Quick Start](FLUTTER_DEPLOY_QUICKSTART.md)** | **📊 [CI/CD Summary](DEPLOYMENT_CI_CD_SUMMARY.md)**
 
@@ -392,6 +397,7 @@ npm run deploy:flutter:test
 <summary><b>Configure FIREBASE_TOKEN (one-time setup)</b></summary>
 
 1. Generate token:
+
    ```bash
    firebase login:ci
    ```
@@ -533,6 +539,7 @@ validate             # Full validation
 ### Development Workflow
 
 1. **Clone & Install**
+
    ```bash
    git clone https://github.com/JorelFuji/shiritori_game.git
    cd shiritori_game
@@ -540,11 +547,13 @@ validate             # Full validation
    ```
 
 2. **Create Feature Branch**
+
    ```bash
    git checkout -b feature/your-feature
    ```
 
 3. **Develop & Test**
+
    ```bash
    npm run dev
    npm run test
@@ -552,12 +561,14 @@ validate             # Full validation
    ```
 
 4. **Build & Validate**
+
    ```bash
    npm run build:fast
    npm run validate
    ```
 
 5. **Commit & Push**
+
    ```bash
    git add .
    git commit -m "feat: your feature"

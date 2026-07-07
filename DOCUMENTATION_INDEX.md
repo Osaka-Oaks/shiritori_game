@@ -48,11 +48,11 @@
 
 ### Quick Start (< 5 minutes)
 
-| Guide | What You'll Learn | Time |
-|-------|------------------|------|
-| **[Main README](README.md)** | Complete project overview, setup, and usage | 5 min |
-| **[Quick Start](#quick-commands)** | Run the game locally in 3 commands | 1 min |
-| **[Port Management](PORT_MANAGEMENT_GUIDE.md)** | Kill ports to prevent errors | 2 min |
+| Guide                                           | What You'll Learn                           | Time  |
+| ----------------------------------------------- | ------------------------------------------- | ----- |
+| **[Main README](README.md)**                    | Complete project overview, setup, and usage | 5 min |
+| **[Quick Start](#quick-commands)**              | Run the game locally in 3 commands          | 1 min |
+| **[Port Management](PORT_MANAGEMENT_GUIDE.md)** | Kill ports to prevent errors                | 2 min |
 
 ### Essential Commands
 
@@ -73,11 +73,11 @@ npm run dev
 
 ### Documentation
 
-| Guide | Description | For Who |
-|-------|-------------|---------|
-| **[Build Optimization Quick Start](BUILD_OPTIMIZATION_QUICKSTART.md)** ⭐ | Get 60% faster builds in 60 seconds | Everyone |
-| **[Build Performance Summary](BUILD_PERFORMANCE_SUMMARY.md)** | Complete optimization techniques explained | Developers |
-| **[Build Tracking Summary](BUILD_TRACKING_SUMMARY.md)** | Analytics and tracking system details | DevOps |
+| Guide                                                                     | Description                                | For Who    |
+| ------------------------------------------------------------------------- | ------------------------------------------ | ---------- |
+| **[Build Optimization Quick Start](BUILD_OPTIMIZATION_QUICKSTART.md)** ⭐ | Get 60% faster builds in 60 seconds        | Everyone   |
+| **[Build Performance Summary](BUILD_PERFORMANCE_SUMMARY.md)**             | Complete optimization techniques explained | Developers |
+| **[Build Tracking Summary](BUILD_TRACKING_SUMMARY.md)**                   | Analytics and tracking system details      | DevOps     |
 
 ### Quick Commands
 
@@ -118,11 +118,11 @@ npm run build:report
 
 ### Documentation
 
-| Guide | Description | For Who |
-|-------|-------------|---------|
-| **[Monitoring Quick Start](monitoring/QUICKSTART.md)** ⭐ | Start monitoring in 5 minutes | Everyone |
-| **[Monitoring & Observability Guide](MONITORING_OBSERVABILITY_GUIDE.md)** | Complete monitoring stack setup | DevOps |
-| **[Build Performance Summary](BUILD_PERFORMANCE_SUMMARY.md)** | Includes monitoring integration | Developers |
+| Guide                                                                     | Description                     | For Who    |
+| ------------------------------------------------------------------------- | ------------------------------- | ---------- |
+| **[Monitoring Quick Start](monitoring/QUICKSTART.md)** ⭐                 | Start monitoring in 5 minutes   | Everyone   |
+| **[Monitoring & Observability Guide](MONITORING_OBSERVABILITY_GUIDE.md)** | Complete monitoring stack setup | DevOps     |
+| **[Build Performance Summary](BUILD_PERFORMANCE_SUMMARY.md)**             | Includes monitoring integration | Developers |
 
 ### Monitoring Tools
 
@@ -215,13 +215,13 @@ npm run monitor:elk:logs
 
 ### Documentation
 
-| Guide | Description | For Who |
-|-------|-------------|---------|
-| **[Flutter Firebase Quick Start](FLUTTER_FIREBASE_QUICKSTART.md)** ⭐ | Setup Flutter + Firebase in 3 commands | Everyone |
-| **[Flutter Firebase Setup](FLUTTER_FIREBASE_SETUP.md)** | Complete Firebase integration guide | Developers |
-| **[Flutter Deploy Quick Start](FLUTTER_DEPLOY_QUICKSTART.md)** ⭐ | Deploy Flutter in 3 commands | Everyone |
-| **[Flutter Deployment Guide](FLUTTER_DEPLOYMENT_GUIDE.md)** | Complete deployment documentation | Developers |
-| **[CI/CD Summary](DEPLOYMENT_CI_CD_SUMMARY.md)** | All workflows explained | DevOps |
+| Guide                                                                 | Description                            | For Who    |
+| --------------------------------------------------------------------- | -------------------------------------- | ---------- |
+| **[Flutter Firebase Quick Start](FLUTTER_FIREBASE_QUICKSTART.md)** ⭐ | Setup Flutter + Firebase in 3 commands | Everyone   |
+| **[Flutter Firebase Setup](FLUTTER_FIREBASE_SETUP.md)**               | Complete Firebase integration guide    | Developers |
+| **[Flutter Deploy Quick Start](FLUTTER_DEPLOY_QUICKSTART.md)** ⭐     | Deploy Flutter in 3 commands           | Everyone   |
+| **[Flutter Deployment Guide](FLUTTER_DEPLOYMENT_GUIDE.md)**           | Complete deployment documentation      | Developers |
+| **[CI/CD Summary](DEPLOYMENT_CI_CD_SUMMARY.md)**                      | All workflows explained                | DevOps     |
 
 ### Deployment Workflows
 
@@ -279,12 +279,12 @@ npm run deploy:flutter:test
 
 ### Live URLs
 
-| App | Environment | URL |
-|-----|-------------|-----|
-| 🎮 Shiritori Online | Production | https://shiritori-game-ccaae.web.app |
-| 🎨 Kawaii Shiritori | Production | https://kawaii-shiritori.web.app |
-| 📱 Flutter App | Production | https://shiritori-game-ccaae.web.app |
-| 📱 Flutter App | Staging | https://shiritori-game-ccaae--develop.web.app |
+| App                 | Environment | URL                                           |
+| ------------------- | ----------- | --------------------------------------------- |
+| 🎮 Shiritori Online | Production  | https://shiritori-game-ccaae.web.app          |
+| 🎨 Kawaii Shiritori | Production  | https://kawaii-shiritori.web.app              |
+| 📱 Flutter App      | Production  | https://shiritori-game-ccaae.web.app          |
+| 📱 Flutter App      | Staging     | https://shiritori-game-ccaae--develop.web.app |
 
 ### Files Created
 
@@ -300,10 +300,10 @@ npm run deploy:flutter:test
 
 ### Documentation
 
-| Guide | Description | For Who |
-|-------|-------------|---------|
+| Guide                                                    | Description                | For Who  |
+| -------------------------------------------------------- | -------------------------- | -------- |
 | **[Port Management Guide](PORT_MANAGEMENT_GUIDE.md)** ⭐ | Kill ports, prevent errors | Everyone |
-| **[Infrastructure Guide](infra/README.md)** | Terraform/OpenTofu setup | DevOps |
+| **[Infrastructure Guide](infra/README.md)**              | Terraform/OpenTofu setup   | DevOps   |
 
 ### Port Management
 
@@ -397,8 +397,8 @@ npm run tofu:apply
 
 ### Flutter Application
 
-| App | Description | Documentation |
-|-----|-------------|---------------|
+| App                | Description                            | Documentation                         |
+| ------------------ | -------------------------------------- | ------------------------------------- |
 | 📱 **Flutter App** | Cross-platform app (Web, iOS, Android) | [README](shiritori-flutter/README.md) |
 
 ### Game Documentation
@@ -415,6 +415,7 @@ npm run tofu:apply
 ### Development Workflow
 
 1. **Setup**
+
    ```bash
    git clone https://github.com/JorelFuji/shiritori_game.git
    cd shiritori_game
@@ -422,11 +423,13 @@ npm run tofu:apply
    ```
 
 2. **Start Development**
+
    ```bash
    npm run dev
    ```
 
 3. **Build & Test**
+
    ```bash
    npm run build:fast
    npm run test
@@ -434,6 +437,7 @@ npm run tofu:apply
    ```
 
 4. **Track Performance**
+
    ```bash
    npm run build:track
    npm run build:analyze

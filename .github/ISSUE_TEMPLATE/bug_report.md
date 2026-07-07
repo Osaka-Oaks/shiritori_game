@@ -1,9 +1,9 @@
 ---
 name: 🐛 Bug Report
 about: Report a bug or issue with the application
-title: '[Bug]: '
-labels: ['type: bug', 'status: triage']
-assignees: ''
+title: "[Bug]: "
+labels: ["type: bug", "status: triage"]
+assignees: ""
 ---
 
 ## 🐛 Bug Description
@@ -32,11 +32,13 @@ If applicable, add screenshots to help explain your problem.
 ## 🌐 Environment
 
 **Application:**
+
 - [ ] shiritori-online (React)
 - [ ] kawaii-shiritori (React)
 - [ ] shiritori_flutter (Flutter / Dart)
 
 **Platform:**
+
 - [ ] Web (Desktop)
 - [ ] Web (Mobile)
 - [ ] iOS
@@ -44,29 +46,35 @@ If applicable, add screenshots to help explain your problem.
 - [ ] Desktop App
 
 **Browser (if web):**
+
 - Browser: [e.g., Chrome, Safari, Firefox]
 - Version: [e.g., 120.0]
 
 **Device (if mobile):**
+
 - Device: [e.g., iPhone 14, Pixel 7]
 - OS: [e.g., iOS 17, Android 14]
 
 **Application Version:**
+
 - Version/Commit: [e.g., v1.0.0 or abc1234]
 
 ## 📋 Additional Context
 
 ### Error Messages
+
 ```
 Paste any error messages here
 ```
 
 ### Console Logs
+
 ```
 Paste relevant console logs here
 ```
 
 ### Network Requests
+
 - Request failed: [Yes/No]
 - Status code: [e.g., 404, 500]
 - Endpoint: [e.g., /api/games]
@@ -80,18 +88,21 @@ Paste relevant console logs here
 ## 📊 Impact
 
 **Severity:**
+
 - [ ] Critical - App unusable
 - [ ] High - Major functionality broken
 - [ ] Medium - Feature partially broken
 - [ ] Low - Minor issue
 
 **Frequency:**
+
 - [ ] Always
 - [ ] Often
 - [ ] Sometimes
 - [ ] Rare
 
 **Users Affected:**
+
 - [ ] All users
 - [ ] Specific user group
 - [ ] Single user

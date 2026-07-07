@@ -58,6 +58,7 @@ Total Time: ~9 minutes
 **File:** `.github/workflows/deploy-and-test.yml`
 
 **What it does:**
+
 - Checks out code
 - Installs dependencies
 - Runs dependency health check
@@ -65,15 +66,18 @@ Total Time: ~9 minutes
 - Generates report in GitHub Summary
 
 **Scripts:**
+
 - `npm run deps:report`
 - `npm audit`
 
 **Success criteria:**
+
 - ✅ All dependencies installed
 - ✅ No critical vulnerabilities
 - ✅ Report generated
 
 **Failure handling:**
+
 - ⚠️ Warnings don't block deployment
 - ❌ Critical errors stop pipeline
 
@@ -82,17 +86,20 @@ Total Time: ~9 minutes
 ### Stage 2: Build & Test (3 min)
 
 **Runs in parallel for both apps:**
+
 - shiritori-online
 - kawaii-shiritori
 
 **Steps per app:**
 
 1. **Install Dependencies**
+
    ```bash
    npm ci
    ```
 
 2. **Lint Code**
+
    ```bash
    npm run lint
    ```
@@ -101,6 +108,7 @@ Total Time: ~9 minutes
    - Warnings logged but don't fail
 
 3. **Type Check**
+
    ```bash
    npx tsc --noEmit
    ```
@@ -109,6 +117,7 @@ Total Time: ~9 minutes
    - Type safety verification
 
 4. **Run Tests** (kawaii-shiritori only)
+
    ```bash
    npm test
    ```
@@ -117,6 +126,7 @@ Total Time: ~9 minutes
    - Coverage report
 
 5. **Build Production Bundle**
+
    ```bash
    npm run build
    ```
@@ -136,6 +146,7 @@ Total Time: ~9 minutes
    - Available for download
 
 **Success criteria:**
+
 - ✅ Build completes without errors
 - ✅ dist/ folder contains files
 - ✅ Artifacts uploaded
@@ -155,6 +166,7 @@ Total Time: ~9 minutes
    - No rebuild needed
 
 2. **Deploy to Firebase**
+
    ```bash
    firebase deploy --only hosting,database
    ```
@@ -168,6 +180,7 @@ Total Time: ~9 minutes
    - Commit SHA
 
 **What's deployed:**
+
 - ✅ Static website files
 - ✅ Realtime Database security rules
 - ✅ Hosting configuration
@@ -185,6 +198,7 @@ Total Time: ~9 minutes
 1. **Download Build Artifact**
 
 2. **Deploy to Firebase**
+
    ```bash
    firebase deploy --only hosting,firestore
    ```
@@ -195,6 +209,7 @@ Total Time: ~9 minutes
 3. **Generate Summary**
 
 **What's deployed:**
+
 - ✅ Static website files
 - ✅ Firestore security rules
 - ✅ Hosting configuration
@@ -210,6 +225,7 @@ Total Time: ~9 minutes
 1. **Wait for DNS Propagation** (30s)
 
 2. **Homepage Test**
+
    ```bash
    curl https://shiritori-game-ccaae.web.app/
    ```
@@ -232,6 +248,7 @@ Total Time: ~9 minutes
    - Reports security status
 
 6. **Database Connectivity**
+
    ```bash
    curl https://shiritori-game-ccaae-default-rtdb.firebaseio.com/.json
    ```
@@ -244,6 +261,7 @@ Total Time: ~9 minutes
    - Checks 200 responses
 
 **Success criteria:**
+
 - ✅ All HTTP checks return 200
 - ✅ Content found
 - ✅ Performance acceptable
@@ -271,14 +289,17 @@ Total Time: ~9 minutes
    - Deployment info recorded
 
 **Outputs:**
+
 ```markdown
 # 🎉 Deployment Successful!
 
 ## 🌐 Live URLs
+
 - 🎮 Shiritori Online: https://shiritori-game-ccaae.web.app
 - 🎨 Kawaii Shiritori: https://shiritori-game-ccaae.web.app
 
 ## ✅ All Tests Passed
+
 - ✅ Code validation
 - ✅ Build successful
 - ✅ Deployment complete
@@ -297,20 +318,24 @@ Commit: abc123def
 ### Automatic Triggers
 
 **1. Push to Main**
+
 ```yaml
 on:
   push:
     branches: [main]
 ```
+
 - Triggers full pipeline
 - Deploys to production
 - Runs all tests
 
 **2. Manual Trigger**
+
 ```yaml
 on:
   workflow_dispatch:
 ```
+
 - Available in Actions tab
 - "Run workflow" button
 - Optional environment selection
@@ -329,6 +354,7 @@ on:
 ### Required Secrets
 
 **`FIREBASE_TOKEN`**
+
 - Location: Repository Settings → Secrets → Actions
 - Purpose: Firebase CLI authentication
 - How to get:
@@ -340,10 +366,11 @@ on:
 
 ```yaml
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
 ```
 
 **Used in pipeline:**
+
 - Node.js version
 - Build environment
 - Test configuration
@@ -355,19 +382,23 @@ env:
 ### View Pipeline Status
 
 **1. GitHub Actions Tab**
+
 ```
 https://github.com/JorelFuji/shiritori_game/actions
 ```
+
 - Lists all workflow runs
 - Shows status (running/success/failed)
 - Provides duration
 
 **2. Workflow Details**
+
 - Click any workflow run
 - View each job
 - Check logs for each step
 
 **3. Summary Tab**
+
 - Formatted reports
 - Test results
 - Performance metrics
@@ -376,16 +407,19 @@ https://github.com/JorelFuji/shiritori_game/actions
 ### Log Locations
 
 **Build Logs:**
+
 ```
 Actions → Deploy & Test → build-and-test → Build production bundle
 ```
 
 **Deploy Logs:**
+
 ```
 Actions → Deploy & Test → deploy-online → Deploy to Firebase
 ```
 
 **Test Logs:**
+
 ```
 Actions → Deploy & Test → test-deployment → (all test steps)
 ```
@@ -393,10 +427,12 @@ Actions → Deploy & Test → test-deployment → (all test steps)
 ### Download Artifacts
 
 **Available artifacts:**
+
 - `build-shiritori-online` (30 days)
 - `build-kawaii-shiritori` (30 days)
 
 **How to download:**
+
 1. Go to workflow run
 2. Scroll to "Artifacts" section
 3. Click to download ZIP
@@ -410,12 +446,14 @@ Actions → Deploy & Test → test-deployment → (all test steps)
 **Symptom:** Build stage fails
 
 **Common causes:**
+
 - TypeScript errors
 - Missing dependencies
 - Syntax errors
 - Import issues
 
 **How to debug:**
+
 ```bash
 # Reproduce locally
 npm ci
@@ -426,6 +464,7 @@ npx tsc --noEmit
 ```
 
 **Fix:**
+
 - Correct code errors
 - Update dependencies
 - Fix imports
@@ -438,12 +477,14 @@ npx tsc --noEmit
 **Symptom:** Deploy stage fails
 
 **Common causes:**
+
 - Missing FIREBASE_TOKEN
 - Invalid firebase.json
 - Network timeout
 - Rules syntax error
 
 **How to debug:**
+
 ```bash
 # Test deploy locally
 firebase deploy --only hosting
@@ -456,6 +497,7 @@ echo $FIREBASE_TOKEN
 ```
 
 **Fix:**
+
 - Update GitHub secret
 - Fix firebase.json
 - Retry deployment
@@ -468,12 +510,14 @@ echo $FIREBASE_TOKEN
 **Symptom:** Test stage fails
 
 **Common causes:**
+
 - Site not accessible (DNS delay)
 - Content mismatch
 - Slow response time
 - Database offline
 
 **How to debug:**
+
 ```bash
 # Test manually
 curl -I https://shiritori-game-ccaae.web.app/
@@ -486,6 +530,7 @@ curl https://shiritori-game-ccaae-default-rtdb.firebaseio.com/.json
 ```
 
 **Fix:**
+
 - Wait for DNS propagation
 - Verify deployment completed
 - Check Firebase status
@@ -509,7 +554,7 @@ concurrency:
 
 # Node version
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
 
 # Artifact retention
 retention-days: 30
@@ -523,17 +568,20 @@ environment:
 ### Customization
 
 **Change Node version:**
+
 ```yaml
 env:
-  NODE_VERSION: '22'  # Update here
+  NODE_VERSION: "22" # Update here
 ```
 
 **Adjust artifact retention:**
+
 ```yaml
-retention-days: 7  # Shorter retention
+retention-days: 7 # Shorter retention
 ```
 
 **Add notification:**
+
 ```yaml
 - name: Notify Slack
   uses: slackapi/slack-github-action@v1
@@ -547,25 +595,27 @@ retention-days: 7  # Shorter retention
 
 ### Typical Run Times
 
-| Stage | Time | Variance |
-|-------|------|----------|
-| Validate | 2 min | ±30s |
-| Build shiritori-online | 1.5 min | ±20s |
-| Build kawaii-shiritori | 2 min | ±30s |
-| Deploy online | 1 min | ±15s |
-| Deploy kawaii | 1 min | ±15s |
-| Test | 1 min | ±20s |
-| Validate | 30s | ±10s |
-| **Total** | **~9 min** | **±2 min** |
+| Stage                  | Time       | Variance   |
+| ---------------------- | ---------- | ---------- |
+| Validate               | 2 min      | ±30s       |
+| Build shiritori-online | 1.5 min    | ±20s       |
+| Build kawaii-shiritori | 2 min      | ±30s       |
+| Deploy online          | 1 min      | ±15s       |
+| Deploy kawaii          | 1 min      | ±15s       |
+| Test                   | 1 min      | ±20s       |
+| Validate               | 30s        | ±10s       |
+| **Total**              | **~9 min** | **±2 min** |
 
 ### Optimization Opportunities
 
 **Current bottlenecks:**
+
 1. ⏱️ Dependency installation (parallel)
 2. ⏱️ TypeScript compilation
 3. ⏱️ Vite build (large bundle)
 
 **Potential improvements:**
+
 - Use build cache
 - Parallel deploy jobs
 - Optimize bundle size
@@ -586,12 +636,14 @@ retention-days: 7  # Shorter retention
 ### When to Skip Pipeline
 
 **Use manual deploy if:**
+
 - 🚨 Emergency hotfix
 - 🔧 Infrastructure changes
 - 🧪 Testing deployment process
 - 📦 Large dependency updates
 
 **How to skip:**
+
 ```bash
 # Deploy manually without pipeline
 cd shiritori-online
@@ -605,11 +657,13 @@ firebase deploy
 ### Pipeline Stuck
 
 **Symptoms:**
+
 - Job running >15 min
 - No log updates
 - "Waiting" status
 
 **Solutions:**
+
 1. Cancel workflow
 2. Check GitHub status
 3. Retry workflow
@@ -618,11 +672,13 @@ firebase deploy
 ### Logs Not Showing
 
 **Symptoms:**
+
 - Empty log sections
 - Missing output
 - Incomplete reports
 
 **Solutions:**
+
 1. Refresh page
 2. Check browser console
 3. Download raw logs
@@ -631,16 +687,19 @@ firebase deploy
 ### Tests Passing Locally But Failing in CI
 
 **Symptoms:**
+
 - Local: ✅ All tests pass
 - CI: ❌ Tests fail
 
 **Common causes:**
+
 - Environment differences
 - Missing env vars
 - Different Node version
 - Timing issues
 
 **Solutions:**
+
 ```bash
 # Match CI environment
 nvm use 20
@@ -668,7 +727,7 @@ Your CI/CD pipeline:
 ✅ **Reliable** - Error handling built-in  
 ✅ **Observable** - Detailed logs & reports  
 ✅ **Secure** - Token-based auth  
-✅ **Tested** - Comprehensive validation  
+✅ **Tested** - Comprehensive validation
 
 **Just push to main and watch it deploy!** 🚀
 

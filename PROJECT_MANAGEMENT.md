@@ -13,7 +13,7 @@ Your project now has:
 ✅ **Scheduled Tasks** - Daily health checks, weekly reports, monthly analytics  
 ✅ **Commit Tracking** - Conventional commits with auto-changelog  
 ✅ **PR Automation** - Size labeling, review reminders, auto-linking  
-✅ **Cleanup Jobs** - Artifact and workflow run management  
+✅ **Cleanup Jobs** - Artifact and workflow run management
 
 ---
 
@@ -22,6 +22,7 @@ Your project now has:
 ### 1. Project Automation (`project-automation.yml`)
 
 **Triggers:**
+
 - Issues: opened, edited, closed, reopened, labeled
 - Pull requests: opened, edited, closed, labeled, review_requested
 - Comments: created
@@ -30,7 +31,9 @@ Your project now has:
 **Features:**
 
 #### Auto-Labeling
+
 Automatically adds labels based on:
+
 - **Title prefix**: `feat:` → `enhancement`, `feature`
 - **Title prefix**: `fix:` → `bug`
 - **Title prefix**: `docs:` → `documentation`
@@ -39,6 +42,7 @@ Automatically adds labels based on:
 - **Keywords**: `critical`, `urgent` → `priority:critical`
 
 #### PR Size Labeling
+
 - `size/XS`: <10 lines
 - `size/S`: <50 lines
 - `size/M`: <200 lines
@@ -46,10 +50,12 @@ Automatically adds labels based on:
 - `size/XL`: 500+ lines
 
 #### Auto-Assignment
+
 - Issue authors are automatically assigned to their issues
 - PR authors are assigned to their PRs
 
 #### Stale Management
+
 - Issues inactive for 60 days → marked `stale`
 - PRs inactive for 60 days → marked `stale`
 - Stale issues closed after 7 days
@@ -57,6 +63,7 @@ Automatically adds labels based on:
 - Exempt: `pinned`, `security`, `priority:critical`
 
 #### PR-Issue Linking
+
 - Detects `Closes #123`, `Fixes #456`, etc.
 - Auto-comments on linked issues
 - Creates cross-references
@@ -64,6 +71,7 @@ Automatically adds labels based on:
 ### 2. Scheduled Tasks (`scheduled-tasks.yml`)
 
 **Schedule:**
+
 ```
 Daily:   2 AM UTC (9 PM EST)
 Weekly:  Monday 9 AM UTC
@@ -73,6 +81,7 @@ Monthly: 1st of month, 10 AM UTC
 **Jobs:**
 
 #### Daily Health Check (2 AM UTC)
+
 - Checks production site status (HTTP 200)
 - Measures response time
 - Checks Firebase services
@@ -80,16 +89,19 @@ Monthly: 1st of month, 10 AM UTC
 - Runs every day automatically
 
 #### Cleanup Old Artifacts (Daily)
+
 - Deletes artifacts older than 30 days
 - Saves GitHub storage space
 - Runs automatically
 
 #### Cleanup Old Workflow Runs (Daily)
+
 - Keeps last 50 runs per workflow
 - Deletes runs older than 90 days
 - Reduces clutter
 
 #### Weekly Dependency Report (Monday 9 AM)
+
 - Generates dependency inventory
 - Lists outdated packages
 - Checks version mismatches
@@ -97,6 +109,7 @@ Monthly: 1st of month, 10 AM UTC
 - Actionable checklist included
 
 #### Backup Configs (Daily)
+
 - Backs up all critical config files
 - Stores as artifact (90-day retention)
 - Includes:
@@ -106,6 +119,7 @@ Monthly: 1st of month, 10 AM UTC
   - ESLint/Prettier configs
 
 #### Monthly Analytics (1st of month)
+
 - Commit activity
 - Issues closed
 - PRs merged
@@ -114,6 +128,7 @@ Monthly: 1st of month, 10 AM UTC
 - Creates detailed report issue
 
 #### Check Broken Links (Sunday)
+
 - Scans all markdown files
 - Finds broken links
 - Reports issues
@@ -141,14 +156,14 @@ Monthly: 1st of month, 10 AM UTC
 
 **Built-in automation:**
 
-| Event | Action |
-|-------|--------|
-| Issue opened | → Backlog |
-| Issue assigned | → Todo |
-| PR opened | → In Progress |
-| PR approved | → Review |
-| Issue closed | → Done |
-| PR merged | → Done |
+| Event          | Action        |
+| -------------- | ------------- |
+| Issue opened   | → Backlog     |
+| Issue assigned | → Todo        |
+| PR opened      | → In Progress |
+| PR approved    | → Review      |
+| Issue closed   | → Done        |
+| PR merged      | → Done        |
 
 **Custom automation:**
 
@@ -167,49 +182,54 @@ Monthly: 1st of month, 10 AM UTC
 ### Label Categories
 
 #### Type (Primary)
-| Label | Color | Description |
-|-------|-------|-------------|
-| `bug` | `#d73a4a` | Something isn't working |
-| `enhancement` | `#a2eeef` | New feature or request |
-| `feature` | `#0e8a16` | New feature implementation |
+
+| Label           | Color     | Description                |
+| --------------- | --------- | -------------------------- |
+| `bug`           | `#d73a4a` | Something isn't working    |
+| `enhancement`   | `#a2eeef` | New feature or request     |
+| `feature`       | `#0e8a16` | New feature implementation |
 | `documentation` | `#0075ca` | Documentation improvements |
-| `security` | `#ee0701` | Security issues |
-| `performance` | `#fbca04` | Performance improvements |
+| `security`      | `#ee0701` | Security issues            |
+| `performance`   | `#fbca04` | Performance improvements   |
 
 #### Priority
-| Label | Color | SLA |
-|-------|-------|-----|
+
+| Label               | Color     | SLA      |
+| ------------------- | --------- | -------- |
 | `priority:critical` | `#b60205` | 24 hours |
-| `priority:high` | `#d93f0b` | 3 days |
-| `priority:medium` | `#fbca04` | 1 week |
-| `priority:low` | `#0e8a16` | No SLA |
+| `priority:high`     | `#d93f0b` | 3 days   |
+| `priority:medium`   | `#fbca04` | 1 week   |
+| `priority:low`      | `#0e8a16` | No SLA   |
 
 #### Status
-| Label | Description |
-|-------|-------------|
+
+| Label                | Description               |
+| -------------------- | ------------------------- |
 | `status:in-progress` | Currently being worked on |
-| `status:blocked` | Blocked by dependency |
-| `status:review` | Needs code review |
-| `status:testing` | In testing phase |
-| `stale` | No activity for 60+ days |
+| `status:blocked`     | Blocked by dependency     |
+| `status:review`      | Needs code review         |
+| `status:testing`     | In testing phase          |
+| `stale`              | No activity for 60+ days  |
 
 #### Component
-| Label | App/Area |
-|-------|----------|
-| `app:online` | shiritori-online |
-| `app:kawaii` | kawaii-shiritori |
-| `ci/cd` | CI/CD pipeline |
-| `firebase` | Firebase services |
-| `ui` | User interface |
+
+| Label        | App/Area          |
+| ------------ | ----------------- |
+| `app:online` | shiritori-online  |
+| `app:kawaii` | kawaii-shiritori  |
+| `ci/cd`      | CI/CD pipeline    |
+| `firebase`   | Firebase services |
+| `ui`         | User interface    |
 
 #### Size (Auto-generated)
-| Label | Lines Changed |
-|-------|---------------|
-| `size/XS` | <10 |
-| `size/S` | 10-49 |
-| `size/M` | 50-199 |
-| `size/L` | 200-499 |
-| `size/XL` | 500+ |
+
+| Label     | Lines Changed |
+| --------- | ------------- |
+| `size/XS` | <10           |
+| `size/S`  | 10-49         |
+| `size/M`  | 50-199        |
+| `size/L`  | 200-499       |
+| `size/XL` | 500+          |
 
 ---
 
@@ -268,6 +288,7 @@ Monthly: 1st of month, 10 AM UTC
 ### Daily Reports
 
 **Health Check (2 AM UTC)**
+
 - Site uptime status
 - Response times
 - Service availability
@@ -276,6 +297,7 @@ Monthly: 1st of month, 10 AM UTC
 ### Weekly Reports
 
 **Dependency Report (Monday 9 AM)**
+
 - Outdated packages
 - Version mismatches
 - Security vulnerabilities
@@ -284,6 +306,7 @@ Monthly: 1st of month, 10 AM UTC
 ### Monthly Reports
 
 **Analytics Report (1st of month)**
+
 - Commit activity
 - Issues closed
 - PRs merged
@@ -293,12 +316,14 @@ Monthly: 1st of month, 10 AM UTC
 ### Available Metrics
 
 **Via GitHub Insights:**
+
 - Commit frequency
 - Code frequency
 - Contributors
 - Pulse (activity summary)
 
 **Via Project Board:**
+
 - Issues by status
 - Average time in column
 - Throughput (issues/week)
@@ -312,23 +337,23 @@ Monthly: 1st of month, 10 AM UTC
 
 ```yaml
 # Daily - 2 AM UTC (9 PM EST)
-'0 2 * * *':
+"0 2 * * *":
   - Health check
   - Cleanup artifacts
   - Cleanup workflow runs
   - Backup configs
 
 # Weekly - Monday 9 AM UTC
-'0 9 * * 1':
+"0 9 * * 1":
   - Dependency report
   - Security scan
 
 # Weekly - Sunday 9 AM UTC
-'0 9 * * 0':
+"0 9 * * 0":
   - Check broken links
 
 # Monthly - 1st at 10 AM UTC
-'0 10 1 * *':
+"0 10 1 * *":
   - Monthly analytics
   - Quarterly review reminder
 ```
@@ -340,6 +365,7 @@ All scheduled tasks can be triggered manually:
 **GitHub → Actions → Scheduled Tasks → Run workflow**
 
 Select task:
+
 - `all` - Run all tasks
 - `health-check` - Just health check
 - `cleanup` - Cleanup artifacts/runs
@@ -373,6 +399,7 @@ Select task:
 **GitHub → Settings → Notifications**
 
 **Recommended settings:**
+
 - ✅ Email: Issues, PRs, mentions
 - ✅ Web: All activity
 - ✅ Watching: Your repos
@@ -385,6 +412,7 @@ Select task:
 ### For Issues
 
 ✅ **DO:**
+
 - Use appropriate template
 - Add clear title with type prefix
 - Provide reproduction steps (bugs)
@@ -393,6 +421,7 @@ Select task:
 - Update status regularly
 
 ❌ **DON'T:**
+
 - Create duplicates (search first)
 - Use vague titles
 - Skip the template
@@ -402,6 +431,7 @@ Select task:
 ### For Pull Requests
 
 ✅ **DO:**
+
 - Follow commit conventions
 - Keep PRs small (<500 lines)
 - Link to issue(s)
@@ -411,6 +441,7 @@ Select task:
 - Squash commits before merge
 
 ❌ **DON'T:**
+
 - Create massive PRs (>1000 lines)
 - Skip CI checks
 - Force push after review
@@ -420,6 +451,7 @@ Select task:
 ### For Commits
 
 ✅ **DO:**
+
 - Follow conventional commits
 - Write descriptive messages
 - Reference issues
@@ -427,6 +459,7 @@ Select task:
 - Squash before merging
 
 ❌ **DON'T:**
+
 - Use "fix", "update", "changes" alone
 - Commit work-in-progress code
 - Include multiple unrelated changes
@@ -439,17 +472,20 @@ Select task:
 ### New Team Members
 
 **Read first:**
+
 1. [Commit Conventions](./.github/COMMIT_CONVENTIONS.md)
 2. [Branching Strategy](./.github/BRANCHING.md)
 3. This document
 
 **Setup:**
+
 1. Clone repo
 2. Install dependencies
 3. Configure git template
 4. Test local workflow
 
 **First task:**
+
 1. Pick issue from "Todo"
 2. Create branch
 3. Make changes
@@ -474,29 +510,32 @@ Select task:
 ### Check System Health
 
 **Daily:**
+
 - Review health check results
 - Check failed workflows
 - Monitor open issues
 
 **Weekly:**
+
 - Review dependency report
 - Check stale issues/PRs
 - Review PR throughput
 
 **Monthly:**
+
 - Review analytics report
 - Update roadmap
 - Plan next sprint
 
 ### Dashboard URLs
 
-| Dashboard | URL |
-|-----------|-----|
-| **Actions** | https://github.com/JorelFuji/shiritori_game/actions |
-| **Issues** | https://github.com/JorelFuji/shiritori_game/issues |
-| **PRs** | https://github.com/JorelFuji/shiritori_game/pulls |
+| Dashboard    | URL                                                  |
+| ------------ | ---------------------------------------------------- |
+| **Actions**  | https://github.com/JorelFuji/shiritori_game/actions  |
+| **Issues**   | https://github.com/JorelFuji/shiritori_game/issues   |
+| **PRs**      | https://github.com/JorelFuji/shiritori_game/pulls    |
 | **Projects** | https://github.com/JorelFuji/shiritori_game/projects |
-| **Insights** | https://github.com/JorelFuji/shiritori_game/pulse |
+| **Insights** | https://github.com/JorelFuji/shiritori_game/pulse    |
 
 ---
 
@@ -504,18 +543,19 @@ Select task:
 
 ### Target KPIs
 
-| Metric | Target | Current | Status |
-|--------|--------|---------|--------|
-| Issue resolution time | <3 days | - | - |
-| PR merge time | <2 days | - | - |
-| Stale issues | <5 | - | - |
-| Test coverage | >80% | - | - |
-| Uptime | 99.9% | - | - |
-| Build time | <10 min | ~9 min | ✅ |
+| Metric                | Target  | Current | Status |
+| --------------------- | ------- | ------- | ------ |
+| Issue resolution time | <3 days | -       | -      |
+| PR merge time         | <2 days | -       | -      |
+| Stale issues          | <5      | -       | -      |
+| Test coverage         | >80%    | -       | -      |
+| Uptime                | 99.9%   | -       | -      |
+| Build time            | <10 min | ~9 min  | ✅     |
 
 ### Tracking
 
 Monitor via:
+
 - GitHub Insights
 - Project board
 - Automated reports
@@ -536,12 +576,12 @@ You now have:
 ✅ **Dependency tracking** - Weekly reports  
 ✅ **Analytics** - Monthly insights  
 ✅ **Cleanup automation** - Storage management  
-✅ **Comprehensive docs** - Full guides  
+✅ **Comprehensive docs** - Full guides
 
 **Your project management is now enterprise-grade!** 🚀
 
 ---
 
-*Last updated: July 2026*  
-*System version: 1.0*  
-*Status: ✅ Fully Automated*
+_Last updated: July 2026_  
+_System version: 1.0_  
+_Status: ✅ Fully Automated_

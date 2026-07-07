@@ -9,8 +9,9 @@
 ### Issue 1: Docker Desktop Authentication Required
 
 **Error:**
+
 ```
-Error response from daemon: Sign in to continue using Docker Desktop. 
+Error response from daemon: Sign in to continue using Docker Desktop.
 Membership in the [organization] organization is required.
 Sign in enforced by your administrators (via registry.json).
 ```
@@ -32,6 +33,7 @@ docker compose -f docker-compose.lite.yml up -d
 ```
 
 This version includes:
+
 - ✅ Elasticsearch
 - ✅ Kibana
 - ✅ Logstash
@@ -88,6 +90,7 @@ Edit `docker-compose.yml` to use public images that don't require auth:
 ### Issue 2: Obsolete Version Attribute Warning
 
 **Warning:**
+
 ```
 WARN[0000] docker-compose.yml: the attribute `version` is obsolete
 ```
@@ -102,11 +105,10 @@ If you still see this in custom files:
 
 ```yaml
 # Remove this line
-version: '3.8'
+version: "3.8"
 
 # Just start with
-services:
-  ...
+services: ...
 ```
 
 ---
@@ -114,6 +116,7 @@ services:
 ### Issue 3: Port Already in Use
 
 **Error:**
+
 ```
 Error: Port 5601 is already in use
 Error: Port 9200 is already in use
@@ -140,6 +143,7 @@ npm run monitor:elk:start
 ### Issue 4: Cannot Connect to Docker Daemon
 
 **Error:**
+
 ```
 Cannot connect to the Docker daemon at unix:///var/run/docker.sock
 ```
@@ -181,6 +185,7 @@ newgrp docker
 ### Issue 5: Insufficient Memory
 
 **Error:**
+
 ```
 Elasticsearch: max virtual memory areas vm.max_map_count [65530] is too low
 ```
@@ -223,6 +228,7 @@ sudo sysctl -p
 ### Issue 6: Containers Keep Restarting
 
 **Error:**
+
 ```
 Container shiritori-elasticsearch is unhealthy
 Container shiritori-kibana restarting
@@ -254,6 +260,7 @@ npm run monitor:elk:start
 ### Issue 7: Images Won't Pull
 
 **Error:**
+
 ```
 Error pulling image
 ```
@@ -354,11 +361,13 @@ npm run monitor:elk:lite
 ```
 
 **Includes:**
+
 - ✅ Elasticsearch (search & storage)
 - ✅ Kibana (visualization)
 - ✅ Logstash (log processing)
 
 **Excludes:**
+
 - ❌ APM Server (requires auth)
 - ❌ Beats (optional)
 - ❌ Heartbeat (optional)

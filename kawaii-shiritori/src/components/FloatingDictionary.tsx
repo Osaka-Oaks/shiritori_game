@@ -241,7 +241,9 @@ export default function FloatingDictionary({ onClose }: FloatingDictionaryProps)
                       {selectedWord.japanese[0].word}
                     </h4>
                   )}
-                  <p className="font-body text-sm text-primary">{selectedWord.japanese[0].reading}</p>
+                  <p className="font-body text-sm text-primary">
+                    {selectedWord.japanese[0].reading}
+                  </p>
                 </div>
                 <button
                   onClick={() => speakWord(selectedWord.japanese[0].reading)}
@@ -346,7 +348,11 @@ export default function FloatingDictionary({ onClose }: FloatingDictionaryProps)
             <ChevronDown className="w-4 h-4" />
           </button>
           {onClose && (
-            <button onClick={onClose} className="p-1 hover:bg-white/20 rounded transition-all" title="Close">
+            <button
+              onClick={onClose}
+              className="p-1 hover:bg-white/20 rounded transition-all"
+              title="Close"
+            >
               <X className="w-4 h-4" />
             </button>
           )}
