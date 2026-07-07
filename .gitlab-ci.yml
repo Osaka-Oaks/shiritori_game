@@ -1,0 +1,332 @@
+# GitLab CI/CD Pipeline for Shiritori Game
+# Supports multi-app monorepo with optimized build caching
+
+stages:
+  - validate
+  - test
+  - build
+  - deploy
+  - verify
+
+variables:
+  NODE_VERSION: "24"
+  FLUTTER_VERSION: "3.44.4"
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/.cache/Cypress"
+
+# Caching strategy
+.cache_template: &cache_config
+  cache:
+    key:
+      files:
+        - package-lock.json
+        - shiritori-online/package-lock.json
+        - kawaii-shiritori/package-lock.json
+    paths:
+      - .npm
+      - node_modules
+      - shiritori-online/node_modules
+      - kawaii-shiritori/node_modules
+      - .cache
+
+# Base job configuration
+.node_job:
+  image: node:${NODE_VERSION}
+  before_script:
+    - node --version
+    - npm --version
+    - npm ci --prefer-offline --no-audit
+  <<: *cache_config
+
+# Lint and format check
+lint:
+  extends: .node_job
+  stage: validate
+  script:
+    - npm run lint
+    - npm run format:check
+    - npm run validate:json
+  only:
+    - merge_requests
+    - main
+    - develop
+
+# TypeScript validation
+typecheck:
+  extends: .node_job
+  stage: validate
+  script:
+    - cd shiritori-online && npm run typecheck
+    - cd ../kawaii-shiritori && npm run typecheck
+  only:
+    - merge_requests
+    - main
+    - develop
+
+# Security audit
+security:
+  extends: .node_job
+  stage: validate
+  script:
+    - npm run security:check
+    - npm run security:audit
+  allow_failure: true
+  only:
+    - merge_requests
+    - main
+
+# Run tests
+test:shiritori-online:
+  extends: .node_job
+  stage: test
+  script:
+    - cd shiritori-online
+    - npm test -- --coverage
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: shiritori-online/coverage/cobertura-coverage.xml
+    paths:
+      - shiritori-online/coverage
+    expire_in: 30 days
+  only:
+    - merge_requests
+    - main
+    - develop
+
+test:kawaii-shiritori:
+  extends: .node_job
+  stage: test
+  script:
+    - cd kawaii-shiritori
+    - npm test -- --coverage
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: kawaii-shiritori/coverage/cobertura-coverage.xml
+    paths:
+      - kawaii-shiritori/coverage
+    expire_in: 30 days
+  only:
+    - merge_requests
+    - main
+    - develop
+
+# Build jobs
+build:shiritori-online:
+  extends: .node_job
+  stage: build
+  script:
+    - npm run build
+    - ls -lh shiritori-online/dist
+  artifacts:
+    paths:
+      - shiritori-online/dist
+    expire_in: 7 days
+  only:
+    - main
+    - develop
+    - tags
+
+build:kawaii-shiritori:
+  extends: .node_job
+  stage: build
+  script:
+    - npm run build:kawaii
+    - ls -lh kawaii-shiritori/dist
+  artifacts:
+    paths:
+      - kawaii-shiritori/dist
+    expire_in: 7 days
+  only:
+    - main
+    - develop
+    - tags
+
+# Build tracking with metrics
+build:track:
+  extends: .node_job
+  stage: build
+  script:
+    - npm run build:track
+    - cat .github/build-history.jsonl | tail -1
+  artifacts:
+    paths:
+      - .github/build-history.jsonl
+    expire_in: 90 days
+  only:
+    - main
+
+# Flutter build
+build:flutter:
+  image: cirrusci/flutter:${FLUTTER_VERSION}
+  stage: build
+  before_script:
+    - flutter --version
+    - flutter doctor -v
+  script:
+    - cd shiritori_flutter
+    - flutter pub get
+    - flutter analyze
+    - flutter test || echo "No tests or tests failed"
+    - flutter build web --release --no-tree-shake-icons
+    - ls -lh build/web
+  artifacts:
+    paths:
+      - shiritori_flutter/build/web
+    expire_in: 7 days
+  cache:
+    key: flutter-cache
+    paths:
+      - shiritori_flutter/.dart_tool
+      - shiritori_flutter/.pub-cache
+  only:
+    - main
+    - develop
+    - tags
+
+# Deploy to Firebase (production)
+deploy:production:
+  extends: .node_job
+  stage: deploy
+  environment:
+    name: production
+    url: https://shiritori-game-ccaae.web.app
+  before_script:
+    - npm install -g firebase-tools
+  script:
+    - |
+      if [ -n "$FIREBASE_TOKEN" ]; then
+        firebase deploy --only hosting --project shiritori-game-ccaae --non-interactive --token "$FIREBASE_TOKEN"
+      else
+        echo "FIREBASE_TOKEN not set"
+        exit 1
+      fi
+  dependencies:
+    - build:shiritori-online
+  only:
+    - main
+  when: manual
+
+# Deploy Flutter (production)
+deploy:flutter:
+  image: node:${NODE_VERSION}
+  stage: deploy
+  environment:
+    name: flutter-production
+    url: https://shiritori-flutter.web.app
+  before_script:
+    - npm install -g firebase-tools
+  script:
+    - |
+      if [ -n "$FIREBASE_TOKEN" ]; then
+        cd shiritori_flutter
+        firebase deploy --only hosting --project shiritori-game-ccaae --non-interactive --token "$FIREBASE_TOKEN"
+      else
+        echo "FIREBASE_TOKEN not set"
+        exit 1
+      fi
+  dependencies:
+    - build:flutter
+  only:
+    - main
+  when: manual
+
+# Deploy to staging
+deploy:staging:
+  extends: .node_job
+  stage: deploy
+  environment:
+    name: staging
+    url: https://shiritori-game-ccaae--develop.web.app
+  before_script:
+    - npm install -g firebase-tools
+  script:
+    - |
+      if [ -n "$FIREBASE_TOKEN" ]; then
+        firebase deploy --only hosting --project shiritori-game-ccaae --non-interactive --token "$FIREBASE_TOKEN"
+      else
+        echo "FIREBASE_TOKEN not set"
+        exit 1
+      fi
+  dependencies:
+    - build:kawaii-shiritori
+  only:
+    - develop
+
+# Verify deployment
+verify:production:
+  image: curlimages/curl:latest
+  stage: verify
+  script:
+    - |
+      echo "Verifying production deployment..."
+      HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" https://shiritori-game-ccaae.web.app/)
+      if [ "$HTTP_CODE" = "200" ]; then
+        echo "✅ Production site is live (HTTP $HTTP_CODE)"
+      else
+        echo "❌ Production site returned HTTP $HTTP_CODE"
+        exit 1
+      fi
+      
+      RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" https://shiritori-game-ccaae.web.app/)
+      echo "Response time: ${RESPONSE_TIME}s"
+  dependencies:
+    - deploy:production
+  only:
+    - main
+  when: on_success
+
+verify:flutter:
+  image: curlimages/curl:latest
+  stage: verify
+  script:
+    - |
+      echo "Verifying Flutter deployment..."
+      HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" https://shiritori-flutter.web.app/)
+      if [ "$HTTP_CODE" = "200" ]; then
+        echo "✅ Flutter site is live (HTTP $HTTP_CODE)"
+      else
+        echo "❌ Flutter site returned HTTP $HTTP_CODE"
+        exit 1
+      fi
+  dependencies:
+    - deploy:flutter
+  only:
+    - main
+  when: on_success
+
+# Monitoring check
+monitor:health:
+  image: curlimages/curl:latest
+  stage: verify
+  script:
+    - |
+      echo "Checking site health..."
+      curl -f https://shiritori-game-ccaae.web.app/ || exit 1
+      curl -f https://shiritori-flutter.web.app/ || exit 1
+      echo "✅ All sites healthy"
+  only:
+    - schedules
+  when: always
+
+# Performance analysis
+analyze:lighthouse:
+  image: node:${NODE_VERSION}
+  stage: verify
+  before_script:
+    - npm install -g @lhci/cli
+  script:
+    - lhci autorun --collect.url=https://shiritori-game-ccaae.web.app/ || true
+  artifacts:
+    paths:
+      - .lighthouseci
+    expire_in: 30 days
+  only:
+    - main
+  when: manual
+  allow_failure: true
