@@ -34,6 +34,7 @@ jobs:
     outputs:
       online: ${{ steps.filter.outputs.online }}
       kawaii: ${{ steps.filter.outputs.kawaii }}
+      flutter: ${{ steps.filter.outputs.flutter }}
       kawaii-rules: ${{ steps.filter.outputs.kawaii-rules }}
       shared: ${{ steps.filter.outputs.shared }}
       deps: ${{ steps.filter.outputs.deps }}
@@ -56,6 +57,8 @@ jobs:
               - 'kawaii-shiritori/index.html'
               - 'kawaii-shiritori/vite.config.ts'
               - 'kawaii-shiritori/server.ts'
+            flutter:
+              - 'shiritori_flutter/**'
             kawaii-rules:
               - 'kawaii-shiritori/firestore.rules'
               - 'kawaii-shiritori/firestore.indexes.json'
@@ -107,10 +110,10 @@ jobs:
 
       - run: chmod +x scripts/security-check.sh && bash scripts/security-check.sh
 
-  validate-json:
-    name: JSON validate
+  validate-fast:
+    name: Validate (JSON + Prettier)
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 3
     needs: changes
     if: needs.changes.outputs.docs-only != 'true'
     steps:
@@ -120,27 +123,13 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci --prefer-offline --no-audit
-      - run: npm run validate:json && npm run format:json:check
-
-  format:
-    name: Prettier
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    needs: changes
-    if: needs.changes.outputs.docs-only != 'true'
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci --prefer-offline --no-audit && npm run format:check
+      - run: npm run validate:json && npm run format:json:check && npm run format:check
 
   lint-online:
     name: Lint — shiritori-online
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    needs: [changes, format, validate-json]
+    needs: [changes, validate-fast]
     if: |
       needs.changes.outputs.docs-only != 'true' &&
       (needs.changes.outputs.online == 'true' || needs.changes.outputs.deps == 'true' || needs.changes.outputs.ci-config == 'true')
@@ -153,6 +142,11 @@ jobs:
           cache-dependency-path: shiritori-online/package-lock.json
       - working-directory: shiritori-online
         run: npm ci --prefer-offline --no-audit
+      - uses: actions/cache@v4
+        with:
+          path: shiritori-online/.eslintcache
+          key: eslint-online-${{ hashFiles('shiritori-online/src/**', 'shiritori-online/eslint.config.*') }}
+          restore-keys: eslint-online-
       - working-directory: shiritori-online
         run: npm run lint && npm run type-check
 
@@ -160,7 +154,7 @@ jobs:
     name: Lint — kawaii-shiritori
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    needs: [changes, format, validate-json]
+    needs: [changes, validate-fast]
     if: |
       needs.changes.outputs.docs-only != 'true' &&
       (needs.changes.outputs.kawaii == 'true' || needs.changes.outputs.deps == 'true')
@@ -172,7 +166,14 @@ jobs:
           cache: npm
           cache-dependency-path: kawaii-shiritori/package-lock.json
       - working-directory: kawaii-shiritori
-        run: npm ci --prefer-offline --no-audit && npm run lint
+        run: npm ci --prefer-offline --no-audit
+      - uses: actions/cache@v4
+        with:
+          path: kawaii-shiritori/.eslintcache
+          key: eslint-kawaii-${{ hashFiles('kawaii-shiritori/src/**', 'kawaii-shiritori/eslint.config.*') }}
+          restore-keys: eslint-kawaii-
+      - working-directory: kawaii-shiritori
+        run: npm run lint
 
   test:
     name: Unit tests
@@ -191,6 +192,23 @@ jobs:
           cache-dependency-path: kawaii-shiritori/package-lock.json
       - working-directory: kawaii-shiritori
         run: npm ci --prefer-offline --no-audit && npm run test
+
+  lint-flutter:
+    name: Analyze — shiritori_flutter
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    needs: [changes, validate-fast]
+    if: |
+      needs.changes.outputs.docs-only != 'true' &&
+      (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.deps == 'true')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - working-directory: shiritori_flutter
+        run: flutter pub get && flutter analyze lib test
 
   build-online:
     name: Build — shiritori-online
