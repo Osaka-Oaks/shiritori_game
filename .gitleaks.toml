@@ -1,0 +1,14 @@
+title = "shiritori-game gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allowlisted paths and patterns"
+paths = [
+  '''package-lock\.json$''',
+  '''\.github/workflows/.*''',
+  '''src/data/dictionary\.json$''',
+  '''firebase\.ts$''',
+  '''firebase-config\.ts$''',
+]
