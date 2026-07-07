@@ -28,6 +28,18 @@
 - name: "status: ready"
   color: "0e8a16"
   description: Ready to work / merge
+- name: "status: backlog"
+  color: "d4d4d4"
+  description: Backlog — not started
+- name: "status: review"
+  color: "c5def5"
+  description: In code review
+- name: "status: done"
+  color: "1d76db"
+  description: Completed / shipped
+- name: "status: stale"
+  color: "ffffff"
+  description: Inactive — may be closed soon
 
 # ── Priority ─────────────────────────
 - name: "priority: high"
@@ -49,3 +61,34 @@
 - name: "dependencies"
   color: "0366d6"
   description: Dependency updates
+
+# ── GitHub Actions / automation ─────
+- name: "action: ci"
+  color: "bfd4f2"
+  description: CI pipeline run or failure
+- name: "action: deploy"
+  color: "f9d0c4"
+  description: Deployment related
+- name: "action: security"
+  color: "e99695"
+  description: Security scan or audit
+- name: "action: cron"
+  color: "d876e3"
+  description: Scheduled / cron job
+- name: "action: uptime"
+  color: "f9c513"
+  description: Uptime / health monitor
+
+# ── Game features ───────────────────
+- name: "game: solo"
+  color: "84b6eb"
+  description: Single-player / vs CPU mode
+- name: "game: multiplayer"
+  color: "7057ff"
+  description: Online two-player mode
+- name: "game: levels"
+  color: "2ea043"
+  description: Difficulty levels / progression
+- name: "game: dev-tools"
+  color: "a2eeef"
+  description: In-app dev / test tools

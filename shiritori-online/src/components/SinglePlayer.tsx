@@ -39,6 +39,11 @@ export default function SinglePlayer({
   const [showDev, setShowDev] = useState(false);
   const cpuTimer = useRef<number | undefined>(undefined);
 
+  useEffect(() => {
+    if (initialLevel && !game) startGame(initialLevel);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const cfg = game?.level ?? null;
   const converted = romajiToHiragana(raw);
   const status = game?.status ?? "playing";

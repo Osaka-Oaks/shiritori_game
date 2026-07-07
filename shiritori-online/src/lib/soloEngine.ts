@@ -95,8 +95,7 @@ function endGame(state: SoloState, status: SoloStatus, reason: string): SoloStat
 function countFollowUps(
   kana: string,
   usedSet: Set<string>,
-  vocab: BotWord[],
-  rules: RuleSettings
+  vocab: BotWord[]
 ): number {
   return vocab.filter(w => getFirstKana(w.kana) === kana && !usedSet.has(w.kana)).length;
 }
@@ -140,8 +139,8 @@ export function cpuMove(
   if (cfg.trap) {
     candidates = [...candidates].sort(
       (a, b) =>
-        countFollowUps(getChainKana(a.kana, rules), new Set([...usedSet, a.kana]), vocab, rules) -
-        countFollowUps(getChainKana(b.kana, rules), new Set([...usedSet, b.kana]), vocab, rules)
+        countFollowUps(getChainKana(a.kana, rules), new Set([...usedSet, a.kana]), vocab) -
+        countFollowUps(getChainKana(b.kana, rules), new Set([...usedSet, b.kana]), vocab)
     );
   } else {
     candidates = shuffle(candidates);
