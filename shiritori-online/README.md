@@ -94,13 +94,13 @@ games/
     settings:     { smallKanaLenient, dakutenLenient }
 ```
 
-- Both clients **subscribe** to their room node ([`subscribeRoom`](src/lib/roomService.ts))
+- Both clients **subscribe** to their room node ([`subscribeRoom`](src/lib/game/room-service.ts))
   and re-render on every change.
 - Moves, joins, timeouts, and rematches are committed with **transactions** so the
   two devices can't clobber each other (e.g. only the player whose turn it is can
   submit; either device can safely finalize an expired timer).
 - All game rules (last-kana chaining, ん detection, small-kana / dakuten house
-  rules, repeats) live in pure, testable logic: [`src/lib/shiritori.ts`](src/lib/shiritori.ts).
+  rules, repeats) live in pure, testable logic: [`src/lib/game/shiritori.ts`](src/lib/game/shiritori.ts).
 
 ### Database security rules
 
