@@ -1,0 +1,43 @@
+name: 🧪 Dev / test task
+description: In-app dev testing, solo mode, or QA checklist
+title: "[Test]: "
+labels: ["game: dev-tools", "status: triage"]
+body:
+  - type: dropdown
+    id: test_type
+    attributes:
+      label: Test type
+      options:
+        - Solo / vs CPU levels
+        - Dev mode (?dev=1)
+        - Multiplayer room
+        - Dictionary / word validation
+        - Deploy / smoke test
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: level
+    attributes:
+      label: Level (1–5) or URL
+      placeholder: "?solo=3&dev=1"
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to test
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result (if bug)
