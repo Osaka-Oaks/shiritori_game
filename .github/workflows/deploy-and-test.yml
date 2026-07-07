@@ -1,0 +1,111 @@
+name: Deploy (manual)
+
+# Extended manual deploy. Automatic CI/CD runs in ci.yml on push to main.
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_kawaii_hosting:
+        description: "Deploy kawaii hosting too (replaces live shiritori-online site)"
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: manual-deploy
+  cancel-in-progress: false
+
+env:
+  FIREBASE_PROJECT: shiritori-game-ccaae
+  LIVE_URL: https://shiritori-game-ccaae.web.app
+
+jobs:
+  validate-and-build:
+    name: Validate & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            shiritori-online/package-lock.json
+            kawaii-shiritori/package-lock.json
+
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run test
+
+      - name: Build apps
+        run: |
+          npm ci --prefix shiritori-online && npm run build --prefix shiritori-online
+          npm ci --prefix kawaii-shiritori && npm run build --prefix kawaii-shiritori
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-deploy-dist
+          path: |
+            shiritori-online/dist/
+            kawaii-shiritori/dist/
+          retention-days: 14
+
+  deploy:
+    name: Deploy to Firebase
+    runs-on: ubuntu-latest
+    needs: validate-and-build
+    environment:
+      name: production
+      url: ${{ env.LIVE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: manual-deploy-dist
+
+      - name: Deploy shiritori-online (hosting + RTDB)
+        working-directory: shiritori-online
+        run: >
+          npx firebase-tools@latest deploy
+          --only hosting,database
+          --project ${{ env.FIREBASE_PROJECT }}
+          --non-interactive
+          --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Deploy Firestore rules
+        working-directory: kawaii-shiritori
+        run: >
+          npx firebase-tools@latest deploy
+          --only firestore
+          --project ${{ env.FIREBASE_PROJECT }}
+          --non-interactive
+          --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Deploy kawaii hosting (optional)
+        if: inputs.deploy_kawaii_hosting == true
+        working-directory: kawaii-shiritori
+        run: >
+          npx firebase-tools@latest deploy
+          --only hosting
+          --project ${{ env.FIREBASE_PROJECT }}
+          --non-interactive
+          --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+  smoke-test:
+    name: Smoke test
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - run: sleep 15
+      - run: curl -fsSL "${{ env.LIVE_URL }}/" | grep -q "しりとり"
+      - run: curl -fsSL -o /dev/null -w "%{http_code}\n" "${{ env.LIVE_URL }}/"

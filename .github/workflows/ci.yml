@@ -1,27 +1,30 @@
 name: CI
 
-# Format, lint, test, build on every push/PR.
-# Deploy shiritori-online to Firebase Hosting + RTDB rules on push to main.
+# Format → lint → test → build → deploy (main) → smoke test
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20"
+  FIREBASE_PROJECT: shiritori-game-ccaae
+  LIVE_URL: https://shiritori-game-ccaae.web.app
 
 jobs:
   format:
     name: Prettier
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -33,7 +36,7 @@ jobs:
       - name: Install root dependencies
         run: npm ci
 
-      - name: Check root JSON/YAML formatting
+      - name: Check root formatting (JSON/YAML/config)
         run: npm run format:check
 
       - name: Install shiritori-online dependencies
@@ -55,16 +58,15 @@ jobs:
   lint:
     name: ESLint — ${{ matrix.app }}
     runs-on: ubuntu-latest
+    needs: format
     strategy:
       fail-fast: false
       matrix:
         app: [shiritori-online, kawaii-shiritori]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -79,14 +81,13 @@ jobs:
         run: npm run lint
 
   test:
-    name: Unit tests (kawaii-shiritori)
+    name: Unit tests
     runs-on: ubuntu-latest
+    needs: lint
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -96,15 +97,15 @@ jobs:
         working-directory: kawaii-shiritori
         run: npm ci
 
-      - name: Run tests
+      - name: Run vitest
         working-directory: kawaii-shiritori
         run: npm run test
 
-      - name: Upload test results
+      - name: Upload coverage artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-kawaii
+          name: coverage-kawaii-shiritori
           path: kawaii-shiritori/coverage/
           retention-days: 14
           if-no-files-found: ignore
@@ -112,17 +113,15 @@ jobs:
   build:
     name: Build — ${{ matrix.app }}
     runs-on: ubuntu-latest
-    needs: [format, lint, test]
+    needs: test
     strategy:
       fail-fast: false
       matrix:
         app: [shiritori-online, kawaii-shiritori]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -132,34 +131,39 @@ jobs:
         working-directory: ${{ matrix.app }}
         run: npm ci
 
-      - name: Build
+      - name: Production build
         working-directory: ${{ matrix.app }}
         run: npm run build
 
-      - name: Upload build artifact
+      - name: Build summary
+        working-directory: ${{ matrix.app }}
+        run: |
+          echo "## Build — ${{ matrix.app }}" >> $GITHUB_STEP_SUMMARY
+          ls -lh dist/ >> $GITHUB_STEP_SUMMARY
+          du -sh dist/ >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload dist artifact
         uses: actions/upload-artifact@v4
         with:
           name: dist-${{ matrix.app }}
           path: ${{ matrix.app }}/dist/
-          retention-days: 14
+          retention-days: 30
 
   deploy:
     name: Deploy shiritori-online
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: build
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment:
       name: production
-      url: https://shiritori-game-ccaae.web.app
+      url: ${{ env.LIVE_URL }}
     defaults:
       run:
         working-directory: shiritori-online
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
 
@@ -169,11 +173,22 @@ jobs:
           name: dist-shiritori-online
           path: shiritori-online/dist
 
-      - name: Deploy to Firebase
+      - name: Deploy hosting + database rules
         run: >
           npx firebase-tools@latest deploy
           --only hosting,database
-          --project shiritori-game-ccaae
+          --project ${{ env.FIREBASE_PROJECT }}
+          --non-interactive
+          --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Deploy Firestore rules (kawaii leaderboard)
+        working-directory: kawaii-shiritori
+        run: >
+          npx firebase-tools@latest deploy
+          --only firestore
+          --project ${{ env.FIREBASE_PROJECT }}
           --non-interactive
           --token "$FIREBASE_TOKEN"
         env:
@@ -182,10 +197,32 @@ jobs:
   smoke-test:
     name: Smoke test live site
     runs-on: ubuntu-latest
-    needs: [deploy]
+    needs: deploy
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - name: Verify homepage
+      - name: Wait for CDN
+        run: sleep 15
+
+      - name: Homepage HTTP 200
         run: |
-          curl -fsSL -o /dev/null -w "HTTP %{http_code}\n" https://shiritori-game-ccaae.web.app/
-          curl -fsSL https://shiritori-game-ccaae.web.app/ | grep -q "しりとり"
+          STATUS=$(curl -fsSL -o /dev/null -w "%{http_code}" "${{ env.LIVE_URL }}/")
+          echo "HTTP $STATUS" >> $GITHUB_STEP_SUMMARY
+          test "$STATUS" = "200"
+
+      - name: Verify page content
+        run: |
+          CONTENT=$(curl -fsSL "${{ env.LIVE_URL }}/")
+          echo "$CONTENT" | grep -q "しりとり"
+          echo "$CONTENT" | grep -q "assets/index-"
+
+      - name: Verify static assets
+        run: |
+          JS=$(curl -fsSL "${{ env.LIVE_URL }}/" | grep -oE 'assets/index-[^"]+\.js' | head -1)
+          CSS=$(curl -fsSL "${{ env.LIVE_URL }}/" | grep -oE 'assets/index-[^"]+\.css' | head -1)
+          curl -fsSL -o /dev/null "${{ env.LIVE_URL }}/$JS"
+          curl -fsSL -o /dev/null "${{ env.LIVE_URL }}/$CSS"
+
+      - name: Realtime Database reachable
+        run: |
+          DB_STATUS=$(curl -fsSL -o /dev/null -w "%{http_code}" "https://${{ env.FIREBASE_PROJECT }}-default-rtdb.firebaseio.com/.json" || true)
+          test "$DB_STATUS" = "401" -o "$DB_STATUS" = "200"

@@ -1,0 +1,93 @@
+name: Security
+
+# Static analysis + dependency vulnerability scanning.
+# Runs on pushes/PRs to main and weekly (Mondays) to catch newly-disclosed CVEs.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"
+
+# Least-privilege by default; CodeQL needs to write security events.
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  codeql:
+    name: CodeQL analysis
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [javascript-typescript]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
+
+  audit:
+    name: npm audit — ${{ matrix.app }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [shiritori-online, kawaii-shiritori]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.app }}
+        run: npm ci
+
+      # Report high/critical; do not block merges on known transitive advisories.
+      - name: Audit (high & critical)
+        working-directory: ${{ matrix.app }}
+        continue-on-error: true
+        run: npm audit --audit-level=high
+
+  dependency-review:
+    name: Dependency review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          comment-summary-in-pr: always
