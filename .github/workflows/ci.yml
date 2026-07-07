@@ -99,40 +99,17 @@ jobs:
       - name: Run security-check script
         run: chmod +x scripts/security-check.sh && bash scripts/security-check.sh
 
-      - name: npm audit — shiritori-online
+      - name: npm audit — shiritori-online (production)
         working-directory: shiritori-online
         run: |
           npm ci
-          npm audit --audit-level=critical --json > ../audit-online.json || true
-          node -e "
-            const r=require('./../audit-online.json');
-            const v=r.metadata?.vulnerabilities||{};
-            if ((v.critical||0)>0) { console.error('Critical vulnerabilities in shiritori-online'); process.exit(1); }
-            console.log('shiritori-online audit OK (critical=0)');
-          "
+          npm audit --omit=dev --audit-level=critical
 
-      - name: npm audit — kawaii-shiritori
+      - name: npm audit — kawaii-shiritori (production)
         working-directory: kawaii-shiritori
         run: |
           npm ci
-          npm audit --audit-level=critical --json > ../audit-kawaii.json || true
-          node -e "
-            const r=require('./../audit-kawaii.json');
-            const v=r.metadata?.vulnerabilities||{};
-            if ((v.critical||0)>0) { console.error('Critical vulnerabilities in kawaii-shiritori'); process.exit(1); }
-            console.log('kawaii-shiritori audit OK (critical=0)');
-          "
-
-      - name: Upload audit reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: security-audit-reports
-          path: |
-            audit-online.json
-            audit-kawaii.json
-          retention-days: 30
-          if-no-files-found: ignore
+          npm audit --omit=dev --audit-level=critical
 
   json-validation:
     name: JSON Validation

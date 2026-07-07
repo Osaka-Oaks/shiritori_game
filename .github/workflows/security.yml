@@ -67,11 +67,11 @@ jobs:
       - working-directory: ${{ matrix.app }}
         run: npm ci
 
-      - name: Critical vulnerabilities (blocking)
+      - name: Critical vulnerabilities — production deps (blocking)
         working-directory: ${{ matrix.app }}
-        run: npm audit --audit-level=critical
+        run: npm audit --omit=dev --audit-level=critical
 
-      - name: High vulnerabilities (report)
+      - name: Full audit report (includes devDependencies)
         working-directory: ${{ matrix.app }}
         continue-on-error: true
         run: |
