@@ -18,6 +18,7 @@
     "build": "npm run install:app && npm --prefix shiritori-online run build",
     "build:kawaii": "npm run install:kawaii && npm --prefix kawaii-shiritori run build",
     "build:flutter": "cd shiritori_flutter && flutter pub get && flutter build web",
+    "validate:iac": "bash infra/validate-iac.sh",
     "preview": "npm --prefix shiritori-online run preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -57,7 +58,16 @@
     "ci:fast": "npm run ci:validate && npm run build",
     "ci:full": "npm run ci:validate && npm run test && npm run ci:build",
     "security:check": "bash scripts/security-check.sh",
-    "security:audit": "npm --prefix shiritori-online audit --audit-level=high && npm --prefix kawaii-shiritori audit --audit-level=high || true"
+    "security:audit": "npm --prefix shiritori-online audit --audit-level=high && npm --prefix kawaii-shiritori audit --audit-level=high || true",
+    "infra:init": "cd infrastructure/terraform && terraform init",
+    "infra:plan": "cd infrastructure/terraform && terraform plan",
+    "infra:apply": "cd infrastructure/terraform && terraform apply",
+    "infra:destroy": "cd infrastructure/terraform && terraform destroy",
+    "infra:output": "cd infrastructure/terraform && terraform output",
+    "infra:validate": "cd infrastructure/terraform && terraform validate && terraform fmt -check",
+    "tofu:init": "cd infrastructure/terraform && tofu init",
+    "tofu:plan": "cd infrastructure/terraform && tofu plan",
+    "tofu:apply": "cd infrastructure/terraform && tofu apply"
   },
   "devDependencies": {
     "prettier": "^3.2.0",

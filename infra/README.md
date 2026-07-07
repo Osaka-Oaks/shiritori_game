@@ -30,7 +30,24 @@ infra/
 
 ## Quick start
 
-### Terraform
+**From repo root** (not from inside `environments/dev`):
+
+```bash
+# One command — both stacks
+bash infra/validate-iac.sh
+
+# Or manually (after installing CLIs):
+cd infra/terraform/environments/dev && terraform init -backend=false && terraform validate
+cd ../../../../opentofu/environments/dev && tofu init -backend=false && tofu validate
+```
+
+### Install CLIs (macOS)
+
+```bash
+brew install hashicorp/tap/terraform opentofu
+```
+
+### Terraform only
 
 ```bash
 cd infra/terraform/environments/dev
