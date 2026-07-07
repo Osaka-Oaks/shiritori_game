@@ -8,9 +8,11 @@ const TIMEOUT_GRACE_MS = 2000; // small buffer before either client finalizes a 
 
 function randomCode(len = 4): string {
   let c = "";
+  // Uses crypto.getRandomValues (not Math.random) so room codes are not predictable.
+  const randomValues = new Uint32Array(len);
+  crypto.getRandomValues(randomValues);
   for (let i = 0; i < len; i++) {
-    // Math.random is fine here — just a room code, not security-sensitive.
-    c += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)];
+    c += CODE_CHARS[randomValues[i] % CODE_CHARS.length];
   }
   return c;
 }
