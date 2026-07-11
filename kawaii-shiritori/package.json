@@ -36,6 +36,7 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,json,css}\" \"*.{json,yml,yaml}\" \".github/**/*.{yml,yaml}\"",
     "type-check": "npx tsc --noEmit",
     "test": "npx vitest run",
+    "test:junit": "npx vitest run --reporter=junit --reporter=default --outputFile.junit=test-results/junit.xml",
     "test:watch": "npx vitest",
     "test:ui": "npx vitest --ui",
     "test:coverage": "npx vitest run --coverage",

@@ -1,7 +1,17 @@
 import { ref, set, get, onValue, runTransaction, serverTimestamp } from "firebase/database";
-import { db } from "../../firebase";
+import { db, auth } from "../../firebase";
 import type { GameState, PlayedWord } from "../../types";
 import { validateMove, type RuleSettings, DEFAULT_RULES } from "./shiritori";
+
+/**
+ * Ensure user is authenticated before database operations.
+ * Throws if auth is not ready - prevents PERMISSION_DENIED errors.
+ */
+function ensureAuth(): void {
+  if (!auth.currentUser) {
+    throw new Error("Authentication required. Please wait for sign-in to complete.");
+  }
+}
 
 const CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no easily-confused chars
 const TIMEOUT_GRACE_MS = 2000; // small buffer before either client finalizes a timeout
@@ -62,6 +72,8 @@ export async function createRoom(
   timeLimit: number,
   settings: RuleSettings
 ): Promise<string> {
+  ensureAuth(); // Verify authentication before database operation
+
   for (let attempt = 0; attempt < 6; attempt++) {
     const code = randomCode();
     const snap = await get(gameRef(code));
@@ -97,6 +109,8 @@ export type JoinResult = { ok: true; seat: number } | { ok: false; reason: strin
 
 /** Join an existing room as seat 1 (or rejoin a seat you already hold). */
 export async function joinRoom(uid: string, name: string, rawCode: string): Promise<JoinResult> {
+  ensureAuth(); // Verify authentication before database operation
+
   const code = rawCode.trim().toUpperCase();
   if (!code) return { ok: false, reason: "Enter a room code." };
 
@@ -156,6 +170,8 @@ export async function playWord(
   meaning?: string,
   readingKana?: string
 ): Promise<PlayResult> {
+  ensureAuth(); // Verify authentication before database operation
+
   const seat = seatOf(state, uid);
   if (seat === -1) return { ok: false, reason: "You're not in this game." };
   if (state.status !== "playing") return { ok: false, reason: "Game isn't active." };

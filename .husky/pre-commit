@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Get the root directory
+ROOT_DIR=$(git rev-parse --show-toplevel)
+
+# Run lint-staged for kawaii-shiritori if files changed
+if git diff --cached --name-only | grep -q "^kawaii-shiritori/"; then
+  echo "📦 Checking kawaii-shiritori..."
+  cd "$ROOT_DIR/kawaii-shiritori" && npx lint-staged
+fi
+
+# Run lint-staged for shiritori-online if files changed
+if git diff --cached --name-only | grep -q "^shiritori-online/"; then
+  echo "📦 Checking shiritori-online..."
+  cd "$ROOT_DIR/shiritori-online" && npx lint-staged
+fi
+
+echo "✅ Pre-commit checks passed!"

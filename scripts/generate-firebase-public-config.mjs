@@ -4,11 +4,34 @@
  * Usage: node scripts/generate-firebase-public-config.mjs <app-dir>
  * CI: pass env vars; local: load from app/.env via dotenv.
  */
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { resolve, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const appDir = resolve(process.argv[2] || "shiritori-online");
+// Get the root directory of the project
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const rootDir = resolve(__dirname, "..");
+
+// Get app directory argument or default
+const appArg = process.argv[2] || "shiritori-online";
+
+// If appArg is an absolute path, use it; otherwise resolve from root
+let appDir;
+if (appArg.startsWith('/')) {
+  appDir = appArg;
+} else {
+  // Check if we're already in the app directory (running from app dir)
+  const cwd = process.cwd();
+  const cwdBasename = basename(cwd);
+  if (cwdBasename === appArg && existsSync(resolve(cwd, "package.json"))) {
+    // Already in the app directory
+    appDir = cwd;
+  } else {
+    // Resolve from root
+    appDir = resolve(rootDir, appArg);
+  }
+}
+
 const envPath = resolve(appDir, ".env");
 
 if (existsSync(envPath)) {
@@ -40,6 +63,12 @@ const config = {
   measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID || "",
 };
 
-const out = resolve(appDir, "public/firebase-config.json");
+// Ensure public directory exists
+const publicDir = resolve(appDir, "public");
+if (!existsSync(publicDir)) {
+  mkdirSync(publicDir, { recursive: true });
+}
+
+const out = resolve(publicDir, "firebase-config.json");
 writeFileSync(out, JSON.stringify(config, null, 2) + "\n");
 console.log(`Wrote ${out}`);

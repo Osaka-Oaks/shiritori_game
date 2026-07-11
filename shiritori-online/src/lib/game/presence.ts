@@ -6,7 +6,16 @@ import {
   serverTimestamp,
   type Unsubscribe,
 } from "firebase/database";
-import { db } from "../../firebase";
+import { db, auth } from "../../firebase";
+
+/**
+ * Ensure user is authenticated before database operations.
+ */
+function ensureAuth(): void {
+  if (!auth.currentUser) {
+    throw new Error("Authentication required. Please wait for sign-in to complete.");
+  }
+}
 
 export interface PresenceState {
   online: boolean;
@@ -16,6 +25,8 @@ export interface PresenceState {
 
 /** Mark this player online; auto-offline on disconnect/tab close. */
 export function initPresence(uid: string, gameCode?: string): () => void {
+  ensureAuth(); // Verify authentication before database operation
+
   const presenceRef = ref(db, `presence/${uid}`);
   const connectedRef = ref(db, ".info/connected");
 

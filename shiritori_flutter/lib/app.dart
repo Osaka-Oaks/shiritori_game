@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'screens/home_screen.dart';
+import 'core/router/app_router.dart';
+import 'core/theme/app_theme.dart';
 import 'services/auth_service.dart';
-import 'theme/app_theme.dart';
 
-class ShiritoriApp extends StatefulWidget {
+class ShiritoriApp extends ConsumerStatefulWidget {
   const ShiritoriApp({super.key});
 
   @override
-  State<ShiritoriApp> createState() => _ShiritoriAppState();
+  ConsumerState<ShiritoriApp> createState() => _ShiritoriAppState();
 }
 
-class _ShiritoriAppState extends State<ShiritoriApp> {
+class _ShiritoriAppState extends ConsumerState<ShiritoriApp> {
   String? _uid;
   String? _error;
+  bool _isDarkMode = false;
 
   @override
   void initState() {
@@ -32,15 +34,31 @@ class _ShiritoriAppState extends State<ShiritoriApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shiritori',
+    if (_error != null) {
+      return MaterialApp(
+        theme: AppTheme.light(),
+        darkTheme: AppTheme.dark(),
+        themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
+        home: _ErrorScreen(message: _error!, onRetry: _boot),
+      );
+    }
+
+    if (_uid == null) {
+      return MaterialApp(
+        theme: AppTheme.light(),
+        darkTheme: AppTheme.dark(),
+        themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
+        home: const _LoadingScreen(),
+      );
+    }
+
+    return MaterialApp.router(
+      title: 'Shiritori 2D/3D',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
-      home: _error != null
-          ? _ErrorScreen(message: _error!, onRetry: _boot)
-          : _uid == null
-              ? const _LoadingScreen()
-              : HomeScreen(uid: _uid!),
+      darkTheme: AppTheme.dark(),
+      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      routerConfig: AppRouter.router(_uid),
     );
   }
 }

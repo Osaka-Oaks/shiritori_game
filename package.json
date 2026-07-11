@@ -9,6 +9,7 @@
     "npm": ">=10.0.0"
   },
   "scripts": {
+    "prepare": "husky install || true",
     "install:app": "npm --prefix shiritori-online install",
     "install:kawaii": "npm --prefix kawaii-shiritori install",
     "install:all": "npm run install:app && npm run install:kawaii",
@@ -23,13 +24,13 @@
     "build": "npm run install:app && npm --prefix shiritori-online run build",
     "build:kawaii": "npm run install:kawaii && npm --prefix kawaii-shiritori run build",
     "build:flutter": "cd shiritori_flutter && flutter pub get && flutter build web",
-    "deploy:flutter": "npm run build:flutter && cd shiritori_flutter && npx firebase-tools deploy --only hosting --project shiritori-game-ccaae",
+    "deploy:flutter": "cd shiritori-flutter && flutter build web --release && firebase deploy --only hosting",
     "test:flutter": "cd shiritori_flutter && flutter test",
     "test:flutter:url": "bash scripts/test-flutter-url.sh",
     "build:fast": "GENERATE_SOURCEMAP=false npm run build:kawaii",
-    "build:track": "bash scripts/track-build-time.sh kawaii-shiritori production",
+    "build:track": "bash scripts/track-build.sh shiritori-online build shiritori-online",
     "build:analyze": "node scripts/analyze-build-times.js",
-    "build:report": "node scripts/analyze-build-times.js --export",
+    "build:report": "bash scripts/build-metrics-report.sh",
     "validate:iac": "bash infra/validate-iac.sh",
     "preview": "npm --prefix shiritori-online run preview",
     "format": "prettier --write .",
@@ -42,6 +43,9 @@
     "lint:online": "npm --prefix shiritori-online run lint",
     "lint:kawaii": "npm --prefix kawaii-shiritori run lint",
     "test": "npm --prefix kawaii-shiritori run test",
+    "test:junit": "npm --prefix kawaii-shiritori run test:junit",
+    "test:all": "npm run test && npm run test:online",
+    "test:online": "echo 'No tests configured for shiritori-online yet'",
     "validate": "npm run format:check && npm run lint && npm run security:check && npm run test && npm run build && npm run build:kawaii",
     "deploy": "npm run install:app && npm --prefix shiritori-online run deploy",
     "deploy:hosting": "npm run install:app && npm --prefix shiritori-online run deploy:hosting",
@@ -50,7 +54,6 @@
     "deploy:firestore": "npm run install:kawaii && npm --prefix kawaii-shiritori run deploy:firestore",
     "deploy:kawaii": "npm run install:kawaii && npm --prefix kawaii-shiritori run deploy",
     "deploy:kawaii:hosting": "npm run install:kawaii && npm --prefix kawaii-shiritori run deploy:hosting",
-    "deploy:flutter": "cd shiritori-flutter && flutter build web --release && firebase deploy --only hosting",
     "deploy:flutter:test": "bash scripts/test-flutter-deployment.sh",
     "deploy:flutter:staging": "cd shiritori-flutter && flutter build web --release && firebase hosting:channel:deploy develop",
     "deps:report": "node scripts/deps-report.mjs",
@@ -76,9 +79,7 @@
     "ci:validate": "npm run format:check && npm run validate:json && npm run lint",
     "ci:build": "npm run build && npm run build:kawaii",
     "ci:fast": "npm run ci:validate && npm run build:track",
-    "build:track": "bash scripts/track-build.sh shiritori-online build shiritori-online",
     "build:track:kawaii": "bash scripts/track-build.sh kawaii-shiritori build kawaii-shiritori",
-    "build:report": "bash scripts/build-metrics-report.sh",
     "ci:full": "npm run ci:validate && npm run test && npm run ci:build",
     "security:check": "bash scripts/security-check.sh",
     "security:audit": "npm --prefix shiritori-online audit --audit-level=high && npm --prefix kawaii-shiritori audit --audit-level=high || true",
@@ -115,6 +116,7 @@
     "port:kill:all": "bash scripts/kill-all-ports.sh"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
     "prettier": "^3.2.0",
     "syncpack": "^13.0.4"
   }

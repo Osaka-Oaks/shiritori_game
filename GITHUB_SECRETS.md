@@ -32,7 +32,21 @@ Add these as **Secrets** or **Repository variables** (variables are fine — cli
 | `VITE_FIREBASE_MEASUREMENT_ID` | optional | Analytics |
 | `VITE_FIREBASE_FIRESTORE_DATABASE_ID` | kawaii, word-chain | Default: `(default)` |
 
-**Where to copy values:** [Firebase Console](https://console.firebase.google.com/) → `shiritori-game-ccaae` → Project settings → Your apps → Web app config.
+**Where to copy values:** [Firebase Console](https://console.firebase.google.com/) → `shiritori-game-ccaae` → Project settings → **Shiritori Game Web** app.
+
+**Current values** (also in `.env.example` files — safe to commit; client keys are public by design):
+
+| Variable | Value |
+|----------|-------|
+| `VITE_FIREBASE_API_KEY` | `AIzaSyAOr3y32r7OG1EfX6728LRK4hR7rHV7x_k` |
+| `VITE_FIREBASE_AUTH_DOMAIN` | `shiritori-game-ccaae.firebaseapp.com` |
+| `VITE_FIREBASE_DATABASE_URL` | `https://shiritori-game-ccaae-default-rtdb.firebaseio.com` |
+| `VITE_FIREBASE_PROJECT_ID` | `shiritori-game-ccaae` |
+| `VITE_FIREBASE_STORAGE_BUCKET` | `shiritori-game-ccaae.firebasestorage.app` |
+| `VITE_FIREBASE_MESSAGING_SENDER_ID` | `324507601155` |
+| `VITE_FIREBASE_APP_ID` | `1:324507601155:web:d69804f7cf3dba96ec4136` |
+| `VITE_FIREBASE_MEASUREMENT_ID` | `G-9X4LT2R6CJ` |
+| `VITE_FIREBASE_FIRESTORE_DATABASE_ID` | `(default)` |
 
 ---
 
