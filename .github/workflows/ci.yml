@@ -488,7 +488,7 @@ jobs:
 
       - name: Download build
         if: needs.build-online.result == 'success'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist-shiritori-online
           path: shiritori-online/dist
@@ -540,7 +540,7 @@ jobs:
         with:
           path: ~/.npm/_npx
           key: firebase-tools-${{ env.FIREBASE_TOOLS_VERSION }}
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: dist-shiritori-flutter
           path: shiritori_flutter/build/web
@@ -585,7 +585,7 @@ jobs:
         with:
           path: ~/.npm/_npx
           key: firebase-tools-${{ env.FIREBASE_TOOLS_VERSION }}
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: dist-shiritori-online
           path: shiritori-online/dist
@@ -624,7 +624,7 @@ jobs:
         with:
           path: ~/.npm/_npx
           key: firebase-tools-${{ env.FIREBASE_TOOLS_VERSION }}
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: dist-shiritori-flutter
           path: shiritori_flutter/build/web
@@ -750,7 +750,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download build metrics
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         continue-on-error: true
         with:
           pattern: build-metrics-*
@@ -758,7 +758,7 @@ jobs:
           path: .github
 
       - name: Download deployment records
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         continue-on-error: true
         with:
           name: deployment-records
