@@ -1,12 +1,12 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Tue, 14 Jul 2026 01:23:58 GMT
+> Last updated: Tue, 14 Jul 2026 07:46:22 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🟡 | 72.0% |
+| **Build Success Rate** | 🔴 | 70.0% |
 | **Open Issues** | 🟢 | 0 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
@@ -18,14 +18,14 @@
 |--------|---------|--------|-------------|
 | `2026-07-06-sy9w` | fix: Add authentication guards to preven | 🔄 | 2d ago |
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 6d ago |
-| `dependabot/github_actions/actions/dependency-review-action-5` | chore(deps): bump actions/dependency-rev | 🔄 | 6d ago |
-| `dependabot/github_actions/actions/download-artifact-8` | chore(deps): bump actions/download-artif | 🔄 | 6d ago |
+| `dependabot/github_actions/actions/dependency-review-action-5` | chore(deps): bump actions/dependency-rev | 🔄 | 7d ago |
+| `dependabot/github_actions/actions/download-artifact-8` | chore(deps): bump actions/download-artif | 🔄 | 7d ago |
 | `dependabot/github_actions/actions/setup-node-6` | chore(deps): bump actions/setup-node fro | 🔄 | 6d ago |
 | `dependabot/github_actions/actions/upload-artifact-7` | chore(deps): bump actions/upload-artifac | 🔄 | 6d ago |
-| `dependabot/github_actions/github/codeql-action-4` | chore(deps): bump github/codeql-action f | 🔄 | 6d ago |
+| `dependabot/github_actions/github/codeql-action-4` | chore(deps): bump github/codeql-action f | 🔄 | 7d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | chore(deps-dev): bump the lint-format gr | 🔄 | 0d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/lint-staged-17.0.8` | chore(deps-dev): bump lint-staged in /ka | 🔄 | 6d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/multi-c62902aa62` | chore(deps-dev): bump esbuild, vite, @vi | 🔄 | 6d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/lint-staged-17.0.8` | chore(deps-dev): bump lint-staged in /ka | 🔄 | 7d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/multi-c62902aa62` | chore(deps-dev): bump esbuild, vite, @vi | 🔄 | 7d ago |
 
 ## 🎯 Active Work
 
@@ -40,8 +40,8 @@ _No open pull requests_
 ## 📈 Recent Activity
 
 ### Top Contributors (Last 100 commits)
-1. **JorelFuji** - 63 commits
-2. **github-actions[bot]** - 33 commits
+1. **JorelFuji** - 62 commits
+2. **github-actions[bot]** - 34 commits
 3. **Claude** - 4 commits
 
 ### Workflow Status
