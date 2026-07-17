@@ -1,12 +1,12 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Thu, 16 Jul 2026 18:55:05 GMT
+> Last updated: Fri, 17 Jul 2026 01:44:44 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🟢 | 92.0% |
+| **Build Success Rate** | 🔴 | 54.0% |
 | **Open Issues** | 🟢 | 0 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
@@ -20,10 +20,10 @@
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 9d ago |
 | `dependabot/github_actions/actions/dependency-review-action-5` | chore(deps): bump actions/dependency-rev | 🔄 | 9d ago |
 | `dependabot/github_actions/actions/download-artifact-8` | chore(deps): bump actions/download-artif | 🔄 | 9d ago |
-| `dependabot/github_actions/actions/setup-node-6` | chore(deps): bump actions/setup-node fro | 🔄 | 9d ago |
+| `dependabot/github_actions/actions/setup-node-7` | chore(deps): bump actions/setup-node fro | 🔄 | 0d ago |
 | `dependabot/github_actions/actions/upload-artifact-7` | chore(deps): bump actions/upload-artifac | 🔄 | 9d ago |
 | `dependabot/github_actions/github/codeql-action-4` | chore(deps): bump github/codeql-action f | 🔄 | 9d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | chore(deps-dev): bump the lint-format gr | 🔄 | 2d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | chore(deps-dev): bump the lint-format gr | 🔄 | 0d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/lint-staged-17.0.8` | chore(deps-dev): bump lint-staged in /ka | 🔄 | 9d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/multi-c62902aa62` | chore(deps-dev): bump esbuild, vite, @vi | 🔄 | 9d ago |
 
@@ -40,16 +40,16 @@ _No open pull requests_
 ## 📈 Recent Activity
 
 ### Top Contributors (Last 100 commits)
-1. **JorelFuji** - 52 commits
-2. **github-actions[bot]** - 44 commits
+1. **JorelFuji** - 51 commits
+2. **github-actions[bot]** - 45 commits
 3. **Claude** - 4 commits
 
 ### Workflow Status
 - ⚪ **Build Optimization**
-- ⚪ **CI**
-- ⚪ **Commit Tracking & Monitoring**
+- ❌ **CI**
+- ✅ **Commit Tracking & Monitoring**
 - ⚪ **Deploy (manual)**
-- ⚪ **Deploy Flutter to Firebase**
+- ✅ **Deploy Flutter to Firebase**
 
 ## 🚀 Deployment History
 
@@ -63,12 +63,12 @@ _No open pull requests_
 
 ## 🔗 Quick Links
 
-- [🎯 View Issues](https://github.com/JorelFuji/shiritori_game/issues)
-- [🔀 View Pull Requests](https://github.com/JorelFuji/shiritori_game/pulls)
-- [⚙️ View Actions](https://github.com/JorelFuji/shiritori_game/actions)
-- [📊 View Insights](https://github.com/JorelFuji/shiritori_game/pulse)
-- [🚀 View Deployments](https://github.com/JorelFuji/shiritori_game/deployments)
+- [🎯 View Issues](https://github.com/Osaka-Oaks/shiritori_game/issues)
+- [🔀 View Pull Requests](https://github.com/Osaka-Oaks/shiritori_game/pulls)
+- [⚙️ View Actions](https://github.com/Osaka-Oaks/shiritori_game/actions)
+- [📊 View Insights](https://github.com/Osaka-Oaks/shiritori_game/pulse)
+- [🚀 View Deployments](https://github.com/Osaka-Oaks/shiritori_game/deployments)
 
 ---
 
-_Auto-generated every 6 hours • [Refresh](https://github.com/JorelFuji/shiritori_game/actions/workflows/status-dashboard.yml)_
+_Auto-generated every 6 hours • [Refresh](https://github.com/Osaka-Oaks/shiritori_game/actions/workflows/status-dashboard.yml)_
