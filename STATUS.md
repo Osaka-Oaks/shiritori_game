@@ -1,16 +1,16 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Sat, 18 Jul 2026 18:45:13 GMT
+> Last updated: Sun, 19 Jul 2026 01:43:44 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 56.0% |
+| **Build Success Rate** | 🔴 | 46.0% |
 | **Open Issues** | 🟢 | 2 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
-| **Commits (24h)** | 🟡 | 4 |
+| **Commits (24h)** | 🟡 | 3 |
 
 ## 🌿 Branch Status
 
@@ -20,10 +20,10 @@
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 11d ago |
 | `dependabot/github_actions/actions/dependency-review-action-5` | chore(deps): bump actions/dependency-rev | 🔄 | 11d ago |
 | `dependabot/github_actions/actions/download-artifact-8` | chore(deps): bump actions/download-artif | 🔄 | 11d ago |
-| `dependabot/github_actions/actions/setup-node-7` | chore(deps): bump actions/setup-node fro | 🔄 | 1d ago |
+| `dependabot/github_actions/actions/setup-node-7` | chore(deps): bump actions/setup-node fro | 🔄 | 2d ago |
 | `dependabot/github_actions/actions/upload-artifact-7` | chore(deps): bump actions/upload-artifac | 🔄 | 11d ago |
 | `dependabot/github_actions/github/codeql-action-4` | chore(deps): bump github/codeql-action f | 🔄 | 11d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | chore(deps-dev): bump the lint-format gr | 🔄 | 1d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | chore(deps-dev): bump the lint-format gr | 🔄 | 2d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/lint-staged-17.0.8` | chore(deps-dev): bump lint-staged in /ka | 🔄 | 11d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/multi-c62902aa62` | chore(deps-dev): bump esbuild, vite, @vi | 🔄 | 11d ago |
 
@@ -40,8 +40,8 @@ _No open pull requests_
 ## 📈 Recent Activity
 
 ### Top Contributors (Last 100 commits)
-1. **github-actions[bot]** - 52 commits
-2. **JorelFuji** - 44 commits
+1. **github-actions[bot]** - 53 commits
+2. **JorelFuji** - 43 commits
 3. **Claude** - 4 commits
 
 ### Workflow Status
@@ -49,7 +49,7 @@ _No open pull requests_
 - ❌ **CI**
 - ✅ **Commit Tracking & Monitoring**
 - ⚪ **Deploy (manual)**
-- ✅ **Deploy Flutter to Firebase**
+- ⚪ **Deploy Flutter to Firebase**
 
 ## 🚀 Deployment History
 
