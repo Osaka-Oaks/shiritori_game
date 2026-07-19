@@ -3,12 +3,14 @@
 ## ✅ All Requested Features Implemented
 
 ### 1. 🚫 No Duplicate Words
+
 - **Player validation**: Checks hiragana, romaji, kanji, and word forms
 - **Bot validation**: AI opponent can't repeat words either
 - **Auto-win**: If bot repeats, player automatically wins
 - **Clear error messages**: Shows which word was repeated
 
 ### 2. 💾 Game Caching & Save System
+
 - **Auto-save to localStorage**: Game state saves after every turn
 - **Persists for 1 hour**: Recovers if you close browser accidentally
 - **Saves**: Played words, scores, turn state, timer, opponent
@@ -16,6 +18,7 @@
 - **Lightweight**: Uses browser localStorage (no backend needed)
 
 ### 3. 📜 Match History & Leaderboard
+
 - **Match history**: Every game saved with scores, chain length, winner
 - **Persistent storage**: Uses localStorage for device-level history
 - **Recent games**: Shows last 3 games on home screen
@@ -24,13 +27,16 @@
 - **Firebase ready**: Structure ready for cloud sync when you add Firebase
 
 ### 4. 🇬🇧 English Translation Display
+
 **Bot Chat (Prominently Displayed):**
+
 ```
-I played "Ringo" (りんご) = 🇬🇧 Apple! 
+I played "Ringo" (りんご) = 🇬🇧 Apple!
 Your turn to match "go". がんばって!
 ```
 
 **Word History Cards:**
+
 - Kanji/Word display
 - Hiragana with romaji badge
 - **🇬🇧 English Translation** (separate bold line)
@@ -39,25 +45,31 @@ Your turn to match "go". がんばって!
 Every word shows its meaning clearly so you can learn while playing!
 
 ### 5. 💡 Hints & Power-ups for Beginners
+
 **Available Power-ups:**
+
 - **💡 Word Hint** (3 uses): Get AI-suggested words starting with required sound
 - **🛡️ Shield Guard** (1 use): One-time protection from timer loss
 - **⏱️ Time Restore**: Shield adds 25 seconds back to timer
 
 **Practice Mode:**
+
 - Flashcard drill to learn vocabulary
 - Chain practice for real scenarios
 - Speed challenge (30 seconds)
 - Example words for each hiragana sound
 
 **Enhanced Rules View:**
+
 - **Strategy Tab**: Safe starter words, dangerous endings
 - **Advanced Tab**: 4 difficulty levels explained
 - **Scoring Tab**: Point system and power-up costs
 - **Visual examples**: Word chain demos with emojis
 
 ### 6. 🌸 Sleek, Modern, Cute Japanese Design
+
 **Current Aesthetic:**
+
 - ✅ Kawaii Material Design 3 color scheme
 - ✅ Soft rounded corners and shadows
 - ✅ Cherry blossom theme
@@ -69,7 +81,9 @@ Every word shows its meaning clearly so you can learn while playing!
 - ✅ Responsive mobile-first design
 
 ### 7. 🎮 Unity WebGL Integration (Ready)
+
 **Created Components:**
+
 - `UnityGameView.tsx` - Unity loader with progress bar
 - React ↔ Unity bidirectional communication
 - Fullscreen support
@@ -77,6 +91,7 @@ Every word shows its meaning clearly so you can learn while playing!
 - Error handling with setup instructions
 
 **Architecture:**
+
 ```
 React (App Shell)
 ├── Login & Menus
@@ -90,11 +105,13 @@ React (App Shell)
 ```
 
 **To Activate:**
+
 1. Build Unity project as WebGL
 2. Place files in `public/unity/Build/`
 3. Component auto-loads when accessed
 
 **Unity Features Ready:**
+
 - 2D/3D character animations
 - Word appearance effects
 - Cherry blossom particles for correct words
@@ -103,16 +120,20 @@ React (App Shell)
 - Victory celebrations
 
 ### 8. 📚 Comprehensive Rules System
+
 **4-Tab Interface:**
 
 #### 📚 Basic Rules Tab
+
 - 4 core rules with icons
 - Visual word chain examples
 - Fatal word warnings (ん endings)
 - Beginner-friendly explanations
 
 #### 🎯 Strategy Tab
+
 **For Competing with Native Speakers:**
+
 - Safe starter words (150-200 word vocabulary)
 - 8 common kana with 3 words each
 - Force easy sounds strategy
@@ -120,6 +141,7 @@ React (App Shell)
 - Goal: Survival > Winning
 
 **Example Strategy:**
+
 ```
 Learn words for: あいうかさたなま
 Force endings: か, さ, た, な, ま
@@ -127,19 +149,24 @@ Avoid: ん (fatal), ゆ, ぢ, ぴ (limited options)
 ```
 
 #### ⚡ Advanced Tab
+
 **4 Difficulty Levels:**
+
 1. **Level 1 (Beginner)**: Romaji allowed, no timer, hints
 2. **Level 2 (Normal)**: Hiragana only, 20s timer, no hints
 3. **Level 3 (Speed Battle)**: 10s timer, must say meaning
 4. **Level 4 (Native Challenge)**: 5s timer, kanji required, final 2-kana mode
 
 **Expert Mode:**
+
 - Final 2-kana matching (さくら → next starts with くら)
 - Category limits (animals, food, places only)
 - Trap mode (bonus for forcing opponent into hard kana)
 
 #### 🏆 Scoring Tab
+
 **Point System:**
+
 - Valid word: +50
 - Word with kanji: +20
 - Answer under 5 sec: +30
@@ -151,12 +178,15 @@ Avoid: ん (fatal), ゆ, ぢ, ぴ (limited options)
 - Use hint: -10
 
 **Win Conditions:**
+
 - First to 500 points
 - Last player standing
 - Best of 3 rounds
 
 ### 9. 👥 Multiplayer Infrastructure (Ready)
+
 **Created Components:**
+
 - `MultiplayerView.tsx` - Room management UI
 - `firebase-config.ts` - Firebase initialization
 - Room creation with 6-digit codes
@@ -165,6 +195,7 @@ Avoid: ん (fatal), ゆ, ぢ, ぴ (limited options)
 
 **To Activate:**
 Add Firebase config to `.env`:
+
 ```env
 VITE_FIREBASE_API_KEY=...
 VITE_FIREBASE_AUTH_DOMAIN=...
@@ -172,6 +203,7 @@ VITE_FIREBASE_DATABASE_URL=...
 ```
 
 ### 10. 📖 500+ Word Dictionary
+
 - JLPT N5-N3 vocabulary
 - Hiragana, romaji, kanji, translations
 - Indexed by start/end sounds
@@ -183,6 +215,7 @@ VITE_FIREBASE_DATABASE_URL=...
 ## 🎯 Game Modes Available
 
 ### 1. **Bot Match** (Single Player)
+
 - 3 AI difficulty levels
 - Gemini AI validation
 - Timer pressure
@@ -190,6 +223,7 @@ VITE_FIREBASE_DATABASE_URL=...
 - Score tracking
 
 ### 2. **Practice Mode**
+
 - Flashcard drill
 - Chain practice
 - Speed challenge (30s)
@@ -197,12 +231,14 @@ VITE_FIREBASE_DATABASE_URL=...
 - Example words
 
 ### 3. **Multiplayer** (Ready for Firebase)
+
 - Room creation/joining
 - 2-4 players
 - Real-time turns
 - Casual/competitive modes
 
 ### 4. **Unity Enhanced** (Optional)
+
 - 3D game board
 - Character animations
 - Visual effects
@@ -213,6 +249,7 @@ VITE_FIREBASE_DATABASE_URL=...
 ## 🎨 UI/UX Features
 
 ### Visual Design
+
 - ✅ Kawaii aesthetic with soft colors
 - ✅ Material Design 3 principles
 - ✅ Cherry blossom theme
@@ -221,6 +258,7 @@ VITE_FIREBASE_DATABASE_URL=...
 - ✅ Mobile-responsive
 
 ### User Experience
+
 - ✅ Clear feedback (success/error modals)
 - ✅ Audio pronunciation
 - ✅ Visual word history
@@ -230,6 +268,7 @@ VITE_FIREBASE_DATABASE_URL=...
 - ✅ Profile customization
 
 ### Accessibility
+
 - ✅ Romaji input support
 - ✅ Hiragana conversion
 - ✅ Clear error messages
@@ -241,6 +280,7 @@ VITE_FIREBASE_DATABASE_URL=...
 ## 🚀 Tech Stack
 
 **Frontend:**
+
 - React 19 + TypeScript
 - Vite 6.2
 - Tailwind CSS 4.1
@@ -248,15 +288,18 @@ VITE_FIREBASE_DATABASE_URL=...
 - Lucide React icons
 
 **Backend:**
+
 - Express server
 - Google Gemini AI
 - Firebase (ready to activate)
 
 **Game Engine:**
+
 - Unity WebGL (optional)
 - react-unity-webgl integration
 
 **Data Storage:**
+
 - localStorage (game state, history)
 - Firebase Realtime Database (ready)
 - Firestore (ready for profiles)
@@ -266,12 +309,14 @@ VITE_FIREBASE_DATABASE_URL=...
 ## 📱 Platform Support
 
 **Currently Working:**
+
 - ✅ Desktop browsers (Chrome, Firefox, Safari, Edge)
 - ✅ Mobile browsers (iOS Safari, Chrome)
 - ✅ Responsive design (phone, tablet, desktop)
 - ✅ PWA installable
 
 **Ready to Add:**
+
 - Unity WebGL (needs build files)
 - Firebase multiplayer (needs config)
 - Cloud save sync (needs Firebase)
@@ -281,6 +326,7 @@ VITE_FIREBASE_DATABASE_URL=...
 ## 🎓 Learning Features
 
 ### For Beginners
+
 - 150-200 word starter vocabulary
 - Safe sound strategies
 - Visual word chains
@@ -288,12 +334,14 @@ VITE_FIREBASE_DATABASE_URL=...
 - Practice mode with no pressure
 
 ### For Intermediate
+
 - Speed challenges
 - Category thinking
 - Kanji learning
 - Advanced scoring
 
 ### For Advanced
+
 - Native speaker competition
 - Final 2-kana mode
 - Speed mode (5-10s)
@@ -304,18 +352,21 @@ VITE_FIREBASE_DATABASE_URL=...
 ## 🔥 Competitive Features
 
 ### Rankings
+
 - Player score tracking
 - Win/loss records
 - Chain length records
 - Leaderboard with avatars
 
 ### Challenges
+
 - Time pressure modes
 - Difficulty escalation
 - Power-up strategy
 - Category restrictions
 
 ### Achievements (Ready to Add)
+
 - First win
 - 10-word chain
 - Speed demon (5s answers)
@@ -327,6 +378,7 @@ VITE_FIREBASE_DATABASE_URL=...
 ## 📈 What You Can Do Right Now
 
 ### ✅ Working Features (No Setup)
+
 1. Play bot matches (3 difficulty levels)
 2. Practice mode (flashcard, chain, speed)
 3. Browse dictionary (500+ words)
@@ -338,11 +390,13 @@ VITE_FIREBASE_DATABASE_URL=...
 9. Game auto-save
 
 ### 🔧 Need Configuration
+
 1. **Unity WebGL**: Need Unity build files
 2. **Multiplayer**: Need Firebase config
 3. **Cloud Save**: Need Firebase config
 
 ### 🎯 Future Enhancements (Optional)
+
 - Voice input (speech-to-text)
 - Daily challenges
 - Achievement system
@@ -357,21 +411,25 @@ VITE_FIREBASE_DATABASE_URL=...
 ## 🎮 How to Play with Native Speaker
 
 ### Week 1-2: Foundation
+
 - Practice mode daily (15 min)
 - Learn 50 common words
 - Memorize safe endings
 
 ### Week 3-4: Build Confidence
+
 - Play bot matches (easy → medium)
 - Learn 100 more words
 - Practice category thinking
 
 ### Week 5-6: Speed Training
+
 - Speed challenge mode
 - 10-second response drills
 - Learn dangerous sounds
 
 ### Week 7-8: Native Ready
+
 - Play hard bot
 - Consistent 5-10 word chains
 - 200+ word vocabulary
@@ -407,7 +465,7 @@ You now have a **production-ready** Shiritori game with:
 ✅ 500+ word dictionary  
 ✅ Practice mode  
 ✅ Multiplayer (ready for Firebase)  
-✅ Mobile responsive  
+✅ Mobile responsive
 
 **Your game is ready to help you compete with native speakers!**
 

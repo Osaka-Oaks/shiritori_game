@@ -5,13 +5,13 @@
   "type": "module",
   "description": "Bilingual Shiritori — real-time two-player Japanese word-chain game (PWA, Firebase).",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0"
   },
   "scripts": {
     "dev": "vite",
-    "build": "npx tsc --noEmit && npx vite build",
-    "type-check": "npx tsc --noEmit",
-    "lint": "eslint . --quiet",
+    "build": "node ../scripts/generate-firebase-public-config.mjs shiritori-online && npx tsc --noEmit --incremental && npx vite build",
+    "type-check": "npx tsc --noEmit --incremental",
+    "lint": "eslint . --quiet --cache --cache-location .eslintcache",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"*.{json,yml,yaml}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"*.{json,yml,yaml}\"",
@@ -26,7 +26,7 @@
     "test:rules": "firebase emulators:exec --only database \"node scripts/test-database-rules.mjs\""
   },
   "dependencies": {
-    "firebase": "^10.13.0",
+    "firebase": "^12.16.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

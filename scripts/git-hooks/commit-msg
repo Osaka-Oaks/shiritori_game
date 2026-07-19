@@ -1,0 +1,76 @@
+#!/bin/bash
+# Commit message hook - enforces conventional commits
+# Install: ln -s ../../scripts/git-hooks/commit-msg .git/hooks/commit-msg
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Skip if merge commit
+if echo "$COMMIT_MSG" | grep -qE "^Merge"; then
+  exit 0
+fi
+
+# Skip if revert commit
+if echo "$COMMIT_MSG" | grep -qE "^Revert"; then
+  exit 0
+fi
+
+# Skip if [skip ci] or automated commit
+if echo "$COMMIT_MSG" | grep -qE "\[skip ci\]|\[bot\]"; then
+  exit 0
+fi
+
+# Conventional commit pattern
+PATTERN="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert|security)(\([a-z0-9\-]+\))?: .{1,50}"
+
+if ! echo "$COMMIT_MSG" | grep -qE "$PATTERN"; then
+  echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  echo -e "${RED}❌ Invalid commit message format${NC}"
+  echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  echo ""
+  echo -e "${YELLOW}Your commit message:${NC}"
+  echo -e "  $COMMIT_MSG"
+  echo ""
+  echo -e "${YELLOW}Required format:${NC}"
+  echo -e "  type(scope): subject"
+  echo ""
+  echo -e "${YELLOW}Valid types:${NC}"
+  echo -e "  feat     - New feature"
+  echo -e "  fix      - Bug fix"
+  echo -e "  docs     - Documentation"
+  echo -e "  style    - Code style"
+  echo -e "  refactor - Code refactoring"
+  echo -e "  perf     - Performance"
+  echo -e "  test     - Testing"
+  echo -e "  build    - Build system"
+  echo -e "  ci       - CI/CD"
+  echo -e "  chore    - Maintenance"
+  echo -e "  security - Security fix"
+  echo ""
+  echo -e "${YELLOW}Examples:${NC}"
+  echo -e "  feat(kawaii): add dark mode"
+  echo -e "  fix(online): resolve timeout"
+  echo -e "  docs: update README"
+  echo ""
+  echo -e "${YELLOW}Scope (optional):${NC}"
+  echo -e "  online, kawaii, ci, deps, firebase, ui, api, etc."
+  echo ""
+  exit 1
+fi
+
+# Check subject length (first line)
+SUBJECT=$(echo "$COMMIT_MSG" | head -n 1)
+LENGTH=${#SUBJECT}
+
+if [ $LENGTH -gt 72 ]; then
+  echo -e "${YELLOW}⚠️  Warning: Subject line is ${LENGTH} characters (recommend <72)${NC}"
+fi
+
+# Success
+echo -e "${GREEN}✅ Commit message format valid${NC}"
+exit 0

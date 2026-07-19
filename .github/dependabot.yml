@@ -36,3 +36,13 @@ updates:
     schedule:
       interval: monthly
     labels: ["dependencies", "ci"]
+
+  - package-ecosystem: pub
+    directory: /shiritori_flutter
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    reviewers:
+      - "JorelFuji"
+    labels: ["dependencies", "flutter"]

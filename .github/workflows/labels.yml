@@ -1,0 +1,55 @@
+name: Labels & project board
+
+# Keeps repo labels in sync with .github/labels.yml, auto-labels PRs by path,
+# and adds new issues/PRs to the Kanban project board.
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/labels.yml"
+      - ".github/labeler.yml"
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  issues:
+    types: [opened, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  sync-labels:
+    name: Sync labels
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: crazy-max/ghaction-github-labeler@v5
+        with:
+          yaml-file: .github/labels.yml
+          skip-delete: true
+
+  label-pr:
+    name: Auto-label PR by path
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/labeler@v5
+        with:
+          configuration-path: .github/labeler.yml
+
+  add-to-board:
+    name: Add to Kanban board
+    runs-on: ubuntu-latest
+    # Requires a repo/org secret ADD_TO_PROJECT_PAT (a PAT with 'project' scope)
+    # and the PROJECT_URL below. Skips gracefully until configured.
+    if: ${{ vars.PROJECT_URL != '' }}
+    steps:
+      - uses: actions/add-to-project@v1
+        with:
+          project-url: ${{ vars.PROJECT_URL }}
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}

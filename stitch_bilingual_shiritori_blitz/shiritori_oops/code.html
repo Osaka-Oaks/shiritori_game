@@ -1,164 +1,218 @@
-<!DOCTYPE html><html class="light" lang="en"><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>Shiritori - Oops!</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "surface-container-high": "#eee4ff",
-                        "secondary-fixed": "#92f5dc",
-                        "on-surface-variant": "#544246",
-                        "on-secondary-fixed-variant": "#005143",
-                        "on-background": "#1e1830",
-                        "on-tertiary-container": "#564400",
-                        "primary-container": "#ff94b4",
-                        "surface-container-highest": "#e9ddff",
-                        "surface": "#fdf7ff",
-                        "secondary-fixed-dim": "#76d8c0",
-                        "on-secondary-fixed": "#00201a",
-                        "on-primary-container": "#7a2846",
-                        "primary-fixed-dim": "#ffb1c6",
-                        "on-tertiary-fixed-variant": "#574500",
-                        "surface-variant": "#e9ddff",
-                        "surface-container-lowest": "#ffffff",
-                        "on-tertiary": "#ffffff",
-                        "surface-tint": "#98415e",
-                        "surface-container-low": "#f8f1ff",
-                        "surface-bright": "#fdf7ff",
-                        "on-primary-fixed-variant": "#7b2947",
-                        "tertiary-fixed": "#ffe088",
-                        "inverse-primary": "#ffb1c6",
-                        "tertiary-container": "#d4b142",
-                        "outline-variant": "#d9c0c5",
-                        "outline": "#867276",
-                        "on-tertiary-fixed": "#241a00",
-                        "tertiary": "#735c00",
-                        "on-surface": "#1e1830",
-                        "surface-dim": "#e0d5f6",
-                        "surface-container": "#f3eaff",
-                        "secondary-container": "#92f5dc",
-                        "tertiary-fixed-dim": "#e7c353",
-                        "error": "#ba1a1a",
-                        "inverse-surface": "#332c46",
-                        "on-secondary-container": "#007260",
-                        "on-primary-fixed": "#3f001b",
-                        "on-error-container": "#93000a",
-                        "primary": "#98415e",
-                        "error-container": "#ffdad6",
-                        "inverse-on-surface": "#f6eeff",
-                        "on-error": "#ffffff",
-                        "on-secondary": "#ffffff",
-                        "primary-fixed": "#ffd9e1",
-                        "on-primary": "#ffffff",
-                        "secondary": "#006b5a",
-                        "background": "#fdf7ff"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "container-margin": "24px",
-                        "bubble-padding": "16px",
-                        "unit": "8px",
-                        "gutter": "16px"
-                    },
-                    "fontFamily": {
-                        "headline-lg-mobile": ["Plus Jakarta Sans"],
-                        "label-caps": ["Quicksand"],
-                        "headline-lg": ["Plus Jakarta Sans"],
-                        "display-game": ["Plus Jakarta Sans"],
-                        "body-lg": ["Quicksand"],
-                        "body-md": ["Quicksand"]
-                    },
-                    "fontSize": {
-                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
-                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
-                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
-                        "display-game": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
-                        "body-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
-                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}]
-                    }
-                }
-            }
-        }
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Shiritori - Oops!</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-high": "#eee4ff",
+              "secondary-fixed": "#92f5dc",
+              "on-surface-variant": "#544246",
+              "on-secondary-fixed-variant": "#005143",
+              "on-background": "#1e1830",
+              "on-tertiary-container": "#564400",
+              "primary-container": "#ff94b4",
+              "surface-container-highest": "#e9ddff",
+              surface: "#fdf7ff",
+              "secondary-fixed-dim": "#76d8c0",
+              "on-secondary-fixed": "#00201a",
+              "on-primary-container": "#7a2846",
+              "primary-fixed-dim": "#ffb1c6",
+              "on-tertiary-fixed-variant": "#574500",
+              "surface-variant": "#e9ddff",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "surface-tint": "#98415e",
+              "surface-container-low": "#f8f1ff",
+              "surface-bright": "#fdf7ff",
+              "on-primary-fixed-variant": "#7b2947",
+              "tertiary-fixed": "#ffe088",
+              "inverse-primary": "#ffb1c6",
+              "tertiary-container": "#d4b142",
+              "outline-variant": "#d9c0c5",
+              outline: "#867276",
+              "on-tertiary-fixed": "#241a00",
+              tertiary: "#735c00",
+              "on-surface": "#1e1830",
+              "surface-dim": "#e0d5f6",
+              "surface-container": "#f3eaff",
+              "secondary-container": "#92f5dc",
+              "tertiary-fixed-dim": "#e7c353",
+              error: "#ba1a1a",
+              "inverse-surface": "#332c46",
+              "on-secondary-container": "#007260",
+              "on-primary-fixed": "#3f001b",
+              "on-error-container": "#93000a",
+              primary: "#98415e",
+              "error-container": "#ffdad6",
+              "inverse-on-surface": "#f6eeff",
+              "on-error": "#ffffff",
+              "on-secondary": "#ffffff",
+              "primary-fixed": "#ffd9e1",
+              "on-primary": "#ffffff",
+              secondary: "#006b5a",
+              background: "#fdf7ff",
+            },
+            borderRadius: {
+              DEFAULT: "1rem",
+              lg: "2rem",
+              xl: "3rem",
+              full: "9999px",
+            },
+            spacing: {
+              "container-margin": "24px",
+              "bubble-padding": "16px",
+              unit: "8px",
+              gutter: "16px",
+            },
+            fontFamily: {
+              "headline-lg-mobile": ["Plus Jakarta Sans"],
+              "label-caps": ["Quicksand"],
+              "headline-lg": ["Plus Jakarta Sans"],
+              "display-game": ["Plus Jakarta Sans"],
+              "body-lg": ["Quicksand"],
+              "body-md": ["Quicksand"],
+            },
+            fontSize: {
+              "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "700" }],
+              "label-caps": [
+                "12px",
+                { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" },
+              ],
+              "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "700" }],
+              "display-game": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "800" },
+              ],
+              "body-lg": ["20px", { lineHeight: "28px", fontWeight: "500" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "500" }],
+            },
+          },
+        },
+      };
     </script>
-<style>
-        .rain-pattern {
-            background-image: radial-gradient(var(--tw-colors-primary-container) 2px, transparent 2px);
-            background-size: 32px 32px;
-            opacity: 0.3;
-        }
-        .squish-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 0 0 0 rgba(0,0,0,0) !important;
-        }
+    <style>
+      .rain-pattern {
+        background-image: radial-gradient(var(--tw-colors-primary-container) 2px, transparent 2px);
+        background-size: 32px 32px;
+        opacity: 0.3;
+      }
+      .squish-btn:active {
+        transform: translateY(2px);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
+      }
     </style>
-</head>
-<body class="bg-surface dark:bg-background min-h-screen flex flex-col items-center relative overflow-x-hidden font-body-md text-body-md text-on-surface">
-<!-- Ambient Background -->
-<div class="absolute inset-0 rain-pattern pointer-events-none z-0"></div>
-<!-- TopAppBar -->
-<!-- Note: Top nav is hidden on mobile, full nav cluster shown on desktop. For this specific Oops feedback screen (transactional/linear), the instruction says "Automatic Suppression: You MUST exclude the navigation shell if the page intent is Linear/Transactional... However, the prompt EXPLICITLY asks: 'Includes a primary action button 'Try Again' and the shared navigation components.' -->
-<!-- I will follow the explicit prompt instruction to include the shared navigation components, despite the semantic shell mandate suggesting suppression, as specific prompt instructions override general rules. Wait, Source of Truth says: Contextual State & Identity logic. Actually, an "Oops" screen is an error/feedback screen. "Relevance Check: If the page content (e.g., "Privacy Policy" or "Error 404") does not logically sit under the categories defined in the JSON, suppress the navigation to prioritize the content canvas." -->
-<!-- However, the prompt literally says "Includes a primary action button 'Try Again' and the shared navigation components." I will include them to satisfy the prompt. -->
-<header class="w-full top-0 bg-surface dark:bg-background z-50 flex justify-between items-center px-container-margin py-unit w-full max-w-full hidden md:flex">
-<button class="text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-transform active:scale-95 duration-200 p-2 rounded-full">
-<span class="material-symbols-outlined text-2xl">menu</span>
-</button>
-<h1 class="font-display-game text-headline-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tighter">SHIRITORI</h1>
-<button class="text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-transform active:scale-95 duration-200 p-2 rounded-full">
-<span class="material-symbols-outlined text-2xl">settings</span>
-</button>
-</header>
-<!-- Main Content Canvas -->
-<main class="flex-1 w-full max-w-md mx-auto flex flex-col items-center justify-center px-container-margin py-12 relative z-10">
-<!-- Glassmorphism Card for Oops State -->
-<div class="bg-surface-container-lowest/80 backdrop-blur-md w-full rounded-xl p-8 flex flex-col items-center text-center shadow-[0_8px_32px_rgba(152,65,94,0.1)] border border-surface-variant">
-<!-- Mascot Image -->
-<div class="w-48 h-48 mb-6 relative">
-<img alt="Confused Mascot" class="w-full h-full object-contain drop-shadow-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDveFYsKgkorVEVvyG8y1RXU65eV4xXjssWR9ddJFJ6AfaJrWM4zsCqXALjRCebFfatbks3e6NZsga8jPNtvU7iYYzbOFEGH3FnMVhjlBLLM8L4A-TCvU96Iyq_U9HmC15JVpYF1wykSPYZeomMHz4AeBF2yEWOJAowHZvqOxLzBZXAVLTh9zlP0cTCmxyOa1ame2fJc8gtRV53TATHhA0tDb215Lsg0h-A2vQv5w-DB8b0I_o0dAVgWbGkzdkywp6p4axPucg5S9Al">
-</div>
-<!-- Feedback Text -->
-<h2 class="font-display-game text-display-game text-primary mb-4 drop-shadow-sm">MADA MADA...</h2>
-<p class="font-body-lg text-body-lg text-on-surface-variant mb-8 px-4">
-                That word doesn't work! Try another one.
-            </p>
-<!-- Primary Action Button -->
-<a href="{{DATA:SCREEN:SCREEN_14}}" class="squish-btn w-full max-w-[240px] bg-primary text-on-primary font-headline-lg-mobile text-headline-lg-mobile py-4 px-8 rounded-full shadow-[0_4px_0_var(--tw-colors-on-primary-fixed-variant)] transition-all duration-150 flex items-center justify-center gap-2">
-<span class="material-symbols-outlined">refresh</span>
-                Try Again
-            </a>
-</div>
-</main>
-<!-- BottomNavBar (Mobile Only) -->
-<!-- Active state semantic matching: Since this is playing the game (trying a word), "Play" is the closest logical match. -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container dark:bg-surface-container-high rounded-t-lg shadow-[0_-4px_10px_rgba(152,65,94,0.1)] md:hidden">
-<!-- Play (Active) -->
-<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-fixed text-on-primary-container dark:text-on-primary-fixed-variant rounded-full px-5 py-1 active:translate-y-0.5 transition-all duration-150 hover:opacity-80" href="{{DATA:SCREEN:SCREEN_13}}">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
-<span class="font-label-caps text-label-caps mt-1">Play</span>
-</a>
-<!-- History (Inactive) -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant active:translate-y-0.5 transition-all duration-150 hover:opacity-80 px-5 py-1" href="{{DATA:SCREEN:SCREEN_5}}">
-<span class="material-symbols-outlined">history</span>
-<span class="font-label-caps text-label-caps mt-1">History</span>
-</a>
-<!-- Profile (Inactive) -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant active:translate-y-0.5 transition-all duration-150 hover:opacity-80 px-5 py-1" href="{{DATA:SCREEN:SCREEN_9}}">
-<span class="material-symbols-outlined">person</span>
-<span class="font-label-caps text-label-caps mt-1">Profile</span>
-</a>
-</nav>
-
-
-</body></html>
+  </head>
+  <body
+    class="bg-surface dark:bg-background min-h-screen flex flex-col items-center relative overflow-x-hidden font-body-md text-body-md text-on-surface"
+  >
+    <!-- Ambient Background -->
+    <div class="absolute inset-0 rain-pattern pointer-events-none z-0"></div>
+    <!-- TopAppBar -->
+    <!-- Note: Top nav is hidden on mobile, full nav cluster shown on desktop. For this specific Oops feedback screen (transactional/linear), the instruction says "Automatic Suppression: You MUST exclude the navigation shell if the page intent is Linear/Transactional... However, the prompt EXPLICITLY asks: 'Includes a primary action button 'Try Again' and the shared navigation components.' -->
+    <!-- I will follow the explicit prompt instruction to include the shared navigation components, despite the semantic shell mandate suggesting suppression, as specific prompt instructions override general rules. Wait, Source of Truth says: Contextual State & Identity logic. Actually, an "Oops" screen is an error/feedback screen. "Relevance Check: If the page content (e.g., "Privacy Policy" or "Error 404") does not logically sit under the categories defined in the JSON, suppress the navigation to prioritize the content canvas." -->
+    <!-- However, the prompt literally says "Includes a primary action button 'Try Again' and the shared navigation components." I will include them to satisfy the prompt. -->
+    <header
+      class="w-full top-0 bg-surface dark:bg-background z-50 flex justify-between items-center px-container-margin py-unit w-full max-w-full hidden md:flex"
+    >
+      <button
+        class="text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-transform active:scale-95 duration-200 p-2 rounded-full"
+      >
+        <span class="material-symbols-outlined text-2xl">menu</span>
+      </button>
+      <h1
+        class="font-display-game text-headline-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tighter"
+      >
+        SHIRITORI
+      </h1>
+      <button
+        class="text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-transform active:scale-95 duration-200 p-2 rounded-full"
+      >
+        <span class="material-symbols-outlined text-2xl">settings</span>
+      </button>
+    </header>
+    <!-- Main Content Canvas -->
+    <main
+      class="flex-1 w-full max-w-md mx-auto flex flex-col items-center justify-center px-container-margin py-12 relative z-10"
+    >
+      <!-- Glassmorphism Card for Oops State -->
+      <div
+        class="bg-surface-container-lowest/80 backdrop-blur-md w-full rounded-xl p-8 flex flex-col items-center text-center shadow-[0_8px_32px_rgba(152,65,94,0.1)] border border-surface-variant"
+      >
+        <!-- Mascot Image -->
+        <div class="w-48 h-48 mb-6 relative">
+          <img
+            alt="Confused Mascot"
+            class="w-full h-full object-contain drop-shadow-md"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDveFYsKgkorVEVvyG8y1RXU65eV4xXjssWR9ddJFJ6AfaJrWM4zsCqXALjRCebFfatbks3e6NZsga8jPNtvU7iYYzbOFEGH3FnMVhjlBLLM8L4A-TCvU96Iyq_U9HmC15JVpYF1wykSPYZeomMHz4AeBF2yEWOJAowHZvqOxLzBZXAVLTh9zlP0cTCmxyOa1ame2fJc8gtRV53TATHhA0tDb215Lsg0h-A2vQv5w-DB8b0I_o0dAVgWbGkzdkywp6p4axPucg5S9Al"
+          />
+        </div>
+        <!-- Feedback Text -->
+        <h2 class="font-display-game text-display-game text-primary mb-4 drop-shadow-sm">
+          MADA MADA...
+        </h2>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mb-8 px-4">
+          That word doesn't work! Try another one.
+        </p>
+        <!-- Primary Action Button -->
+        <a
+          href="{{DATA:SCREEN:SCREEN_14}}"
+          class="squish-btn w-full max-w-[240px] bg-primary text-on-primary font-headline-lg-mobile text-headline-lg-mobile py-4 px-8 rounded-full shadow-[0_4px_0_var(--tw-colors-on-primary-fixed-variant)] transition-all duration-150 flex items-center justify-center gap-2"
+        >
+          <span class="material-symbols-outlined">refresh</span>
+          Try Again
+        </a>
+      </div>
+    </main>
+    <!-- BottomNavBar (Mobile Only) -->
+    <!-- Active state semantic matching: Since this is playing the game (trying a word), "Play" is the closest logical match. -->
+    <nav
+      class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container dark:bg-surface-container-high rounded-t-lg shadow-[0_-4px_10px_rgba(152,65,94,0.1)] md:hidden"
+    >
+      <!-- Play (Active) -->
+      <a
+        class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-fixed text-on-primary-container dark:text-on-primary-fixed-variant rounded-full px-5 py-1 active:translate-y-0.5 transition-all duration-150 hover:opacity-80"
+        href="{{DATA:SCREEN:SCREEN_13}}"
+      >
+        <span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1"
+          >sports_esports</span
+        >
+        <span class="font-label-caps text-label-caps mt-1">Play</span>
+      </a>
+      <!-- History (Inactive) -->
+      <a
+        class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant active:translate-y-0.5 transition-all duration-150 hover:opacity-80 px-5 py-1"
+        href="{{DATA:SCREEN:SCREEN_5}}"
+      >
+        <span class="material-symbols-outlined">history</span>
+        <span class="font-label-caps text-label-caps mt-1">History</span>
+      </a>
+      <!-- Profile (Inactive) -->
+      <a
+        class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant active:translate-y-0.5 transition-all duration-150 hover:opacity-80 px-5 py-1"
+        href="{{DATA:SCREEN:SCREEN_9}}"
+      >
+        <span class="material-symbols-outlined">person</span>
+        <span class="font-label-caps text-label-caps mt-1">Profile</span>
+      </a>
+    </nav>
+  </body>
+</html>

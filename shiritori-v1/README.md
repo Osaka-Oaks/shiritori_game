@@ -61,6 +61,7 @@ behaves like an app.
 3. Take turns. Each word must start with the previous word's chain kana.
 
 Rules enforced in `lib/shiritori.js`:
+
 - kana only (hiragana/katakana; katakana normalized to hiragana for matching)
 - no repeats
 - small-kana promotion: しゃ chains to や

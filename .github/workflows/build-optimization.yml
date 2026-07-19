@@ -1,0 +1,177 @@
+name: Build Optimization
+
+# Manual only — metrics/benchmarks. Main CI is ci.yml (avoids duplicate builds on every push).
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: App to benchmark
+        type: choice
+        options: [shiritori-online, kawaii-shiritori, both]
+        default: both
+
+env:
+  NODE_VERSION: "20"
+  CACHE_VERSION: v2
+
+jobs:
+  # Fast build with optimizations
+  optimized-build:
+    name: Optimized Build
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        app: [shiritori-online, kawaii-shiritori]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1 # Shallow clone for speed
+
+      - name: Setup Node.js with cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: "${{ matrix.app }}/package-lock.json"
+
+      # Aggressive caching strategy
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: |
+            ${{ matrix.app }}/node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ env.CACHE_VERSION }}-${{ matrix.app }}-${{ hashFiles(format('{0}/package-lock.json', matrix.app)) }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ env.CACHE_VERSION }}-${{ matrix.app }}-
+            ${{ runner.os }}-node-${{ env.CACHE_VERSION }}-
+
+      - name: Cache build output
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ matrix.app }}/dist
+            ${{ matrix.app }}/.vite
+            ${{ matrix.app }}/build
+          key: ${{ runner.os }}-build-${{ matrix.app }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ matrix.app }}-
+
+      - name: Install dependencies (if cache miss)
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: |
+          cd ${{ matrix.app }}
+          npm ci --prefer-offline --no-audit
+
+      - name: Build with optimizations
+        run: |
+          cd ${{ matrix.app }}
+
+          # Use production optimizations
+          export NODE_ENV=production
+          export GENERATE_SOURCEMAP=false
+
+          # Build with timing
+          time npm run build
+        env:
+          CI: true
+
+      - name: Analyze bundle size
+        run: |
+          cd ${{ matrix.app }}
+
+          # Check bundle size
+          du -sh dist/ || du -sh build/
+
+          # Report largest files
+          find dist/ -type f -o -path build/ -type f | xargs ls -lh | sort -k5 -hr | head -10 || true
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.app }}-build
+          path: ${{ matrix.app }}/dist
+          retention-days: 7
+
+      - name: Report build time
+        run: |
+          echo "::notice title=Build Complete::${{ matrix.app }} built successfully"
+
+  # Parallel testing for speed
+  parallel-test:
+    name: Parallel Tests
+    runs-on: ubuntu-latest
+    needs: optimized-build
+
+    strategy:
+      fail-fast: false
+      matrix:
+        test-group: [unit, integration, e2e]
+        app: [kawaii-shiritori]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ matrix.app }}/node_modules
+          key: ${{ runner.os }}-node-${{ env.CACHE_VERSION }}-${{ matrix.app }}-${{ hashFiles(format('{0}/package-lock.json', matrix.app)) }}
+
+      - name: Run ${{ matrix.test-group }} tests
+        run: |
+          cd ${{ matrix.app }}
+          npm test -- --run
+
+  # Build time monitoring
+  build-metrics:
+    name: Build Metrics
+    runs-on: ubuntu-latest
+    needs: [optimized-build, parallel-test]
+    if: always()
+
+    steps:
+      - name: Calculate build times
+        run: |
+          echo "Build completed"
+          echo "Total workflow time: ${{ github.event.workflow_run.conclusion }}"
+
+      - name: Send metrics to Datadog
+        if: github.ref == 'refs/heads/main'
+        env:
+          DD_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+        run: |
+          # Send build time metric
+          curl -X POST "https://api.datadoghq.com/api/v1/series" \
+            -H "Content-Type: application/json" \
+            -H "DD-API-KEY: ${DD_API_KEY}" \
+            -d @- << EOF
+          {
+            "series": [
+              {
+                "metric": "ci.build.duration",
+                "points": [[$(date +%s), ${{ github.event.workflow_run.duration }}]],
+                "type": "gauge",
+                "tags": ["app:shiritori", "branch:${{ github.ref_name }}"]
+              }
+            ]
+          }
+          EOF
+
+# Optimization notes:
+# 1. Shallow clone (fetch-depth: 1)
+# 2. Aggressive caching (node_modules, build output)
+# 3. Parallel jobs (matrix strategy)
+# 4. Skip unnecessary steps (no audit, prefer offline)
+# 5. Disable source maps in CI
+# 6. Parallel testing

@@ -1,0 +1,95 @@
+name: CI - UI Package
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "packages/ui/**"
+      - "packages/core/**"
+      - "packages/shared/**"
+      - ".github/workflows/ci-ui.yml"
+      - "pnpm-lock.yaml"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "packages/ui/**"
+      - "packages/core/**"
+      - "packages/shared/**"
+
+jobs:
+  test:
+    name: Test UI Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+
+      - name: 📚 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🏗️ Build dependencies (core, shared)
+        run: |
+          pnpm --filter @shiritori/shared build
+          pnpm --filter @shiritori/core build
+
+      - name: 🔍 Type check
+        run: pnpm --filter @shiritori/ui typecheck
+
+      - name: 🎨 Lint code
+        run: pnpm --filter @shiritori/ui lint
+
+      - name: 🧪 Run component tests
+        run: pnpm --filter @shiritori/ui test
+
+      - name: 📊 Generate coverage
+        run: pnpm --filter @shiritori/ui test:coverage
+
+      - name: 📤 Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./packages/ui/coverage/coverage-final.json
+          flags: ui
+          name: ui-coverage
+
+      - name: 🏗️ Build package
+        run: pnpm --filter @shiritori/ui build
+
+      - name: 📦 Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ui-dist
+          path: packages/ui/dist/
+          retention-days: 7
+
+  status:
+    name: UI Package Status
+    runs-on: ubuntu-latest
+    needs: [test]
+    if: always()
+    steps:
+      - name: ✅ Success
+        if: needs.test.result == 'success'
+        run: |
+          echo "::notice::✅ UI package tests passed!"
+          echo "MODULE=ui" >> $GITHUB_ENV
+          echo "STATUS=success" >> $GITHUB_ENV
+
+      - name: ❌ Failure
+        if: needs.test.result != 'success'
+        run: |
+          echo "::error::❌ UI package tests failed!"
+          echo "MODULE=ui" >> $GITHUB_ENV
+          echo "STATUS=failure" >> $GITHUB_ENV
+          exit 1

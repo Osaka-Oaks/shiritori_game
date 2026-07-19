@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "324507601155",
+    "firebase_url": "https://shiritori-game-ccaae-default-rtdb.firebaseio.com",
+    "project_id": "shiritori-game-ccaae",
+    "storage_bucket": "shiritori-game-ccaae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324507601155:android:9b69c57ebb1ae439ec4136",
+        "android_client_info": {
+          "package_name": "com.melvinspiller.nihongo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqrOdxX5qpThctLpYDh4qgBefYzOEV0bE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324507601155:android:90d09d9082f8062dec4136",
+        "android_client_info": {
+          "package_name": "com.shiritori.othello"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqrOdxX5qpThctLpYDh4qgBefYzOEV0bE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324507601155:android:1e8c704834cf594fec4136",
+        "android_client_info": {
+          "package_name": "com.shiritori.shiritori_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqrOdxX5qpThctLpYDh4qgBefYzOEV0bE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

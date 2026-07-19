@@ -1,6 +1,14 @@
 import React from "react";
 import { convertRomajiToHiragana, speakWord } from "../utils";
-import { Search, CheckCircle, XCircle, Volume2, Sparkles, AlertCircle, Loader2 } from "lucide-react";
+import {
+  Search,
+  CheckCircle,
+  XCircle,
+  Volume2,
+  Sparkles,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface WordEvaluationResult {
@@ -38,7 +46,7 @@ export default function LibraryView() {
   const handleEvaluate = async (wordToTest: string) => {
     const trimmed = wordToTest.trim();
     if (!trimmed) return;
-    
+
     setLoading(true);
     setErrorStatus(null);
     setResult(null);
@@ -72,7 +80,9 @@ export default function LibraryView() {
     <div className="w-full max-w-2xl mx-auto py-4 px-4 pb-24 space-y-6">
       {/* Top Title Info */}
       <div className="text-center space-y-1">
-        <h2 className="font-headline text-2xl font-extrabold text-on-surface">Interactive Dictionary</h2>
+        <h2 className="font-headline text-2xl font-extrabold text-on-surface">
+          Interactive Dictionary
+        </h2>
         <p className="font-body text-on-surface-variant font-medium text-sm">
           Solve disputes! Test any word below to see if it is valid for Shiritori
         </p>
@@ -81,10 +91,10 @@ export default function LibraryView() {
       {/* Input box */}
       <div className="bg-surface-container-low rounded-3xl p-5 border-2 border-surface-container-highest shadow-soft space-y-4">
         <h3 className="font-label-caps text-xs text-primary font-bold">SHIRITORI WORD REFEREE</h3>
-        
+
         <form
           className="flex gap-2"
-          onSubmit={(e) => {
+          onSubmit={e => {
             e.preventDefault();
             handleEvaluate(query);
           }}
@@ -93,9 +103,9 @@ export default function LibraryView() {
             <input
               type="text"
               className="w-full bg-surface border-2 border-primary/40 rounded-full py-3 px-6 pr-12 text-on-surface font-body font-bold placeholder:text-outline/40 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary-container/20 transition-all font-medium"
-              placeholder="Enter word (e.g., さくら, ringo, 猫)..."
+              placeholder="Enter word (e.g., さくら, りんご, ねこ)..."
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={e => setQuery(e.target.value)}
             />
             <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-outline" />
           </div>
@@ -111,7 +121,9 @@ export default function LibraryView() {
 
         {/* Quick word suggestions tag grid */}
         <div className="space-y-1.5 text-left bg-surface rounded-2xl p-3 border border-outline-variant/20">
-          <p className="text-[10px] font-label-caps text-outline-variant font-bold">POPULAR SEARCHES</p>
+          <p className="text-[10px] font-label-caps text-outline-variant font-bold">
+            POPULAR SEARCHES
+          </p>
           <div className="flex flex-wrap gap-1.5 pt-0.5">
             {quickWords.map((item, i) => (
               <button
@@ -119,7 +131,10 @@ export default function LibraryView() {
                 onClick={() => onQuickClick(item.jp)}
                 className="text-xs bg-surface-container-low border border-primary/10 hover:border-primary hover:bg-primary/5 text-on-surface-variant font-bold px-2.5 py-1.5 rounded-full transition-colors cursor-pointer"
               >
-                {item.jp} <span className="opacity-60 font-medium text-[10px] bg-primary/5 px-1 py-0.5 rounded ml-0.5">{item.romaji}</span>
+                {item.jp}{" "}
+                <span className="opacity-60 font-medium text-[10px] bg-primary/5 px-1 py-0.5 rounded ml-0.5">
+                  {item.romaji}
+                </span>
               </button>
             ))}
           </div>
@@ -145,8 +160,8 @@ export default function LibraryView() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             className={`rounded-3xl border-2 p-6 text-left shadow-soft space-y-6 ${
-              result.isValid 
-                ? "bg-secondary-container/15 border-secondary/30" 
+              result.isValid
+                ? "bg-secondary-container/15 border-secondary/30"
                 : "bg-error-container/15 border-error/25"
             }`}
           >
@@ -158,7 +173,7 @@ export default function LibraryView() {
                   <h3 className="font-display-game text-3xl font-extrabold text-on-surface tracking-tight">
                     {result.kanji || result.word}
                   </h3>
-                  
+
                   {/* TTS Voice Playback Trigger */}
                   <button
                     onClick={() => speakWord(result.hiragana || result.word)}
@@ -182,7 +197,8 @@ export default function LibraryView() {
                 </div>
 
                 <p className="text-sm text-on-surface font-semibold pt-1">
-                  English Mean: <span className="font-extrabold text-primary">{result.translation}</span>
+                  English Mean:{" "}
+                  <span className="font-extrabold text-primary">{result.translation}</span>
                 </p>
               </div>
 
@@ -207,7 +223,9 @@ export default function LibraryView() {
                 </div>
 
                 <div className="text-left">
-                  <div className={`text-xs font-headline font-black tracking-wider ${result.isValid ? 'text-secondary' : 'text-error'}`}>
+                  <div
+                    className={`text-xs font-headline font-black tracking-wider ${result.isValid ? "text-secondary" : "text-error"}`}
+                  >
                     {result.isValid ? "SUGOI! VALID" : "MADA MADA... INVALID"}
                   </div>
                   <p className="text-[10px] text-on-surface-variant font-body mt-0.5 leading-tight max-w-xs select-none">
@@ -220,18 +238,30 @@ export default function LibraryView() {
             {/* Syllables mapping break-down row */}
             <div className="p-4 bg-surface rounded-2xl border border-outline-variant/20 grid grid-cols-3 gap-2 text-center text-xs font-body font-bold">
               <div className="space-y-0.5 text-left border-r border-outline-variant/20 pr-2">
-                <span className="text-[10px] font-label-caps text-on-surface-variant/80 block select-none">STARTS WITH</span>
-                <span className="text-sm text-primary font-display-game font-extrabold">{result.startSound}</span>
+                <span className="text-[10px] font-label-caps text-on-surface-variant/80 block select-none">
+                  STARTS WITH
+                </span>
+                <span className="text-sm text-primary font-display-game font-extrabold">
+                  {result.startSound}
+                </span>
               </div>
 
               <div className="space-y-0.5 text-center">
-                <span className="text-[10px] font-label-caps text-on-surface-variant/80 block select-none">ENDS WITH</span>
-                <span className="text-sm text-primary font-display-game font-extrabold">{result.endSound}</span>
+                <span className="text-[10px] font-label-caps text-on-surface-variant/80 block select-none">
+                  ENDS WITH
+                </span>
+                <span className="text-sm text-primary font-display-game font-extrabold">
+                  {result.endSound}
+                </span>
               </div>
 
               <div className="space-y-0.5 text-right border-l border-outline-variant/20 pl-2">
-                <span className="text-[10px] font-label-caps text-on-surface-variant/80 block select-none">ENDS IN N?</span>
-                <span className={`text-sm font-extrabold ${result.endsInN ? 'text-error' : 'text-secondary'}`}>
+                <span className="text-[10px] font-label-caps text-on-surface-variant/80 block select-none">
+                  ENDS IN N?
+                </span>
+                <span
+                  className={`text-sm font-extrabold ${result.endsInN ? "text-error" : "text-secondary"}`}
+                >
                   {result.endsInN ? "YES (ん/ン)" : "NO"}
                 </span>
               </div>

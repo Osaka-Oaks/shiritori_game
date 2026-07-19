@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { ensureSignedIn } from "./firebase";
-import Home from "./components/Home";
-import GameRoom from "./components/GameRoom";
-import Rules from "./components/Rules";
-import Welcome from "./components/Welcome";
-import LoveNote from "./components/LoveNote";
+import Home from "./components/game/Home";
+import GameRoom from "./components/game/GameRoom";
+import Rules from "./components/shell/Rules";
+import Welcome from "./components/shell/Welcome";
+import LoveNote from "./components/shell/LoveNote";
+import FloatingDictionary from "./components/dictionary/FloatingDictionary";
+import SinglePlayer from "./components/game/SinglePlayer";
+import { parseLevelId as parseLevel } from "./lib/game/levels";
+import type { LevelId } from "./lib/game/levels";
+import { enableDevMode } from "./lib/dev/dev-mode";
 import { useSettings } from "./settings";
 
-type View = { name: "home" } | { name: "room"; code: string };
+type View = { name: "home" } | { name: "room"; code: string } | { name: "solo"; level?: LevelId };
 
 const LOVE_KEY = "shiritori_lovenote_seen";
 
@@ -15,27 +20,36 @@ export default function App() {
   const { t } = useSettings();
   const [uid, setUid] = useState<string | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
-  const [view, setView] = useState<View>({ name: "home" });
+  // Deep-link: ?room=ABCD | ?solo=3 | ?dev=1
+  const [deepLink] = useState(() => {
+    const p = new URLSearchParams(window.location.search);
+    return {
+      room: (p.get("room") || "").toUpperCase(),
+      solo: parseLevel(p.get("solo") ?? p.get("level")),
+      dev: p.get("dev") === "1",
+    };
+  });
+
+  const [deepLinkCode] = useState(() => deepLink.room);
+
+  const [view, setView] = useState<View>(() =>
+    deepLink.solo ? { name: "solo", level: deepLink.solo } : { name: "home" }
+  );
   const [showRules, setShowRules] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const [showLove, setShowLove] = useState(false);
-  const [playerName, setPlayerName] = useState(
-    () => localStorage.getItem("shiritori_name") || ""
-  );
+  const [playerName, setPlayerName] = useState(() => localStorage.getItem("shiritori_name") || "");
 
-  // Anonymous sign-in on first load.
+  useEffect(() => {
+    if (deepLink.dev) enableDevMode();
+  }, [deepLink.dev]);
+
   useEffect(() => {
     ensureSignedIn()
       .then(setUid)
-      .catch((e) => setAuthError(t("connectError") + "\n" + (e?.message ?? "")));
+      .catch(e => setAuthError(t("connectError") + "\n" + (e?.message ?? "")));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Deep-link support: shiritori.app/?room=ABCD prefills the code on Home.
-  const [deepLinkCode] = useState(() => {
-    const p = new URLSearchParams(window.location.search);
-    return (p.get("room") || "").toUpperCase();
-  });
 
   function setName(name: string) {
     setPlayerName(name);
@@ -68,9 +82,7 @@ export default function App() {
     />
   ) : null;
 
-  const loveNote = showLove ? (
-    <LoveNote fromName={playerName} onClose={closeLove} />
-  ) : null;
+  const loveNote = showLove ? <LoveNote fromName={playerName} onClose={closeLove} /> : null;
 
   if (authError) {
     return (
@@ -103,17 +115,23 @@ export default function App() {
 
   return (
     <>
-      {view.name === "home" ? (
+      {view.name === "home" && (
         <Home
           uid={uid}
           name={playerName}
           setName={setName}
           deepLinkCode={deepLinkCode}
           onEnterRoom={enterRoom}
+          onSinglePlayer={() => setView({ name: "solo" })}
+          onSoloLevel={level => setView({ name: "solo", level: level as LevelId })}
           onShowRules={() => setShowRules(true)}
           onShowLove={() => setShowLove(true)}
         />
-      ) : (
+      )}
+      {view.name === "solo" && (
+        <SinglePlayer name={playerName} initialLevel={view.level} onLeave={leaveRoom} />
+      )}
+      {view.name === "room" && (
         <GameRoom
           uid={uid}
           code={view.code}
@@ -122,6 +140,7 @@ export default function App() {
         />
       )}
       {showRules && <Rules onClose={() => setShowRules(false)} />}
+      <FloatingDictionary isPlaying={view.name === "room" || view.name === "solo"} />
       {welcome}
       {loveNote}
     </>

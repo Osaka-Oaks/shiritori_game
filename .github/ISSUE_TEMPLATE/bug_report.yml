@@ -1,0 +1,43 @@
+name: 🐛 Bug report
+description: Something isn't working as expected
+title: "[Bug]: "
+labels: ["type: bug", "status: triage"]
+body:
+  - type: dropdown
+    id: app
+    attributes:
+      label: Which app?
+      options:
+        - shiritori-online (2-player realtime)
+        - kawaii-shiritori (full-featured)
+        - shiritori_flutter (Flutter web/mobile)
+        - Both / not sure
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug, plus what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to '...'
+        2. Click '...'
+        3. See error
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: "Browser / device / OS (e.g. Chrome 120 on iPhone)"
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors (optional)
+      render: shell

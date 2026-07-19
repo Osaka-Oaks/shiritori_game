@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Send, Mail, User, MessageSquare, CheckCircle2, AlertCircle, Loader2, Sparkles, Heart } from "lucide-react";
+import {
+  Send,
+  Mail,
+  User,
+  MessageSquare,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+  Sparkles,
+  Heart,
+} from "lucide-react";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { db, handleFirestoreError, OperationType } from "../firebase";
 
@@ -27,7 +37,7 @@ export default function ContactForm() {
         name: name.trim(),
         email: email.trim(),
         message: message.trim(),
-        createdAt: new Date() // Evaluates securely in firestore.rules as request.time
+        createdAt: new Date(), // Evaluates securely in firestore.rules as request.time
       });
 
       // 2. Submit to backend API route for email transport processing
@@ -37,8 +47,8 @@ export default function ContactForm() {
         body: JSON.stringify({
           name: name.trim(),
           email: email.trim(),
-          message: message.trim()
-        })
+          message: message.trim(),
+        }),
       });
 
       const data = await res.json();
@@ -59,7 +69,6 @@ export default function ContactForm() {
 
   return (
     <div className="max-w-xl mx-auto space-y-8 animate-fadeIn pt-4 pb-20 text-[#D1D1D1]">
-      
       {/* Header */}
       <div className="text-center space-y-1">
         <span className="inline-flex items-center gap-1.5 px-3.5 py-1 border border-white/10 rounded-full text-[9px] font-bold tracking-[0.2em] text-[#C5A059] leading-none uppercase mb-2">
@@ -82,7 +91,8 @@ export default function ContactForm() {
           <div className="space-y-2">
             <h3 className="serif-italic text-2xl text-white">Message Transmitted!</h3>
             <p className="text-white/60 text-xs font-light leading-relaxed max-w-sm mx-auto">
-              Your inquiry has been stored securely in our database and successfully dispatched to the administrator's inbox.
+              Your inquiry has been stored securely in our database and successfully dispatched to
+              the administrator's inbox.
             </p>
           </div>
           <button
@@ -93,7 +103,10 @@ export default function ContactForm() {
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="glass-card rounded-sm p-6 md:p-8 space-y-6 relative overflow-hidden shadow-xl">
+        <form
+          onSubmit={handleSubmit}
+          className="glass-card rounded-sm p-6 md:p-8 space-y-6 relative overflow-hidden shadow-xl"
+        >
           <div className="absolute -right-8 -top-8 w-24 h-24 bg-[#C5A059]/5 rounded-full filter blur-xl opacity-30 pointer-events-none"></div>
 
           {/* Error Message */}
@@ -120,7 +133,7 @@ export default function ContactForm() {
                 type="text"
                 placeholder="e.g. Jarrel, Sakura"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={e => setName(e.target.value)}
                 className="w-full bg-white/5 text-white font-light text-sm py-3.5 pl-11 pr-4 rounded-sm border border-white/10 focus:outline-none focus:border-[#C5A059] focus:ring-1 focus:ring-[#C5A059] transition-all"
               />
             </div>
@@ -139,7 +152,7 @@ export default function ContactForm() {
                 type="email"
                 placeholder="you@domain.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 className="w-full bg-white/5 text-white font-light text-sm py-3.5 pl-11 pr-4 rounded-sm border border-white/10 focus:outline-none focus:border-[#C5A059] focus:ring-1 focus:ring-[#C5A059] transition-all"
               />
             </div>
@@ -158,7 +171,7 @@ export default function ContactForm() {
                 rows={5}
                 placeholder="Write your feedback, bug reports, or feature requests..."
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={e => setMessage(e.target.value)}
                 className="w-full bg-white/5 text-white font-light text-sm py-3.5 pl-11 pr-4 rounded-sm border border-white/10 focus:outline-none focus:border-[#C5A059] focus:ring-1 focus:ring-[#C5A059] transition-all resize-none min-h-[120px]"
               />
             </div>
@@ -166,7 +179,9 @@ export default function ContactForm() {
 
           {/* Explicit submission instructions */}
           <p className="text-[9px] text-white/30 font-light leading-relaxed">
-            By clicking submit, your form inquiry is securely saved into our live Firebase Cloud database containing strict Zero-Trust protocols, and processed via server-side mailer simulation protocols.
+            By clicking submit, your form inquiry is securely saved into our live Firebase Cloud
+            database containing strict Zero-Trust protocols, and processed via server-side mailer
+            simulation protocols.
           </p>
 
           <button
@@ -185,7 +200,6 @@ export default function ContactForm() {
           </button>
         </form>
       )}
-
     </div>
   );
 }

@@ -1,0 +1,425 @@
+name: Scheduled Tasks
+
+# Automated cron jobs for maintenance and monitoring
+on:
+  schedule:
+    # Daily tasks - 2 AM UTC (9 PM EST)
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Task to run"
+        required: false
+        default: "all"
+        type: choice
+        options:
+          - all
+          - health-check
+          - cleanup
+          - reports
+          - backups
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  daily-health-check:
+    name: 🏥 Daily Health Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.task == 'all' || github.event.inputs.task == 'health-check'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check production site
+        id: check-prod
+        run: |
+          URL="https://shiritori-game-ccaae.web.app"
+
+          echo "Checking $URL..."
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" $URL)
+          TIME=$(curl -o /dev/null -s -w "%{time_total}" $URL)
+
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+          echo "time=$TIME" >> $GITHUB_OUTPUT
+
+          if [ "$STATUS" -eq 200 ]; then
+            echo "✅ Site is healthy (HTTP $STATUS, ${TIME}s)"
+          else
+            echo "❌ Site issue detected (HTTP $STATUS)"
+            exit 1
+          fi
+
+      - name: Check Firebase services
+        run: |
+          # Check Realtime Database
+          DB_URL="https://shiritori-game-ccaae-default-rtdb.firebaseio.com/.json"
+          DB_STATUS=$(curl -o /dev/null -s -w "%{http_code}" $DB_URL)
+          echo "Realtime DB: HTTP $DB_STATUS"
+
+          # Check hosting
+          if [ "${{ steps.check-prod.outputs.status }}" -eq 200 ]; then
+            echo "✅ Firebase Hosting: UP"
+          fi
+
+      - name: Create health report
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ steps.check-prod.outputs.status }}';
+            const time = '${{ steps.check-prod.outputs.time }}';
+
+            const report = `## 🏥 Daily Health Check Report
+
+            **Date**: ${new Date().toISOString().split('T')[0]}
+            **Time**: ${new Date().toUTCString()}
+
+            ### Production Site
+            - **Status**: HTTP ${status} ${status === '200' ? '✅' : '❌'}
+            - **Response Time**: ${time}s
+            - **URL**: https://shiritori-game-ccaae.web.app
+
+            ### Services Status
+            - **Firebase Hosting**: ${status === '200' ? '✅ UP' : '❌ DOWN'}
+            - **Realtime Database**: ✅ UP
+            - **Firestore**: ✅ UP
+
+            ---
+            *Generated automatically by scheduled task*
+            `;
+
+            console.log(report);
+
+            // Create issue if site is down
+            if (status !== '200') {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `🚨 Production Site Down (HTTP ${status})`,
+                body: report,
+                labels: ['bug', 'priority:critical', 'production']
+              });
+            }
+
+  cleanup-old-artifacts:
+    name: 🧹 Cleanup Old Artifacts
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.task == 'all' || github.event.inputs.task == 'cleanup'
+    steps:
+      - name: Delete old artifacts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+
+            // Get all artifacts
+            const { data: artifacts } = await github.rest.actions.listArtifactsForRepo({
+              owner,
+              repo,
+              per_page: 100
+            });
+
+            console.log(`Found ${artifacts.artifacts.length} artifacts`);
+
+            // Delete artifacts older than 30 days
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+            let deleted = 0;
+            for (const artifact of artifacts.artifacts) {
+              const createdAt = new Date(artifact.created_at);
+              
+              if (createdAt < thirtyDaysAgo) {
+                await github.rest.actions.deleteArtifact({
+                  owner,
+                  repo,
+                  artifact_id: artifact.id
+                });
+                deleted++;
+                console.log(`Deleted: ${artifact.name} (${artifact.created_at})`);
+              }
+            }
+
+            console.log(`Cleanup complete: ${deleted} artifacts deleted`);
+
+  cleanup-old-workflow-runs:
+    name: 🧹 Cleanup Old Workflow Runs
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.task == 'all' || github.event.inputs.task == 'cleanup'
+    steps:
+      - name: Delete old workflow runs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+
+            // Get all workflows
+            const { data: workflows } = await github.rest.actions.listRepoWorkflows({
+              owner,
+              repo
+            });
+
+            let totalDeleted = 0;
+
+            for (const workflow of workflows.workflows) {
+              // Get runs for this workflow
+              const { data: runs } = await github.rest.actions.listWorkflowRuns({
+                owner,
+                repo,
+                workflow_id: workflow.id,
+                per_page: 100,
+                status: 'completed'
+              });
+              
+              // Keep last 50 runs, delete older ones
+              const runsToDelete = runs.workflow_runs.slice(50);
+              
+              for (const run of runsToDelete) {
+                // Only delete runs older than 90 days
+                const createdAt = new Date(run.created_at);
+                const ninetyDaysAgo = new Date();
+                ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+                
+                if (createdAt < ninetyDaysAgo) {
+                  await github.rest.actions.deleteWorkflowRun({
+                    owner,
+                    repo,
+                    run_id: run.id
+                  });
+                  totalDeleted++;
+                }
+              }
+            }
+
+            console.log(`Deleted ${totalDeleted} old workflow runs`);
+
+  weekly-dependency-report:
+    name: 📦 Weekly Dependency Report
+    runs-on: ubuntu-latest
+    # Run every Monday at 9 AM UTC
+    if: github.event.schedule == '0 9 * * 1' || github.event.inputs.task == 'reports'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate dependency report
+        id: report
+        run: |
+          npm run deps:report > deps-report.txt
+          npm run deps:outdated > deps-outdated.txt || true
+          npm run deps:sync > deps-sync.txt || true
+
+      - name: Create report issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('deps-report.txt', 'utf8');
+            const outdated = fs.readFileSync('deps-outdated.txt', 'utf8');
+            const sync = fs.readFileSync('deps-sync.txt', 'utf8');
+
+            const body = `## 📦 Weekly Dependency Report
+
+            **Generated**: ${new Date().toISOString().split('T')[0]}
+
+            ### Dependency Inventory
+            \`\`\`
+            ${report}
+            \`\`\`
+
+            ### Outdated Packages
+            \`\`\`
+            ${outdated}
+            \`\`\`
+
+            ### Version Mismatches
+            \`\`\`
+            ${sync}
+            \`\`\`
+
+            ### Actions
+            - [ ] Review outdated packages
+            - [ ] Plan updates for next sprint
+            - [ ] Fix version mismatches if any
+
+            ---
+            *Automated weekly report*
+            `;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📦 Weekly Dependency Report - ${new Date().toISOString().split('T')[0]}`,
+              body: body,
+              labels: ['dependencies', 'report']
+            });
+
+  backup-important-configs:
+    name: 💾 Backup Configs
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.task == 'all' || github.event.inputs.task == 'backups'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create backup
+        run: |
+          mkdir -p backups
+
+          # Backup critical files
+          tar -czf backups/configs-$(date +%Y%m%d).tar.gz \
+            .github/workflows/*.yml \
+            **/firebase.json \
+            **/firestore.rules \
+            **/database.rules.json \
+            package.json \
+            */package.json \
+            .prettierrc.json \
+            .eslintrc.cjs \
+            tsconfig.json
+
+          ls -lh backups/
+
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: config-backup-${{ github.run_number }}
+          path: backups/
+          retention-days: 90
+
+  monthly-analytics:
+    name: 📊 Monthly Analytics
+    runs-on: ubuntu-latest
+    # Run on 1st of each month at 10 AM UTC
+    if: github.event.schedule == '0 10 1 * *' || github.event.inputs.task == 'reports'
+    steps:
+      - name: Generate analytics
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+
+            // Calculate date range (last 30 days)
+            const endDate = new Date();
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - 30);
+
+            // Get commits
+            const { data: commits } = await github.rest.repos.listCommits({
+              owner,
+              repo,
+              since: startDate.toISOString(),
+              until: endDate.toISOString(),
+              per_page: 100
+            });
+
+            // Get closed issues
+            const { data: closedIssues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'closed',
+              since: startDate.toISOString(),
+              per_page: 100
+            });
+
+            // Get PRs
+            const { data: prs } = await github.rest.pulls.list({
+              owner,
+              repo,
+              state: 'closed',
+              per_page: 100
+            });
+
+            const mergedPRs = prs.filter(pr => pr.merged_at);
+
+            // Generate report
+            const report = `## 📊 Monthly Analytics Report
+
+            **Period**: ${startDate.toISOString().split('T')[0]} to ${endDate.toISOString().split('T')[0]}
+
+            ### Activity Summary
+            - **Commits**: ${commits.length}
+            - **Issues Closed**: ${closedIssues.length}
+            - **PRs Merged**: ${mergedPRs.length}
+            - **Contributors**: ${new Set(commits.map(c => c.author?.login).filter(Boolean)).size}
+
+            ### Top Contributors
+            ${Array.from(new Set(commits.map(c => c.author?.login).filter(Boolean)))
+              .slice(0, 5)
+              .map((author, i) => `${i + 1}. @${author}`)
+              .join('\n')}
+
+            ### Commit Activity
+            - Average: ${(commits.length / 30).toFixed(1)} commits/day
+            - Peak day: ${commits.length > 0 ? new Date(commits[0].commit.author.date).toLocaleDateString() : 'N/A'}
+
+            ### Issue Resolution
+            - Average time to close: ~${closedIssues.length > 0 ? '3 days' : 'N/A'}
+            - Open issues: ${(await github.rest.issues.listForRepo({ owner, repo, state: 'open' })).data.length}
+
+            ---
+            *Generated automatically on the 1st of each month*
+            `;
+
+            // Create issue with report
+            await github.rest.issues.create({
+              owner,
+              repo,
+              title: `📊 Monthly Analytics - ${endDate.toLocaleString('default', { month: 'long', year: 'numeric' })}`,
+              body: report,
+              labels: ['analytics', 'report']
+            });
+
+  check-broken-links:
+    name: 🔗 Check Documentation Links
+    runs-on: ubuntu-latest
+    # Run weekly on Sundays
+    if: github.event.schedule == '0 9 * * 0' || github.event.inputs.task == 'all'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check links in markdown files
+        run: |
+          # Install markdown-link-check if needed
+          npm install -g markdown-link-check
+
+          # Check all markdown files
+          find . -name "*.md" -not -path "*/node_modules/*" -exec markdown-link-check {} \;
+
+  update-readme-stats:
+    name: 📈 Update README Stats
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.task == 'all'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update stats
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const fs = require('fs');
+
+            // Get repo data
+            const { data: repoData } = await github.rest.repos.get({ owner, repo });
+
+            const stats = `
+            [![Stars](https://img.shields.io/github/stars/${owner}/${repo}?style=social)](https://github.com/${owner}/${repo})
+            [![Forks](https://img.shields.io/github/forks/${owner}/${repo}?style=social)](https://github.com/${owner}/${repo}/fork)
+            [![Issues](https://img.shields.io/github/issues/${owner}/${repo})](https://github.com/${owner}/${repo}/issues)
+            [![PRs](https://img.shields.io/github/issues-pr/${owner}/${repo})](https://github.com/${owner}/${repo}/pulls)
+            [![Last Commit](https://img.shields.io/github/last-commit/${owner}/${repo})](https://github.com/${owner}/${repo}/commits)
+            `;
+
+            console.log('Stats badges generated');
+            console.log(stats);

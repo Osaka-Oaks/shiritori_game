@@ -1,0 +1,121 @@
+{
+  "// Copy this file to .vscode/settings.json": "",
+
+  "// Git Configuration": "",
+  "git.enableCommitSigning": false,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "git.fetchOnPull": true,
+  "git.pruneOnFetch": true,
+  "git.showPushSuccessNotification": true,
+  "git.inputValidationLength": 50,
+  "git.inputValidationSubjectLength": 50,
+
+  "// Commit Message Template": "",
+  "git.inputValidation": "always",
+  "git.branchProtection": ["main", "develop"],
+
+  "// File Watching": "",
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/.git/**": true,
+    "**/coverage/**": true
+  },
+
+  "// Auto Save & Format": "",
+  "files.autoSave": "onFocusChange",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+
+  "// Task Tracking": "",
+  "todo-tree.general.tags": ["TODO", "FIXME", "BUG", "HACK", "XXX", "NOTE"],
+  "todo-tree.highlights.defaultHighlight": {
+    "icon": "alert",
+    "type": "text",
+    "foreground": "#FFFFFF",
+    "background": "#FF0000",
+    "opacity": 50
+  },
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "check",
+      "foreground": "#FFFFFF",
+      "background": "#0079FF"
+    },
+    "FIXME": {
+      "icon": "alert",
+      "foreground": "#FFFFFF",
+      "background": "#FF0000"
+    },
+    "BUG": {
+      "icon": "bug",
+      "foreground": "#FFFFFF",
+      "background": "#FF5733"
+    }
+  },
+
+  "// TypeScript": "",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+
+  "// ESLint": "",
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.run": "onSave",
+  "eslint.codeActionsOnSave.mode": "all",
+
+  "// Prettier": "",
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": false,
+
+  "// Search": "",
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/coverage": true,
+    "**/.git": true,
+    "**/package-lock.json": true
+  },
+
+  "// Terminal": "",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.env.osx": {
+    "NODE_ENV": "development"
+  },
+
+  "// Performance": "",
+  "files.exclude": {
+    "**/.git": false,
+    "**/node_modules": true,
+    "**/dist": true
+  },
+
+  "// Git Lens (if installed)": "",
+  "gitlens.codeLens.enabled": true,
+  "gitlens.currentLine.enabled": true,
+  "gitlens.hovers.currentLine.over": "line",
+  "gitlens.statusBar.enabled": true,
+  "gitlens.views.repositories.files.layout": "tree",
+
+  "// GitHub Pull Requests": "",
+  "githubPullRequests.pullBranch": "always",
+  "githubPullRequests.createOnPublishBranch": "ask",
+
+  "// Files Association": "",
+  "files.associations": {
+    "*.yml": "yaml",
+    ".prettierrc": "json",
+    ".eslintrc": "json",
+    "*.rules": "javascript"
+  },
+
+  "// Custom Commands": "",
+  "npm.enableScriptExplorer": true,
+  "npm.scriptExplorerAction": "run"
+}

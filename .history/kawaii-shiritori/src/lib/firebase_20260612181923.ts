@@ -9,12 +9,12 @@ export const auth = getAuth(app);
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 
 export enum OperationType {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  LIST = 'list',
-  GET = 'get',
-  WRITE = 'write',
+  CREATE = "create",
+  UPDATE = "update",
+  DELETE = "delete",
+  LIST = "list",
+  GET = "get",
+  WRITE = "write",
 }
 
 export interface FirestoreErrorInfo {
@@ -31,11 +31,15 @@ export interface FirestoreErrorInfo {
       providerId?: string | null;
       email?: string | null;
     }[];
-  }
+  };
 }
 
 // Zero-Trust Firestore standard error logger
-export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+export function handleFirestoreError(
+  error: unknown,
+  operationType: OperationType,
+  path: string | null
+) {
   const errInfo: FirestoreErrorInfo = {
     error: error instanceof Error ? error.message : String(error),
     authInfo: {
@@ -44,13 +48,14 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
       emailVerified: auth.currentUser?.emailVerified,
       isAnonymous: auth.currentUser?.isAnonymous,
       tenantId: auth.currentUser?.tenantId,
-      providerInfo: auth.currentUser?.providerData?.map(provider => ({
-        providerId: provider.providerId,
-        email: provider.email,
-      })) || []
+      providerInfo:
+        auth.currentUser?.providerData?.map(provider => ({
+          providerId: provider.providerId,
+          email: provider.email,
+        })) || [],
     },
     operationType,
-    path
+    path,
   };
   console.error("Firestore Error logged: ", JSON.stringify(errInfo));
   throw new Error(JSON.stringify(errInfo));
@@ -64,7 +69,7 @@ export async function saveCustomizationsToFirestore(
   avatarUrl: string
 ) {
   const path = `users/${userId}`;
-  
+
   // Guard clause for safety when using placeholder keys
   if (firebaseConfig.apiKey === "placeholder-api-key") {
     console.log("Using transient guest customizations storage (Firebase is in standby mode)");
@@ -73,13 +78,17 @@ export async function saveCustomizationsToFirestore(
 
   try {
     const userDocRef = doc(db, "users", userId);
-    await setDoc(userDocRef, {
-      uid: userId,
-      name,
-      avatarUrl,
-      ...customizations,
-      updatedAt: new Date().toISOString()
-    }, { merge: true });
+    await setDoc(
+      userDocRef,
+      {
+        uid: userId,
+        name,
+        avatarUrl,
+        ...customizations,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
+    );
     console.log("Customizations successfully synced to Firestore online for user:", userId);
   } catch (error) {
     try {

@@ -4,19 +4,28 @@ name: Deploy (manual)
 on:
   workflow_dispatch:
     inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "production"
+        type: choice
+        options:
+          - production
+          - staging
       deploy_kawaii_hosting:
-        description: "Deploy kawaii hosting too (replaces live shiritori-online site)"
+        description: "Also deploy kawaii hosting (replaces live site)"
         required: false
         default: false
         type: boolean
 
 concurrency:
-  group: manual-deploy
+  group: manual-deploy-${{ github.event.inputs.environment }}
   cancel-in-progress: false
 
 env:
   FIREBASE_PROJECT: shiritori-game-ccaae
   LIVE_URL: https://shiritori-game-ccaae.web.app
+  STAGING_URL: https://shiritori-game-ccaae--develop.web.app
 
 jobs:
   validate-and-build:
@@ -37,6 +46,7 @@ jobs:
       - run: npm ci
       - run: npm run format:check
       - run: npm run lint
+      - run: npm run security:check
       - run: npm run test
 
       - name: Build apps
@@ -58,8 +68,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: validate-and-build
     environment:
-      name: production
-      url: ${{ env.LIVE_URL }}
+      name: ${{ github.event.inputs.environment }}
+      url: ${{ github.event.inputs.environment == 'staging' && env.STAGING_URL || env.LIVE_URL }}
     steps:
       - uses: actions/checkout@v4
 
@@ -68,12 +78,25 @@ jobs:
           name: manual-deploy-dist
 
       - name: Deploy shiritori-online (hosting + RTDB)
+        if: github.event.inputs.environment == 'production'
         working-directory: shiritori-online
         run: >
           npx firebase-tools@latest deploy
           --only hosting,database
           --project ${{ env.FIREBASE_PROJECT }}
           --non-interactive
+          --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Deploy staging preview channel
+        if: github.event.inputs.environment == 'staging'
+        working-directory: shiritori-online
+        run: >
+          npx firebase-tools@latest hosting:channel:deploy develop
+          --project ${{ env.FIREBASE_PROJECT }}
+          --non-interactive
+          --expires 14d
           --token "$FIREBASE_TOKEN"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
@@ -106,6 +129,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy
     steps:
-      - run: sleep 15
-      - run: curl -fsSL "${{ env.LIVE_URL }}/" | grep -q "しりとり"
-      - run: curl -fsSL -o /dev/null -w "%{http_code}\n" "${{ env.LIVE_URL }}/"
+      - name: Smoke test
+        run: |
+          if [ "${{ github.event.inputs.environment }}" = "staging" ]; then
+            URL="${{ env.STAGING_URL }}"
+          else
+            URL="${{ env.LIVE_URL }}"
+          fi
+          sleep 15
+          curl -fsSL "$URL/" | grep -q "しりとり"
+          curl -fsSL -o /dev/null -w "%{http_code}\n" "$URL/"

@@ -3,12 +3,14 @@ import path from "path";
 import dotenv from "dotenv";
 import { GoogleGenAI, Type } from "@google/genai";
 import { createServer as createViteServer } from "vite";
+import { createRateLimiter } from "./src/lib/express-rate-limit";
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use("/api", createRateLimiter(100, 60_000));
 
 // Simple in-memory rate limiter to protect against denial-of-service abuse.
 // Limits each client IP to a fixed number of requests per time window.
@@ -39,16 +41,18 @@ const PORT = 3000;
 const getAIClient = () => {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    console.warn("WARNING: GEMINI_API_KEY is not defined in environment variables. Gemini calls will fail.");
+    console.warn(
+      "WARNING: GEMINI_API_KEY is not defined in environment variables. Gemini calls will fail."
+    );
     return null;
   }
   return new GoogleGenAI({
     apiKey,
     httpOptions: {
       headers: {
-        'User-Agent': 'aistudio-build',
-      }
-    }
+        "User-Agent": "aistudio-build",
+      },
+    },
   });
 };
 
@@ -63,7 +67,9 @@ app.post("/api/library/search", async (req, res) => {
   const ai = getAIClient();
 
   if (!ai) {
-    return res.status(500).json({ error: "Gemini API Client is not configured. Please supply GEMINI_API_KEY." });
+    return res
+      .status(500)
+      .json({ error: "Gemini API Client is not configured. Please supply GEMINI_API_KEY." });
   }
 
   const prompt = `Lookup the Japanese word: "${query}" (provided in ${language === "ENG" ? "English / English translation request" : "Japanese"}).
@@ -80,35 +86,66 @@ Response must be strictly JSON according to the schema requested. If the term do
         responseSchema: {
           type: Type.OBJECT,
           properties: {
-            word: { type: Type.STRING, description: "Capitalized Romanized representation, e.g. 'Ringo'" },
-            kanji: { type: Type.STRING, description: "Standard Kanji representation if appropriate, e.g. '林檎'" },
+            word: {
+              type: Type.STRING,
+              description: "Capitalized Romanized representation, e.g. 'Ringo'",
+            },
+            kanji: {
+              type: Type.STRING,
+              description: "Standard Kanji representation if appropriate, e.g. '林檎'",
+            },
             hiragana: { type: Type.STRING, description: "Hiragana writing, e.g. 'りんご'" },
             katakana: { type: Type.STRING, description: "Katakana writing, e.g. 'リンゴ'" },
-            romaji: { type: Type.STRING, description: "Lower-case phonetic romaji representation, e.g. 'ringo'" },
-            category: { type: Type.STRING, description: "Grammar part of speech, most commonly 'Noun'" },
+            romaji: {
+              type: Type.STRING,
+              description: "Lower-case phonetic romaji representation, e.g. 'ringo'",
+            },
+            category: {
+              type: Type.STRING,
+              description: "Grammar part of speech, most commonly 'Noun'",
+            },
             meaning: { type: Type.STRING, description: "Primary English definition, e.g. 'Apple'" },
             shiritoriRuleCheck: {
               type: Type.OBJECT,
               properties: {
-                valid: { type: Type.BOOLEAN, description: "Whether this is a valid Shiritori noun (e.g. true for nouns not ending in 'ん')" },
-                reason: { type: Type.STRING, description: "Short evaluation description like 'Valid word! Starts with Ri (り) and ends with Go (ご).'" },
-                startsWith: { type: Type.STRING, description: "The starting Hiragana character of the word (e.g. 'り')" },
-                endsWith: { type: Type.STRING, description: "The ending Hiragana character of the word (e.g. 'ご')" },
-                endsInN: { type: Type.BOOLEAN, description: "Whether it ends in any 'n' / 'ん' / 'ン' sound" }
+                valid: {
+                  type: Type.BOOLEAN,
+                  description:
+                    "Whether this is a valid Shiritori noun (e.g. true for nouns not ending in 'ん')",
+                },
+                reason: {
+                  type: Type.STRING,
+                  description:
+                    "Short evaluation description like 'Valid word! Starts with Ri (り) and ends with Go (ご).'",
+                },
+                startsWith: {
+                  type: Type.STRING,
+                  description: "The starting Hiragana character of the word (e.g. 'り')",
+                },
+                endsWith: {
+                  type: Type.STRING,
+                  description: "The ending Hiragana character of the word (e.g. 'ご')",
+                },
+                endsInN: {
+                  type: Type.BOOLEAN,
+                  description: "Whether it ends in any 'n' / 'ん' / 'ン' sound",
+                },
               },
-              required: ["valid", "reason", "startsWith", "endsWith", "endsInN"]
-            }
+              required: ["valid", "reason", "startsWith", "endsWith", "endsInN"],
+            },
           },
-          required: ["word", "hiragana", "romaji", "category", "meaning", "shiritoriRuleCheck"]
-        }
-      }
+          required: ["word", "hiragana", "romaji", "category", "meaning", "shiritoriRuleCheck"],
+        },
+      },
     });
 
     const data = JSON.parse(response.text || "{}");
     res.json(data);
   } catch (error: any) {
     console.error("Gemini library search error:", error);
-    res.status(500).json({ error: error.message || "Failed to search word dictionary with Gemini." });
+    res
+      .status(500)
+      .json({ error: error.message || "Failed to search word dictionary with Gemini." });
   }
 });
 
@@ -132,7 +169,7 @@ app.post("/api/contact/submit", async (req, res) => {
 
   res.json({
     status: "ok",
-    message: `Inquiry successfully recorded and transmitted to ${destinationEmail}!`
+    message: `Inquiry successfully recorded and transmitted to ${destinationEmail}!`,
   });
 });
 
@@ -142,7 +179,9 @@ app.post("/api/game/evaluate-word", async (req, res) => {
   const ai = getAIClient();
 
   if (!ai) {
-    return res.status(500).json({ error: "Gemini API Client is not configured. Please supply GEMINI_API_KEY." });
+    return res
+      .status(500)
+      .json({ error: "Gemini API Client is not configured. Please supply GEMINI_API_KEY." });
   }
 
   const normalizedUsed = Array.isArray(usedWords) ? usedWords.join(", ") : "";
@@ -165,21 +204,52 @@ If the word is in romaji or English, find its Japanese noun translation first (e
         responseSchema: {
           type: Type.OBJECT,
           properties: {
-            valid: { type: Type.BOOLEAN, description: "Strictly true if valid Japanese noun, starts with core lastChar, is not used before, and does NOT end in ん/n/ン." },
-            reason: { type: Type.STRING, description: "Readable feedback phrase why it works or failed (e.g. 'Valid word! Starts with Ri (り) and ends with Go (ご).')" },
+            valid: {
+              type: Type.BOOLEAN,
+              description:
+                "Strictly true if valid Japanese noun, starts with core lastChar, is not used before, and does NOT end in ん/n/ン.",
+            },
+            reason: {
+              type: Type.STRING,
+              description:
+                "Readable feedback phrase why it works or failed (e.g. 'Valid word! Starts with Ri (り) and ends with Go (ご).')",
+            },
             word: { type: Type.STRING, description: "Capitalizd Romaji form" },
             hiragana: { type: Type.STRING, description: "Hiragana form" },
             kanji: { type: Type.STRING, description: "Kanji representation" },
             meaning: { type: Type.STRING, description: "English translation definition" },
-            startsWithCorrectChar: { type: Type.BOOLEAN, description: "True if it starts with the lastChar" },
+            startsWithCorrectChar: {
+              type: Type.BOOLEAN,
+              description: "True if it starts with the lastChar",
+            },
             endsInN: { type: Type.BOOLEAN, description: "True if it ends in n/ん/ン" },
-            isDuplicate: { type: Type.BOOLEAN, description: "True if it matches one of the usedWords" },
-            lastChar: { type: Type.STRING, description: "The ending Hiragana character (e.g. if 'りんご', ends in 'ご')" },
-            lastCharRomaji: { type: Type.STRING, description: "Phonetic ending character romaji (e.g. 'go')" }
+            isDuplicate: {
+              type: Type.BOOLEAN,
+              description: "True if it matches one of the usedWords",
+            },
+            lastChar: {
+              type: Type.STRING,
+              description: "The ending Hiragana character (e.g. if 'りんご', ends in 'ご')",
+            },
+            lastCharRomaji: {
+              type: Type.STRING,
+              description: "Phonetic ending character romaji (e.g. 'go')",
+            },
           },
-          required: ["valid", "reason", "word", "hiragana", "meaning", "startsWithCorrectChar", "endsInN", "isDuplicate", "lastChar", "lastCharRomaji"]
-        }
-      }
+          required: [
+            "valid",
+            "reason",
+            "word",
+            "hiragana",
+            "meaning",
+            "startsWithCorrectChar",
+            "endsInN",
+            "isDuplicate",
+            "lastChar",
+            "lastCharRomaji",
+          ],
+        },
+      },
     });
 
     const data = JSON.parse(response.text || "{}");
@@ -196,13 +266,15 @@ app.post("/api/game/bot-play", async (req, res) => {
   const ai = getAIClient();
 
   if (!ai) {
-    return res.status(500).json({ error: "Gemini API Client is not configured. Please supply GEMINI_API_KEY." });
+    return res
+      .status(500)
+      .json({ error: "Gemini API Client is not configured. Please supply GEMINI_API_KEY." });
   }
 
   const normalizedUsed = Array.isArray(usedWords) ? usedWords.join(", ") : "";
 
   // Dynamic failure generation for Bot if on easy difficulty
-  const shouldMakeMistake = difficulty === "easy" && Math.random() < 0.20;
+  const shouldMakeMistake = difficulty === "easy" && Math.random() < 0.2;
 
   const prompt = `Speak as ${opponentName || "Neko-chan/Mei-chan"} in a Shiritori match!
 You need to say a Japanese noun that starts with the Hiragana syllable: "${lastChar}".
@@ -224,13 +296,31 @@ Also give a cute, kawaii sticker emoji reaction and an elegant, friendly chat co
             kanji: { type: Type.STRING, description: "Kanji form if exists" },
             meaning: { type: Type.STRING, description: "English translation of the word" },
             endsInN: { type: Type.BOOLEAN, description: "True if the word ends with 'ん'/'ン'/n" },
-            isInvalid: { type: Type.BOOLEAN, description: "True if the bot chose an invalid start syllable or did a mistake" },
-            chatSticker: { type: Type.STRING, description: "A sticker style emoji, e.g. '🌸', '✨', '💪', '❤️'" },
-            chatMessage: { type: Type.STRING, description: "Sweet, supportive chat response comment, in English or bilingual, e.g. 'Ah, the forest is beautiful! Kiku (Chrysanthemum) starts with Ki! Your turn!'" }
+            isInvalid: {
+              type: Type.BOOLEAN,
+              description: "True if the bot chose an invalid start syllable or did a mistake",
+            },
+            chatSticker: {
+              type: Type.STRING,
+              description: "A sticker style emoji, e.g. '🌸', '✨', '💪', '❤️'",
+            },
+            chatMessage: {
+              type: Type.STRING,
+              description:
+                "Sweet, supportive chat response comment, in English or bilingual, e.g. 'Ah, the forest is beautiful! Kiku (Chrysanthemum) starts with Ki! Your turn!'",
+            },
           },
-          required: ["word", "hiragana", "meaning", "endsInN", "isInvalid", "chatSticker", "chatMessage"]
-        }
-      }
+          required: [
+            "word",
+            "hiragana",
+            "meaning",
+            "endsInN",
+            "isInvalid",
+            "chatSticker",
+            "chatMessage",
+          ],
+        },
+      },
     });
 
     const data = JSON.parse(response.text || "{}");
@@ -250,10 +340,10 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
+    const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(distPath, "index.html"));
     });
   }
 

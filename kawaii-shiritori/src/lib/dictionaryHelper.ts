@@ -1,9 +1,10 @@
-import dictionaryData from '../data/dictionary.json';
+import dictionaryData from "../data/dictionary.json";
 
 export interface DictionaryWord {
   word: string;
   romaji: string;
   kanji: string;
+  onyomi?: string;
   translation: string;
   startSound: string;
   endSound: string;
@@ -28,7 +29,7 @@ class DictionaryHelper {
     this.byHiragana = new Map();
     this.byRomaji = new Map();
     this.byKanji = new Map();
-    
+
     this.buildIndexes();
   }
 
@@ -46,7 +47,7 @@ class DictionaryHelper {
 
       this.byHiragana.set(word.word, word);
       this.byRomaji.set(word.romaji.toLowerCase(), word);
-      
+
       if (word.kanji) {
         this.byKanji.set(word.kanji, word);
       }
@@ -55,19 +56,19 @@ class DictionaryHelper {
 
   findWord(input: string): DictionaryWord | null {
     const normalized = input.trim().toLowerCase();
-    
+
     if (this.byHiragana.has(input.trim())) {
       return this.byHiragana.get(input.trim()) || null;
     }
-    
+
     if (this.byRomaji.has(normalized)) {
       return this.byRomaji.get(normalized) || null;
     }
-    
+
     if (this.byKanji.has(input.trim())) {
       return this.byKanji.get(input.trim()) || null;
     }
-    
+
     return null;
   }
 
@@ -84,30 +85,34 @@ class DictionaryHelper {
   }
 
   endsInN(word: string): boolean {
-    return word.endsWith('ん') || word.endsWith('ン') || word.toLowerCase().endsWith('n');
+    return word.endsWith("ん") || word.endsWith("ン") || word.toLowerCase().endsWith("n");
   }
 
   getRandomWordStartingWith(sound: string, excludeWords: string[] = []): DictionaryWord | null {
-    const candidates = this.getWordsByStartSound(sound).filter(w => 
-      !this.endsInN(w.word) && 
-      !excludeWords.includes(w.word) &&
-      !excludeWords.includes(w.romaji) &&
-      !excludeWords.includes(w.kanji)
+    const candidates = this.getWordsByStartSound(sound).filter(
+      w =>
+        !this.endsInN(w.word) &&
+        !excludeWords.includes(w.word) &&
+        !excludeWords.includes(w.romaji) &&
+        !excludeWords.includes(w.kanji)
     );
-    
+
     if (candidates.length === 0) return null;
-    
+
     const randomIndex = Math.floor(Math.random() * candidates.length);
     return candidates[randomIndex];
   }
 
-  getSuggestedWords(sound: string, count: number = 3, excludeWords: string[] = []): DictionaryWord[] {
-    const candidates = this.getWordsByStartSound(sound).filter(w => 
-      !this.endsInN(w.word) && 
-      !excludeWords.includes(w.word) &&
-      !excludeWords.includes(w.romaji)
+  getSuggestedWords(
+    sound: string,
+    count: number = 3,
+    excludeWords: string[] = []
+  ): DictionaryWord[] {
+    const candidates = this.getWordsByStartSound(sound).filter(
+      w =>
+        !this.endsInN(w.word) && !excludeWords.includes(w.word) && !excludeWords.includes(w.romaji)
     );
-    
+
     const shuffled = candidates.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
   }

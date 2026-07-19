@@ -1,0 +1,7 @@
+{
+  "status": "ok",
+  "service": "shiritori-online",
+  "version": "1.0.0",
+  "timestamp": "build-time",
+  "checks": ["hosting", "spa"]
+}

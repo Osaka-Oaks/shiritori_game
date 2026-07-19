@@ -2,7 +2,20 @@ import React from "react";
 import { PlayerProfile, OpponentBot, PlayedWord, MatchHistory, WordHint } from "../types";
 import { convertRomajiToHiragana, speakWord } from "../utils";
 import { motion, AnimatePresence } from "motion/react";
-import { Home, Lightbulb, Shield, ShieldCheck, ArrowRight, Zap, RefreshCw, X, AlertOctagon, Volume2, Trophy, Loader2 } from "lucide-react";
+import {
+  Home,
+  Lightbulb,
+  Shield,
+  ShieldCheck,
+  ArrowRight,
+  Zap,
+  RefreshCw,
+  X,
+  AlertOctagon,
+  Volume2,
+  Trophy,
+  Loader2,
+} from "lucide-react";
 
 interface GameRoomProps {
   playerProfile: PlayerProfile;
@@ -15,7 +28,7 @@ export default function GameRoomView({
   playerProfile,
   selectedBot,
   onGameFinished,
-  onExit
+  onExit,
 }: GameRoomProps) {
   // --- STATE REGISTRY ---
   const [playedWords, setPlayedWords] = React.useState<PlayedWord[]>([
@@ -28,16 +41,16 @@ export default function GameRoomView({
       romaji: "ringo",
       startSound: "り",
       endSound: "ご",
-      speaker: "opponent"
-    }
+      speaker: "opponent",
+    },
   ]);
 
   const [playerScore, setPlayerScore] = React.useState(0);
   const [opponentScore, setOpponentScore] = React.useState(0);
-  
+
   const [currentTurn, setCurrentTurn] = React.useState<"player" | "opponent">("player");
   const [playerInput, setPlayerInput] = React.useState("");
-  
+
   // Powerup state variables
   const [hints, setHints] = React.useState<WordHint[]>([]);
   const [loadingHints, setLoadingHints] = React.useState(false);
@@ -47,17 +60,32 @@ export default function GameRoomView({
   const [hintCount, setHintCount] = React.useState(3);
 
   // Timer settings
-  const INITIAL_TIME_S = selectedBot.difficulty === "easy" ? 40 : selectedBot.difficulty === "medium" ? 25 : 15;
+  const INITIAL_TIME_S =
+    selectedBot.difficulty === "easy" ? 40 : selectedBot.difficulty === "medium" ? 25 : 15;
   const [timeLeft, setTimeLeft] = React.useState(INITIAL_TIME_S);
-  
+
   // Transitional Overlay popups
   const [evaluatingWord, setEvaluatingWord] = React.useState(false);
-  const [successState, setSuccessState] = React.useState<{ show: boolean; points: number; word: string } | null>(null);
-  const [oopsState, setOopsState] = React.useState<{ show: boolean; msg: string; word: string } | null>(null);
-  const [gameOverState, setGameOverState] = React.useState<{ show: boolean; winnerName: string; winnerAvatar: string } | null>(null);
+  const [successState, setSuccessState] = React.useState<{
+    show: boolean;
+    points: number;
+    word: string;
+  } | null>(null);
+  const [oopsState, setOopsState] = React.useState<{
+    show: boolean;
+    msg: string;
+    word: string;
+  } | null>(null);
+  const [gameOverState, setGameOverState] = React.useState<{
+    show: boolean;
+    winnerName: string;
+    winnerAvatar: string;
+  } | null>(null);
 
   // Bot Speech Bubble Dialog text
-  const [botChat, setBotChat] = React.useState(`Hello, ${playerProfile.name}! I played "Ringo" (りんご) = 🍎 Apple. Match the final sound "go" (ご)!`);
+  const [botChat, setBotChat] = React.useState(
+    `Hello, ${playerProfile.name}! I played "Ringo" (りんご) = 🍎 Apple. Match the final sound "go" (ご)!`
+  );
 
   // Auto-save game state to localStorage
   React.useEffect(() => {
@@ -69,15 +97,15 @@ export default function GameRoomView({
         currentTurn,
         timeLeft,
         botName: selectedBot.name,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
-      localStorage.setItem('shiritori_game_state', JSON.stringify(gameState));
+      localStorage.setItem("shiritori_game_state", JSON.stringify(gameState));
     }
   }, [playedWords, playerScore, opponentScore, currentTurn, gameOverState]);
 
   // Load saved game state on mount
   React.useEffect(() => {
-    const saved = localStorage.getItem('shiritori_game_state');
+    const saved = localStorage.getItem("shiritori_game_state");
     if (saved) {
       try {
         const state = JSON.parse(saved);
@@ -87,7 +115,7 @@ export default function GameRoomView({
           // For now, just clear it on new game
         }
       } catch (e) {
-        console.error('Failed to load saved game:', e);
+        console.error("Failed to load saved game:", e);
       }
     }
   }, []);
@@ -95,7 +123,7 @@ export default function GameRoomView({
   // Clear saved game on game over
   React.useEffect(() => {
     if (gameOverState?.show) {
-      localStorage.removeItem('shiritori_game_state');
+      localStorage.removeItem("shiritori_game_state");
     }
   }, [gameOverState]);
 
@@ -110,7 +138,9 @@ export default function GameRoomView({
           setHasShieldGuard(false);
           setShieldActive(true);
           setTimeLeft(INITIAL_TIME_S);
-          setBotChat("Woof/Meow! My shield trigger activated to restore your turn timer. Quick thinking!");
+          setBotChat(
+            "Woof/Meow! My shield trigger activated to restore your turn timer. Quick thinking!"
+          );
           return;
         }
         triggerGameOver("opponent");
@@ -143,11 +173,11 @@ export default function GameRoomView({
   const handleBotTurn = async (currentHistory: PlayedWord[]) => {
     setCurrentTurn("opponent");
     setTimeLeft(INITIAL_TIME_S);
-    
+
     // Find matching syllable for opponent
     const lastWord = currentHistory[currentHistory.length - 1];
     const syllable = lastWord ? lastWord.endSound : "り";
-    
+
     try {
       const response = await fetch("/api/gemini/opponent-turn", {
         method: "POST",
@@ -155,8 +185,8 @@ export default function GameRoomView({
         body: JSON.stringify({
           lastSound: syllable,
           difficulty: selectedBot.difficulty,
-          playedWords: currentHistory.map(w => w.word)
-        })
+          playedWords: currentHistory.map(w => w.word),
+        }),
       });
 
       if (!response.ok) throw new Error("Bot turn API error");
@@ -166,23 +196,30 @@ export default function GameRoomView({
       const isFatal = botPlay.endSound === "ん" || botPlay.word.toLowerCase().endsWith("n");
 
       setTimeout(() => {
-        setPlayedWords(prev => [...prev, {
-          word: botPlay.word,
-          translation: botPlay.translation,
-          kanji: botPlay.kanji || "",
-          hiragana: botPlay.hiragana || botPlay.word,
-          katakana: botPlay.katakana || "",
-          romaji: botPlay.romaji || botPlay.word,
-          startSound: botPlay.startSound || syllable,
-          endSound: botPlay.endSound || "ご",
-          speaker: "opponent"
-        }]);
+        setPlayedWords(prev => [
+          ...prev,
+          {
+            word: botPlay.word,
+            translation: botPlay.translation,
+            kanji: botPlay.kanji || "",
+            hiragana: botPlay.hiragana || botPlay.word,
+            katakana: botPlay.katakana || "",
+            romaji: botPlay.romaji || botPlay.word,
+            startSound: botPlay.startSound || syllable,
+            endSound: botPlay.endSound || "ご",
+            speaker: "opponent",
+          },
+        ]);
 
-        setBotChat(`I played "${botPlay.word}" (${botPlay.hiragana}) = 🇬🇧 ${botPlay.translation}! Your turn to match "${botPlay.endSound}". がんばって!`);
+        setBotChat(
+          `I played "${botPlay.word}" (${botPlay.hiragana}) = 🇬🇧 ${botPlay.translation}! Your turn to match "${botPlay.endSound}". がんばって!`
+        );
         speakWord(botPlay.hiragana || botPlay.word);
 
         if (isFatal) {
-          setBotChat(`Oops... I played "${botPlay.word}" which ends in ん/N. I made a fatal mistake and lost!`);
+          setBotChat(
+            `Oops... I played "${botPlay.word}" which ends in ん/N. I made a fatal mistake and lost!`
+          );
           setTimeout(() => triggerGameOver("player"), 1800);
         } else {
           setOpponentScore(prev => prev + 40);
@@ -190,7 +227,6 @@ export default function GameRoomView({
           setTimeLeft(INITIAL_TIME_S);
         }
       }, 1500);
-
     } catch (err) {
       console.error(err);
       setCurrentTurn("player");
@@ -212,16 +248,20 @@ export default function GameRoomView({
     try {
       // 1. Check duplicates locally in history to prevent API redundant counts
       const lower = finalWordToCheck.toLowerCase();
-      const duplicate = playedWords.some(w => 
-        w.word.toLowerCase() === lower || 
-        w.hiragana === lower || 
-        w.kanji === lower ||
-        w.romaji.toLowerCase() === lower
+      const duplicate = playedWords.some(
+        w =>
+          w.word.toLowerCase() === lower ||
+          w.hiragana === lower ||
+          w.kanji === lower ||
+          w.romaji.toLowerCase() === lower
       );
 
       if (duplicate) {
         setEvaluatingWord(false);
-        triggerOopsModal(`You cannot repeat a word! "${finalWordToCheck}" has already been used in this match.`, finalWordToCheck);
+        triggerOopsModal(
+          `You cannot repeat a word! "${finalWordToCheck}" has already been used in this match.`,
+          finalWordToCheck
+        );
         return;
       }
 
@@ -229,7 +269,7 @@ export default function GameRoomView({
       const response = await fetch("/api/gemini/evaluate-word", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ word: finalWordToCheck })
+        body: JSON.stringify({ word: finalWordToCheck }),
       });
 
       if (!response.ok) throw new Error("Evaluation failed");
@@ -238,24 +278,34 @@ export default function GameRoomView({
       setEvaluatingWord(false);
 
       if (!checkResult.isValid) {
-        triggerOopsModal(checkResult.reason || "This is not a recognized Japanese noun suited for Shiritori.", finalWordToCheck);
+        triggerOopsModal(
+          checkResult.reason || "This is not a recognized Japanese noun suited for Shiritori.",
+          finalWordToCheck
+        );
         return;
       }
 
       // 3. Chain matching syllable check
       // Syllable check (Hiragana match)
-      const correctStart = checkResult.startSound === requiredLetter || 
-                           checkResult.startSound.startsWith(requiredLetter) || 
-                           requiredLetter.startsWith(checkResult.startSound);
+      const correctStart =
+        checkResult.startSound === requiredLetter ||
+        checkResult.startSound.startsWith(requiredLetter) ||
+        requiredLetter.startsWith(checkResult.startSound);
 
       if (!correctStart) {
-        triggerOopsModal(`Phonetic chain breach! Your word starts with "${checkResult.startSound}" but MUST start with last sound "${requiredLetter}".`, finalWordToCheck);
+        triggerOopsModal(
+          `Phonetic chain breach! Your word starts with "${checkResult.startSound}" but MUST start with last sound "${requiredLetter}".`,
+          finalWordToCheck
+        );
         return;
       }
 
       // 4. Ends in ん Check (direct loss condition)
       if (checkResult.endsInN) {
-        triggerOopsModal(`FATAL ERROR! Your word "${finalWordToCheck}" ends in "ん" / "N". The rules say this causes a direct GAME OVER!`, finalWordToCheck);
+        triggerOopsModal(
+          `FATAL ERROR! Your word "${finalWordToCheck}" ends in "ん" / "N". The rules say this causes a direct GAME OVER!`,
+          finalWordToCheck
+        );
         setTimeout(() => {
           setOopsState(null);
           triggerGameOver("opponent");
@@ -264,10 +314,14 @@ export default function GameRoomView({
       }
 
       // --- ALL VALID: TRIGGER SUCCESS OVERLAY ---
-      const pointsScored = 50 + (finalWordToCheck.length * 10);
-      setSuccessState({ show: true, points: pointsScored, word: checkResult.kanji || finalWordToCheck });
+      const pointsScored = 50 + finalWordToCheck.length * 10;
+      setSuccessState({
+        show: true,
+        points: pointsScored,
+        word: checkResult.kanji || finalWordToCheck,
+      });
       speakWord(checkResult.hiragana || finalWordToCheck);
-      
+
       const newSavedWord: PlayedWord = {
         word: checkResult.word,
         translation: checkResult.translation,
@@ -277,13 +331,13 @@ export default function GameRoomView({
         romaji: checkResult.romaji || trimmedInput,
         startSound: checkResult.startSound || requiredLetter,
         endSound: checkResult.endSound,
-        speaker: "player"
+        speaker: "player",
       };
 
       const updatedHistory = [...playedWords, newSavedWord];
       setPlayedWords(updatedHistory);
       setPlayerScore(prev => prev + pointsScored);
-      
+
       // Clear input
       setPlayerInput("");
       setHints([]);
@@ -293,10 +347,12 @@ export default function GameRoomView({
         setSuccessState(null);
         handleBotTurn(updatedHistory);
       }, 1600);
-
     } catch (err) {
       setEvaluatingWord(false);
-      triggerOopsModal("Oops! API error evaluating word. Let's assume it was valid!", finalWordToCheck);
+      triggerOopsModal(
+        "Oops! API error evaluating word. Let's assume it was valid!",
+        finalWordToCheck
+      );
     }
   };
 
@@ -314,7 +370,7 @@ export default function GameRoomView({
       const response = await fetch("/api/gemini/word-hint", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lastSound: requiredLetter })
+        body: JSON.stringify({ lastSound: requiredLetter }),
       });
 
       if (!response.ok) throw new Error("Hints fetch failing");
@@ -324,7 +380,12 @@ export default function GameRoomView({
     } catch (err) {
       // Offline direct mock population
       setHints([
-        { word: `${requiredLetter}ko`, translation: "Quick hint word", hiragana: `${requiredLetter}こ`, romaji: `${requiredLetter}ko` }
+        {
+          word: `${requiredLetter}ko`,
+          translation: "Quick hint word",
+          hiragana: `${requiredLetter}こ`,
+          romaji: `${requiredLetter}ko`,
+        },
       ]);
     } finally {
       setLoadingHints(false);
@@ -344,12 +405,16 @@ export default function GameRoomView({
       id: Math.random().toString(),
       opponentName: selectedBot.name,
       opponentAvatar: selectedBot.avatarUrl,
-      date: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }),
+      date: new Date().toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
       playerScore,
       opponentScore,
       chainLength: playedWords.length,
       fatalWord: playedWords[playedWords.length - 1]?.word || "Ringo",
-      didWin: isPlayerWin
+      didWin: isPlayerWin,
     };
 
     onGameFinished(finalReport);
@@ -367,8 +432,8 @@ export default function GameRoomView({
         romaji: "ringo",
         startSound: "り",
         endSound: "ご",
-        speaker: "opponent"
-      }
+        speaker: "opponent",
+      },
     ]);
     setPlayerScore(0);
     setOpponentScore(0);
@@ -382,12 +447,13 @@ export default function GameRoomView({
     setSuccessState(null);
     setOopsState(null);
     setGameOverState(null);
-    setBotChat(`New game battle launched! Connect current word "Ringo". Play sound syllable "go" (ご)!`);
+    setBotChat(
+      `New game battle launched! Connect current word "Ringo". Play sound syllable "go" (ご)!`
+    );
   };
 
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col min-h-[82vh] relative bg-background select-none pb-24 overflow-hidden pt-2 px-1">
-      
       {/* Top turn timer horizontal indicator */}
       <div className="w-full h-2.5 bg-surface-container-high rounded-full overflow-hidden shadow-inner absolute top-0 left-0 right-0 z-10">
         <motion.div
@@ -423,9 +489,13 @@ export default function GameRoomView({
 
         {/* Dynamic center Turn Tag */}
         <div className="text-center">
-          <span className={`text-[10px] font-label-caps font-bold px-3 py-1 rounded-full ${
-            currentTurn === 'player' ? 'bg-primary-container/20 text-primary' : 'bg-secondary-container/20 text-on-secondary-container'
-          }`}>
+          <span
+            className={`text-[10px] font-label-caps font-bold px-3 py-1 rounded-full ${
+              currentTurn === "player"
+                ? "bg-primary-container/20 text-primary"
+                : "bg-secondary-container/20 text-on-secondary-container"
+            }`}
+          >
             {currentTurn === "player" ? "Your Turn" : "Bot's Turn"}
           </span>
           <p className="text-[10px] font-bold text-outline-variant mt-1">⏳ {timeLeft}sLeft</p>
@@ -445,8 +515,12 @@ export default function GameRoomView({
             )}
           </div>
           <div>
-            <h4 className="font-headline font-bold text-xs text-on-surface max-w-[90px] truncate">{selectedBot.name}</h4>
-            <div className="text-sm font-black text-secondary font-headline">{opponentScore} pts</div>
+            <h4 className="font-headline font-bold text-xs text-on-surface max-w-[90px] truncate">
+              {selectedBot.name}
+            </h4>
+            <div className="text-sm font-black text-secondary font-headline">
+              {opponentScore} pts
+            </div>
           </div>
         </div>
       </header>
@@ -480,12 +554,14 @@ export default function GameRoomView({
                 initial={{ opacity: 0, x: isBot ? -40 : 40, scale: 0.95 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 transition={{ type: "spring", damping: 15 }}
-                className={`flex gap-3 items-start ${isBot ? 'flex-row' : 'flex-row'}`} // Align everything in uniform easy-read flow
+                className={`flex gap-3 items-start ${isBot ? "flex-row" : "flex-row"}`} // Align everything in uniform easy-read flow
               >
                 {/* Round badge indicator with letters */}
-                <div className={`w-10 h-10 rounded-full text-white flex items-center justify-center font-display-game font-bold text-xs shadow-md border-2 border-white flex-shrink-0 ${
-                  isBot ? 'bg-secondary' : 'bg-primary'
-                }`}>
+                <div
+                  className={`w-10 h-10 rounded-full text-white flex items-center justify-center font-display-game font-bold text-xs shadow-md border-2 border-white flex-shrink-0 ${
+                    isBot ? "bg-secondary" : "bg-primary"
+                  }`}
+                >
                   {wordObj.startSound}
                 </div>
 
@@ -502,7 +578,8 @@ export default function GameRoomView({
                     </div>
 
                     <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">
-                      Hiragana: <strong className="font-bold text-primary">{wordObj.hiragana}</strong>
+                      Hiragana:{" "}
+                      <strong className="font-bold text-primary">{wordObj.hiragana}</strong>
                     </p>
                     <p className="text-xs font-bold text-secondary mt-1 flex items-center gap-1">
                       🇬🇧 {wordObj.translation}
@@ -518,7 +595,9 @@ export default function GameRoomView({
                       <Volume2 className="w-4 h-4" />
                     </button>
                     {/* Syllable connector marker info */}
-                    <div className={`px-2 py-0.5 rounded font-display-game text-[10px] text-white font-bold inline-block mr-1 ${isBot ? 'bg-secondary' : 'bg-primary'}`}>
+                    <div
+                      className={`px-2 py-0.5 rounded font-display-game text-[10px] text-white font-bold inline-block mr-1 ${isBot ? "bg-secondary" : "bg-primary"}`}
+                    >
                       {wordObj.endSound}
                     </div>
                   </div>
@@ -543,16 +622,17 @@ export default function GameRoomView({
       {/* CONTROLS INPUT BOARD PANEL (BOTTOM STICKY) */}
       <footer className="p-3 bg-surface-container-low border-t border-surface-container-highest z-20 flex flex-col gap-2 relative">
         <form onSubmit={handleWordSubmit} className="flex gap-2 items-center">
-          
           {/* Leftside Bolt powerups trigger button */}
           <button
             type="button"
             onClick={() => setShowPowerupMenu(prev => !prev)}
             className={`p-3 rounded-full border-2 transition-all flex items-center justify-center cursor-pointer ${
-              showPowerupMenu ? 'bg-primary border-primary text-on-primary' : 'bg-surface border-primary/20 text-primary hover:bg-primary/5 shadow-xs'
+              showPowerupMenu
+                ? "bg-primary border-primary text-on-primary"
+                : "bg-surface border-primary/20 text-primary hover:bg-primary/5 shadow-xs"
             }`}
           >
-            <Zap className={`w-5 h-5 fill-current ${showPowerupMenu ? 'animate-bounce' : ''}`} />
+            <Zap className={`w-5 h-5 fill-current ${showPowerupMenu ? "animate-bounce" : ""}`} />
           </button>
 
           {/* Core Word Input field */}
@@ -564,15 +644,19 @@ export default function GameRoomView({
               className="w-full bg-surface border-2 border-primary rounded-none py-3 px-6 pr-12 text-on-surface font-body font-bold placeholder:text-white/30 focus:outline-none focus:border-white focus:ring-2 focus:ring-primary/20 transition-all shadow-[4px_4px_0px_0px_#f27d26] disabled:opacity-50"
               placeholder={currentTurn === "opponent" ? "Waiting for Bot..." : `Enter word...`}
               value={playerInput}
-              onChange={(e) => setPlayerInput(e.target.value.replace(/[^a-zA-Zあ-んア-ン]/g, ""))}
+              onChange={e => setPlayerInput(e.target.value.replace(/[^a-zA-Zあ-んア-ン]/g, ""))}
             />
-            
+
             <button
               type="submit"
               disabled={!playerInput.trim() || currentTurn === "opponent" || evaluatingWord}
               className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-on-primary rounded-none p-2 hover:bg-opacity-90 disabled:opacity-50 transition-colors cursor-pointer border border-white"
             >
-              {evaluatingWord ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
+              {evaluatingWord ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <ArrowRight className="w-4 h-4" />
+              )}
             </button>
           </div>
         </form>
@@ -580,7 +664,8 @@ export default function GameRoomView({
         {/* Converted real-time preview helper tooltip */}
         {playerInput && (
           <div className="text-center font-display-game font-bold text-xs bg-primary/10 text-primary py-1 px-4 rounded-full mx-auto max-w-xs animate-fade-in select-none">
-            Preview Conversion: <span className="underline font-extrabold">{inputHiraganaPreview}</span>
+            Preview Conversion:{" "}
+            <span className="underline font-extrabold">{inputHiraganaPreview}</span>
           </div>
         )}
 
@@ -598,7 +683,9 @@ export default function GameRoomView({
                   <Zap className="w-3.5 h-3.5 fill-current" />
                   AVAILABLE SKILL BOOSTS
                 </span>
-                <span className="text-[9px] font-body text-outline font-medium">Free during event match</span>
+                <span className="text-[9px] font-body text-outline font-medium">
+                  Free during event match
+                </span>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
@@ -624,7 +711,9 @@ export default function GameRoomView({
                     setHasShieldGuard(false);
                     setShieldActive(true);
                     setTimeLeft(prev => prev + 25);
-                    setBotChat("Active shield safety! Restoring turn game clock with 25 additional seconds!");
+                    setBotChat(
+                      "Active shield safety! Restoring turn game clock with 25 additional seconds!"
+                    );
                     setShowPowerupMenu(false);
                   }}
                   className="p-2.5 bg-surface-container border border-outline-variant/20 rounded-xl flex items-center gap-2 select-none disabled:opacity-30 text-left"
@@ -632,7 +721,9 @@ export default function GameRoomView({
                   <ShieldCheck className="w-4 h-4 text-secondary" />
                   <div>
                     <h6 className="font-headline font-bold text-xs text-on-surface">Time Shield</h6>
-                    <p className="text-[9px] text-outline mt-0.5">{hasShieldGuard ? "Available (One-Shot)" : "Used up"}</p>
+                    <p className="text-[9px] text-outline mt-0.5">
+                      {hasShieldGuard ? "Available (One-Shot)" : "Used up"}
+                    </p>
                   </div>
                 </button>
               </div>
@@ -647,7 +738,9 @@ export default function GameRoomView({
 
               {hints.length > 0 && (
                 <div className="bg-surface rounded-xl p-2.5 border border-primary/10 space-y-1.5 text-xs text-left shadow-xs">
-                  <p className="font-label-caps text-[9px] text-primary font-bold">GEMINI SUGGESTED WORDS:</p>
+                  <p className="font-label-caps text-[9px] text-primary font-bold">
+                    GEMINI SUGGESTED WORDS:
+                  </p>
                   <div className="grid grid-cols-3 gap-1.5 pt-0.5">
                     {hints.map((hint, hi) => (
                       <button
@@ -659,8 +752,12 @@ export default function GameRoomView({
                         }}
                         className="p-2 bg-surface-container-low hover:bg-primary/5 border border-primary/10 rounded-lg text-center cursor-pointer transition-colors"
                       >
-                        <span className="font-display-game font-bold text-on-surface block truncate">{hint.word}</span>
-                        <span className="text-[9px] text-primary block truncate font-medium">{hint.translation}</span>
+                        <span className="font-display-game font-bold text-on-surface block truncate">
+                          {hint.word}
+                        </span>
+                        <span className="text-[9px] text-primary block truncate font-medium">
+                          {hint.translation}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -699,9 +796,15 @@ export default function GameRoomView({
                 <h3 className="font-headline font-black text-2xl tracking-tight text-yellow-600 animate-bounce">
                   SUGOI! すごい
                 </h3>
-                <p className="text-xl font-black text-primary font-headline">+{successState.points} points scored!</p>
+                <p className="text-xl font-black text-primary font-headline">
+                  +{successState.points} points scored!
+                </p>
                 <p className="text-xs font-body text-on-surface-variant font-medium">
-                  Valid Japanese word: <strong className="font-extrabold text-on-surface font-display-game">{successState.word}</strong> Accepted!
+                  Valid Japanese word:{" "}
+                  <strong className="font-extrabold text-on-surface font-display-game">
+                    {successState.word}
+                  </strong>{" "}
+                  Accepted!
                 </p>
               </div>
 
@@ -749,7 +852,8 @@ export default function GameRoomView({
 
               <div className="p-3 bg-error-container/30 border border-error/20 rounded-xl space-y-1">
                 <p className="text-xs text-on-error-container font-body font-extrabold leading-tight">
-                  Evaluated Word: <span className="underline font-black font-display-game">{oopsState.word}</span>
+                  Evaluated Word:{" "}
+                  <span className="underline font-black font-display-game">{oopsState.word}</span>
                 </p>
                 <p className="text-[11px] text-on-error-container/90 font-body leading-relaxed">
                   Reason: {oopsState.msg}
@@ -811,12 +915,18 @@ export default function GameRoomView({
               {/* Scores dashboard wrap recap */}
               <div className="bg-surface rounded-2xl p-4 border border-outline-variant/30 grid grid-cols-2 gap-2 text-center">
                 <div className="border-r">
-                  <span className="text-[10px] font-label-caps text-on-surface-variant">YOUR SCORE</span>
+                  <span className="text-[10px] font-label-caps text-on-surface-variant">
+                    YOUR SCORE
+                  </span>
                   <p className="text-lg font-headline font-black text-primary">{playerScore} pts</p>
                 </div>
                 <div>
-                  <span className="text-[10px] font-label-caps text-on-surface-variant">CHAIN LIMIT</span>
-                  <p className="text-lg font-headline font-black text-secondary">{playedWords.length} words</p>
+                  <span className="text-[10px] font-label-caps text-on-surface-variant">
+                    CHAIN LIMIT
+                  </span>
+                  <p className="text-lg font-headline font-black text-secondary">
+                    {playedWords.length} words
+                  </p>
                 </div>
               </div>
 

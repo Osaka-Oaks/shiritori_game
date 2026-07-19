@@ -5,12 +5,14 @@ import { getAnalytics, logEvent, setUserProperties, Analytics } from "firebase/a
 import { getPerformance, trace, Performance } from "firebase/performance";
 import { getRemoteConfig, fetchAndActivate, getValue, RemoteConfig } from "firebase/remote-config";
 import { getMessaging, getToken, onMessage, Messaging } from "firebase/messaging";
-import firebaseConfig from "./firebase-applet-config.json";
+import { getFirebaseWebConfig, isFirebaseConfigured } from "./firebase-env";
+
+const firebaseConfig = getFirebaseWebConfig();
 
 // Initialize Firebase Core services
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || "(default)");
 
 // Initialize Analytics (free on Spark)
 let analytics: Analytics | null = null;
@@ -70,12 +72,12 @@ if (typeof window !== "undefined" && "serviceWorker" in navigator) {
 export { analytics, performance, remoteConfig, messaging };
 
 export enum OperationType {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  LIST = 'list',
-  GET = 'get',
-  WRITE = 'write',
+  CREATE = "create",
+  UPDATE = "update",
+  DELETE = "delete",
+  LIST = "list",
+  GET = "get",
+  WRITE = "write",
 }
 
 export interface FirestoreErrorInfo {
@@ -92,11 +94,15 @@ export interface FirestoreErrorInfo {
       providerId?: string | null;
       email?: string | null;
     }[];
-  }
+  };
 }
 
 // Zero-Trust Firestore standard error logger
-export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+export function handleFirestoreError(
+  error: unknown,
+  operationType: OperationType,
+  path: string | null
+) {
   const errInfo: FirestoreErrorInfo = {
     error: error instanceof Error ? error.message : String(error),
     authInfo: {
@@ -105,13 +111,14 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
       emailVerified: auth.currentUser?.emailVerified,
       isAnonymous: auth.currentUser?.isAnonymous,
       tenantId: auth.currentUser?.tenantId,
-      providerInfo: auth.currentUser?.providerData?.map(provider => ({
-        providerId: provider.providerId,
-        email: provider.email,
-      })) || []
+      providerInfo:
+        auth.currentUser?.providerData?.map(provider => ({
+          providerId: provider.providerId,
+          email: provider.email,
+        })) || [],
     },
     operationType,
-    path
+    path,
   };
   console.error("Firestore Error logged: ", JSON.stringify(errInfo));
   throw new Error(JSON.stringify(errInfo));
@@ -125,22 +132,26 @@ export async function saveCustomizationsToFirestore(
   avatarUrl: string
 ) {
   const path = `users/${userId}`;
-  
-  // Guard clause for safety when using placeholder keys
-  if (firebaseConfig.apiKey === "placeholder-api-key") {
+
+  // Skip Firestore writes when Firebase env is not configured (local UI-only mode)
+  if (!isFirebaseConfigured()) {
     console.log("Using transient guest customizations storage (Firebase is in standby mode)");
     return;
   }
 
   try {
     const userDocRef = doc(db, "users", userId);
-    await setDoc(userDocRef, {
-      uid: userId,
-      name,
-      avatarUrl,
-      ...customizations,
-      updatedAt: new Date().toISOString()
-    }, { merge: true });
+    await setDoc(
+      userDocRef,
+      {
+        uid: userId,
+        name,
+        avatarUrl,
+        ...customizations,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
+    );
     console.log("Customizations successfully synced to Firestore online for user:", userId);
   } catch (error) {
     try {
@@ -159,7 +170,7 @@ export async function saveCustomizationsToFirestore(
  */
 export function trackGameEvent(eventName: string, params?: Record<string, any>) {
   if (!analytics) return;
-  
+
   try {
     logEvent(analytics, eventName, params);
     console.log(`📊 Analytics: ${eventName}`, params);
@@ -176,50 +187,50 @@ export const GameAnalytics = {
   gameStarted: (mode: string, difficulty?: string) => {
     trackGameEvent("game_started", { mode, difficulty });
   },
-  
+
   gameCompleted: (mode: string, winner: string, duration: number) => {
     trackGameEvent("game_completed", { mode, winner, duration_seconds: duration });
   },
-  
+
   // Word events
   wordSubmitted: (word: string, valid: boolean, hiragana: string) => {
     trackGameEvent("word_submitted", { word, valid, hiragana });
   },
-  
+
   wordValidated: (valid: boolean, reason?: string) => {
     trackGameEvent("word_validated", { valid, reason });
   },
-  
+
   // Feature usage
   voiceInputUsed: (success: boolean) => {
     trackGameEvent("voice_input_used", { success });
   },
-  
+
   hintRequested: (sound: string) => {
     trackGameEvent("hint_requested", { required_sound: sound });
   },
-  
+
   powerupUsed: (powerup: string) => {
     trackGameEvent("powerup_used", { powerup_type: powerup });
   },
-  
+
   // Multiplayer
   localGameStarted: (connectionMethod: string) => {
     trackGameEvent("local_game_started", { connection_method: connectionMethod });
   },
-  
+
   multiplayerJoined: (roomId: string) => {
     trackGameEvent("multiplayer_joined", { room_id: roomId });
   },
-  
+
   // User engagement
   tutorialViewed: (section: string) => {
     trackGameEvent("tutorial_viewed", { section });
   },
-  
+
   achievementUnlocked: (achievement: string) => {
     trackGameEvent("achievement_unlocked", { achievement_name: achievement });
-  }
+  },
 };
 
 /**
@@ -227,7 +238,7 @@ export const GameAnalytics = {
  */
 export function setAnalyticsUserProperties(properties: Record<string, any>) {
   if (!analytics) return;
-  
+
   try {
     setUserProperties(analytics, properties);
     console.log("📊 User properties set:", properties);
@@ -243,7 +254,7 @@ export function setAnalyticsUserProperties(properties: Record<string, any>) {
  */
 export function startPerformanceTrace(traceName: string) {
   if (!performance) return null;
-  
+
   try {
     const t = trace(performance, traceName);
     t.start();
@@ -260,7 +271,7 @@ export function startPerformanceTrace(traceName: string) {
  */
 export const GamePerformance = {
   // Track word validation time
-  trackWordValidation: async <T,>(fn: () => Promise<T>) => {
+  trackWordValidation: async <T>(fn: () => Promise<T>) => {
     const t = startPerformanceTrace("word_validation");
     try {
       const result = await fn();
@@ -271,9 +282,9 @@ export const GamePerformance = {
       throw error;
     }
   },
-  
+
   // Track AI response time
-  trackAIResponse: async <T,>(provider: string, fn: () => Promise<T>) => {
+  trackAIResponse: async <T>(provider: string, fn: () => Promise<T>) => {
     const t = startPerformanceTrace(`ai_response_${provider}`);
     try {
       const result = await fn();
@@ -284,19 +295,19 @@ export const GamePerformance = {
       throw error;
     }
   },
-  
+
   // Track page load
   trackPageLoad: (pageName: string) => {
     const t = startPerformanceTrace(`page_load_${pageName}`);
     // Auto-stop after short delay
     setTimeout(() => t?.stop(), 2000);
   },
-  
+
   // Track game render
   trackGameRender: () => {
     const t = startPerformanceTrace("game_render");
     requestAnimationFrame(() => t?.stop());
-  }
+  },
 };
 
 // ===== REMOTE CONFIG HELPERS =====
@@ -306,7 +317,7 @@ export const GamePerformance = {
  */
 export async function fetchRemoteConfig(): Promise<boolean> {
   if (!remoteConfig) return false;
-  
+
   try {
     const activated = await fetchAndActivate(remoteConfig);
     console.log(`🎛️ Remote Config ${activated ? "activated" : "already active"}`);
@@ -322,10 +333,10 @@ export async function fetchRemoteConfig(): Promise<boolean> {
  */
 export function getConfigValue(key: string, defaultValue: any): any {
   if (!remoteConfig) return defaultValue;
-  
+
   try {
     const value = getValue(remoteConfig, key);
-    
+
     // Parse based on type
     if (typeof defaultValue === "boolean") {
       return value.asBoolean();
@@ -353,7 +364,7 @@ export const FeatureFlags = {
     return getConfigValue(key, defaults[difficulty as keyof typeof defaults] || 25);
   },
   isOllamaEnabled: () => getConfigValue("enable_ollama_ai", false),
-  isUnityModeEnabled: () => getConfigValue("feature_unity_mode", false)
+  isUnityModeEnabled: () => getConfigValue("feature_unity_mode", false),
 };
 
 // ===== CLOUD MESSAGING (FCM) HELPERS =====
@@ -366,18 +377,18 @@ export async function requestNotificationPermission(): Promise<string | null> {
     console.warn("FCM not available");
     return null;
   }
-  
+
   try {
     const permission = await Notification.requestPermission();
-    
+
     if (permission === "granted") {
       console.log("✅ Notification permission granted");
-      
+
       // Get FCM token
       const token = await getToken(messaging, {
-        vapidKey: "YOUR_VAPID_KEY" // You'll need to generate this in Firebase Console
+        vapidKey: "YOUR_VAPID_KEY", // You'll need to generate this in Firebase Console
       });
-      
+
       console.log("📱 FCM Token:", token);
       return token;
     } else {
@@ -395,8 +406,8 @@ export async function requestNotificationPermission(): Promise<string | null> {
  */
 export function listenForMessages(callback: (payload: any) => void) {
   if (!messaging) return;
-  
-  onMessage(messaging, (payload) => {
+
+  onMessage(messaging, payload => {
     console.log("📬 Message received:", payload);
     callback(payload);
   });
@@ -412,30 +423,30 @@ export const GameNotifications = {
       new Notification("Opponent Found!", {
         body: `${opponentName} is ready to play!`,
         icon: "/icon-192.png",
-        badge: "/badge-72.png"
+        badge: "/badge-72.png",
       });
     }
   },
-  
+
   // Notify when it's your turn
   yourTurn: () => {
     if ("Notification" in window && Notification.permission === "granted") {
       new Notification("Your Turn!", {
         body: "Time to play your next word!",
-        icon: "/icon-192.png"
+        icon: "/icon-192.png",
       });
     }
   },
-  
+
   // Notify when you win
   gameWon: () => {
     if ("Notification" in window && Notification.permission === "granted") {
       new Notification("You Won! 🎉", {
         body: "Congratulations on winning the Shiritori game!",
-        icon: "/icon-192.png"
+        icon: "/icon-192.png",
       });
     }
-  }
+  },
 };
 
 // ===== ERROR TRACKING (CRASHLYTICS-LIKE) =====
@@ -448,9 +459,9 @@ export function trackError(error: Error, context?: Record<string, any>) {
   trackGameEvent("error_occurred", {
     error_message: error.message,
     error_stack: error.stack,
-    ...context
+    ...context,
   });
-  
+
   console.error("🐛 Error tracked:", error, context);
 }
 
@@ -460,8 +471,8 @@ export function trackError(error: Error, context?: Record<string, any>) {
 export function trackCustomError(message: string, context?: Record<string, any>) {
   trackGameEvent("custom_error", {
     message,
-    ...context
+    ...context,
   });
-  
+
   console.error("🐛 Custom error:", message, context);
 }

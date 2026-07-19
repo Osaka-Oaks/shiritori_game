@@ -1,30 +1,31 @@
-export type AppView = 
-  | "HOME" 
-  | "AVATAR_PICKER" 
-  | "GAME_ROOM" 
-  | "HISTORY" 
-  | "LIBRARY" 
-  | "LEADERBOARD" 
+export type AppView =
+  | "HOME"
+  | "AVATAR_PICKER"
+  | "GAME_ROOM"
+  | "HISTORY"
+  | "LIBRARY"
+  | "LEADERBOARD"
   | "RULES"
   | "AUTH"
   | "PRACTICE"
   | "MULTIPLAYER"
-  | "LOCAL_MULTIPLAYER";
+  | "LOCAL_MULTIPLAYER"
+  | "GAME_2D";
 
 export interface AppCustomizations {
   accentColor: string;
-  gridStyle: 'dense' | 'sparse' | 'dot' | 'none';
-  font: 'Space Grotesk' | 'Playfair Display' | 'JetBrains Mono';
-  headingStyle: 'uppercase' | 'normal';
-  layoutDensity: 'compact' | 'standard' | 'spacious';
+  gridStyle: "dense" | "sparse" | "dot" | "none";
+  font: "Space Grotesk" | "Playfair Display" | "JetBrains Mono";
+  headingStyle: "uppercase" | "normal";
+  layoutDensity: "compact" | "standard" | "spacious";
 }
 
 export const DEFAULT_CUSTOMIZATIONS: AppCustomizations = {
-  accentColor: '#f27d26',
-  gridStyle: 'sparse',
-  font: 'Space Grotesk',
-  headingStyle: 'uppercase',
-  layoutDensity: 'standard'
+  accentColor: "#f27d26",
+  gridStyle: "sparse",
+  font: "Space Grotesk",
+  headingStyle: "uppercase",
+  layoutDensity: "standard",
 };
 
 export interface PlayedWord {
@@ -54,14 +55,17 @@ export interface OpponentBot {
 
 export interface MatchHistory {
   id: string;
+  opponentId: string;
   opponentName: string;
   opponentAvatar: string;
+  opponentDifficulty: "easy" | "medium" | "hard";
   date: string;
   playerScore: number;
   opponentScore: number;
   chainLength: number;
   fatalWord: string;
   didWin: boolean;
+  duration: number;
 }
 
 export interface LeaderboardUser {

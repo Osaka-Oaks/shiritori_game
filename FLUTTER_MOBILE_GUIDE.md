@@ -3,9 +3,11 @@
 ## 🎯 Two Approaches to Mobile
 
 ### Option 1: Flutter WebView (Fast - Recommended First)
+
 Wrap your existing React app in a Flutter WebView shell.
 
 **Pros:**
+
 - ✅ Fast (1-2 hours setup)
 - ✅ Keep all existing code
 - ✅ Deploy to iOS/Android immediately
@@ -13,14 +15,17 @@ Wrap your existing React app in a Flutter WebView shell.
 - ✅ Easy updates (just update web app)
 
 **Cons:**
+
 - ⚠️ Slightly slower than native
 - ⚠️ Requires internet connection
 - ⚠️ Web app limitations
 
 ### Option 2: Native Flutter Rewrite (Best - Long Term)
+
 Rebuild the game in Flutter/Dart.
 
 **Pros:**
+
 - ✅ True native performance
 - ✅ Offline support
 - ✅ Better UX/animations
@@ -28,6 +33,7 @@ Rebuild the game in Flutter/Dart.
 - ✅ Smaller app size
 
 **Cons:**
+
 - ⚠️ 2-4 weeks development
 - ⚠️ Maintain two codebases
 - ⚠️ Learn Flutter/Dart
@@ -39,6 +45,7 @@ Rebuild the game in Flutter/Dart.
 ### Step 1: Install Flutter
 
 **Mac:**
+
 ```bash
 # Install Flutter SDK
 git clone https://github.com/flutter/flutter.git -b stable ~/flutter
@@ -52,6 +59,7 @@ flutter doctor
 ```
 
 **Install Xcode (for iOS):**
+
 ```bash
 # Install from App Store
 # Open Xcode > Preferences > Locations > Command Line Tools
@@ -64,6 +72,7 @@ xcode-select --install
 ```
 
 **Install Android Studio (for Android):**
+
 ```bash
 # Download from: https://developer.android.com/studio
 # Install Android SDK
@@ -86,19 +95,20 @@ cd shiritori_mobile
 ### Step 3: Install Dependencies
 
 **Edit `pubspec.yaml`:**
+
 ```yaml
 name: shiritori_mobile
 description: Shiritori Game Mobile App
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  
+
   # Firebase
   firebase_core: ^3.8.1
   firebase_analytics: ^11.3.5
@@ -108,10 +118,10 @@ dependencies:
   firebase_messaging: ^15.1.6
   firebase_performance: ^0.10.0+10
   firebase_remote_config: ^5.1.6
-  
+
   # WebView
   webview_flutter: ^4.11.1
-  
+
   # UI
   cupertino_icons: ^1.0.8
 
@@ -122,13 +132,14 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  
+
   # Add app icon
   assets:
     - assets/icon.png
 ```
 
 **Install:**
+
 ```bash
 flutter pub get
 ```
@@ -157,6 +168,7 @@ flutterfire configure
 ### Step 5: Create WebView App
 
 **Create `lib/main.dart`:**
+
 ```dart
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -166,12 +178,12 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   runApp(const ShiritoriApp());
 }
 
@@ -206,10 +218,10 @@ class _WebViewScreenState extends State<WebViewScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Track app open
     analytics.logAppOpen();
-    
+
     // Initialize WebView
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -233,7 +245,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
         ),
       )
       ..loadRequest(Uri.parse('https://shiritori-game-ccaae.web.app'));
-      
+
       // For local testing, use:
       // ..loadRequest(Uri.parse('http://localhost:3000'));
   }
@@ -278,6 +290,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
 **Edit `ios/Runner/Info.plist`:**
 Add camera/microphone permissions for voice input:
+
 ```xml
 <key>NSCameraUsageDescription</key>
 <string>This app needs camera access for profile pictures</string>
@@ -292,6 +305,7 @@ Add camera/microphone permissions for voice input:
 ```
 
 **iOS App Transport Security (for local testing):**
+
 ```xml
 <key>NSAppTransportSecurity</key>
 <dict>
@@ -303,6 +317,7 @@ Add camera/microphone permissions for voice input:
 ### Step 7: Configure Android
 
 **Edit `android/app/src/main/AndroidManifest.xml`:**
+
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Permissions -->
@@ -311,14 +326,14 @@ Add camera/microphone permissions for voice input:
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    
+
     <application
         android:label="Shiritori Game"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <!-- For local testing -->
-        
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -327,7 +342,7 @@ Add camera/microphone permissions for voice input:
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
-            
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -364,6 +379,7 @@ flutter run
 ### Step 10: Build for Production
 
 **iOS:**
+
 ```bash
 # Build iOS app
 flutter build ios --release
@@ -379,6 +395,7 @@ open ios/Runner.xcworkspace
 ```
 
 **Android:**
+
 ```bash
 # Build APK (for testing)
 flutter build apk --release
@@ -396,6 +413,7 @@ flutter build appbundle --release
 This is a long-term project. I'll provide the architecture.
 
 ### Project Structure
+
 ```
 shiritori_flutter/
 ├── lib/
@@ -427,26 +445,27 @@ shiritori_flutter/
 ```
 
 ### Key Dependencies
+
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
-  
+
   # State Management
   riverpod: ^2.6.1
   flutter_riverpod: ^2.6.1
-  
+
   # Firebase
   firebase_core: ^3.8.1
   firebase_analytics: ^11.3.5
   firebase_auth: ^5.3.3
   firebase_database: ^11.1.7
   cloud_firestore: ^5.5.2
-  
+
   # UI
   google_fonts: ^6.2.1
   flutter_animate: ^4.5.0
-  
+
   # Functionality
   speech_to_text: ^7.0.0
   flutter_tts: ^4.2.0
@@ -455,6 +474,7 @@ dependencies:
 ```
 
 ### Sample Game Screen (Native)
+
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -468,7 +488,7 @@ class GameScreen extends ConsumerStatefulWidget {
 
 class _GameScreenState extends ConsumerState<GameScreen> {
   final TextEditingController _wordController = TextEditingController();
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -481,19 +501,19 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         children: [
           // Timer
           _buildTimer(),
-          
+
           // Word History
           Expanded(
             child: _buildWordHistory(),
           ),
-          
+
           // Input Area
           _buildInputArea(),
         ],
       ),
     );
   }
-  
+
   Widget _buildTimer() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -507,7 +527,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       ),
     );
   }
-  
+
   Widget _buildWordHistory() {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
@@ -525,7 +545,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       },
     );
   }
-  
+
   Widget _buildInputArea() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -549,7 +569,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             color: Colors.pink,
             iconSize: 32,
           ),
-          
+
           // Text input
           Expanded(
             child: TextField(
@@ -560,7 +580,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               ),
             ),
           ),
-          
+
           // Submit button
           IconButton(
             icon: const Icon(Icons.send),
@@ -582,6 +602,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 ## 🧪 Testing Your Flutter App
 
 ### Test on iOS Simulator
+
 ```bash
 # Open iOS Simulator
 open -a Simulator
@@ -591,6 +612,7 @@ flutter run
 ```
 
 ### Test on Android Emulator
+
 ```bash
 # Start emulator
 flutter emulators --launch Pixel_7_API_34
@@ -602,6 +624,7 @@ flutter run
 ### Test on Physical Device
 
 **iOS:**
+
 ```bash
 # Connect iPhone via USB
 # Trust computer on iPhone
@@ -610,6 +633,7 @@ flutter run
 ```
 
 **Android:**
+
 ```bash
 # Enable Developer Mode on Android
 # Enable USB Debugging
@@ -619,6 +643,7 @@ flutter run
 ```
 
 ### Hot Reload While Developing
+
 ```bash
 # Press 'r' to hot reload
 # Press 'R' to hot restart
@@ -632,10 +657,12 @@ flutter run
 ### iOS App Store
 
 **Step 1: Apple Developer Account**
+
 - Cost: $99/year
 - Sign up: https://developer.apple.com
 
 **Step 2: App Store Connect**
+
 1. Create new app
 2. Set app name: "Shiritori Game"
 3. Bundle ID: `com.yourname.shiritori`
@@ -643,6 +670,7 @@ flutter run
 5. Write description
 
 **Step 3: Build and Archive**
+
 ```bash
 # Build iOS
 flutter build ios --release
@@ -654,6 +682,7 @@ open ios/Runner.xcworkspace
 ```
 
 **Step 4: Submit for Review**
+
 1. Fill app information
 2. Set age rating
 3. Add privacy policy
@@ -663,10 +692,12 @@ open ios/Runner.xcworkspace
 ### Google Play Store
 
 **Step 1: Google Play Console**
+
 - Cost: $25 one-time
 - Sign up: https://play.google.com/console
 
 **Step 2: Create App**
+
 1. Create new app
 2. Set app name: "Shiritori Game"
 3. Upload icon
@@ -674,6 +705,7 @@ open ios/Runner.xcworkspace
 5. Add screenshots
 
 **Step 3: Build App Bundle**
+
 ```bash
 # Generate signing key
 keytool -genkey -v -keystore ~/shiritori-key.jks \
@@ -685,6 +717,7 @@ flutter build appbundle --release
 ```
 
 **Step 4: Upload and Publish**
+
 1. Upload AAB file
 2. Create production release
 3. Submit for review
@@ -695,6 +728,7 @@ flutter build appbundle --release
 ## 🎯 Recommended Approach
 
 ### Phase 1: WebView App (Week 1)
+
 1. Create Flutter project
 2. Add WebView
 3. Configure Firebase
@@ -705,6 +739,7 @@ flutter build appbundle --release
 **Result:** Your existing React app works on iOS/Android!
 
 ### Phase 2: Native Flutter (Weeks 2-8)
+
 1. Build game screen natively
 2. Migrate Firebase logic
 3. Add voice input
@@ -719,12 +754,14 @@ flutter build appbundle --release
 ## 🔧 Troubleshooting
 
 ### "Flutter not found"
+
 ```bash
 # Add to PATH
 export PATH="$PATH:$HOME/flutter/bin"
 ```
 
 ### "pod install failed" (iOS)
+
 ```bash
 cd ios
 pod repo update
@@ -733,6 +770,7 @@ cd ..
 ```
 
 ### "Gradle build failed" (Android)
+
 ```bash
 cd android
 ./gradlew clean
@@ -742,6 +780,7 @@ flutter pub get
 ```
 
 ### WebView not loading
+
 ```bash
 # Check internet connection
 # Verify URL is correct
@@ -753,16 +792,16 @@ flutter pub get
 
 ## 📱 Features Support Matrix
 
-| Feature | React Web | Flutter WebView | Native Flutter |
-|---------|-----------|-----------------|----------------|
-| **Game Logic** | ✅ | ✅ | ✅ |
-| **Voice Input** | ✅ (Web API) | ✅ (Web API) | ✅ (Native) |
-| **Local Multiplayer** | ✅ (Web Bluetooth) | ⚠️ Limited | ✅ (Native BLE) |
-| **Firebase** | ✅ | ✅ | ✅ |
-| **Offline Mode** | ❌ | ❌ | ✅ |
-| **Performance** | Good | Good | Excellent |
-| **File Size** | N/A | ~50MB | ~20MB |
-| **Development Time** | Done | 1-2 days | 2-4 weeks |
+| Feature               | React Web          | Flutter WebView | Native Flutter  |
+| --------------------- | ------------------ | --------------- | --------------- |
+| **Game Logic**        | ✅                 | ✅              | ✅              |
+| **Voice Input**       | ✅ (Web API)       | ✅ (Web API)    | ✅ (Native)     |
+| **Local Multiplayer** | ✅ (Web Bluetooth) | ⚠️ Limited      | ✅ (Native BLE) |
+| **Firebase**          | ✅                 | ✅              | ✅              |
+| **Offline Mode**      | ❌                 | ❌              | ✅              |
+| **Performance**       | Good               | Good            | Excellent       |
+| **File Size**         | N/A                | ~50MB           | ~20MB           |
+| **Development Time**  | Done               | 1-2 days        | 2-4 weeks       |
 
 ---
 
@@ -800,18 +839,21 @@ flutter build appbundle --release  # Android
 ## 🎉 Summary
 
 **Option 1 (WebView):**
+
 - ✅ Fast setup (1-2 days)
 - ✅ Use existing React app
 - ✅ Deploy immediately to App Store & Play Store
 - ⚠️ Requires internet
 
 **Option 2 (Native):**
+
 - ✅ Best performance
 - ✅ Offline support
 - ✅ Better user experience
 - ⚠️ Takes 2-4 weeks
 
 **My Recommendation:**
+
 1. Start with WebView (Option 1)
 2. Get on App Store & Play Store fast
 3. Build native version in parallel
@@ -822,15 +864,18 @@ flutter build appbundle --release  # Android
 ## 📚 Resources
 
 **Flutter:**
+
 - Docs: https://docs.flutter.dev
 - Codelabs: https://docs.flutter.dev/codelabs
 - YouTube: https://www.youtube.com/c/flutterdev
 
 **Firebase + Flutter:**
+
 - FlutterFire: https://firebase.flutter.dev
 - Setup: https://firebase.google.com/docs/flutter/setup
 
 **Your Project:**
+
 - Firebase Console: https://console.firebase.google.com/project/shiritori-game-ccaae
 - GitHub: https://github.com/JorelFuji/shiritori_game
 

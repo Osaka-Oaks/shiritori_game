@@ -1,0 +1,28 @@
+name: Stale items
+
+# Cron job: nudge and tidy stale issues/PRs so the board stays honest.
+on:
+  schedule:
+    - cron: "0 5 * * *" # daily 05:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v9
+        with:
+          days-before-stale: 30
+          days-before-close: 7
+          stale-issue-label: "status: stale"
+          stale-pr-label: "status: stale"
+          exempt-issue-labels: "priority: high,status: blocked"
+          exempt-pr-labels: "priority: high,status: blocked"
+          stale-issue-message: "This issue has been inactive for 30 days. It will close in 7 days if there's no further activity."
+          stale-pr-message: "This PR has been inactive for 30 days. It will close in 7 days if there's no further activity."

@@ -3,16 +3,21 @@
 
 // Small kana normalize to their full-size sound for chaining (standard house rule).
 const SMALL_TO_LARGE = {
-  "ゃ": "や", "ゅ": "ゆ", "ょ": "よ",
-  "ぁ": "あ", "ぃ": "い", "ぅ": "う", "ぇ": "え", "ぉ": "お",
-  "っ": "つ", "ゎ": "わ",
+  ゃ: "や",
+  ゅ: "ゆ",
+  ょ: "よ",
+  ぁ: "あ",
+  ぃ: "い",
+  ぅ: "う",
+  ぇ: "え",
+  ぉ: "お",
+  っ: "つ",
+  ゎ: "わ",
 };
 
 // Convert katakana to hiragana so チェーン and ちぇーん chain identically.
 export function toHiragana(str) {
-  return str.replace(/[\u30a1-\u30f6]/g, (ch) =>
-    String.fromCharCode(ch.charCodeAt(0) - 0x60)
-  );
+  return str.replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
 }
 
 // Accept only hiragana, katakana, and the long-vowel mark ー.
@@ -71,7 +76,7 @@ export function validateWord(rawWord, requiredKana, usedWords) {
     };
   }
   const normalized = toHiragana(word);
-  if (usedWords.some((u) => toHiragana(u.trim()) === normalized)) {
+  if (usedWords.some(u => toHiragana(u.trim()) === normalized)) {
     return { ok: false, reason: "Already used — no repeats." };
   }
   return { ok: true };

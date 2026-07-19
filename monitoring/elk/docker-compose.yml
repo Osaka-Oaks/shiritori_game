@@ -1,0 +1,155 @@
+# ELK Stack for Shiritori Game Monitoring
+# Elasticsearch, Logstash, Kibana
+# Note: version attribute is obsolete in Docker Compose v2+
+
+services:
+  # Elasticsearch - Data storage and search
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: shiritori-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - elk
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Logstash - Log processing and ingestion
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.11.0
+    container_name: shiritori-logstash
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    ports:
+      - "5044:5044" # Beats input
+      - "5000:5000/tcp" # TCP input
+      - "5000:5000/udp" # UDP input
+      - "9600:9600" # Logstash monitoring
+    environment:
+      - "LS_JAVA_OPTS=-Xms256m -Xmx256m"
+    networks:
+      - elk
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9600 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Kibana - Visualization and dashboards
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: shiritori-kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_NAME=shiritori-kibana
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    networks:
+      - elk
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Filebeat - Log shipping from files
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.11.0
+    container_name: shiritori-filebeat
+    user: root
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - filebeat-data:/usr/share/filebeat/data
+    command: filebeat -e -strict.perms=false
+    networks:
+      - elk
+    depends_on:
+      logstash:
+        condition: service_healthy
+
+  # Metricbeat - System and application metrics
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:8.11.0
+    container_name: shiritori-metricbeat
+    user: root
+    volumes:
+      - ./metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /proc:/hostfs/proc:ro
+      - /:/hostfs:ro
+      - metricbeat-data:/usr/share/metricbeat/data
+    command: metricbeat -e -strict.perms=false -system.hostfs=/hostfs
+    networks:
+      - elk
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  # APM Server - Application Performance Monitoring
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:8.11.0
+    container_name: shiritori-apm-server
+    ports:
+      - "8200:8200"
+    volumes:
+      - ./apm-server/apm-server.yml:/usr/share/apm-server/apm-server.yml:ro
+    environment:
+      - output.elasticsearch.hosts=["elasticsearch:9200"]
+    networks:
+      - elk
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8200 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Heartbeat - Uptime monitoring
+  heartbeat:
+    image: docker.elastic.co/beats/heartbeat:8.11.0
+    container_name: shiritori-heartbeat
+    volumes:
+      - ./heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
+    command: heartbeat -e -strict.perms=false
+    networks:
+      - elk
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+networks:
+  elk:
+    driver: bridge
+
+volumes:
+  elasticsearch-data:
+    driver: local
+  filebeat-data:
+    driver: local
+  metricbeat-data:
+    driver: local

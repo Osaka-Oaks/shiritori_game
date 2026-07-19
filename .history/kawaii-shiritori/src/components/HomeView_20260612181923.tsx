@@ -11,7 +11,37 @@ interface HomeViewProps {
   onSelectMatch: (m: MatchHistory) => void;
 }
 
-const KANA_LIST = ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と', 'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ'];
+const KANA_LIST = [
+  "あ",
+  "い",
+  "う",
+  "え",
+  "お",
+  "か",
+  "き",
+  "く",
+  "け",
+  "こ",
+  "さ",
+  "し",
+  "す",
+  "せ",
+  "そ",
+  "た",
+  "ち",
+  "つ",
+  "て",
+  "と",
+  "な",
+  "に",
+  "ぬ",
+  "ね",
+  "の",
+  "は",
+  "ひ",
+  "ふ",
+  "へ",
+];
 
 export default function HomeView({
   profile,
@@ -60,8 +90,12 @@ export default function HomeView({
       <div className="w-full max-w-md flex flex-col items-center z-10 text-center space-y-6">
         {/* Animated Hero Mascot */}
         <div className="relative mb-2 border border-white/10 p-5 bg-surface-container-low relative w-full flex items-center justify-center">
-          <span className="absolute top-1.5 left-2 text-[8px] font-mono text-primary tracking-[3px]">FIG. 01 // INDEXED_NEKO</span>
-          <span className="absolute bottom-1.5 right-2 text-[8px] font-mono text-white/30 tracking-widest">SCALE: 1:1</span>
+          <span className="absolute top-1.5 left-2 text-[8px] font-mono text-primary tracking-[3px]">
+            FIG. 01 // INDEXED_NEKO
+          </span>
+          <span className="absolute bottom-1.5 right-2 text-[8px] font-mono text-white/30 tracking-widest">
+            SCALE: 1:1
+          </span>
           <div className="absolute right-3 top-3 w-2 h-2 rounded-none bg-primary animate-pulse" />
           <motion.div
             className="relative w-40 h-40 md:w-48 md:h-48 flex items-center justify-center cursor-pointer"
@@ -86,7 +120,9 @@ export default function HomeView({
 
         {/* Brand Headline tagline */}
         <div className="space-y-2">
-          <span className="struct-index text-xs tracking-[4px] uppercase block">No. 01 // ARCHITECTURAL LEDGER</span>
+          <span className="struct-index text-xs tracking-[4px] uppercase block">
+            No. 01 // ARCHITECTURAL LEDGER
+          </span>
           <h2 className="font-headline text-5xl md:text-7xl font-black text-white tracking-[-3px] leading-none uppercase">
             SHIRI<span className="text-primary">TORI</span>
           </h2>
@@ -121,8 +157,13 @@ export default function HomeView({
         {/* Recent Active Matches Feed */}
         <section className="w-full px-2 pt-4">
           <div className="flex items-center justify-between mb-3 px-2">
-            <h3 className="font-label-caps text-label-caps text-on-surface-variant text-xs">RECENT GAMES</h3>
-            <span onClick={onStartGame} className="text-xs text-primary font-bold hover:underline cursor-pointer">
+            <h3 className="font-label-caps text-label-caps text-on-surface-variant text-xs">
+              RECENT GAMES
+            </h3>
+            <span
+              onClick={onStartGame}
+              className="text-xs text-primary font-bold hover:underline cursor-pointer"
+            >
               New Game
             </span>
           </div>
@@ -153,13 +194,17 @@ export default function HomeView({
                         {match.opponentName}
                       </p>
                       <p className="text-[11px] text-on-surface-variant/80 font-medium">
-                        {match.didWin ? "Match finished • You won!" : `Active • Last: ${match.fatalWord || "Ringo"}`}
+                        {match.didWin
+                          ? "Match finished • You won!"
+                          : `Active • Last: ${match.fatalWord || "Ringo"}`}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    {!match.didWin && <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />}
+                    {!match.didWin && (
+                      <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
+                    )}
                     <ChevronRight className="w-4 h-4 text-outline group-hover:text-primary transition-colors" />
                   </div>
                 </motion.div>

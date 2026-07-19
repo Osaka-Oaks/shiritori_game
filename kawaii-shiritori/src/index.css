@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -60,20 +60,23 @@
 }
 
 /* Base resets & additions to reinforce the architectural brutalism look */
-html, body {
+html,
+body {
   background-color: #080808;
   color: #ffffff;
   font-family: "Space Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /* Strict style overrides for rounded states to force crisp 90-degree corners */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   border-radius: 0px !important;
 }
 
 /* Custom background patterns matching the abstract grid visual of STRUCT */
 .rain-pattern {
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 32px 32px;
@@ -82,7 +85,7 @@ html, body {
 
 .confetti-bg {
   background-color: #080808;
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   background-size: 40px 40px;
@@ -90,7 +93,7 @@ html, body {
 
 /* Architectural ledger indicators and structural borders */
 .struct-indicator {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: "Playfair Display", Georgia, serif;
   font-style: italic;
   font-size: 14px;
   color: #f27d26;
@@ -154,7 +157,7 @@ html, body {
 
 /* Material icon variation setting shortcuts */
 .material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
+  font-family: "Material Symbols Outlined";
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -165,6 +168,6 @@ html, body {
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-  -webkit-font-feature-settings: 'liga';
+  -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
 }

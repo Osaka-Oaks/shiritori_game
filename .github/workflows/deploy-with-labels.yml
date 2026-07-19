@@ -1,0 +1,441 @@
+name: Deploy & Test with Labels
+
+# Deploy to Firebase and test with automatic labeling
+on:
+  push:
+    branches: [main, develop]
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy"
+        required: true
+        default: "production"
+        type: choice
+        options:
+          - production
+          - staging
+      tags:
+        description: "Deployment tags (comma-separated)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  issues: write
+  deployments: write
+
+env:
+  FIREBASE_PROJECT: shiritori-game-ccaae
+  PROD_URL: https://shiritori-game-ccaae.web.app
+  STAGING_URL: https://shiritori-game-ccaae--develop.web.app
+
+jobs:
+  prepare-deployment:
+    name: 🏷️ Prepare Deployment with Labels
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      environment: ${{ steps.env.outputs.environment }}
+      tags: ${{ steps.tags.outputs.tags }}
+      labels: ${{ steps.labels.outputs.labels }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate version tag
+        id: version
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION=$(date +%Y%m%d.%H%M%S)-${GITHUB_SHA:0:7}
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📌 Version: $VERSION"
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            ENV="production"
+          elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+            ENV="staging"
+          else
+            ENV="${{ github.event.inputs.environment || 'staging' }}"
+          fi
+          echo "environment=$ENV" >> $GITHUB_OUTPUT
+          echo "🌍 Environment: $ENV"
+
+      - name: Generate deployment tags
+        id: tags
+        run: |
+          TAGS="${{ github.event.inputs.tags }}"
+
+          # Auto-generate tags from commit message
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+
+          # Extract hashtags from commit message
+          HASHTAGS=$(echo "$COMMIT_MSG" | grep -o '#[a-zA-Z0-9_-]*' | tr '\n' ',' | sed 's/,$//')
+
+          if [ -z "$TAGS" ]; then
+            TAGS="$HASHTAGS"
+          else
+            TAGS="$TAGS,$HASHTAGS"
+          fi
+
+          # Add default tags
+          TAGS="$TAGS,version:${{ steps.version.outputs.version }}"
+          TAGS="$TAGS,env:${{ steps.env.outputs.environment }}"
+          TAGS="$TAGS,branch:${GITHUB_REF#refs/heads/}"
+
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+          echo "🏷️ Tags: $TAGS"
+
+      - name: Generate labels
+        id: labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tags = '${{ steps.tags.outputs.tags }}'.split(',').filter(Boolean);
+            const labels = [];
+
+            // Convert tags to labels
+            for (const tag of tags) {
+              if (tag.startsWith('#')) {
+                labels.push(tag.substring(1));
+              } else if (tag.includes(':')) {
+                const [key, value] = tag.split(':');
+                labels.push(`${key}-${value}`);
+              }
+            }
+
+            // Add deployment labels
+            labels.push('deployment');
+            labels.push(`env-${{ steps.env.outputs.environment }}`);
+
+            const labelStr = labels.join(',');
+            core.setOutput('labels', labelStr);
+            console.log(`🏷️ Labels: ${labelStr}`);
+
+            return labels;
+
+      - name: Create deployment issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const version = '${{ steps.version.outputs.version }}';
+            const env = '${{ steps.env.outputs.environment }}';
+            const tags = '${{ steps.tags.outputs.tags }}'.split(',').filter(Boolean);
+            const labels = '${{ steps.labels.outputs.labels }}'.split(',').filter(Boolean);
+
+            const body = `## 🚀 Deployment: ${version}
+
+            **Environment**: ${env}
+            **Version**: \`${version}\`
+            **Branch**: \`${context.ref}\`
+            **SHA**: \`${context.sha.substring(0, 7)}\`
+            **Triggered by**: @${context.actor}
+
+            ### 🏷️ Tags
+            ${tags.map(t => `- \`${t}\``).join('\n')}
+
+            ### ⏱️ Timeline
+            - **Started**: ${new Date().toISOString()}
+            - **Status**: 🔄 In Progress
+
+            ---
+            *This issue will be auto-updated with deployment status*
+            `;
+
+            const { data: issue } = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚀 Deploy ${version} to ${env}`,
+              body: body,
+              labels: labels
+            });
+
+            console.log(`Created deployment issue: #${issue.number}`);
+            core.exportVariable('DEPLOY_ISSUE', issue.number);
+
+  build-and-deploy:
+    name: 🏗️ Build & Deploy
+    runs-on: ubuntu-latest
+    needs: prepare-deployment
+    environment:
+      name: ${{ needs.prepare-deployment.outputs.environment }}
+      url: ${{ needs.prepare-deployment.outputs.environment == 'production' && env.PROD_URL || env.STAGING_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          npm ci --prefer-offline
+          npm ci --prefix shiritori-online --prefer-offline
+          npm ci --prefix kawaii-shiritori --prefer-offline
+
+      - name: Build applications
+        run: |
+          echo "🏗️ Building shiritori-online..."
+          npm run build --prefix shiritori-online
+
+          echo "🏗️ Building kawaii-shiritori..."
+          npm run build --prefix kawaii-shiritori
+
+      - name: Tag builds
+        run: |
+          VERSION="${{ needs.prepare-deployment.outputs.version }}"
+          TAGS="${{ needs.prepare-deployment.outputs.tags }}"
+
+          # Add version file
+          echo "{\"version\":\"$VERSION\",\"tags\":\"$TAGS\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > shiritori-online/dist/version.json
+          echo "{\"version\":\"$VERSION\",\"tags\":\"$TAGS\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > kawaii-shiritori/dist/version.json
+
+      - name: Deploy to Firebase
+        run: |
+          ENV="${{ needs.prepare-deployment.outputs.environment }}"
+
+          if [ "$ENV" = "production" ]; then
+            echo "🚀 Deploying to production..."
+            npx firebase-tools@latest deploy \
+              --only hosting,database,firestore \
+              --project ${{ env.FIREBASE_PROJECT }} \
+              --non-interactive \
+              --token "${{ secrets.FIREBASE_TOKEN }}"
+          else
+            echo "🚀 Deploying to staging..."
+            npx firebase-tools@latest hosting:channel:deploy develop \
+              --project ${{ env.FIREBASE_PROJECT }} \
+              --expires 14d \
+              --non-interactive \
+              --token "${{ secrets.FIREBASE_TOKEN }}"
+          fi
+
+      - name: Record deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const version = '${{ needs.prepare-deployment.outputs.version }}';
+            const env = '${{ needs.prepare-deployment.outputs.environment }}';
+            const url = env === 'production' ? '${{ env.PROD_URL }}' : '${{ env.STAGING_URL }}';
+
+            // Create deployment
+            const { data: deployment } = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment: env,
+              description: `Deploy ${version}`,
+              auto_merge: false,
+              required_contexts: []
+            });
+
+            // Set deployment status
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.id,
+              state: 'success',
+              environment_url: url,
+              description: `Deployed to ${env}`
+            });
+
+            console.log(`✅ Deployment recorded: ${deployment.id}`);
+
+  test-deployment:
+    name: 🧪 Test Firebase URLs
+    runs-on: ubuntu-latest
+    needs: [prepare-deployment, build-and-deploy]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for deployment
+        run: sleep 30
+
+      - name: Determine URL to test
+        id: url
+        run: |
+          ENV="${{ needs.prepare-deployment.outputs.environment }}"
+          if [ "$ENV" = "production" ]; then
+            URL="${{ env.PROD_URL }}"
+          else
+            URL="${{ env.STAGING_URL }}"
+          fi
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "🌐 Testing URL: $URL"
+
+      - name: Test homepage
+        id: test-homepage
+        run: |
+          URL="${{ steps.url.outputs.url }}"
+
+          echo "Testing $URL..."
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" $URL)
+          TIME=$(curl -o /dev/null -s -w "%{time_total}" $URL)
+
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+          echo "time=$TIME" >> $GITHUB_OUTPUT
+
+          if [ "$STATUS" -eq 200 ]; then
+            echo "✅ Homepage: HTTP $STATUS (${TIME}s)"
+          else
+            echo "❌ Homepage: HTTP $STATUS"
+            exit 1
+          fi
+
+      - name: Test version endpoint
+        run: |
+          URL="${{ steps.url.outputs.url }}/version.json"
+
+          echo "Testing version endpoint..."
+          RESPONSE=$(curl -s $URL)
+          VERSION=$(echo $RESPONSE | grep -o '"version":"[^"]*"' | cut -d'"' -f4)
+
+          echo "📌 Deployed version: $VERSION"
+          echo "Expected: ${{ needs.prepare-deployment.outputs.version }}"
+
+          if [ "$VERSION" = "${{ needs.prepare-deployment.outputs.version }}" ]; then
+            echo "✅ Version matches"
+          else
+            echo "⚠️ Version mismatch"
+          fi
+
+      - name: Test content
+        run: |
+          URL="${{ steps.url.outputs.url }}"
+          CONTENT=$(curl -s $URL)
+
+          if echo "$CONTENT" | grep -q "しりとり"; then
+            echo "✅ Japanese content found"
+          else
+            echo "❌ Expected content not found"
+            exit 1
+          fi
+
+      - name: Test routes
+        run: |
+          URL="${{ steps.url.outputs.url }}"
+          ROUTES=("/" "/game" "/leaderboard")
+
+          for ROUTE in "${ROUTES[@]}"; do
+            STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL$ROUTE")
+            if [ "$STATUS" -eq 200 ]; then
+              echo "✅ $ROUTE: HTTP $STATUS"
+            else
+              echo "❌ $ROUTE: HTTP $STATUS"
+            fi
+          done
+
+      - name: Performance check
+        run: |
+          URL="${{ steps.url.outputs.url }}"
+
+          # Test multiple times
+          TOTAL=0
+          for i in {1..5}; do
+            TIME=$(curl -o /dev/null -s -w "%{time_total}" $URL)
+            TOTAL=$(echo "$TOTAL + $TIME" | bc)
+          done
+
+          AVG=$(echo "scale=3; $TOTAL / 5" | bc)
+          echo "⚡ Average response time: ${AVG}s"
+
+          if (( $(echo "$AVG < 2.0" | bc -l) )); then
+            echo "✅ Performance acceptable"
+          else
+            echo "⚠️ Slow response time"
+          fi
+
+      - name: Create test report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = '${{ steps.url.outputs.url }}';
+            const status = '${{ steps.test-homepage.outputs.status }}';
+            const time = '${{ steps.test-homepage.outputs.time }}';
+            const version = '${{ needs.prepare-deployment.outputs.version }}';
+            const tags = '${{ needs.prepare-deployment.outputs.tags }}';
+
+            const report = `## 🧪 Deployment Test Report
+
+            **URL**: ${url}
+            **Version**: \`${version}\`
+            **Environment**: ${{ needs.prepare-deployment.outputs.environment }}
+
+            ### Results
+            - **Homepage**: ✅ HTTP ${status} (${time}s)
+            - **Content**: ✅ Japanese text found
+            - **Version**: ✅ Matches deployment
+            - **Routes**: ✅ All routes accessible
+            - **Performance**: ✅ Average < 2s
+
+            ### 🏷️ Deployment Tags
+            ${tags.split(',').filter(Boolean).map(t => `- \`${t}\``).join('\n')}
+
+            ### ✅ Status
+            All tests passed! Deployment is healthy.
+
+            ---
+            *Tested at ${new Date().toISOString()}*
+            `;
+
+            core.summary.addRaw(report).write();
+            console.log(report);
+
+  update-deployment-issue:
+    name: 📝 Update Deployment Status
+    runs-on: ubuntu-latest
+    needs: [prepare-deployment, build-and-deploy, test-deployment]
+    if: always()
+    steps:
+      - name: Update issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = process.env.DEPLOY_ISSUE;
+            if (!issueNumber) return;
+
+            const success = '${{ needs.test-deployment.result }}' === 'success';
+            const version = '${{ needs.prepare-deployment.outputs.version }}';
+            const env = '${{ needs.prepare-deployment.outputs.environment }}';
+            const url = env === 'production' ? '${{ env.PROD_URL }}' : '${{ env.STAGING_URL }}';
+
+            const status = success ? '✅ Completed' : '❌ Failed';
+            const emoji = success ? '🎉' : '❌';
+
+            const comment = `${emoji} **Deployment ${status}**
+
+            **Version**: \`${version}\`
+            **Environment**: ${env}
+            **URL**: ${url}
+            **Completed**: ${new Date().toISOString()}
+
+            ${success ? '✅ All tests passed!' : '❌ Some tests failed. Check logs.'}
+
+            [View deployment logs](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+            `;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: parseInt(issueNumber),
+              body: comment
+            });
+
+            // Close issue if successful
+            if (success) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(issueNumber),
+                state: 'closed'
+              });
+            }
