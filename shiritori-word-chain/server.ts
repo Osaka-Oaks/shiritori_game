@@ -12,6 +12,29 @@ const app = express();
 app.use(express.json());
 app.use("/api", createRateLimiter(100, 60_000));
 
+// Simple in-memory rate limiter to protect against denial-of-service abuse.
+// Limits each client IP to a fixed number of requests per time window.
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX_REQUESTS = 120;
+const requestCounts = new Map<string, { count: number; resetAt: number }>();
+function rateLimiter(req: express.Request, res: express.Response, next: express.NextFunction) {
+  const key = req.ip || "unknown";
+  const now = Date.now();
+  const entry = requestCounts.get(key);
+  if (!entry || now > entry.resetAt) {
+    requestCounts.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    next();
+    return;
+  }
+  entry.count += 1;
+  if (entry.count > RATE_LIMIT_MAX_REQUESTS) {
+    res.status(429).json({ error: "Too many requests. Please slow down." });
+    return;
+  }
+  next();
+}
+app.use(rateLimiter);
+
 const PORT = 3000;
 
 // Initialize Gemini client lazy/safe
