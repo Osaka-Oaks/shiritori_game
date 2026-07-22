@@ -1,12 +1,12 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Tue, 21 Jul 2026 19:02:55 GMT
+> Last updated: Wed, 22 Jul 2026 01:30:15 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 48.0% |
+| **Build Success Rate** | 🔴 | 40.0% |
 | **Open Issues** | 🟢 | 5 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
@@ -20,10 +20,10 @@
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 14d ago |
 | `dependabot/github_actions/actions/dependency-review-action-5` | chore(deps): bump actions/dependency-rev | 🔄 | 14d ago |
 | `dependabot/github_actions/actions/download-artifact-8` | chore(deps): bump actions/download-artif | 🔄 | 14d ago |
-| `dependabot/github_actions/actions/setup-node-7` | chore(deps): bump actions/setup-node fro | 🔄 | 4d ago |
+| `dependabot/github_actions/actions/setup-node-7` | chore(deps): bump actions/setup-node fro | 🔄 | 5d ago |
 | `dependabot/github_actions/actions/upload-artifact-7` | chore(deps): bump actions/upload-artifac | 🔄 | 14d ago |
 | `dependabot/github_actions/github/codeql-action-4` | chore(deps): bump github/codeql-action f | 🔄 | 14d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | chore(deps-dev): bump the lint-format gr | 🔄 | 0d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | chore(deps-dev): bump the lint-format gr | 🔄 | 1d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/lint-staged-17.0.8` | chore(deps-dev): bump lint-staged in /ka | 🔄 | 14d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/multi-c62902aa62` | chore(deps-dev): bump esbuild, vite, @vi | 🔄 | 14d ago |
 
@@ -40,8 +40,8 @@ _No open pull requests_
 ## 📈 Recent Activity
 
 ### Top Contributors (Last 100 commits)
-1. **github-actions[bot]** - 64 commits
-2. **JorelFuji** - 32 commits
+1. **github-actions[bot]** - 65 commits
+2. **JorelFuji** - 31 commits
 3. **Claude** - 4 commits
 
 ### Workflow Status
