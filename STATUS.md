@@ -1,12 +1,12 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Mon, 07 Sep 2026 10:59:43 GMT
+> Last updated: Mon, 07 Sep 2026 16:49:37 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 34.0% |
+| **Build Success Rate** | 🔴 | 64.0% |
 | **Open Issues** | 🔴 | 53 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
@@ -16,16 +16,16 @@
 
 | Branch | Commits | Status | Last Update |
 |--------|---------|--------|-------------|
-| `2026-07-06-sy9w` | fix: Add authentication guards to preven | 🔄 | 57d ago |
-| `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 61d ago |
+| `2026-07-06-sy9w` | fix: Add authentication guards to preven | 🔄 | 58d ago |
+| `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 62d ago |
 | `dependabot/github_actions/actions/dependency-review-action-5` | chore(deps): bump actions/dependency-rev | 🔄 | 62d ago |
 | `dependabot/github_actions/actions/download-artifact-8` | chore(deps): bump actions/download-artif | 🔄 | 62d ago |
 | `dependabot/github_actions/actions/setup-node-7` | chore(deps): bump actions/setup-node fro | 🔄 | 52d ago |
-| `dependabot/github_actions/actions/upload-artifact-7` | chore(deps): bump actions/upload-artifac | 🔄 | 61d ago |
+| `dependabot/github_actions/actions/upload-artifact-7` | chore(deps): bump actions/upload-artifac | 🔄 | 62d ago |
 | `dependabot/github_actions/github/codeql-action-4` | chore(deps): bump github/codeql-action f | 🔄 | 62d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.6` | chore(deps): bump body-parser from 1.20. | 🔄 | 40d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.18` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 33d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/js-yaml-4.3.2` | Bump js-yaml from 4.3.0 to 4.3.2 in /kaw | 🔄 | 4d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/browserslist-4.28.9` | Bump browserslist from 4.28.5 to 4.28.9  | 🔄 | 0d ago |
 
 ## 🎯 Active Work
 
@@ -44,8 +44,8 @@ _No open pull requests_
 
 ### Workflow Status
 - ⚪ **Build Optimization**
-- ⚪ **CI**
-- ⚪ **Commit Tracking & Monitoring**
+- ❌ **CI**
+- ✅ **Commit Tracking & Monitoring**
 - ⚪ **Deploy (manual)**
 - ⚪ **Deploy Flutter to Firebase**
 
