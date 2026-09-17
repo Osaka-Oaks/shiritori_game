@@ -1,13 +1,13 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Thu, 17 Sep 2026 02:20:28 GMT
+> Last updated: Thu, 17 Sep 2026 10:37:21 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 42.0% |
-| **Open Issues** | 🔴 | 62 |
+| **Build Success Rate** | 🔴 | 40.0% |
+| **Open Issues** | 🔴 | 56 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
 | **Commits (24h)** | 🟡 | 3 |
@@ -18,19 +18,19 @@
 |--------|---------|--------|-------------|
 | `2026-07-06-sy9w` | fix: Add authentication guards to preven | 🔄 | 67d ago |
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 71d ago |
-| `dependabot/github_actions/actions/dependency-review-action-5` | chore(deps): bump actions/dependency-rev | 🔄 | 71d ago |
-| `dependabot/github_actions/actions/download-artifact-8` | chore(deps): bump actions/download-artif | 🔄 | 71d ago |
+| `dependabot/github_actions/actions/dependency-review-action-5` | chore(deps): bump actions/dependency-rev | 🔄 | 72d ago |
+| `dependabot/github_actions/actions/download-artifact-8` | chore(deps): bump actions/download-artif | 🔄 | 72d ago |
 | `dependabot/github_actions/actions/setup-node-7` | chore(deps): bump actions/setup-node fro | 🔄 | 62d ago |
 | `dependabot/github_actions/actions/upload-artifact-7` | chore(deps): bump actions/upload-artifac | 🔄 | 71d ago |
-| `dependabot/github_actions/github/codeql-action-4` | chore(deps): bump github/codeql-action f | 🔄 | 71d ago |
+| `dependabot/github_actions/github/codeql-action-4` | chore(deps): bump github/codeql-action f | 🔄 | 72d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.23` | Bump baseline-browser-mapping in /kawaii | 🔄 | 3d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 8d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.18` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 42d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.18` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 43d ago |
 
 ## 🎯 Active Work
 
 ### Open Issues by Type
-- 🐛 **Bugs**: 61
+- 🐛 **Bugs**: 55
 - ✨ **Features**: 0
 - 📋 **Other**: 1
 
