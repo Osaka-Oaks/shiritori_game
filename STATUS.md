@@ -1,16 +1,16 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Wed, 16 Sep 2026 20:36:42 GMT
+> Last updated: Thu, 17 Sep 2026 02:20:28 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 46.0% |
+| **Build Success Rate** | 🔴 | 42.0% |
 | **Open Issues** | 🔴 | 62 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
-| **Commits (24h)** | 🟡 | 4 |
+| **Commits (24h)** | 🟡 | 3 |
 
 ## 🌿 Branch Status
 
@@ -20,11 +20,11 @@
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 71d ago |
 | `dependabot/github_actions/actions/dependency-review-action-5` | chore(deps): bump actions/dependency-rev | 🔄 | 71d ago |
 | `dependabot/github_actions/actions/download-artifact-8` | chore(deps): bump actions/download-artif | 🔄 | 71d ago |
-| `dependabot/github_actions/actions/setup-node-7` | chore(deps): bump actions/setup-node fro | 🔄 | 61d ago |
+| `dependabot/github_actions/actions/setup-node-7` | chore(deps): bump actions/setup-node fro | 🔄 | 62d ago |
 | `dependabot/github_actions/actions/upload-artifact-7` | chore(deps): bump actions/upload-artifac | 🔄 | 71d ago |
 | `dependabot/github_actions/github/codeql-action-4` | chore(deps): bump github/codeql-action f | 🔄 | 71d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.23` | Bump baseline-browser-mapping in /kawaii | 🔄 | 2d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 7d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.23` | Bump baseline-browser-mapping in /kawaii | 🔄 | 3d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 8d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.18` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 42d ago |
 
 ## 🎯 Active Work
