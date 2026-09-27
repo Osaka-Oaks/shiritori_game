@@ -1,16 +1,16 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Sun, 27 Sep 2026 02:26:17 GMT
+> Last updated: Sun, 27 Sep 2026 11:00:25 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 38.0% |
-| **Open Issues** | 🔴 | 58 |
+| **Build Success Rate** | 🔴 | 40.0% |
+| **Open Issues** | 🔴 | 59 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
-| **Commits (24h)** | 🟡 | 4 |
+| **Commits (24h)** | 🟡 | 3 |
 
 ## 🌿 Branch Status
 
@@ -18,19 +18,19 @@
 |--------|---------|--------|-------------|
 | `2026-07-06-sy9w` | fix: Add authentication guards to preven | 🔄 | 77d ago |
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 81d ago |
-| `dependabot/github_actions/actions/upload-artifact-7` | chore(deps): bump actions/upload-artifac | 🔄 | 81d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.23` | Bump baseline-browser-mapping in /kawaii | 🔄 | 13d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 18d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.18` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 52d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.18` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 53d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/browserslist-4.28.9` | Bump browserslist from 4.28.5 to 4.28.9  | 🔄 | 19d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/js-yaml-4.3.2` | Bump js-yaml from 4.3.0 to 4.3.2 in /kaw | 🔄 | 23d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/js-yaml-4.3.2` | Bump js-yaml from 4.3.0 to 4.3.2 in /kaw | 🔄 | 24d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | Bump the lint-format group across 1 dire | 🔄 | 5d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/postcss-8.5.28` | Bump postcss from 8.5.16 to 8.5.28 in /k | 🔄 | 19d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/testing-af4302dd82` | Bump the testing group across 1 director | 🔄 | 5d ago |
 
 ## 🎯 Active Work
 
 ### Open Issues by Type
-- 🐛 **Bugs**: 57
+- 🐛 **Bugs**: 58
 - ✨ **Features**: 0
 - 📋 **Other**: 1
 
