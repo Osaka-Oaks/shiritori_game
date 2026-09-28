@@ -1,31 +1,31 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Mon, 28 Sep 2026 12:19:26 GMT
+> Last updated: Mon, 28 Sep 2026 22:44:10 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 40.0% |
+| **Build Success Rate** | 🔴 | 60.0% |
 | **Open Issues** | 🔴 | 60 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
-| **Commits (24h)** | 🟡 | 3 |
+| **Commits (24h)** | 🟡 | 2 |
 
 ## 🌿 Branch Status
 
 | Branch | Commits | Status | Last Update |
 |--------|---------|--------|-------------|
-| `2026-07-06-sy9w` | fix: Add authentication guards to preven | 🔄 | 78d ago |
-| `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 82d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.23` | Bump baseline-browser-mapping in /kawaii | 🔄 | 14d ago |
+| `2026-07-06-sy9w` | fix: Add authentication guards to preven | 🔄 | 79d ago |
+| `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 83d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.23` | Bump baseline-browser-mapping in /kawaii | 🔄 | 15d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 19d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.18` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 54d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/browserslist-4.28.9` | Bump browserslist from 4.28.5 to 4.28.9  | 🔄 | 20d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/browserslist-4.28.9` | Bump browserslist from 4.28.5 to 4.28.9  | 🔄 | 21d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/js-yaml-4.3.2` | Bump js-yaml from 4.3.0 to 4.3.2 in /kaw | 🔄 | 25d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | Bump the lint-format group across 1 dire | 🔄 | 6d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | Bump the lint-format group across 1 dire | 🔄 | 0d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/postcss-8.5.28` | Bump postcss from 8.5.16 to 8.5.28 in /k | 🔄 | 21d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/testing-af4302dd82` | Bump the testing group across 1 director | 🔄 | 6d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/testing-af4302dd82` | Bump the testing group across 1 director | 🔄 | 0d ago |
 
 ## 🎯 Active Work
 
@@ -44,10 +44,10 @@ _No open pull requests_
 
 ### Workflow Status
 - ⚪ **Build Optimization**
-- ⚪ **CI**
-- ⚪ **Commit Tracking & Monitoring**
+- ❌ **CI**
+- ✅ **Commit Tracking & Monitoring**
 - ⚪ **Deploy (manual)**
-- ⚪ **Deploy Flutter to Firebase**
+- ✅ **Deploy Flutter to Firebase**
 
 ## 🚀 Deployment History
 
