@@ -1,16 +1,16 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Tue, 29 Sep 2026 03:13:05 GMT
+> Last updated: Tue, 29 Sep 2026 11:46:20 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 60.0% |
-| **Open Issues** | 🔴 | 60 |
+| **Build Success Rate** | 🔴 | 56.0% |
+| **Open Issues** | 🔴 | 61 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
-| **Commits (24h)** | 🟡 | 2 |
+| **Commits (24h)** | 🟡 | 3 |
 
 ## 🌿 Branch Status
 
@@ -20,9 +20,9 @@
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 83d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.23` | Bump baseline-browser-mapping in /kawaii | 🔄 | 15d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 20d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.18` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 54d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.18` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 55d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/browserslist-4.28.9` | Bump browserslist from 4.28.5 to 4.28.9  | 🔄 | 21d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/js-yaml-4.3.2` | Bump js-yaml from 4.3.0 to 4.3.2 in /kaw | 🔄 | 25d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/js-yaml-4.3.2` | Bump js-yaml from 4.3.0 to 4.3.2 in /kaw | 🔄 | 26d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | Bump the lint-format group across 1 dire | 🔄 | 0d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/postcss-8.5.28` | Bump postcss from 8.5.16 to 8.5.28 in /k | 🔄 | 21d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/testing-af4302dd82` | Bump the testing group across 1 director | 🔄 | 0d ago |
@@ -30,7 +30,7 @@
 ## 🎯 Active Work
 
 ### Open Issues by Type
-- 🐛 **Bugs**: 59
+- 🐛 **Bugs**: 60
 - ✨ **Features**: 0
 - 📋 **Other**: 1
 
