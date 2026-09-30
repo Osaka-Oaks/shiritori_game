@@ -1,12 +1,12 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Tue, 29 Sep 2026 21:38:02 GMT
+> Last updated: Wed, 30 Sep 2026 02:55:17 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 52.0% |
+| **Build Success Rate** | 🔴 | 54.0% |
 | **Open Issues** | 🔴 | 61 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
@@ -18,14 +18,14 @@
 |--------|---------|--------|-------------|
 | `2026-07-06-sy9w` | fix: Add authentication guards to preven | 🔄 | 80d ago |
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 84d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.23` | Bump baseline-browser-mapping in /kawaii | 🔄 | 15d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 20d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.23` | Bump baseline-browser-mapping in /kawaii | 🔄 | 16d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 21d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.18` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 55d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/browserslist-4.28.9` | Bump browserslist from 4.28.5 to 4.28.9  | 🔄 | 22d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/js-yaml-4.3.2` | Bump js-yaml from 4.3.0 to 4.3.2 in /kaw | 🔄 | 26d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | Bump the lint-format group across 1 dire | 🔄 | 0d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | Bump the lint-format group across 1 dire | 🔄 | 1d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/postcss-8.5.28` | Bump postcss from 8.5.16 to 8.5.28 in /k | 🔄 | 22d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/testing-af4302dd82` | Bump the testing group across 1 director | 🔄 | 0d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/testing-af4302dd82` | Bump the testing group across 1 director | 🔄 | 1d ago |
 
 ## 🎯 Active Work
 
