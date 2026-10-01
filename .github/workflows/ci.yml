@@ -46,7 +46,7 @@ jobs:
         with:
           fetch-depth: 2
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
@@ -76,7 +76,7 @@ jobs:
       # docs-only must mean "nothing but docs changed". A file counts as
       # non-doc only if it matches every negated pattern below, so this
       # filter is false exactly when all changed files are docs.
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         id: nondocs
         with:
           predicate-quantifier: every
