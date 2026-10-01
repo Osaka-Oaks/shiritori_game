@@ -42,7 +42,7 @@ jobs:
       ci-config: ${{ steps.filter.outputs.ci-config }}
       docs-only: ${{ steps.nondocs.outputs.non-docs == 'false' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 2
 
@@ -101,7 +101,7 @@ jobs:
     needs: changes
     if: needs.changes.outputs.docs-only != 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -127,7 +127,7 @@ jobs:
     needs: changes
     if: needs.changes.outputs.docs-only != 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -144,7 +144,7 @@ jobs:
       needs.changes.outputs.docs-only != 'true' &&
       (needs.changes.outputs.online == 'true' || needs.changes.outputs.deps == 'true' || needs.changes.outputs.ci-config == 'true')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -169,7 +169,7 @@ jobs:
       needs.changes.outputs.docs-only != 'true' &&
       (needs.changes.outputs.kawaii == 'true' || needs.changes.outputs.deps == 'true')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -194,7 +194,7 @@ jobs:
       needs.changes.outputs.docs-only != 'true' &&
       (needs.changes.outputs.kawaii == 'true' || needs.changes.outputs.deps == 'true')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -212,7 +212,7 @@ jobs:
       needs.changes.outputs.docs-only != 'true' &&
       (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.deps == 'true')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -229,7 +229,7 @@ jobs:
       needs.changes.outputs.docs-only != 'true' &&
       (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.deps == 'true')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -250,7 +250,7 @@ jobs:
       (needs.test-flutter.result == 'success' || needs.test-flutter.result == 'skipped') &&
       (needs.changes.outputs.flutter == 'true' || needs.changes.outputs.deps == 'true' || needs.changes.outputs.ci-config == 'true')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -312,7 +312,7 @@ jobs:
       (needs.lint-online.result == 'success' || needs.lint-online.result == 'skipped') &&
       (needs.changes.outputs.online == 'true' || needs.changes.outputs.deps == 'true' || needs.changes.outputs.ci-config == 'true')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v4
         with:
@@ -392,7 +392,7 @@ jobs:
       (needs.test.result == 'success' || needs.test.result == 'skipped') &&
       (needs.changes.outputs.kawaii == 'true' || needs.changes.outputs.deps == 'true')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v4
         with:
@@ -475,7 +475,7 @@ jobs:
       name: production
       url: ${{ env.LIVE_URL }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v4
         with:
@@ -532,7 +532,7 @@ jobs:
       name: production-flutter
       url: ${{ env.FLUTTER_LIVE_URL }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -577,7 +577,7 @@ jobs:
     environment:
       name: staging
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -616,7 +616,7 @@ jobs:
     environment:
       name: staging-flutter
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -663,7 +663,7 @@ jobs:
         needs.deploy-flutter-staging.result == 'success'
       )
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: CI gate status
         id: ci_gate
@@ -747,7 +747,7 @@ jobs:
       ]
     if: always()
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Download build metrics
         uses: actions/download-artifact@v4
