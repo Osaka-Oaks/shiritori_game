@@ -119,7 +119,7 @@ jobs:
 
       - name: Create or update issue
         if: steps.check.outputs.has_major == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const title = '🔄 Major Dependency Updates Available';
