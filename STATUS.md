@@ -1,12 +1,12 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Thu, 01 Oct 2026 22:06:31 GMT
+> Last updated: Fri, 02 Oct 2026 03:03:52 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 52.0% |
+| **Build Success Rate** | 🔴 | 48.0% |
 | **Open Issues** | 🔴 | 63 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
@@ -18,14 +18,14 @@
 |--------|---------|--------|-------------|
 | `2026-07-06-sy9w` | fix: Add authentication guards to preven | 🔄 | 82d ago |
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 86d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.23` | Bump baseline-browser-mapping in /kawaii | 🔄 | 17d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 22d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.18` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 57d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/browserslist-4.28.9` | Bump browserslist from 4.28.5 to 4.28.9  | 🔄 | 24d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/js-yaml-4.3.2` | Bump js-yaml from 4.3.0 to 4.3.2 in /kaw | 🔄 | 28d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/lint-format-0d378e6f0d` | Bump the lint-format group across 1 dire | 🔄 | 2d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/postcss-8.5.28` | Bump postcss from 8.5.16 to 8.5.28 in /k | 🔄 | 24d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/testing-af4302dd82` | Bump the testing group across 1 director | 🔄 | 2d ago |
+| `dependabot/github_actions/actions/checkout-7` | Bump actions/checkout from 4 to 7 | 🔄 | 0d ago |
+| `dependabot/github_actions/actions/github-script-9` | Bump actions/github-script from 7 to 9 | 🔄 | 0d ago |
+| `dependabot/github_actions/actions/stale-11` | Bump actions/stale from 9 to 11 | 🔄 | 0d ago |
+| `dependabot/github_actions/crazy-max/ghaction-github-labeler-6` | Bump crazy-max/ghaction-github-labeler f | 🔄 | 0d ago |
+| `dependabot/github_actions/dorny/paths-filter-4` | Bump dorny/paths-filter from 3 to 4 | 🔄 | 0d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.27` | Bump baseline-browser-mapping in /kawaii | 🔄 | 0d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 23d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.21` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 0d ago |
 
 ## 🎯 Active Work
 
@@ -47,7 +47,7 @@ _No open pull requests_
 - ❌ **CI**
 - ✅ **Commit Tracking & Monitoring**
 - ⚪ **Deploy (manual)**
-- ✅ **Deploy Flutter to Firebase**
+- ⚪ **Deploy Flutter to Firebase**
 
 ## 🚀 Deployment History
 
