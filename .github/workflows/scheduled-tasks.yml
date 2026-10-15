@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule' || github.event.inputs.task == 'all' || github.event.inputs.task == 'health-check'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Check production site
         id: check-prod
@@ -201,7 +201,7 @@ jobs:
     # Run every Monday at 9 AM UTC
     if: github.event.schedule == '0 9 * * 1' || github.event.inputs.task == 'reports'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v4
         with:
@@ -268,7 +268,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule' || github.event.inputs.task == 'all' || github.event.inputs.task == 'backups'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Create backup
         run: |
@@ -384,7 +384,7 @@ jobs:
     # Run weekly on Sundays
     if: github.event.schedule == '0 9 * * 0' || github.event.inputs.task == 'all'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Check links in markdown files
         run: |
@@ -399,7 +399,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule' || github.event.inputs.task == 'all'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 

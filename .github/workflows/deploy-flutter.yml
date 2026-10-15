@@ -33,7 +33,7 @@ jobs:
       build_seconds: ${{ steps.build.outputs.seconds }}
       build_size: ${{ steps.size.outputs.size }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: 📱 Setup Flutter ${{ env.FLUTTER_VERSION }}
         uses: subosito/flutter-action@v2
@@ -84,7 +84,7 @@ jobs:
     outputs:
       deploy_seconds: ${{ steps.deploy.outputs.seconds }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
