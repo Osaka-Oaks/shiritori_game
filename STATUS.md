@@ -1,12 +1,12 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Sat, 24 Oct 2026 19:57:23 GMT
+> Last updated: Sun, 25 Oct 2026 02:13:47 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 40.0% |
+| **Build Success Rate** | 🔴 | 38.0% |
 | **Open Issues** | 🔴 | 56 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
@@ -18,14 +18,14 @@
 |--------|---------|--------|-------------|
 | `2026-07-06-sy9w` | fix: Add authentication guards to preven | 🔄 | 105d ago |
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 109d ago |
-| `dependabot/github_actions/actions/checkout-7` | Bump actions/checkout from 4 to 7 | 🔄 | 22d ago |
-| `dependabot/github_actions/actions/github-script-9` | Bump actions/github-script from 7 to 9 | 🔄 | 22d ago |
-| `dependabot/github_actions/actions/stale-11` | Bump actions/stale from 9 to 11 | 🔄 | 22d ago |
-| `dependabot/github_actions/crazy-max/ghaction-github-labeler-6` | Bump crazy-max/ghaction-github-labeler f | 🔄 | 22d ago |
-| `dependabot/github_actions/dorny/paths-filter-4` | Bump dorny/paths-filter from 3 to 4 | 🔄 | 22d ago |
+| `dependabot/github_actions/actions/checkout-7` | Bump actions/checkout from 4 to 7 | 🔄 | 23d ago |
+| `dependabot/github_actions/actions/github-script-9` | Bump actions/github-script from 7 to 9 | 🔄 | 23d ago |
+| `dependabot/github_actions/actions/stale-11` | Bump actions/stale from 9 to 11 | 🔄 | 23d ago |
+| `dependabot/github_actions/crazy-max/ghaction-github-labeler-6` | Bump crazy-max/ghaction-github-labeler f | 🔄 | 23d ago |
+| `dependabot/github_actions/dorny/paths-filter-4` | Bump dorny/paths-filter from 3 to 4 | 🔄 | 23d ago |
 | `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.29` | Bump baseline-browser-mapping in /kawaii | 🔄 | 7d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 45d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.21` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 22d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 46d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.21` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 23d ago |
 
 ## 🎯 Active Work
 
