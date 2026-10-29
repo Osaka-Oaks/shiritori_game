@@ -1,16 +1,16 @@
 # 📊 Project Status Dashboard
 
-> Last updated: Wed, 28 Oct 2026 21:59:20 GMT
+> Last updated: Thu, 29 Oct 2026 11:56:42 GMT
 
 ## 🎯 Overall Health
 
 | Metric | Status | Value |
 |--------|--------|-------|
-| **Build Success Rate** | 🔴 | 50.0% |
-| **Open Issues** | 🔴 | 60 |
+| **Build Success Rate** | 🔴 | 42.0% |
+| **Open Issues** | 🔴 | 61 |
 | **Open PRs** | 🟢 | 0 |
 | **Latest Deployment** | 🔴 | in_progress |
-| **Commits (24h)** | 🟡 | 3 |
+| **Commits (24h)** | 🟡 | 2 |
 
 ## 🌿 Branch Status
 
@@ -18,19 +18,19 @@
 |--------|---------|--------|-------------|
 | `2026-07-06-sy9w` | fix: Add authentication guards to preven | 🔄 | 109d ago |
 | `claude/shiritori-game-main-0qyb3h` | fix(ci): unblock unit tests and app buil | 🔄 | 113d ago |
-| `dependabot/github_actions/actions/checkout-7` | Bump actions/checkout from 4 to 7 | 🔄 | 26d ago |
-| `dependabot/github_actions/actions/github-script-9` | Bump actions/github-script from 7 to 9 | 🔄 | 26d ago |
-| `dependabot/github_actions/actions/stale-11` | Bump actions/stale from 9 to 11 | 🔄 | 26d ago |
-| `dependabot/github_actions/crazy-max/ghaction-github-labeler-6` | Bump crazy-max/ghaction-github-labeler f | 🔄 | 26d ago |
-| `dependabot/github_actions/dorny/paths-filter-4` | Bump dorny/paths-filter from 3 to 4 | 🔄 | 26d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.29` | Bump baseline-browser-mapping in /kawaii | 🔄 | 11d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 49d ago |
-| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.21` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 26d ago |
+| `dependabot/github_actions/actions/checkout-7` | Bump actions/checkout from 4 to 7 | 🔄 | 27d ago |
+| `dependabot/github_actions/actions/github-script-9` | Bump actions/github-script from 7 to 9 | 🔄 | 27d ago |
+| `dependabot/github_actions/actions/stale-11` | Bump actions/stale from 9 to 11 | 🔄 | 27d ago |
+| `dependabot/github_actions/crazy-max/ghaction-github-labeler-6` | Bump crazy-max/ghaction-github-labeler f | 🔄 | 27d ago |
+| `dependabot/github_actions/dorny/paths-filter-4` | Bump dorny/paths-filter from 3 to 4 | 🔄 | 27d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/baseline-browser-mapping-2.11.29` | Bump baseline-browser-mapping in /kawaii | 🔄 | 12d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/body-parser-1.20.8` | Bump body-parser from 1.20.5 to 1.20.8 i | 🔄 | 50d ago |
+| `dependabot/npm_and_yarn/kawaii-shiritori/brace-expansion-1.1.21` | Bump brace-expansion from 1.1.15 to 1.1. | 🔄 | 27d ago |
 
 ## 🎯 Active Work
 
 ### Open Issues by Type
-- 🐛 **Bugs**: 59
+- 🐛 **Bugs**: 60
 - ✨ **Features**: 0
 - 📋 **Other**: 1
 
